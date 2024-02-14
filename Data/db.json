@@ -1,0 +1,42 @@
+{
+  "test": {
+    "Response": "JSON server running!"
+  },
+  "users": [
+       {
+      "id": 1,
+      "name": "Bhuvanesh Rajput",
+      "email": "bhuvanesh.rajput@revdau.com",
+      "password": "RevDau@123",
+      "role": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "Priyanka Chaudhary",
+      "email": "priyanka.chaudhary@revdau.com",
+      "password": "RevDau@123",
+      "role": "BE"
+    },
+    {
+      "id": 3,
+      "name": "Kaveri Khatale",
+      "email": "kaveri.khatale@revdau.com",
+      "password": "RevDau@123",
+      "role": "BE"
+    },
+    {
+      "id": 4,
+      "name": "Uma Bhattacharya",
+      "email": "uma.bhattacharya@revdau.com",
+      "password": "RevDau@123",
+      "role": "BE"
+    },
+    {
+      "id": 5,
+      "name": "Pallavi Sharma",
+      "email": "pallavi.sharma@revdau.com",
+      "password": "RevDau@123",
+      "role": "BE"
+    }
+    
+  ]}

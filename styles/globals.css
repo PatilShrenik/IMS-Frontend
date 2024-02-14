@@ -1,0 +1,679 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+/* @import url("https://fonts.cdnfonts.com/css/satoshi"); */
+@import "https://code.highcharts.com/dashboards/css/dashboards.css";
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* @layer base {
+  body {
+    @apply font-normal text-base text-body bg-whiten relative z-1;
+  }
+} */
+body {
+  color: rgb(var(--foreground-rgb));
+  /* background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb)); */
+  font-family: "Poppins", sans-serif !important;
+}
+
+.topology-editor {
+  display: flex;
+  height: auto;
+  margin: 25px 15px 0;
+}
+
+.topology-editor .creator {
+  background-size: 10px 10px;
+  background-image: linear-gradient(to right,
+      rgb(128, 128, 128, 0.1) 1px,
+      transparent 1px),
+    linear-gradient(to bottom, rgb(128, 128, 128, 0.1) 1px, transparent 1px);
+  /* background-color: whitesmoke; */
+  height: auto;
+  width: 75%;
+  margin: 0 20px 0 0;
+  border-radius: 10px;
+  position: relative;
+  border: 1px solid #c5d3ef;
+}
+
+.topology-editor .creator .open-modal {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #fff;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.topology-editor .creator .wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.topology-editor .editor-options {
+  width: 25%;
+  background: whitesmoke;
+  border-radius: 10px;
+  border: 1px solid #c5d3ef;
+}
+
+.topology-editor .editor-options .modal {
+  width: 95%;
+  margin: auto;
+  border-radius: 0 0 10px 10px;
+}
+
+.topology-editor .editor-options .modal ul {
+  list-style: none;
+  display: flex;
+  color: #000;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  padding: 0;
+}
+
+.topology-editor .editor-options .modal ul li {
+  width: 135px;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.topology-editor .editor-options .modal .close-modal {
+  position: absolute;
+  background: #fff;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100px;
+}
+
+.topology-editor .editor-options .selected-node {
+  border: 1px solid #b5cedf;
+  background: #e1e7f4;
+  border-radius: 10px;
+}
+
+.custom-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editor-options ul li {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.editor-options ul li img {
+  height: 25px;
+}
+
+.topology-editor .editor-options .modal ul li {
+  width: 100%;
+  padding: 5px;
+}
+
+.editor-options {
+  overflow-y: auto;
+  padding: 0 15px;
+  border: 1px solid #e2e7f1;
+}
+
+.editor-options input,
+.editor-options button {
+  border: 1px solid #e2e7f1;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader::before {
+  content: "";
+  width: 50px;
+  height: 50px;
+  border: 5px solid;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+.form-inputs input[type="text"],
+.form-inputs select,
+.form-inputs textarea {
+  border-color: transparent;
+  border-bottom-color: rgb(0, 0, 58);
+  border-radius: 2px;
+  border-width: 1px;
+  margin: 5px 0;
+}
+
+.form-inputs input[type="text"]:focus,
+.form-inputs select:focus,
+.form-inputs textarea:focus {
+  outline: none;
+}
+
+.form-inputs input[type="text"]:disabled,
+.form-inputs select:disabled,
+.form-inputs textarea:disabled {
+  background: rgb(0, 0, 0, 0.1);
+}
+
+.cards-container {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  gap: 2%;
+  margin: 20px;
+}
+
+.card {
+  position: relative;
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  /* margin-bottom: 2%; */
+  width: 50%;
+  min-width: 400px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /* height: 500px; */
+}
+
+.card>div {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+#container {
+  height: 500px;
+}
+
+.highcharts-figure,
+.highcharts-data-table table {
+  min-width: 320px;
+  max-width: 700px;
+  margin: 1em auto;
+}
+
+.highcharts-data-table table {
+  font-family: Verdana, sans-serif;
+  border-collapse: collapse;
+  border: 1px solid #ebebeb;
+  margin: 10px auto;
+  text-align: center;
+  width: 100%;
+  max-width: 200px;
+}
+
+.highcharts-data-table caption {
+  padding: 1em 0;
+  font-size: 1.2em;
+  color: #555;
+}
+
+.highcharts-data-table th {
+  font-weight: 600;
+  padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+  padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+  background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+  background: #f1f7ff;
+}
+
+#container {
+  height: 400px;
+}
+
+.highcharts-figure,
+.highcharts-data-table table {
+  min-width: 310px;
+  max-width: 800px;
+  margin: 1em auto;
+}
+
+.highcharts-data-table table {
+  font-family: Verdana, sans-serif;
+  border-collapse: collapse;
+  border: 1px solid #ebebeb;
+  margin: 10px auto;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.highcharts-data-table caption {
+  padding: 1em 0;
+  font-size: 1.2em;
+  color: #555;
+}
+
+.highcharts-data-table th {
+  font-weight: 600;
+  padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+  padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+  background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+  background: #f1f7ff;
+}
+
+.highcharts-credits {
+  display: none;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+body a {
+  text-decoration: none !important;
+  color: black;
+}
+
+body a:hover {
+  text-decoration: none !important;
+  color: black;
+}
+
+button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.Mui-selected.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+  color: white;
+  height: 50px;
+  transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+/* span.MuiTabs-indicator.css-1aquho2-MuiTabs-indicator { */
+/* background-color: red; */
+/* background: transparent linear-gradient(273deg, #c52828 0%, #e95555 100%); */
+/* box-shadow: inset 0 0 0 3px white; */
+/* border: 4px solid white; */
+/* } */
+
+/* .css-1aquho2-MuiTabs-indicator { */
+/* height: 100% !important; */
+/* border-radius: 50vw; */
+/* margin: 10px 0px; */
+/* } */
+
+/* .MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+  border-radius: 50vw;
+  overflow: hidden;
+  z-index: 1;
+  /* padding:0; */
+/* padding: 0px 15px;
+  min-height: 10px;
+  max-height: 36px;
+} */
+
+/* .MuiTabs-flexContainer.MuiTabs-centered.css-1wf8b0h-MuiTabs-flexContainer {
+  width: fit-content;
+  border-radius: 50vw;
+  overflow: hidden;
+  border: 1px solid #d5c5ee;
+  height: max-content;
+  z-index: 1;
+} */
+
+.MuiTabs-scroller.MuiTabs-fixed.css-jpln7h-MuiTabs-scroller {
+  display: flex;
+  justify-content: center;
+  height: max-content;
+}
+
+.css-1ujnqem-MuiTabs-root {
+  min-height: 0;
+}
+
+.css-13xfq8m-MuiTabPanel-root {
+  padding: 0;
+}
+
+.cloud-tabs button {
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background-color 0ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+}
+
+.cloud-tabs button.Mui-selected {
+  background-color: white !important;
+  opacity: 1;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+}
+
+.cloud-tabs button:not(.Mui-selected) {
+  background-color: rgb(247, 247, 247) !important;
+  opacity: 0.8;
+}
+
+.cloud-tabs button:not(.Mui-selected):hover {
+  background-color: rgb(249, 249, 249) !important;
+  opacity: 1;
+}
+
+span.MuiTabs-indicator.css-10d9dml-MuiTabs-indicator {
+  opacity: 0;
+  height: 100%;
+  width: 100% !important;
+  background-color: white;
+  border-radius: 0.75rem;
+}
+
+.css-13xfq8m-MuiTabPanel-root {
+  padding: 0 !important;
+}
+
+.css-19kzrtu {
+  padding: 0 !important;
+}
+
+.circle-loader {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100dvw;
+  background: rgb(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 10000;
+}
+
+.circle-loader::after {
+  content: "Loading";
+  color: white;
+  font-size: 18px;
+}
+
+.circle-loader::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 5px solid white;
+  border-bottom-color: transparent;
+  animation: loader 1s infinite;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+/* ------------------------------ IMS CSS -----------------------------------------*/
+
+/* styles/globals.css */
+/* body {
+  font-family: "Poppins", sans-serif;
+} */
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #f1f1f1;
+}
+
+@layer utilities {
+
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+
+}
+
+/* third-party libraries CSS */
+
+
+.custom-input-date::-webkit-calendar-picker-indicator {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
+.custom-input-date-1::-webkit-calendar-picker-indicator {
+  background-image: url("/images/icon/icon-calendar.svg");
+}
+
+.custom-input-date-2::-webkit-calendar-picker-indicator {
+  background-image: url("/images/icon/icon-arrow-down.svg");
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+.jvectormap-tip {
+  background-color: #f8fafc !important;
+  font-family: Satoshi, sans-serif;
+}
+
+/* .map-btn .jvectormap-container .jvectormap-zoomin,
+.map-btn .jvectormap-container .jvectormap-zoomout {
+  @apply bottom-0 top-auto right-0 left-auto flex items-center justify-center w-7.5 h-7.5 rounded border border-blue-200 dark:border-strokedark hover:border-blue-400 dark:hover:border-blue-400 bg-white hover:bg-blue-400 text-gray-500 hover:text-white dark:text-gray-300 dark:hover:text-white text-2xl leading-none px-0 pt-0 pb-0.5;
+} */
+
+.map-btn .jvectormap-container .jvectormap-zoomin {
+  right: 45px;
+}
+
+/* Material UI Classes */
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding-right: 0;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0;
+}
+
+@media (min-width: 600px) {
+  .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar {
+    min-height: 40px !important;
+    padding-right: 2px;
+  }
+}
+
+@import "https://code.highcharts.com/css/highcharts.css";
+
+:root {
+  /* light mode */
+  --background-color: #ffffff;
+  --text-color: #292b2c;
+  --hilight-color: #02rgb(47, 48, 52)
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #1f2227;
+    --text-color: #c0c0c0;
+    --hilight-color: #8db4d6;
+  }
+
+  /* Some data colors. Light mode uses defaults */
+  .highcharts-color-0 {
+    fill: #0460ba;
+    stroke: #0460ba;
+  }
+
+  .highcharts-color-1 {
+    fill: #9696ab;
+    stroke: #9696ab;
+  }
+}
+
+/* body { */
+/* background-color: var(--background-color); */
+/* } */
+/* .highcharts-background {
+    fill: var(--background-color);
+}
+.highcharts-container text {
+    fill: white;
+}
+.highcharts-subtitle,
+.highcharts-credits,
+.highcharts-axis-title {
+
+}
+.highcharts-grid-line {
+    stroke: var(--text-color);
+    stroke-opacity: 0.2;
+}
+.highcharts-tooltip-box {
+    fill: var(--background-color);
+}
+.highcharts-column-series rect.highcharts-point {
+    stroke: var(--background-color);
+} */
+
+.custome_card {
+  border-radius: 16px;
+  border: 0.5px solid rgba(0, 0, 0, 0.6);
+  background: linear-gradient(162deg, rgba(123, 98, 202, 0.11) 11.36%, rgba(123, 98, 202, 0.00) 36.6%), #ffffff;
+  font-family: "Oxygen", sans-serif;
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  margin-left: 85px;
+  background-color: #171A22;
+  color: white;
+  -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  z-index: 1200;
+  -webkit-overflow-scrolling: touch;
+  position: fixed;
+  top: 0;
+  outline: 0;
+  left: 0;
+  width: 13.5rem;
+}
+
+.css-h4y409-MuiList-root {
+
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  position: relative;
+  padding-top: 3px;
+  padding-bottom: 3px;
+
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
+  z-index: -120;
+
+}
+/* New Side Bar */

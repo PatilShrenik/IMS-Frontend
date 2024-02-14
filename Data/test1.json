@@ -1,0 +1,20 @@
+{
+  "Graph": [
+    {
+      "BarGraph": {
+        "type": "column",
+        "stacking": true,
+        "categories": ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+        "data": [
+          {
+            "name": "ABMCPL - New Subscription",
+            "data": [1741.92, 2123.56, 2210.25, null, null, null, null]
+          }
+        ],
+        "xAxis": "",
+        "yAxis": "Cost(₹)",
+        "title": "Monthly Disk Consumption"
+      }
+    }
+  ]
+}

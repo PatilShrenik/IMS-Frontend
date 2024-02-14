@@ -1,0 +1,159 @@
+{
+  "AWS": {
+    "Graph": [
+      {
+        "LineChart": {
+          "data": [
+            {
+              "name": "AWS",
+              "data": [
+                ["May", null],
+                ["Jun", null],
+                ["Jul", null],
+                ["Aug", null],
+                ["Sep", null],
+                ["Oct", null],
+                ["Nov", null]
+              ]
+            }
+          ],
+          "title": "Consumption Trend",
+          "xAxis": "Month",
+          "yAxis": "AWS($)"
+        }
+      },
+    
+      {
+        "BarGraph": {
+          "status": false,
+          "msg": "No data found"
+        }
+      }
+    ],
+    "Table": [
+      {
+        "title": "Total Cost For Each Account - AWS",
+        "headers": ["month", "account name", "cost($)"],
+        "data": []
+      }
+    ],
+    "Metric": [
+      {
+        "title": "Total Allocated",
+        "value": {
+          "aws": 0
+        }
+      },
+      {
+        "title": "Total UnAllocated",
+        "value": {
+          "aws": 0
+        }
+      }
+    ]
+  },
+  "Azure": {
+    "Graph": [
+      {
+        "LineChart": {
+          "data": [
+            {
+              "name": "AWS",
+              "data": [
+                ["May", null],
+                ["Jun", null],
+                ["Jul", null],
+                ["Aug", null],
+                ["Sep", null],
+                ["Oct", null],
+                ["Nov", null]
+              ]
+            }
+          ],
+          "title": "Consumption Trend",
+          "xAxis": "Month",
+          "yAxis": "AWS($)"
+        }
+      },
+      {
+        "BarGraph": {
+          "status": false,
+          "msg": "No data found"
+        }
+      }
+    ],
+    "Table": [
+      {
+        "title": "Total Cost For Each Account - AWS",
+        "headers": ["month", "account name", "cost($)"],
+        "data": []
+      }
+    ],
+    "Metric": [
+      {
+        "title": "Total Allocated",
+        "value": {
+          "aws": 0
+        }
+      },
+      {
+        "title": "Total UnAllocated",
+        "value": {
+          "aws": 0
+        }
+      }
+    ]
+  },
+  "CloudGateway": {
+    "Graph": [
+      {
+        "LineChart": {
+          "data": [
+            {
+              "name": "AWS",
+              "data": [
+                ["May", null],
+                ["Jun", null],
+                ["Jul", null],
+                ["Aug", null],
+                ["Sep", null],
+                ["Oct", null],
+                ["Nov", null]
+              ]
+            }
+          ],
+          "title": "Consumption Trend",
+          "xAxis": "Month",
+          "yAxis": "AWS($)"
+        }
+      },
+      {
+        "BarGraph": {
+          "status": false,
+          "msg": "No data found"
+        }
+      }
+    ],
+    "Table": [
+      {
+        "title": "Total Cost For Each Account - AWS",
+        "headers": ["month", "account name", "cost($)"],
+        "data": []
+      }
+    ],
+    "Metric": [
+      {
+        "title": "Total Allocated",
+        "value": {
+          "aws": 0
+        }
+      },
+      {
+        "title": "Total UnAllocated",
+        "value": {
+          "aws": 0
+        }
+      }
+    ]
+  }
+}

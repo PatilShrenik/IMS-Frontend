@@ -1,0 +1,45 @@
+{
+  "BarGraph": {
+      "type": "column",
+      "stacking": "true",
+      "categories": [
+        "Oct",
+        "Nov",
+        "Dec",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Jan"
+      ],
+      "data": [
+          {
+              "name": " ABG Thai Chemicals",
+              "data": [
+                5372.97
+              ]
+          },
+          {
+              "name": "ABG Thai Chemicals",
+              "data": [
+                5796.23
+              ]
+          },
+          {
+            "name": " ABG Thai Chemicals",
+            "data": [
+              5372.97
+            ]
+        },
+        {
+            "name": "ABG Thai Chemicals",
+            "data": [
+              5796.23,
+              63687
+            ]
+        }
+      ],
+      "xAxis": "",
+      "yAxis": "Cost(₹)",
+      "title": "Forecasted Cost For Each Account Or Subscription"
+  }
+},
