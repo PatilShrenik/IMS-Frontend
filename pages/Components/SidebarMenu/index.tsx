@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { usePathname } from "next/navigation";
-
+import Collapse from "@mui/material/Collapse";
+// import ExpandMore from "@mui/icons-material/ExpandMore";
+// import ExpandLess from "@mui/icons-material/ExpandLess";
 interface DropdownItem {
   subMenuDropdownname: string;
   subMenuDropdownpathName: string;
@@ -24,7 +26,6 @@ const SidebarMenu = () => {
 
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
  
-
   const handleSubmenuClick = (index: any) => {
     console.log("=-=", index);
     setOpenSubmenu((prevOpen) => (prevOpen === index ? null : index));
@@ -148,25 +149,7 @@ const SidebarMenu = () => {
 
           ],
         },
-        {
-          subMenuName: "System Settings",
-          // subMenuPathName: "/page/systemSetting",
-          subMenuDropdown: [
-            {
-              subMenuDropdownname: "- Global Settings",
-              subMenuDropdownpathName: "/page/flow",
-            },
-            {
-              subMenuDropdownname: "- Mail Server",
-              subMenuDropdownpathName: "/page/flow",
-            },
-            {
-              subMenuDropdownname: "- SMS Server",
-              subMenuDropdownpathName: "/page/flow",
-            },
-
-          ],
-        },
+       
         {
           subMenuName: "System Settings",
           // subMenuPathName: "/page/systemSetting",
@@ -275,12 +258,6 @@ const SidebarMenu = () => {
       ],
     },
 
-
-   
-
-
-
-
   ];
 
   return (
@@ -322,13 +299,11 @@ const SidebarMenu = () => {
                               />
                             )}
                           </div>
+                          <Collapse in={openSubmenu === subIndex} timeout="auto" unmountOnExit>
                           {submenuItem.subMenuDropdown && (
                             <ul
-                              className={`ml-3 p-0 mt-2 py-[5px] transition-opacity ${
-                                openSubmenu === subIndex
-                                  ? "hidden"
-                                  : "inline-block"
-                              }`}
+                              className="ml-3 p-0 mt-2 py-[5px] transition-opacity "
+                         
                             >
                               {submenuItem.subMenuDropdown.map(
                                 (dropdownItem, dropdownIndex) => (
@@ -341,7 +316,9 @@ const SidebarMenu = () => {
                                 )
                               )}
                             </ul>
+                           
                           )}
+                           </Collapse>
                         </li>
                       ))}
                     </ul>
