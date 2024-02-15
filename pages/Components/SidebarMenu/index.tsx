@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { usePathname } from "next/navigation";
 import Collapse from "@mui/material/Collapse";
 // import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -24,103 +24,95 @@ interface MenuItem {
 const SidebarMenu = () => {
   const pathname = usePathname();
 
+  const path = pathname;
+  // console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
- 
+
   const handleSubmenuClick = (index: any) => {
-    console.log("=-=", index);
     setOpenSubmenu((prevOpen) => (prevOpen === index ? null : index));
   };
 
-  const menuItems: MenuItem[]  = [
+  const menuItems: MenuItem[] = [
     {
       name: "Dashboard",
-      pathName: "/page/FinOps/reports",
-      
+      pathName: "/Dashboard",
     },
 
     {
       name: "Assets",
-      pathName: "/page/FinOps/Settings",
+      pathName: "/Assets",
     },
 
     {
-      name: "Alert",
-      pathName: "/page/Alert",
+      name: "Alerts",
+      pathName: "/Alerts",
     },
 
     {
       name: "Topology",
-      pathName: "/page/Topology",
+      pathName: "/Topology",
     },
     {
       name: "Explorer",
-      pathName: "/page/Explorer",
+      pathName: "/Explorer",
       subMenu: [
         {
           subMenuName: "Metric",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "Flow",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
       ],
     },
     {
-      name: "Report",
-      pathName: "/page/Report",
+      name: "Reports",
+      pathName: "/Reports",
     },
 
     {
       name: "Diagnostics",
-      pathName: "/page/Diagnostics",
+      pathName: "/Diagnostics",
       subMenu: [
         {
           subMenuName: "Ping",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "SNMP",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "SSH",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "TCPDUMP",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "API",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
         {
           subMenuName: "Traceroute",
-           subMenuPathName: "/page/changeSetting",
-        
+          subMenuPathName: "/page/changeSetting",
         },
       ],
     },
     {
       name: "NCM",
-      pathName: "/page/NCM",
+      pathName: "/NCM",
     },
     {
       name: "Audit",
-      pathName: "/page/Audit",
+      pathName: "/Audit",
     },
 
     {
       name: "Settings",
-      pathName: "/page/Settings",
+      pathName: "/Settings",
       subMenu: [
         {
           subMenuName: "User Settings",
@@ -146,10 +138,9 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- LDPA",
               subMenuDropdownpathName: "/page/role",
             },
-
           ],
         },
-       
+
         {
           subMenuName: "System Settings",
           // subMenuPathName: "/page/systemSetting",
@@ -166,7 +157,6 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- SMS Server",
               subMenuDropdownpathName: "/page/flow",
             },
-
           ],
         },
 
@@ -182,9 +172,6 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- Policy",
               subMenuDropdownpathName: "/page/flow",
             },
-
-           
-
           ],
         },
 
@@ -192,7 +179,6 @@ const SidebarMenu = () => {
           subMenuName: "Device Settingd",
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-           
             {
               subMenuDropdownname: "- Credential Profile",
               subMenuDropdownpathName: "/page/flow",
@@ -201,9 +187,6 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- Site Management",
               subMenuDropdownpathName: "/page/flow",
             },
-            
-           
-
           ],
         },
 
@@ -211,19 +194,16 @@ const SidebarMenu = () => {
           subMenuName: "Catalog",
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-           
             {
               subMenuDropdownname: "- SNMP",
               subMenuDropdownpathName: "/page/flow",
             },
-
           ],
         },
         {
           subMenuName: "Traffic",
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-           
             {
               subMenuDropdownname: "- Flow",
               subMenuDropdownpathName: "/page/flow",
@@ -232,16 +212,12 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- Trap",
               subMenuDropdownpathName: "/page/flow",
             },
-            
-           
-
           ],
         },
         {
           subMenuName: "Schedular",
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-           
             {
               subMenuDropdownname: "- Discovery Schedular",
               subMenuDropdownpathName: "/page/flow",
@@ -250,85 +226,95 @@ const SidebarMenu = () => {
               subMenuDropdownname: "- Report Schedular",
               subMenuDropdownpathName: "/page/flow",
             },
-            
-           
-
           ],
         },
       ],
     },
-
   ];
 
   return (
-    <div className="left-0 top-0 w-[17.5rem] ml-[1px] z-9999 flex  flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ">
-      <div className="flex h-[2.5rem] px-3 items-center text-white   pt-1.3 border-b-2">
-        {menuItems.map((menuItem, index) => (
-          <span key={index}>
-            {pathname.includes(menuItem.pathName) && menuItem.name}
-          </span>
-        ))}
-      </div>
+    <>
+      {menuItems.map((menuItem, index) =>
+        pathname.includes(menuItem.name) && menuItem.subMenu ? (
+          <div
+            key={index}
+            className="left-0 top-0 w-[17.5rem] ml-[1px] flex  flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark lg:translate-x-0"
+          >
+            <div className="flex h-[2.5rem] px-3 items-center text-white   pt-1.3 border-b-2">
+              <p>{menuItem.name}</p>
+              {/* {menuItems.map((menuItem, index) => {
+                return (
+                  <span key={index}> */}
+              {/* {pathname.includes(menuItem.pathName) && menuItem.name} */}
+              {/* </span> */}
+              {/* );
+              })} */}
+            </div>
 
-      <ul>
-        {menuItems.map(
-          (menuItem, index) =>
-            pathname.includes(menuItem.pathName) && (
-              <li className="w-full" key={index}>
-                <div
-                  
-                  className="group relative flex items-center rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 "
-                >
-                  {menuItem.subMenu?.length  && (
-                    <ul className="ml-3 p-0  py-[5px]">
-                      {menuItem.subMenu.map((submenuItem, subIndex) => (
-                        <li
-                          key={subIndex}
-                          className=" py-2.5 pl-4  items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
-                        >
-                          <div
-                            className="flex justify-between cursor-pointer transition duration-300 ease-in-out"
-                            onClick={() => handleSubmenuClick(subIndex)}
-                          >
-                            {submenuItem.subMenuName}
-                            {submenuItem.subMenuDropdown && (
-                              <KeyboardArrowUpIcon
-                                className={`transform ${
-                                  openSubmenu === subIndex ? "-rotate-180" : ""
-                                }`}
-                              />
-                            )}
-                          </div>
-                          <Collapse in={openSubmenu === subIndex} timeout="auto" unmountOnExit>
-                          {submenuItem.subMenuDropdown && (
-                            <ul
-                              className="ml-3 p-0 mt-2 py-[5px] transition-opacity "
-                         
+            <ul>
+              {menuItems.map((menuItem, index) =>
+                pathname.includes(menuItem.name) ? (
+                  <li className="w-full" key={index}>
+                    <div className="group relative flex items-center rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ">
+                      {menuItem.subMenu?.length && (
+                        <ul className="w-full ml-3 p-0 py-[5px]">
+                          {menuItem.subMenu.map((submenuItem, subIndex) => (
+                            <li
+                              key={subIndex}
+                              className="w-full py-2.5 px-2 items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
                             >
-                              {submenuItem.subMenuDropdown.map(
-                                (dropdownItem, dropdownIndex) => (
-                                  <li
-                                    key={dropdownIndex}
-                                    className="mr-3 py-1 items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
-                                  >
-                                    {dropdownItem.subMenuDropdownname}
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                           
-                          )}
-                           </Collapse>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </li>
-            )
-        )}
-      </ul>
-    </div>
+                              <div
+                                className="w-full flex justify-between cursor-pointer transition duration-300 ease-in-out"
+                                onClick={() => handleSubmenuClick(subIndex)}
+                              >
+                                <p>{submenuItem.subMenuName}</p>
+                                {submenuItem.subMenuDropdown && (
+                                  <KeyboardArrowDownIcon
+                                    className={`transform ${
+                                      openSubmenu === subIndex
+                                        ? "-rotate-180"
+                                        : ""
+                                    }`}
+                                  />
+                                )}
+                              </div>
+                              <Collapse
+                                in={openSubmenu === subIndex}
+                                timeout="auto"
+                                unmountOnExit
+                              >
+                                {submenuItem.subMenuDropdown && (
+                                  <ul className="ml-3 p-0 mt-2 py-[5px] transition-opacity ">
+                                    {submenuItem.subMenuDropdown.map(
+                                      (dropdownItem, dropdownIndex) => (
+                                        <li
+                                          key={dropdownIndex}
+                                          className="mr-3 py-1 items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
+                                        >
+                                          {dropdownItem.subMenuDropdownname}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                )}
+                              </Collapse>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </li>
+                ) : (
+                  ""
+                )
+              )}
+            </ul>
+          </div>
+        ) : (
+          ""
+        )
+      )}
+    </>
   );
 };
 

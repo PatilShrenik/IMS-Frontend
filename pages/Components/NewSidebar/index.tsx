@@ -8,7 +8,7 @@ import Person2Icon from "@mui/icons-material/Person2";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import CameraRoundedIcon from '@mui/icons-material/CameraRounded';
+import CameraRoundedIcon from "@mui/icons-material/CameraRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useAppContext } from "../AppContext";
@@ -34,74 +34,71 @@ const Sidebar = () => {
   const links = [
     {
       name: "Dashboard",
-      path: "/page/FinOps/reports",
+      path: "/Dashboard",
       icon: (
         <DashboardIcon
           className={` ${
-            pathname.includes("page/FinOps/reports") &&
-            "dark:bg-meta-4 text-blue-700"
+            pathname.includes("/Dashboard") && "dark:bg-meta-4 text-blue-700"
           }`}
-          sx={{ color: "white" }}
+          sx={{ color: "white", margin: "0 1.5rem" }}
         />
       ),
     },
     {
       name: "Assets",
-      path: "/page/FinOps/Settings",
-      icon: <EqualizerIcon sx={{ color: "white" }} />,
+      path: "/Assets",
+      icon: <EqualizerIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
-      name: "Alert",
-      path: "/page/Alert",
-      icon: <NotificationsActiveIcon sx={{ color: "white" }} />,
+      name: "Alerts",
+      path: "/Alerts",
+      icon: (
+        <NotificationsActiveIcon sx={{ color: "white", margin: "0 1.5rem" }} />
+      ),
     },
     {
       name: "Topology",
-      path: "/page/Topology",
-      icon: <CameraRoundedIcon sx={{ color: "white" }} />,
+      path: "/Topology",
+      icon: <CameraRoundedIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
       name: "Explorer",
-      path: "/page/Explorer",
-      icon: <DataSaverOffIcon sx={{ color: "white" }} />,
+      path: "/Explorer",
+      icon: <DataSaverOffIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
-      name: "Report",
-      path: "/page/Report",
-      icon: <AssignmentIcon sx={{ color: "white" }} />,
+      name: "Reports",
+      path: "/Reports",
+      icon: <AssignmentIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
       name: "Diagnostics",
-      path: "/page/Diagnostics",
-      icon: <EqualizerIcon sx={{ color: "white" }} />,
+      path: "/Diagnostics",
+      icon: <EqualizerIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
       name: "NCM",
-      path: "/page/NCM",
-      icon: <Person2Icon sx={{ color: "white" }} />,
+      path: "/NCM",
+      icon: <Person2Icon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
       name: "Audit",
-      path: "/page/Audit",
-      icon: <DynamicFormIcon sx={{ color: "white" }} />,
+      path: "/Audit",
+      icon: <DynamicFormIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
     {
       name: "Settings",
-      path: "/page/Settings",
-      icon: < SettingsIcon sx={{ color: "white" }} />,
+      path: "/Settings",
+      icon: <SettingsIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
     },
-
   ];
 
-
-
- 
   return (
     <aside
       ref={sidebar}
-      className="left-0 top-0 w-[6.50rem] z-9999 flex h-screen flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark  lg:translate-x-0 "
+      className="left-0 top-0 w-[5.5rem] flex h-screen flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark  lg:translate-x-0 shadow-2xl"
     >
-      <div className="flex h-[2.5rem] items-center justify-between gap-2 px-4 pt-1.3 border-b-2">
+      <div className="flex h-[2.5rem] items-center justify-between px-4 py-1 pt-1.3 border-b-2">
         <Link href="" className="flex cursor-default">
           <Image
             width={32}
@@ -113,23 +110,46 @@ const Sidebar = () => {
         </Link>
       </div>
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="pb-4 lg:mt-3 lg:px-4">
+        <nav className="pb-4">
+          <div>
+            <ul className="mb-6 flex flex-col gap-1.5">
+              {links.map((link, index) => (
+                <li key={index}>
+                  <Link
+                    href={link.path}
+                    className={`group relative flex items-center rounded-sm py-1 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ${
+                      pathname.includes(link.path) && "dark:bg-meta-4"
+                    }`}
+                  >
+                    <div className="w-full">
+                      <div className="flex justify-around">{link.icon}</div>
+                      <p className="text-xs flex justify-evenly">{link.name}</p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        {/* <nav className="pb-4">
           <div>
             <ul className="mb-6 flex flex-col ju gap-1.5">
               {links.map((link, index) => (
-                 <li key={index}>
+                <li key={index}>
                   <Link
-                   href={link.path}
+                    href={link.path}
                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ${
-                      pathname.includes(link.path) &&
-                      " dark:bg-meta-4 "
+                      pathname.includes(link.path) && " dark:bg-meta-4 "
                     }`}
                   >
                     <Box>
-                    {link.icon}
-                      <span className="mr-3 text-xs font-light ml-[-12px]">
-                        {link.name}
-                      </span>
+                      <div className="flex flex-col">
+                        {link.icon}
+                        <span className="mr-3 text-xs font-light ml-[-12px]">
+                          {link.name}
+                        </span>
+                      </div>
                     </Box>
                   </Link>
                 </li>
@@ -144,10 +164,10 @@ const Sidebar = () => {
                 //    <Box>
                 //     <DashboardIcon
                 //       sx={{ color: "white" }}
-                      // className={` ${
-                      //   pathname.includes("page/FinOps/reports") &&
-                      //   "dark:bg-meta-4 text-blue-700"
-                      // }`}
+                // className={` ${
+                //   pathname.includes("page/FinOps/reports") &&
+                //   "dark:bg-meta-4 text-blue-700"
+                // }`}
                 //     />
                 //  <span className="mr-3 text-xs font-light ml-[-12px]">Dashboard</span>
                 //       </Box>
@@ -198,7 +218,7 @@ const Sidebar = () => {
               ))}
             </ul>
           </div>
-        </nav>
+        </nav> */}
       </div>
     </aside>
   );
