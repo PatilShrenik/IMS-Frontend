@@ -183,7 +183,7 @@ const index = () => {
             </div>
           </div>
 
-          <div className="relative  min-w-[34.375rem] px-4  overflow-x-auto shadow-md sm:rounded-lg ">
+          <div className="relative  min-w-[34.375rem] px-4 py-1  overflow-x-auto shadow-md sm:rounded-lg ">
           <div className="min-h-[450px]">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -250,15 +250,15 @@ const index = () => {
                       >
                         <MenuItem>
                           {" "}
-                          {/* <EditRoundedIcon className=" text-blue-400  mr-3" />{" "} */}
+                          <EditRoundedIcon className=" text-blue-400  mr-3" />{" "}
                           Edit
                         </MenuItem>
                         <MenuItem> 
-                        {/* <DeleteForeverIcon  className="  text-blue-400 mr-3" /> */}
+                        <DeleteForeverIcon  className="  text-blue-400 mr-3" />
                          Delete</MenuItem>
                         <MenuItem>
                           {" "}
-                          {/* <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "} */}
+                          <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "}
                           Visit Dashboard
                         </MenuItem>
                       </Menu>
