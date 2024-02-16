@@ -220,9 +220,9 @@ const index = () => {
                       {Widget.widget_name}
                     </th>
 
-                    <td className="px-6 py-2">{Widget.widget_type}</td>
+                    <td className="px-6 py-2 text-gray-900 whitespace-nowrap">{Widget.widget_type}</td>
 
-                    <td className=" px-6 py-2">
+                    <td className=" px-6 py-2  text-gray-900 whitespace-nowrap">
                       <IconButton
                         aria-label="more"
                         id="long-button"
