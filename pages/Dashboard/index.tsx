@@ -188,15 +188,15 @@ const index = () => {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr className="bg-blue-400 font-semibold">
-                  <th scope="col" className="px-6 py-4">
+                  <th scope="col" className="px-6 py-4" style={{ width: '50%' }}>
                     widget Name
                   </th>
 
-                  <th scope="col" className="px-6 py-4">
+                  <th scope="col" className="px-6 py-4"  style={{ width: '30%' }}>
                     widget Type
                   </th>
 
-                  <th scope="col" className="px-6 py-4">
+                  <th scope="col" className="px-6 py-4" style={{ width: '20%' }}>
                     Action
                   </th>
                 </tr>
