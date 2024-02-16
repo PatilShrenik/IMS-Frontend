@@ -250,15 +250,15 @@ const index = () => {
                       >
                         <MenuItem>
                           {" "}
-                          <EditRoundedIcon className=" text-blue-400  mr-3" />{" "}
+                          {/* <EditRoundedIcon className=" text-blue-400  mr-3" />{" "} */}
                           Edit
                         </MenuItem>
                         <MenuItem> 
-                        <DeleteForeverIcon  className="  text-blue-400 mr-3" />
+                        {/* <DeleteForeverIcon  className="  text-blue-400 mr-3" /> */}
                          Delete</MenuItem>
                         <MenuItem>
                           {" "}
-                          <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "}
+                          {/* <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "} */}
                           Visit Dashboard
                         </MenuItem>
                       </Menu>
