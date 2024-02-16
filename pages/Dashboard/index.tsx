@@ -19,35 +19,11 @@ const index = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const open = Boolean(anchorEl);
   const handleButtonClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-
-  const handleSearchChange = (event: any) => {
-    setSearchValue(event.target.value);
-  };
-
-  const handleFormSubmit = () => {
-    // Perform search logic here based on the searchValue
-    // For example, you can filter the rows array
-    // For simplicity, let's just log the searchValue for now
-    console.log("Search Value:", searchValue);
-  };
-
-  const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
-  };
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value);
-  };
-
   const widgets: Widget[] = [
     {
       widget_name: "Apple MacBook Pro 17",
@@ -89,6 +65,31 @@ const index = () => {
       widget_type: "chair",
     },
   ];
+  const handleSearchChange = (event: any) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleFormSubmit = () => {
+    // Perform search logic here based on the searchValue
+    // For example, you can filter the rows array
+    // For simplicity, let's just log the searchValue for now
+    console.log("Search Value:", searchValue);
+  };
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
+
+
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value);
+  };
+
+  
   const paginatedWidgets = widgets.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
