@@ -124,8 +124,19 @@ body {
 
 }
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
-  z-index: -120;
+
+/* Tooltip css */
+
+.MuiTooltip-popper[data-popper-placement*="left"] .css-ja5taz-MuiTooltip-tooltip {
+  transform-origin: right center;
+  margin-right: 8px;
+}
+.css-ja5taz-MuiTooltip-tooltip {
+  font-size: 0.7875rem;
+}
+
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+
+  box-shadow: 0px 2.5px 2.5px -1.5px rgba(0, 0, 0, 0.1), 0px 4px 5px 0.5px rgba(0, 0, 0, 0.07), 0px 1.5px 7px 1px rgba(0, 0, 0, 0.06);
 
 }
-/* New Side Bar */
