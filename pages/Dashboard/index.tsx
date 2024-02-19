@@ -14,16 +14,14 @@ interface Widget {
   widget_name: string;
   widget_type: string;
 }
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 10;
 const index = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const open = Boolean(anchorEl);
-  const handleButtonClick = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+
   const widgets: Widget[] = [
     {
       widget_name: "Apple MacBook Pro 17",
@@ -64,23 +62,27 @@ const index = () => {
       widget_name: "Surface Pro",
       widget_type: "chair",
     },
+    {
+      widget_name: "Mag",
+      widget_type: "ds",
+    },
+    {
+      widget_name: "Afd",
+      widget_type: "hdf",
+    },
   ];
+
+  const handleButtonClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   const handleSearchChange = (event: any) => {
     setSearchValue(event.target.value);
-  };
-
-  const handleFormSubmit = () => {
-    // Perform search logic here based on the searchValue
-    // For example, you can filter the rows array
-    // For simplicity, let's just log the searchValue for now
     console.log("Search Value:", searchValue);
   };
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   };
-
-
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -89,7 +91,6 @@ const index = () => {
     setCurrentPage(value);
   };
 
-  
   const paginatedWidgets = widgets.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -113,14 +114,14 @@ const index = () => {
       >
         <path
           d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"
-          fill="#3C50E0"
+          fill="#171A22"
         />
       </svg>
 
       <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
         <div className="container mx-auto sm:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl ">
           <div className="flex border-b-2  justify-between py-2">
-            <span className="px-4 font-bold"> Create Widget</span>
+            <span className="px-4 font-bold"> Add Widget</span>
 
             <CloseSharpIcon
               className="cursor-pointer mr-3"
@@ -128,9 +129,9 @@ const index = () => {
             />
           </div>
 
-          <div className="flex flex-col mt-6 mr-2 sm:flex-row justify-between p-4">
+          <div className="flex  mt-6 mr-2 justify-between p-4">
             <div className="mb-4 sm:mb-0 sm:mr-4 flex items-center">
-              <form onSubmit={handleFormSubmit} className="relative">
+              <form className="relative">
                 <input
                   type="text"
                   placeholder="Type to search..."
@@ -163,7 +164,7 @@ const index = () => {
                 </button>
               </form>
             </div>
-            <div>
+          
               <Tooltip
                 className="text-lg font-bold"
                 title="Create Widget"
@@ -180,102 +181,103 @@ const index = () => {
                   />
                 </svg>
               </Tooltip>
-            </div>
+            
           </div>
 
           <div className="relative  min-w-[34.375rem] px-4 py-1  overflow-x-auto shadow-md sm:rounded-lg ">
-          <div className="min-h-[450px]">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr className="bg-blue-400 font-semibold">
-                  <th scope="col" className="px-6 py-4" style={{ width: '50%' }}>
-                    widget Name
-                  </th>
-
-                  <th scope="col" className="px-6 py-4"  style={{ width: '30%' }}>
-                    widget Type
-                  </th>
-
-                  <th scope="col" className="px-6 py-4" style={{ width: '20%' }}>
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-        
-                {paginatedWidgets.map((Widget, index) => (
-                  <tr
-                    key={index}
-                    className={`${
-                      index % 2 === 0
-
-                        ? "even:bg-gray-200 even:dark:bg-gray-800"
-                        : "odd:bg-white odd:dark:bg-gray-900"
-                    } border-b dark:border-gray-700`}
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {Widget.widget_name}
+            <div className="min-h-[450px] ">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr className="bg-blue-400 font-semibold">
+                    <th scope="col" className="px-6 py-4 w-1/2">
+                      widget Name
                     </th>
 
-                    <td className="px-6 py-2 text-gray-900 whitespace-nowrap">{Widget.widget_type}</td>
+                    <th scope="col" className="px-6 py-4 w-3/10">
+                      widget Type
+                    </th>
 
-                    <td className=" px-6 py-2  text-gray-900 whitespace-nowrap">
-                      <IconButton
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? "long-menu" : undefined}
-                        aria-expanded={open ? "true" : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-
-                      <Menu
-                        id="long-menu"
-                        MenuListProps={{
-                          "aria-labelledby": "long-button",
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        PaperProps={{
-                          style: {
-                            width: "18ch",
-                          },
-                        }}
-                      >
-                        <MenuItem>
-                          {" "}
-                          {/* <EditRoundedIcon className=" text-blue-400  mr-3" />{" "} */}
-                          Edit
-                        </MenuItem>
-                        <MenuItem> 
-                        {/* <DeleteForeverIcon  className="  text-blue-400 mr-3" /> */}
-                         Delete</MenuItem>
-                        <MenuItem>
-                          {" "}
-                          {/* <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "} */}
-                          Visit Dashboard
-                        </MenuItem>
-                      </Menu>
-                    </td>
+                    <th scope="col" className="px-6 py-4 w-1/5">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedWidgets.map((Widget, index) => (
+                    <tr
+                      key={index}
+                      className={`${
+                        index % 2 === 0
+                          ? "bg-gray-200 dark:bg-gray-800"
+                          : "bg-white dark:bg-gray-900"
+                      } border-b dark:border-gray-700`}
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {Widget.widget_name}
+                      </th>
+
+                      <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
+                        {Widget.widget_type}
+                      </td>
+
+                      <td className=" px-6 py-1  text-gray-900 whitespace-nowrap">
+                        <IconButton
+                          aria-label="more"
+                          id="long-button"
+                          aria-controls={open ? "long-menu" : undefined}
+                          aria-expanded={open ? "true" : undefined}
+                          aria-haspopup="true"
+                          onClick={handleClick}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+
+                        <Menu
+                          id="long-menu"
+                          MenuListProps={{
+                            "aria-labelledby": "long-button",
+                          }}
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          PaperProps={{
+                            style: {
+                              width: "16ch",
+                            },
+                          }}
+                        >
+                          <MenuItem>
+                            {" "}
+                            {/* <EditRoundedIcon className=" text-blue-400  mr-3" />{" "} */}
+                            Edit
+                          </MenuItem>
+                          <MenuItem>
+                            {/* <DeleteForeverIcon  className="  text-blue-400 mr-3" /> */}
+                            Delete
+                          </MenuItem>
+                          <MenuItem>
+                            {" "}
+                            {/* <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "} */}
+                            Visit Dashboard
+                          </MenuItem>
+                        </Menu>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div className="flex flex-row-reverse mb-[1rem]">
+            <div className="flex flex-row-reverse ">
               <Pagination
                 count={Math.ceil(widgets.length / ITEMS_PER_PAGE)}
                 page={currentPage}
                 onChange={handlePageChange}
                 variant="outlined"
                 shape="rounded"
-                className="mt-4"
+                className="mt-4 mb-4"
               />
             </div>
           </div>
