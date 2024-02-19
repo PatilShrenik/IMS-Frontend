@@ -1,7 +1,9 @@
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownNotification from "./DropdownNotification";
+import { usePathname } from "next/navigation";
 import DropdownUser from "./DropdownUser";
+import HomeIcon from "@mui/icons-material/Home";
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAppContext } from "../AppContext";
@@ -17,19 +19,62 @@ const Header = (props: {
     toggleSideBarClickState,
     themeSwitch,
   } = useAppContext();
+  const pathname = usePathname();
+  const path = pathname.substring(1);
+  // console.log("header path", path.substring(1));
   return (
     <header
-      className="sticky top-0 z-[100] h-[2.5rem] flex bg-white ease-linear drop-shadow-1 dark:bg-[#171A22] dark:drop-shadow-none lg:translate-x-0" // {`
-    
+      className="sticky top-0 z-[100] h-[3rem] flex bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color  lg:translate-x-0" // {`
     >
-      
-      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 ">
-       
-        <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
-          
-
-          
-        </div>
+      <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-2 ">
+        {pathname.includes("Explorer") ||
+        pathname.includes("Diagnostics") ||
+        pathname.includes("Settings") ? (
+          <div
+            className=" flex cursor-pointer"
+            onClick={() => {
+              toggleSideBarState();
+              // toggleSideBarClickState();
+            }}
+          >
+            <MenuIcon className="text-black dark:text-white" />
+            <div className="mx-4 ">
+              <p className="dark:text-textColor align-middle">
+                <HomeIcon
+                  fontSize="small"
+                  className="align-sub dark:text-textColor hover:text-primary2 dark:hover:text-primary2"
+                />{" "}
+                {"> "}
+                {path} {pathname.includes("Explorer") && " > Metric"}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div
+            className=" flex cursor-pointer"
+            onClick={() => {
+              toggleSideBarState();
+              // toggleSideBarClickState();
+            }}
+          >
+            {/* <MenuIcon className="text-black dark:text-white" /> */}
+            <div className="mx-4 ">
+              <p className="dark:text-textColor align-middle">
+                {!pathname.includes("Dashboard") && (
+                  <>
+                    <HomeIcon
+                      fontSize="small"
+                      className="align-sub dark:text-textColor hover:text-primary2 dark:hover:text-primary2"
+                    />
+                    {" / "}
+                  </>
+                )}
+                {path}
+              </p>
+            </div>
+          </div>
+        )}
+        {/* <div className="flex items-left gap-2 sm:gap-4">{path}</div> */}
 
         <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">

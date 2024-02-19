@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Explorer = () => {
-  return (
-    <div>Explorer</div>
-  )
-}
+  return <div className="dark:text-textColor">Explorer Page Content</div>;
+};
 
-export default Explorer
+export default Explorer;

@@ -71,26 +71,28 @@ const DropdownUser = () => {
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-2"
+        className="flex justify-around items-center"
         href="#"
       >
-        <span className="text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {userName}
+        <div className="flex justify-evenly items-center">
+          <span className="text-right lg:block">
+            <span className="block text-sm font-medium text-black dark:text-white">
+              {userName}
+            </span>
           </span>
-        </span>
 
-        <span className="h-9 mt-1 w-10 rounded-full p-1">
-          {/* <img
+          <span className="h-9 w-10 rounded-full p-1">
+            {/* <img
             style={{ borderRadius: "50%", width: 30, height: 30 }}
             src={"/avatar3.jpg"}
             alt="User"
           /> */}
-          <AccountCircleIcon
-            sx={{ width: "30", height: "30" }}
-            className="text-black dark:text-white"
-          />
-        </span>
+            <AccountCircleIcon
+              sx={{ width: "30", height: "30" }}
+              className="text-black dark:text-white"
+            />
+          </span>
+        </div>
 
         <KeyboardArrowDownIcon className="text-black dark:text-white" />
       </Link>
@@ -100,15 +102,15 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0  p-3 flex w-[15.625rem] flex-col rounded-sm border border-[#E2E8F0] bg-white shadow-default dark:border-[#2E3A47] dark:bg-[#24303F] ${
+        className={`absolute right-0  p-3 flex w-[13.625rem] flex-col rounded-b-xl  bg-light-menu-color shadow-md shadow-black dark:bg-dark-menu-color ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-[#E2E8F0] px-6 py-7.5 dark:border-[#2E3A47]">
+        <ul className="flex flex-col gap-5 border-b border-[#E2E8F0] px-2 dark:border-[#2E3A47]">
           <li>
             <Link
               href=""
-              className="flex cursor-not-allowed items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex cursor-not-allowed items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -130,10 +132,10 @@ const DropdownUser = () => {
               My Profile
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               href=""
-              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -150,11 +152,11 @@ const DropdownUser = () => {
               </svg>
               My Contacts
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               href=""
-              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -179,7 +181,7 @@ const DropdownUser = () => {
           <li></li>
         </ul>
         <button
-          className="flex items-center cursor-not-allowed gap-3.5 py-2 px-6 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-[#DEE4EE]  lg:text-base"
+          className="flex items-center cursor-not-allowed gap-3.5 py-2 px-2 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-textColor  lg:text-base"
           // onClick={handleSignOutClick}
         >
           <svg
@@ -206,13 +208,13 @@ const DropdownUser = () => {
 
       {isSignOutModalOpen && (
         <div className="fixed top-1/5 left-1/3 transform-translate-x-1/2  flex items-center justify-center z-50">
-          <div className="bg-white border-2 border-gray-600 px-7 py-4 rounded-lg shadow-xl dark:text-[#DEE4EE]">
+          <div className="bg-white border-2 border-gray-600 px-7 py-4 rounded-lg shadow-xl dark:text-textColor">
             <p className="text-lg">Are you sure you want to sign out?</p>
 
             <div className="mt-4 flex justify-end">
               <Link href="/">
                 <button
-                  className="mr-4 px-4 py-1 bg-red-800 text-white rounded-md dark:text-[#DEE4EE]"
+                  className="mr-4 px-4 py-1 bg-red-800 text-white rounded-md dark:text-textColor"
                   onClick={handleSignOutConfirm}
                 >
                   Yes
@@ -220,7 +222,7 @@ const DropdownUser = () => {
               </Link>
 
               <button
-                className="px-4 py-1 bg-gray-300 text-gray-700 rounded-lg dark:text-[#DEE4EE]"
+                className="px-4 py-1 bg-gray-300 text-gray-700 rounded-lg dark:text-textColor"
                 onClick={handleSignOutCancel}
               >
                 Cancel

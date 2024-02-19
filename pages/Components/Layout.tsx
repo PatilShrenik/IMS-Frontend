@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
 
-
 import { useAppContext } from "./AppContext";
 
 interface LayoutProps {
@@ -16,10 +15,10 @@ import CloudGateway from "../page/FinOps/Settings";
 
 const Footer = memo(() => (
   <footer
-     className={`px-4 h-12 footer items-center text-center bg-[#FFFFFF] bottom-0 text-neutral-content w-full z-10 dark:bg-[#0C1116]`}
-  > 
-    <p className="text-black text-center">
-      <span className="text-xs">&copy; RevDau 2023</span>{" "}
+    className={`px-4 h-12 footer items-center text-center bg-light-container bottom-0 text-neutral-content w-full z-10 dark:bg-dark-container`}
+  >
+    <p className="text-black text-center dark:text-textColor">
+      <span className="text-xs">&copy; RevDau 2024</span>{" "}
       {/* <strong className="text-red-800 text-xs">
         Birla Management Centre Services Private Limited (BMCSPL).
       </strong>{" "} */}
@@ -32,7 +31,7 @@ const Footer = memo(() => (
     </p> */}
   </footer>
 ));
- Footer.displayName = "Footer";
+Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   const { state, toggleState } = useAppContext();
   // const [uEmail, setEmail] = useState<any>(false);
@@ -56,22 +55,22 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
     >
       <title>IMS</title>
       <NewSidebar />
-      <SidebarMenu/>
-    
+
       <div
         className="flex-auto relative h-[100vh] bg-gray-100  overflow-y-auto overflow-x-hidden"
         // style={{ backgroundColor: "rgba(254, 241, 235, 0.40)" }}
         style={{
-           width: "-webkit-fill-available",
+          width: "-webkit-fill-available",
           background:
             "linear-gradient(180deg, rgb(214, 219, 220), rgb(255, 255, 255))",
         }}
       >
         <Header />
-        <main className=" p-4  min-h-[calc(100vh-5.5rem)] dark:bg-[#0C1116]">
-          {children}
+        <main className="flex min-h-[calc(100vh)] bg-light-container dark:bg-dark-container">
+          <SidebarMenu />
+          <div className="p-4">{children}</div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );
