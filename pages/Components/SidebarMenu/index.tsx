@@ -334,7 +334,7 @@ const SidebarMenu = () => {
                                               className={`pl-[1.3rem] ${
                                                 selectedDropdown ===
                                                 dropdownIndex
-                                                  ? "pl-[.8rem]"
+                                                  ? "pl-[.75rem]"
                                                   : ""
                                               }`}
                                             >

@@ -98,7 +98,7 @@ const Login = () => {
             //   "businessLogo",
             //   fetchedData.data.businessLogo
             // );
-            router.push("/page/FinOps/reports");
+            router.push("/Dashboard");
         if (data.data[0].role != "ADMIN") {
           sessionStorage.setItem("bu_id", data.data[0].id);
         }
