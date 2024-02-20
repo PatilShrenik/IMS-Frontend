@@ -273,6 +273,7 @@ const SidebarMenu = () => {
       {menuItems.map((menuItem, index) =>
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
+          style={{borderTopLeftRadius: '20px'}}
             key={index}
             className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : "w-[13rem] border-r"
@@ -415,7 +416,7 @@ const SidebarMenu = () => {
               )}
             </ul>
             {/* <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" /> */}
-            <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
+            <div className="absolute left-0 top-0 h-full w-[3px]  before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
 
           </div>
         ) : (
