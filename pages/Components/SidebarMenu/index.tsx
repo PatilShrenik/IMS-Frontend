@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import Link from "next/link";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { usePathname } from "next/navigation";
 import Collapse from "@mui/material/Collapse";
-import AddIcon from "@mui/icons-material/Add";
+import BookIcon from '@mui/icons-material/Book';
 import { useAppContext } from "../AppContext";
 import { Divider } from "@mui/material";
-// import ExpandMore from "@mui/icons-material/ExpandMore";
-// import ExpandLess from "@mui/icons-material/ExpandLess";
+import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
+import PolicyIcon from "@mui/icons-material/Policy";
+import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydream";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import TrafficIcon from "@mui/icons-material/Traffic";
+
 interface DropdownItem {
   subMenuDropdownname: string;
   subMenuDropdownpathName: string;
@@ -17,6 +20,7 @@ interface DropdownItem {
 interface SubMenuItem {
   subMenuName: string;
   subMenuPathName?: string;
+  subMenuIcon?: any;
   subMenuDropdown?: DropdownItem[];
 }
 
@@ -26,18 +30,36 @@ interface MenuItem {
   subMenu?: SubMenuItem[];
 }
 
+interface SelectedDropdown {
+  [key: string]: number | null;
+}
+
 const SidebarMenu = () => {
   const { sidebarOpen } = useAppContext();
   const pathname = usePathname();
-  console.log("--", sidebarOpen);
+ // console.log("--", sidebarOpen);
   const path = pathname;
   // console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
+  const [selectedDropdown, setSelectedDropdown] = useState<SelectedDropdown>(
+    {}
+  );
 
   const handleSubmenuClick = (index: any) => {
     setOpenSubmenu((prevOpen) => (prevOpen === index ? null : index));
+    console.log(openSubmenu);
+    setSelectedDropdown({});
   };
-  const [selectedDropdown, setSelectedDropdown] = useState(null) as any;
+ 
+ const handleDropdownClick = (submenuIndex: number, dropdownIndex: number) => {
+    const key = `submenu${submenuIndex}`;
+    console.log(key);
+    console.log(dropdownIndex);
+    setSelectedDropdown({
+      ...selectedDropdown,
+      [key]: dropdownIndex,
+    });
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -47,7 +69,7 @@ const SidebarMenu = () => {
 
     {
       name: "Assets",
-      pathName: "/Assets",
+      pathName: "/assets",
     },
 
     {
@@ -57,7 +79,7 @@ const SidebarMenu = () => {
 
     {
       name: "Topology",
-      pathName: "/Topology",
+      pathName: "/topology",
     },
     {
       name: "Explorer",
@@ -75,7 +97,7 @@ const SidebarMenu = () => {
     },
     {
       name: "Reports",
-      pathName: "/Reports",
+      pathName: "/reports",
     },
 
     {
@@ -110,11 +132,11 @@ const SidebarMenu = () => {
     },
     {
       name: "NCM",
-      pathName: "/NCM",
+      pathName: "/ncm",
     },
     {
       name: "Audit",
-      pathName: "/Audit",
+      pathName: "/audit",
     },
 
     {
@@ -123,6 +145,7 @@ const SidebarMenu = () => {
       subMenu: [
         {
           subMenuName: "User Settings",
+          subMenuIcon: <ManageAccountsIcon />,
           // subMenuPathName: "/page/changeSetting",
           subMenuDropdown: [
             {
@@ -150,6 +173,7 @@ const SidebarMenu = () => {
 
         {
           subMenuName: "System Settings",
+          subMenuIcon: <SettingsSystemDaydreamIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -169,6 +193,7 @@ const SidebarMenu = () => {
 
         {
           subMenuName: "Policy",
+          subMenuIcon: <PolicyIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -184,6 +209,7 @@ const SidebarMenu = () => {
 
         {
           subMenuName: "Device Settings",
+          subMenuIcon: <AppSettingsAltIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -199,6 +225,7 @@ const SidebarMenu = () => {
 
         {
           subMenuName: "Catalog",
+          subMenuIcon: <BookIcon/>,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -209,6 +236,7 @@ const SidebarMenu = () => {
         },
         {
           subMenuName: "Traffic",
+          subMenuIcon: <TrafficIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -223,6 +251,7 @@ const SidebarMenu = () => {
         },
         {
           subMenuName: "Schedular",
+          subMenuIcon: <ScheduleIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -245,7 +274,7 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container  border-[#3C3C3C] duration-300 ease-linear translate-x-0 ${
+            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : "w-[13rem] border-r"
             }`}
           >
@@ -264,14 +293,17 @@ const SidebarMenu = () => {
                             <>
                               <li
                                 key={subIndex}
-                                className="relative w-full py-2 items-center text-black dark:text-textColor hover:text-primary2 dark:hover:text-primary2 font-light"
+                                className="relative w-full py-2 items-center text-black dark:text-textColor font-light"
                               >
                                 <div
-                                  className="w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#D8D8D8] p-2"
+                                  className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#D8D8D8] p-2 ${
+                                    openSubmenu == subIndex &&
+                                    "dark:bg-[#282828] bg-[#D8D8D8]"
+                                  }`}
                                   onClick={() => handleSubmenuClick(subIndex)}
                                 >
                                   <div className="flex">
-                                    {submenuItem.subMenuDropdown && (
+                                    {/* {submenuItem.subMenuDropdown && (
                                       <ManageAccountsIcon
                                         fontSize="small"
                                         className={` ${
@@ -280,7 +312,19 @@ const SidebarMenu = () => {
                                             : ""
                                         }`}
                                       />
-                                    )}
+                                    )} */}
+                                    {submenuItem.subMenuIcon &&
+                                      React.cloneElement(
+                                        submenuItem.subMenuIcon,
+                                        {
+                                          fontSize: "small",
+                                          className: `${
+                                            openSubmenu === subIndex
+                                              ? "text-primary2"
+                                              : ""
+                                          }`,
+                                        }
+                                      )}
                                     <p
                                       className={`mx-2 text-[14px]  ${
                                         openSubmenu === subIndex
@@ -291,15 +335,17 @@ const SidebarMenu = () => {
                                       {submenuItem.subMenuName}
                                     </p>
                                   </div>
-                                  <KeyboardArrowRightIcon
-                                    fontSize="small"
-                                    sx={{ fontSize: "15px" }}
-                                    className={`mr-2 transform ${
-                                      openSubmenu === subIndex
-                                        ? "rotate-90 text-primary2"
-                                        : ""
-                                    }`}
-                                  />
+                                  {submenuItem.subMenuDropdown && (
+                                    <KeyboardArrowRightIcon
+                                      fontSize="small"
+                                      sx={{ fontSize: "15px" }}
+                                      className={`mr-2 transform ${
+                                        openSubmenu === subIndex
+                                          ? "rotate-90 text-primary2"
+                                          : ""
+                                      }`}
+                                    />
+                                  )}
                                 </div>
                                 <Collapse
                                   in={openSubmenu === subIndex}
@@ -316,24 +362,27 @@ const SidebarMenu = () => {
                                           <li
                                             key={dropdownIndex}
                                             className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
-                                              selectedDropdown === dropdownIndex
+                                              // selectedDropdown === dropdownIndex
+                                              selectedDropdown[
+                                                `submenu${subIndex}`
+                                              ] === dropdownIndex
                                                 ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
                                                 : ""
                                             }`}
                                             onClick={() => {
-                                              // handleDropdownClick(
-                                              //   subIndex,
-                                              //   dropdownIndex
-                                              // );
-                                              setSelectedDropdown(
+                                             
+                                             handleDropdownClick(
+                                                subIndex,
                                                 dropdownIndex
                                               );
                                             }}
                                           >
                                             <p
                                               className={`pl-[1.3rem] ${
-                                                selectedDropdown ===
-                                                dropdownIndex
+                                                   // selectedDropdown === dropdownIndex
+                                                selectedDropdown[
+                                                  `submenu${subIndex}`
+                                                ] === dropdownIndex
                                                   ? "pl-[.75rem]"
                                                   : ""
                                               }`}
@@ -365,7 +414,9 @@ const SidebarMenu = () => {
                 )
               )}
             </ul>
-            <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black  to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
+            {/* <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" /> */}
+            <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
+
           </div>
         ) : (
           ""
