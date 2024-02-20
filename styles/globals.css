@@ -65,7 +65,6 @@ body {
 }
 
 @layer utilities {
-
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -77,21 +76,18 @@ body {
     scrollbar-width: none;
     /* Firefox */
   }
-
-
 }
 
 /* third-party libraries CSS */
 
-
-
 .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
   margin-left: 85px;
-  background-color: #171A22;
+  background-color: #171a22;
   color: white;
   -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   display: -webkit-box;
   display: -webkit-flex;
@@ -114,20 +110,18 @@ body {
 }
 
 .css-h4y409-MuiList-root {
-
   list-style: none;
   margin: 0;
   padding: 10px;
   position: relative;
   padding-top: 3px;
   padding-bottom: 3px;
-
 }
-
 
 /* Tooltip css */
 
-.MuiTooltip-popper[data-popper-placement*="left"] .css-ja5taz-MuiTooltip-tooltip {
+.MuiTooltip-popper[data-popper-placement*="left"]
+  .css-ja5taz-MuiTooltip-tooltip {
   transform-origin: right center;
   margin-right: 8px;
 }
@@ -135,8 +129,27 @@ body {
   font-size: 0.7875rem;
 }
 
-.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  box-shadow: 0px 2.5px 2.5px -1.5px rgba(0, 0, 0, 0.1),
+    0px 4px 5px 0.5px rgba(0, 0, 0, 0.07), 0px 1.5px 7px 1px rgba(0, 0, 0, 0.06);
+}
 
-  box-shadow: 0px 2.5px 2.5px -1.5px rgba(0, 0, 0, 0.1), 0px 4px 5px 0.5px rgba(0, 0, 0, 0.07), 0px 1.5px 7px 1px rgba(0, 0, 0, 0.06);
-
+.css-uyijx3-MuiPaper-root {
+  /* background-color: "transparent"; */
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+/* .css-1ex1afd-MuiTableCell-root {
+  border-bottom: 1px solid #3c3c3c;
+} */
+.css-y8ay40-MuiTableCell-root {
+  border-bottom: 1px solid #3c3c3c;
 }

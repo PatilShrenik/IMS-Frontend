@@ -127,23 +127,23 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "User",
-              subMenuDropdownpathName: "/page/user",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Role",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Group",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Password Settings",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
-              subMenuDropdownname: "LDPA",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "LDAP",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -188,7 +188,8 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Credential Profile",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName:
+                "/Settings/device-settings/credential-profile",
             },
             {
               subMenuDropdownname: "Site Management",
@@ -245,8 +246,8 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container  border-[#3C3C3C] duration-300 ease-linear translate-x-0 ${
-              sidebarOpen ? "w-0 " : "w-[13rem] border-r"
+            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container border-textColor  dark:border-[#3C3C3C] duration-300 ease-linear translate-x-0 ${
+              sidebarOpen ? "w-0 " : "w-[15rem] border-r"
             }`}
           >
             {/* <div className="flex justify-between h-[3rem] px-3 items-center text-black dark:text-textColor pt-1.3 shadow-lg shadow-white dark:shadow-black">
@@ -313,40 +314,49 @@ const SidebarMenu = () => {
                                     <ul className="ml-[1.3rem] pY-[5px] transition-opacity ">
                                       {submenuItem.subMenuDropdown.map(
                                         (dropdownItem, dropdownIndex) => (
-                                          <li
-                                            key={dropdownIndex}
-                                            className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
-                                              selectedDropdown === dropdownIndex
-                                                ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
-                                                : ""
-                                            }`}
-                                            onClick={() => {
-                                              // handleDropdownClick(
-                                              //   subIndex,
-                                              //   dropdownIndex
-                                              // );
-                                              setSelectedDropdown(
-                                                dropdownIndex
-                                              );
-                                            }}
+                                          <Link
+                                            href={
+                                              dropdownItem.subMenuDropdownpathName
+                                            }
                                           >
-                                            <p
-                                              className={`pl-[1.3rem] ${
+                                            <li
+                                              key={dropdownIndex}
+                                              className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
                                                 selectedDropdown ===
                                                 dropdownIndex
-                                                  ? "pl-[.75rem]"
+                                                  ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
                                                   : ""
                                               }`}
+                                              onClick={() => {
+                                                // handleDropdownClick(
+                                                //   subIndex,
+                                                //   dropdownIndex
+                                                // );
+                                                setSelectedDropdown(
+                                                  dropdownIndex
+                                                );
+                                              }}
                                             >
-                                              {dropdownItem.subMenuDropdownname}
-                                            </p>
-                                            {/* {dropdownIndex !==
+                                              <p
+                                                className={`${
+                                                  selectedDropdown ===
+                                                  dropdownIndex
+                                                    ? "pl-[.75rem]"
+                                                    : "pl-[1.3rem]"
+                                                }`}
+                                              >
+                                                {
+                                                  dropdownItem.subMenuDropdownname
+                                                }
+                                              </p>
+                                              {/* {dropdownIndex !==
                                               dropdownItem.subMenuDropdownname
                                                 .length -
                                                 1 && (
                                               <div className="absolute top-0 bottom-0 left-0 bg-[#B9B9B9] dark:bg-[#464646] w-[1px]" />
                                             )} */}
-                                          </li>
+                                            </li>
+                                          </Link>
                                         )
                                       )}
                                     </ul>

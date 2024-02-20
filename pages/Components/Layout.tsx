@@ -68,7 +68,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
         <Header />
         <main className="flex min-h-[calc(100vh)] bg-light-container dark:bg-dark-container">
           <SidebarMenu />
-          <div className="p-4">{children}</div>
+          <div className="w-full p-2">{children}</div>
         </main>
         {/* <Footer /> */}
       </div>
