@@ -7,7 +7,7 @@ import DataSaverOffIcon from "@mui/icons-material/DataSaverOff";
 import Person2Icon from "@mui/icons-material/Person2";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
-import ConstructionIcon from '@mui/icons-material/Construction';
+import ConstructionIcon from "@mui/icons-material/Construction";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import CameraRoundedIcon from "@mui/icons-material/CameraRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -49,7 +49,7 @@ const Sidebar = () => {
     },
     {
       name: "Assets",
-      path: "/Assets",
+      path: "/assets",
       icon: (
         <EqualizerIcon
           className={` ${
@@ -73,7 +73,7 @@ const Sidebar = () => {
     },
     {
       name: "Topology",
-      path: "/Topology",
+      path: "/topology",
       icon: (
         <CameraRoundedIcon
           className={` ${
@@ -97,7 +97,7 @@ const Sidebar = () => {
     },
     {
       name: "Reports",
-      path: "/Reports",
+      path: "/reports",
       icon: (
         <AssignmentIcon
           className={` ${
@@ -122,7 +122,7 @@ const Sidebar = () => {
     },
     {
       name: "NCM",
-      path: "/NCM",
+      path: "/ncm",
       icon: (
         <Person2Icon
           className={` ${
@@ -134,7 +134,7 @@ const Sidebar = () => {
     },
     {
       name: "Audit",
-      path: "/Audit",
+      path: "/audit",
       icon: (
         <DynamicFormIcon
           className={` ${
@@ -162,9 +162,10 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-      className={`left-0 top-0 w-[3.3rem] flex  flex-col bg-light-menu-color dark:bg-dark-menu-color duration-300 ease-linear dark:bg-boxdark  lg:translate-x-0 ${
-        sidebarOpen && "shadow-2xl shadow-primary"
-      } "`}
+      //   className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+      //     sidebarOpen && ""
+      //  } `}
+      className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
     >
       <div className="flex h-[3rem] items-center justify-between px-4 pt-1.">
         <Link href="" className="flex cursor-default">

@@ -77,6 +77,25 @@ body {
     /* Firefox */
   }
 }
+/* Add this CSS to your stylesheet */
+/* main{
+  position: relative;
+}
+
+main::before {
+  content: '';
+  position: absolute;
+  width: 10px; 
+  height: 100px;
+  background: rgba(0, 0, 0, 1); 
+  border: solid 2px;
+  border-top-left-radius: 10px; 
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 1); 
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 80%);
+  
+} */
+
+
 
 /* third-party libraries CSS */
 
