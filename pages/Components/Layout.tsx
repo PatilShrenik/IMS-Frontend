@@ -69,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
         <div className="  bg-[#E8E8E8] dark:bg-[#1E1E1E]">
         <main style={{borderTopLeftRadius: '20px' ,  borderLeft: '2px solid rgba(0, 0, 0, 0.2)', borderTop: '2px solid rgba(0, 0, 0, 0.2)'}} className="flex min-h-[calc(100vh)] bg-light-container  dark:bg-dark-container">
           <SidebarMenu />
-          <div className="p-4">{children}</div>
+          <div className="w-full p-2">{children}</div>
         </main>
         </div>
         {/* <Footer /> */}

@@ -75,11 +75,11 @@ const DropdownUser = () => {
         href="#"
       >
         <div className="flex justify-evenly items-center">
-          <span className="text-right lg:block">
+          {/* <span className="text-right lg:block">
             <span className="block text-sm font-medium text-black dark:text-white">
               {userName}
             </span>
-          </span>
+          </span> */}
 
           <span className="h-9 w-10 rounded-full p-1">
             {/* <img
@@ -107,6 +107,12 @@ const DropdownUser = () => {
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-[#E2E8F0] px-2 dark:border-[#2E3A47]">
+          <li className="flex justify-center">
+            {" "}
+            <span className="block text-sm font-medium text-black dark:text-white">
+              {userName}
+            </span>
+          </li>
           <li>
             <Link
               href=""

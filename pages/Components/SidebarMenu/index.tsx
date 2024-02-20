@@ -4,7 +4,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { usePathname } from "next/navigation";
 import Collapse from "@mui/material/Collapse";
-import BookIcon from '@mui/icons-material/Book';
+import BookIcon from "@mui/icons-material/Book";
 import { useAppContext } from "../AppContext";
 import { Divider } from "@mui/material";
 import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
@@ -37,7 +37,7 @@ interface SelectedDropdown {
 const SidebarMenu = () => {
   const { sidebarOpen } = useAppContext();
   const pathname = usePathname();
- // console.log("--", sidebarOpen);
+  // console.log("--", sidebarOpen);
   const path = pathname;
   // console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
@@ -50,8 +50,8 @@ const SidebarMenu = () => {
     console.log(openSubmenu);
     setSelectedDropdown({});
   };
- 
- const handleDropdownClick = (submenuIndex: number, dropdownIndex: number) => {
+
+  const handleDropdownClick = (submenuIndex: number, dropdownIndex: number) => {
     const key = `submenu${submenuIndex}`;
     console.log(key);
     console.log(dropdownIndex);
@@ -225,7 +225,7 @@ const SidebarMenu = () => {
 
         {
           subMenuName: "Catalog",
-          subMenuIcon: <BookIcon/>,
+          subMenuIcon: <BookIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
@@ -275,8 +275,8 @@ const SidebarMenu = () => {
           <div
           style={{borderTopLeftRadius: '20px'}}
             key={index}
-            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
-              sidebarOpen ? "w-0 " : "w-[13rem] border-r"
+            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+              sidebarOpen ? "w-0 " : "w-[15rem] border-r"
             }`}
           >
             {/* <div className="flex justify-between h-[3rem] px-3 items-center text-black dark:text-textColor pt-1.3 shadow-lg shadow-white dark:shadow-black">
@@ -371,8 +371,7 @@ const SidebarMenu = () => {
                                                 : ""
                                             }`}
                                             onClick={() => {
-                                             
-                                             handleDropdownClick(
+                                              handleDropdownClick(
                                                 subIndex,
                                                 dropdownIndex
                                               );
@@ -380,7 +379,7 @@ const SidebarMenu = () => {
                                           >
                                             <p
                                               className={`pl-[1.3rem] ${
-                                                   // selectedDropdown === dropdownIndex
+                                                // selectedDropdown === dropdownIndex
                                                 selectedDropdown[
                                                   `submenu${subIndex}`
                                                 ] === dropdownIndex

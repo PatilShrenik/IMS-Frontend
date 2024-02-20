@@ -7,6 +7,7 @@ import DataSaverOffIcon from "@mui/icons-material/DataSaverOff";
 import Person2Icon from "@mui/icons-material/Person2";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import CameraRoundedIcon from "@mui/icons-material/CameraRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -110,7 +111,7 @@ const Sidebar = () => {
       name: "Diagnostics",
       path: "/Diagnostics",
       icon: (
-        <EqualizerIcon
+        <ConstructionIcon
           className={` ${
             pathname.includes("Diagnostics") &&
             "text-primary2 dark:text-primary2"
@@ -149,7 +150,8 @@ const Sidebar = () => {
       icon: (
         <SettingsIcon
           className={` ${
-            pathname.includes("Settings") && "text-[#0078D4] dark:text-[#0078D4]"
+            pathname.includes("Settings") &&
+            "text-[#0078D4] dark:text-[#0078D4]"
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "white", margin: "0 1.5rem" }}
         />
@@ -160,14 +162,14 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-    //   className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
-    //     sidebarOpen && ""
-    //  } `}
-    className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
+      //   className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+      //     sidebarOpen && ""
+      //  } `}
+      className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
     >
       <div className="flex h-[3rem] items-center justify-between px-4 pt-1.">
         <Link href="" className="flex cursor-default">
-          <Image width={32} height={32} src={"/logo-icon.svg"} alt="Logo" />  
+          <Image width={32} height={32} src={"/logo-icon.svg"} alt="Logo" />
           <div className="flex">
             {/* <p
               className="mx-4 my-6 font-semibold text-2xl text-white"
@@ -315,7 +317,6 @@ const Sidebar = () => {
         </nav> */}
       </div>
     </aside>
- 
   );
 };
 
