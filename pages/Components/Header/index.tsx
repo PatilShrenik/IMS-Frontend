@@ -6,8 +6,6 @@ import DropdownUser from "./DropdownUser";
 import HomeIcon from "@mui/icons-material/Home";
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useAppContext } from "../AppContext";
 import Breadcrumb from "../BreadCrumbs";
 // import { useAppContext } from "@/context/AppContext";
@@ -32,35 +30,31 @@ const Header = (props: {
     .join(" > ");
   // console.log("header path", path.substring(1));
   return (
-    <header className="sticky top-0 z-[100] h-[3rem] flex bg-light-menu-color  ease-linear dark:bg-dark-menu-color  lg:translate-x-0 ">
+    <header className="sticky top-0 z-[100] h-[3rem] flex bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color  lg:translate-x-0">
+      {/* <div></div> */}
       <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-2 ">
-        <div className="flex items-center">
+        <div className="flex">
           {pathname.includes("Explorer") ||
             pathname.includes("Diagnostics") ||
             (pathname.includes("Settings") && (
-              <div className=" flex cursor-pointer border border-textColor dark:border-dark-border rounded-2xl">
-                {sidebarOpen ? (
-                  <NavigateBeforeIcon
-                    onClick={() => {
-                      toggleSideBarState();
-                    }}
-                    className="text-black dark:text-white"
-                  />
-                ) : (
-                  <NavigateNextIcon
-                    onClick={() => {
-                      toggleSideBarState();
-                    }}
-                    className="text-black dark:text-white"
-                  />
-                )}
+              <div
+                className=" flex cursor-pointer items-center"
+                onClick={() => {
+                  toggleSideBarState();
+                  // toggleSideBarClickState();
+                }}
+              >
+                <MenuIcon
+                  className={`text-black dark:text-white ${
+                    !sidebarOpen && "text-primary2 dark:text-primary2"
+                  }`}
+                />
               </div>
             ))}
-          <div className="ml-6">
+          <div className="ml-4">
             <Breadcrumb />
           </div>
         </div>
-
         {/* <div className="flex items-left gap-2 sm:gap-4">{path}</div> */}
 
         <div className="flex mr-2 items-center gap-5 2xsm:gap-7">

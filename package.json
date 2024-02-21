@@ -46,6 +46,7 @@
     "dayjs": "^1.11.9",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
+    "hamburger-react": "^2.5.0",
     "highcharts": "^11.1.0",
     "highcharts-react-official": "^3.2.1",
     "json-server": "^0.17.3",

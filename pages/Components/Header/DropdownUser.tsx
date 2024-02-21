@@ -81,20 +81,20 @@ const DropdownUser = () => {
             </span>
           </span> */}
 
-          <span className="h-9 w-10 rounded-full p-1">
+          <span className="h-9 w-10 rounded-full">
             {/* <img
             style={{ borderRadius: "50%", width: 30, height: 30 }}
             src={"/avatar3.jpg"}
             alt="User"
           /> */}
             <AccountCircleIcon
-              sx={{ width: "30", height: "30" }}
-              className="text-black dark:text-white"
+              sx={{  fontSize : "35px" }}
+              className="text-dark-border dark:text-white"
             />
           </span>
         </div>
 
-        <KeyboardArrowDownIcon className="text-black dark:text-white" />
+        {/* <KeyboardArrowDownIcon className="text-black dark:text-white" /> */}
       </Link>
 
       {/* <!-- Dropdown Start --> */}

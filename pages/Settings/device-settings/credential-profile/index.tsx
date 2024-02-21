@@ -4,13 +4,29 @@ import CredntialProfileTable from "@/pages/Components/Tabels/CredentialProfileTa
 import TablePagination from "@mui/material/TablePagination";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
+import CustomPagination from "@/pages/Components/CustomePagination";
 
 const CredentialProfile = () => {
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibleColumns, setVisibleColumns] = useState<any>([]);
+
+  const [currentPage, setCurrentPage] = useState(1) as any;
+  const [rowsPerPage, setRowsPerPage] = useState(10) as any;
+
+  const handlePageChange = (newPage: any) => {
+    setCurrentPage(newPage);
+    // Fetch data for the new page if needed
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: any) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); // Reset to the first page when changing rows per page
+    // Fetch data for the new rowsPerPage if needed
+  };
+
   useEffect(() => {
     try {
       const getData = async () => {
@@ -75,6 +91,7 @@ const CredentialProfile = () => {
       console.log(error);
     }
   }, []);
+  const totalCount = data && data.length;
   const handleChangePage = (
     event: any,
     newPage: React.SetStateAction<number>
@@ -103,13 +120,20 @@ const CredentialProfile = () => {
           style={{
             position: "fixed",
             bottom: 0,
-            // left: 0,
             right: 0,
+            // borderTop: "1px solid",
             backgroundColor: "#fff", // Set your desired background color
             zIndex: 1000, // Adjust the z-index as needed
           }}
         >
-          <TablePagination
+          <CustomPagination
+            totalCount={totalCount}
+            rowsPerPage={rowsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+          />
+          {/* <TablePagination
             className="bg-light-container dark:bg-dark-container dark:text-textColor pt-12"
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
@@ -118,7 +142,7 @@ const CredentialProfile = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </div>
       </div>
     </>

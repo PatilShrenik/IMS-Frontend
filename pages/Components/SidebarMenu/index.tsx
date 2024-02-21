@@ -87,11 +87,11 @@ const SidebarMenu = () => {
       subMenu: [
         {
           subMenuName: "Metric",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "Flow",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
       ],
     },
@@ -106,27 +106,27 @@ const SidebarMenu = () => {
       subMenu: [
         {
           subMenuName: "Ping",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "SNMP",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "SSH",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "TCPDUMP",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "API",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
         {
           subMenuName: "Traceroute",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "#",
         },
       ],
     },
@@ -150,23 +150,23 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "User",
-              subMenuDropdownpathName: "/page/user",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Role",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Group",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Password Settings",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownpathName: "#",
             },
             {
-              subMenuDropdownname: "LDPA",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "LDAP",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -178,15 +178,15 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Global Settings",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Mail Server",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "SMS Server",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -198,11 +198,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Alarm",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Policy",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -214,11 +214,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Credential Profile",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "/Settings/device-settings/credential-profile",
             },
             {
               subMenuDropdownname: "Site Management",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -230,7 +230,7 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "SNMP",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -241,11 +241,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Flow",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Trap",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -256,11 +256,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Discovery Schedular",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
             {
               subMenuDropdownname: "Report Schedular",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownpathName: "#",
             },
           ],
         },
@@ -274,7 +274,7 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative flex flex-col overflow-y-hidden bg-light-menu-color border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+            className={`relative flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : "w-[15rem] border-r"
             }`}
           >
@@ -319,17 +319,13 @@ const SidebarMenu = () => {
                                         {
                                           fontSize: "small",
                                           className: `${
-                                            openSubmenu === subIndex
-                                              ? "text-primary2"
-                                              : ""
+                                            openSubmenu === subIndex ? "" : ""
                                           }`,
                                         }
                                       )}
                                     <p
                                       className={`mx-2 text-[14px]  ${
-                                        openSubmenu === subIndex
-                                          ? "text-primary2"
-                                          : ""
+                                        openSubmenu === subIndex ? "" : ""
                                       }`}
                                     >
                                       {submenuItem.subMenuName}
@@ -341,7 +337,7 @@ const SidebarMenu = () => {
                                       sx={{ fontSize: "15px" }}
                                       className={`mr-2 transform ${
                                         openSubmenu === subIndex
-                                          ? "rotate-90 text-primary2"
+                                          ? "rotate-90 "
                                           : ""
                                       }`}
                                     />
@@ -377,13 +373,13 @@ const SidebarMenu = () => {
                                             }}
                                           >
                                             <p
-                                              className={`pl-[1.3rem] ${
+                                              className={` ${
                                                 // selectedDropdown === dropdownIndex
                                                 selectedDropdown[
                                                   `submenu${subIndex}`
                                                 ] === dropdownIndex
                                                   ? "pl-[.75rem]"
-                                                  : ""
+                                                  : "pl-[1.3rem]"
                                               }`}
                                             >
                                               {dropdownItem.subMenuDropdownname}

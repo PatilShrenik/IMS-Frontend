@@ -429,7 +429,7 @@ const CredntialProfileTable = (props: any) => {
                 </IconButton>
                 <InputBase
                   className="dark:text-textColor"
-                  placeholder="Search..."
+                  placeholder="Search"
                   value={search}
                   onChange={handleSearchChange}
                 />
@@ -544,10 +544,10 @@ const CredntialProfileTable = (props: any) => {
                   <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
-                    className="bg-primary2 capitalize items-center"
+                    className="bg-primary3 capitalize items-center"
                     size="small"
                   >
-                    <AddIcon fontSize="small" /> Credential Profile
+                    <AddIcon fontSize="small" className="mr-2" /> Credential Profile
                   </Button>
                   {/* <AddIcon
                     className=" dark:text-[#DEE4EE]"
@@ -576,7 +576,7 @@ const CredntialProfileTable = (props: any) => {
             sx={{
               width: "100%",
               overflow: "hidden",
-              borderRadius: ".3rem",
+              borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
@@ -593,7 +593,7 @@ const CredntialProfileTable = (props: any) => {
                 <TableHead>
                   <TableRow>
                     <TableCell
-                      className="bg-primary2 dark:bg-tabel-header dark:text-textColor"
+                      className="bg-textColor dark:bg-tabel-header dark:text-textColor"
                       style={{
                         padding: "8px",
                         fontSize: "11px",
@@ -618,7 +618,7 @@ const CredntialProfileTable = (props: any) => {
                         const iconDirection = column.field ? order : "asc";
                         return (
                           <TableCell
-                            className="bg-primary2 text-white dark:text-textColor dark:bg-tabel-header"
+                            className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header"
                             key={column.id}
                             align={column.align}
                             style={{
@@ -667,7 +667,7 @@ const CredntialProfileTable = (props: any) => {
                         );
                       })}
                     <TableCell
-                      className="bg-primary2 text-white dark:text-textColor dark:bg-tabel-header"
+                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header"
                       style={{
                         padding: "0px 8px",
                         fontSize: "14px",
@@ -690,7 +690,7 @@ const CredntialProfileTable = (props: any) => {
                       const isLastRow = rowIndex === data.length - 1;
                       return (
                         <TableRow
-                          className="bg-light-container dark:bg-dark-container dark:text-textColor border-b-4"
+                          className="bg-light-container dark:bg-dark-container dark:text-textColor border-b-2"
                           hover
                           role="checkbox"
                           tabIndex={-1}
@@ -703,7 +703,7 @@ const CredntialProfileTable = (props: any) => {
                             }}
                             className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
                               isLastRow
-                                ? "border-b-0"
+                                ? "border-b border-gray-300"
                                 : "border-b border-gray-300"
                             }`}
                           >
@@ -734,13 +734,13 @@ const CredntialProfileTable = (props: any) => {
                                 <TableCell
                                   className={`dark:bg-dark-container dark:text-textColor ${
                                     isLastRow
-                                      ? "border-b-0"
+                                      ? "border-b border-gray-300"
                                       : "border-b border-gray-300"
                                   }`}
                                   key={column.id}
                                   align={column.align}
                                   style={{
-                                    fontSize: "11px",
+                                    fontSize: "13px",
                                     fontWeight: "normal",
                                     padding: "8px",
                                     textAlign: "center",
@@ -765,7 +765,7 @@ const CredntialProfileTable = (props: any) => {
                           <TableCell
                             className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
                               isLastRow
-                                ? "border-b-0"
+                                ? "border-b border-gray-300"
                                 : "border-b border-gray-300"
                             }`}
                             style={{

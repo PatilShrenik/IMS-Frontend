@@ -95,8 +95,6 @@ main::before {
   
 } */
 
-
-
 /* third-party libraries CSS */
 
 .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
@@ -171,4 +169,7 @@ main::before {
 } */
 .css-y8ay40-MuiTableCell-root {
   border-bottom: 1px solid #3c3c3c;
+}
+.css-1rxtwhz-MuiPaper-root {
+  box-shadow: none;
 }

@@ -16,7 +16,7 @@ import { useAppContext } from "../AppContext";
 import Zoom from "@mui/material/Zoom";
 
 import { Box } from "@mui/system";
-import { Tooltip } from "@mui/material";
+import { Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -158,14 +158,24 @@ const Sidebar = () => {
       ),
     },
   ];
-
+  const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#3C3C3C",
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#3C3C3C",
+      fontSize : "14px"
+    },
+  }));
   return (
     <aside
       ref={sidebar}
-      //   className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
-      //     sidebarOpen && ""
-      //  } `}
-      className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
+      className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+        sidebarOpen && ""
+      } `}
+      // className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
     >
       <div className="flex h-[3rem] items-center justify-between px-4 pt-1.">
         <Link href="" className="flex cursor-default">
@@ -195,15 +205,38 @@ const Sidebar = () => {
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {links.map((link, index) => (
-                <Tooltip
+                <BootstrapTooltip
                   TransitionComponent={Zoom}
                   title={link.name}
+                  arrow
                   placement="right"
+                  slotProps={{
+                    popper: {
+                      sx: {
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginTop: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginBottom: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginLeft: "4px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginRight: "0px",
+                          },
+                      },
+                    },
+                  }}
                 >
                   <li key={index}>
                     <Link
                       href={link.path}
-                      className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 ${
+                      className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
                         pathname.includes(link.path) &&
                         "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
                       }`}
@@ -222,7 +255,7 @@ const Sidebar = () => {
                       </div>
                     </Link>
                   </li>
-                </Tooltip>
+                </BootstrapTooltip>
               ))}
             </ul>
           </div>

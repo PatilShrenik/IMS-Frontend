@@ -66,12 +66,10 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
         }}
       >
         <Header />
-        <div className="   bg-[#E8E8E8] dark:bg-[#1E1E1E]">
-        <main style={{borderTopLeftRadius: '20px'}} className="flex min-h-[calc(100vh)] bg-light-container  dark:bg-dark-container">
+        <main className="flex min-h-[calc(100vh)] bg-white dark:bg-dark-container">
           <SidebarMenu />
           <div className="w-full p-2">{children}</div>
         </main>
-        </div>
         {/* <Footer /> */}
       </div>
     </div>
