@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DashboardCustomizeRoundedIcon from "@mui/icons-material/DashboardCustomizeRounded";
+import CreateWidgetTable from "../Components/Tabels/CreateWidgetTable";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -113,21 +114,11 @@ const index = () => {
       >
         <AddIcon fontSize="medium" className="dark:text-textColor" />
       </div>
-      {/* <svg
-        className="fixed cursor-pointer w-[50px] h-[50px] bottom-2 right-4 "
-        onClick={handleButtonClick}
-        xmlns="http://www.w3.org/00/svg"
-       viewBox="0 0 512 512"
-      >
-        <path
-          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"
-          fill="#171A22"
-        />
-      </svg> */}
+   
 
-      <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
-        <div className="container mx-auto sm:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl bg-light-container dark:bg-dark-container">
-          <div className="flex border-b-2  justify-between py-2">
+      <Drawer  anchor="right" open={isDrawerOpen} variant="persistent">
+        <div className="container mx-auto h-[100%] sm:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl bg-light-container dark:bg-dark-container">
+          <div className="flex border-b-2  justify-between py-3">
             <span className="px-4 font-bold dark:text-textColor">
               {" "}
               Add Widget
@@ -139,42 +130,7 @@ const index = () => {
             />
           </div>
 
-          <div className="flex  mt-6 mr-2 justify-between p-4">
-            <div className="mb-4 sm:mb-0 sm:mr-4 flex items-center">
-              <form className="relative">
-                <input
-                  type="text"
-                  placeholder="Type to search..."
-                  value={searchValue}
-                  onChange={handleSearchChange}
-                  className="w-full bg-transparent border-b-2 pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-                />
-                <button className="absolute left-0 top-1/2 -translate-y-1/2">
-                  <svg
-                    className="fill-gray-500 hover:fill-blue-400 "
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M9.16666 3.33332C5.945 3.33332 3.33332 5.945 3.33332 9.16666C3.33332 12.3883 5.945 15 9.16666 15C12.3883 15 15 12.3883 15 9.16666C15 5.945 12.3883 3.33332 9.16666 3.33332ZM1.66666 9.16666C1.66666 5.02452 5.02452 1.66666 9.16666 1.66666C13.3088 1.66666 16.6667 5.02452 16.6667 9.16666C16.6667 13.3088 13.3088 16.6667 9.16666 16.6667C5.02452 16.6667 1.66666 13.3088 1.66666 9.16666Z"
-                      fill=""
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M13.2857 13.2857C13.6112 12.9603 14.1388 12.9603 14.4642 13.2857L18.0892 16.9107C18.4147 17.2362 18.4147 17.7638 18.0892 18.0892C17.7638 18.4147 17.2362 18.4147 16.9107 18.0892L13.2857 14.4642C12.9603 14.1388 12.9603 13.6112 13.2857 13.2857Z"
-                      fill=""
-                    />
-                  </svg>
-                </button>
-              </form>
-            </div>
-
+          <div className="mt-6 pr-3 flex flex-row-reverse">         
             <Tooltip
               className="text-lg font-bold"
               title="Create Widget"
@@ -193,8 +149,8 @@ const index = () => {
             </Tooltip>
           </div>
 
-          <div className="relative  min-w-[34.375rem] px-4 py-1  overflow-x-auto shadow-md rounded-lg ">
-            <div className="min-h-[450px] ">
+          <div className="relative  min-w-[34.375rem] px-4 py-1  overflow-x-auto  rounded-lg ">
+            {/* <div className="min-h-[450px] ">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr className="bg-primary2 dark:bg-tabel-header dark:text-textColor font-semibold">
@@ -260,16 +216,15 @@ const index = () => {
                         >
                           <MenuItem>
                             {" "}
-                            {/* <EditRoundedIcon className=" text-blue-400  mr-3" />{" "} */}
                             Edit
                           </MenuItem>
                           <MenuItem>
-                            {/* <DeleteForeverIcon  className="  text-blue-400 mr-3" /> */}
+            
                             Delete
                           </MenuItem>
                           <MenuItem>
                             {" "}
-                            {/* <DashboardCustomizeRoundedIcon className="  text-blue-400 mr-3" />{" "} */}
+                 
                             Visit Dashboard
                           </MenuItem>
                         </Menu>
@@ -288,6 +243,10 @@ const index = () => {
                 shape="rounded"
                 className="mt-4 mb-4"
               />
+            </div> */}
+            <div className="w-full">
+              <CreateWidgetTable />
+              
             </div>
           </div>
         </div>

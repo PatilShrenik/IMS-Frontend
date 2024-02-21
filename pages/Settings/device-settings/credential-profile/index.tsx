@@ -75,6 +75,7 @@ const CredentialProfile = () => {
       console.log(error);
     }
   }, []);
+  
   const handleChangePage = (
     event: any,
     newPage: React.SetStateAction<number>
