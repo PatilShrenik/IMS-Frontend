@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Divider } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { logout } from "@/app/api/AuthAPI";
 import { useRouter } from "next/navigation";
@@ -67,7 +68,7 @@ const DropdownUser = () => {
     setSignOutModalOpen(false);
   };
   return (
-    <div className="relative">
+    <div className="">
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -102,11 +103,11 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0  p-3 flex w-[13.625rem] flex-col rounded-b-xl  bg-light-menu-color shadow-md shadow-black dark:bg-dark-menu-color ${
+        className={`absolute right-0 mr-1 mt-[4.5px] p-2 flex w-[13rem] flex-col rounded-b-xl  bg-light-menu-color shadow-sm shadow-black dark:bg-dark-menu-color ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-[#E2E8F0] px-2 dark:border-[#2E3A47]">
+        <ul className="flex flex-col gap-4 border-b border-[#E2E8F0] px-2 dark:border-[#2E3A47]">
           <li className="flex justify-center">
             {" "}
             <span className="block text-sm font-medium text-black dark:text-white">
@@ -184,7 +185,7 @@ const DropdownUser = () => {
               Account Settings
             </Link>
           </li>
-          <li></li>
+          <li>  <Divider/></li>
         </ul>
         <button
           className="flex items-center cursor-not-allowed gap-3.5 py-2 px-2 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-textColor  lg:text-base"

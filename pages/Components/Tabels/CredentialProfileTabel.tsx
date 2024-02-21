@@ -347,7 +347,7 @@ const CredntialProfileTable = (props: any) => {
       return (
         <Chip
           label={deviceIds.length}
-          className="pt-1 h-[22px] py-0 dark:text-textColor dark:bg-dark-border"
+          className=" pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
         />
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
@@ -636,7 +636,7 @@ const CredntialProfileTable = (props: any) => {
                               className={`flex ${
                                 colIndex == 0 || colIndex == 1
                                   ? "justify-start"
-                                  : "justify-center pl-8"
+                                  : "justify-center pl-8 "
                               }`}
                               //   style={{
                               //     display: "flex",
@@ -751,14 +751,17 @@ const CredntialProfileTable = (props: any) => {
                                     className={`flex ${
                                       colIndex == 0 || colIndex == 1
                                         ? "justify-start"
-                                        : "justify-center pl-8"
+                                        : "justify-center"
                                     }`}
                                   >
+                       
                                     {column.format &&
                                     typeof processedValue === "number"
                                       ? column.format(processedValue)
                                       : processedValue}
+                                 
                                   </span>
+                                
                                 </TableCell>
                               );
                             })}
