@@ -15,7 +15,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-  width: 0px;
+  display: none;
 }
 
 /* @layer base {
@@ -164,12 +164,17 @@ main::before {
   border-radius: 0.5rem;
   margin-top: 0.5rem;
 }
-/* .css-1ex1afd-MuiTableCell-root {
-  border-bottom: 1px solid #3c3c3c;
-} */
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 .css-y8ay40-MuiTableCell-root {
   border-bottom: 1px solid #3c3c3c;
 }
 .css-1rxtwhz-MuiPaper-root {
   box-shadow: none;
+}
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  background-color: none;
 }

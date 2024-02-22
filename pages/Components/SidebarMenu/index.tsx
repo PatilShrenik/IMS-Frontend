@@ -214,7 +214,8 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Credential Profile",
-              subMenuDropdownpathName: "/Settings/device-settings/credential-profile",
+              subMenuDropdownpathName:
+                "/Settings/device-settings/credential-profile",
             },
             {
               subMenuDropdownname: "Site Management",
@@ -296,9 +297,8 @@ const SidebarMenu = () => {
                                 className="relative w-full py-2 items-center text-black dark:text-textColor font-light"
                               >
                                 <div
-                                  className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#D8D8D8] p-2 ${
-                                    openSubmenu == subIndex &&
-                                    "dark:bg-[#282828] bg-[#D8D8D8]"
+                                  className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-tabel-header hover:bg-light-container p-2 ${
+                                    openSubmenu == subIndex && ""
                                   }`}
                                   onClick={() => handleSubmenuClick(subIndex)}
                                 >

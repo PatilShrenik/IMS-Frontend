@@ -1,4 +1,4 @@
-import { baseURL } from "../../constants";
+import { baseURL } from "../../../constants";
 
 export const getAllRole = async () => {
   const token = localStorage.getItem("token");

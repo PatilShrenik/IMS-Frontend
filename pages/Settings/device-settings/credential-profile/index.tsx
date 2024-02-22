@@ -118,12 +118,15 @@ const CredentialProfile = () => {
         />
         <div
           style={{
+            // width: "100%",
             position: "fixed",
             bottom: 0,
-            right: 0,
+            // left: 0,
+            // right: 0,
+            // marginRight : "17rem",
             // borderTop: "1px solid",
             backgroundColor: "#fff", // Set your desired background color
-            zIndex: 1000, // Adjust the z-index as needed
+            zIndex: 0, // Adjust the z-index as needed
           }}
         >
           <CustomPagination

@@ -36,6 +36,7 @@ import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
+import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 
 const CredntialProfileTable = (props: any) => {
   const {
@@ -347,7 +348,7 @@ const CredntialProfileTable = (props: any) => {
       return (
         <Chip
           label={deviceIds.length}
-          className="pt-1 h-[22px] py-0 dark:text-textColor dark:bg-dark-border"
+          className="pt-1 h-[22px] py-0 dark:text-textColor bg-primary2"
         />
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
@@ -425,7 +426,10 @@ const CredntialProfileTable = (props: any) => {
 
               <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
                 <IconButton>
-                  <SearchIcon className="dark:text-[#3C3C3C] text-[#CCCFD9] " fontSize="small" />
+                  <SearchIcon
+                    className="dark:text-[#3C3C3C] text-[#CCCFD9] "
+                    fontSize="small"
+                  />
                 </IconButton>
                 <InputBase
                   className="dark:text-textColor"
@@ -481,7 +485,7 @@ const CredntialProfileTable = (props: any) => {
                   >
                     <VisibilityIcon
                       className="text-dark-border dark:text-light-menu-color"
-                      style={{ margin: "0 0 0 5px" }}
+                      style={{ margin: "0 10px 0 5px" }}
                       onClick={handleMenuOpen}
                     />
                   </Tooltip>
@@ -547,7 +551,8 @@ const CredntialProfileTable = (props: any) => {
                     className="bg-primary3 capitalize items-center"
                     size="small"
                   >
-                    <AddIcon fontSize="small" className="mr-2" /> Credential Profile
+                    <AddIcon fontSize="small" className="mr-2" /> Credential
+                    Profile
                   </Button>
                   {/* <AddIcon
                     className=" dark:text-[#DEE4EE]"
@@ -703,8 +708,8 @@ const CredntialProfileTable = (props: any) => {
                             }}
                             className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
                               isLastRow
-                                ? "border-b border-gray-300"
-                                : "border-b border-gray-300"
+                                ? "border-b"
+                                : "border-b"
                             }`}
                           >
                             <Checkbox
@@ -734,8 +739,8 @@ const CredntialProfileTable = (props: any) => {
                                 <TableCell
                                   className={`dark:bg-dark-container dark:text-textColor ${
                                     isLastRow
-                                      ? "border-b border-gray-300"
-                                      : "border-b border-gray-300"
+                                      ? "border-b "
+                                      : "border-b "
                                   }`}
                                   key={column.id}
                                   align={column.align}
@@ -776,6 +781,7 @@ const CredntialProfileTable = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
+                            <CredentialProfileMenu />
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </TableCell>
                         </TableRow>
