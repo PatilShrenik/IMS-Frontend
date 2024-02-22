@@ -214,7 +214,8 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Credential Profile",
-              subMenuDropdownpathName: "/Settings/device-settings/credential-profile",
+              subMenuDropdownpathName:
+                "/Settings/device-settings/credential-profile",
             },
             {
               subMenuDropdownname: "Site Management",

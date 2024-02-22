@@ -1,4 +1,4 @@
-import { baseURL } from "../../constants";
+import { baseURL } from "../../../constants";
 
 export const updateSMTPServer = async (props: any) => {
   const token = localStorage.getItem("token");

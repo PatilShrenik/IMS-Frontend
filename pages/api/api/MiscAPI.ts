@@ -1,8 +1,8 @@
-import { baseURL } from "../../constants";
+import { baseURL } from "@/constants";
 
 export const getIndicatorMapper = async () => {
   const token = localStorage.getItem("token");
-  let res: any
+  let res: any;
   try {
     res = await fetch(baseURL + "/api/v1/default/misc/indicatorMapper", {
       method: "GET",
@@ -13,9 +13,9 @@ export const getIndicatorMapper = async () => {
       },
     });
     res = res.json();
-  } catch (error:any) {
-    console.log("error in getting indicator Mapper data", error)
-    res = { "result": [] };
+  } catch (error: any) {
+    console.log("error in getting indicator Mapper data", error);
+    res = { result: [] };
   }
 
   // const data = await res.json();
