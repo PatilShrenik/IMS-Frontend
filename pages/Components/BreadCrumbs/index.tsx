@@ -83,6 +83,7 @@ export default function Breadcrumb() {
 
   breadcrumbs.push(
     <Typography
+     sx={{color:'#249EE4'}}
       key={arrayOfStrings.length - 1}
       color="text.primary"
       className=" text-lg text-primary2"

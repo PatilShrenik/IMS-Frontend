@@ -19,7 +19,7 @@ export default function CredentialProfileMenu() {
   };
 
   return (
-    <div>
+    <div className="ml-4">
       <IconButton
         aria-label="more"
         id="long-button"
