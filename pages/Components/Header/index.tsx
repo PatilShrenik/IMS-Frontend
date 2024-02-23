@@ -45,8 +45,10 @@ const Header = (props: {
                 }}
               >
                 <MenuIcon
-                  className={`text-black dark:text-white ${
-                    !sidebarOpen && "text-primary2 dark:text-primary2"
+                  className={` ${
+                    sidebarOpen
+                      ? "text-primary2 dark:text-primary2"
+                      : "text-black dark:text-white"
                   }`}
                 />
               </div>

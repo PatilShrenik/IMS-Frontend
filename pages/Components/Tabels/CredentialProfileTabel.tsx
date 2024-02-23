@@ -347,8 +347,9 @@ const CredntialProfileTable = (props: any) => {
       //   console.log("deviceids", deviceIds);
       return (
         <Chip
+          // variant="outlined"
           label={deviceIds.length}
-          className="pt-1 h-[22px] py-0 dark:text-textColor bg-primary2"
+          className="pt-1 h-[22px] py-0 dark:text-black bg-primary2"
         />
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
@@ -695,7 +696,7 @@ const CredntialProfileTable = (props: any) => {
                       const isLastRow = rowIndex === data.length - 1;
                       return (
                         <TableRow
-                          className="bg-light-container dark:bg-dark-container dark:text-textColor border-b-2"
+                          className="bg-white dark:bg-dark-container dark:text-textColor border-b-2"
                           hover
                           role="checkbox"
                           tabIndex={-1}
@@ -706,10 +707,8 @@ const CredntialProfileTable = (props: any) => {
                               padding: "8px",
                               textAlign: "center",
                             }}
-                            className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
-                              isLastRow
-                                ? "border-b"
-                                : "border-b"
+                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
+                              isLastRow ? "border-b" : "border-b"
                             }`}
                           >
                             <Checkbox
@@ -738,9 +737,7 @@ const CredntialProfileTable = (props: any) => {
                               return (
                                 <TableCell
                                   className={`dark:bg-dark-container dark:text-textColor ${
-                                    isLastRow
-                                      ? "border-b "
-                                      : "border-b "
+                                    isLastRow ? "border-b " : "border-b "
                                   }`}
                                   key={column.id}
                                   align={column.align}
@@ -768,7 +765,7 @@ const CredntialProfileTable = (props: any) => {
                               );
                             })}
                           <TableCell
-                            className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
+                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
                               isLastRow
                                 ? "border-b border-gray-300"
                                 : "border-b border-gray-300"

@@ -166,7 +166,7 @@ const Sidebar = () => {
     },
     [`& .${tooltipClasses.tooltip}`]: {
       backgroundColor: "#3C3C3C",
-      fontSize : "14px"
+      fontSize: "14px",
     },
   }));
   return (
@@ -236,6 +236,26 @@ const Sidebar = () => {
                   <li key={index}>
                     <Link
                       href={link.path}
+                      className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
+                        pathname.includes(link.path) &&
+                        "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                      }`}
+                    >
+                      <div className="w-full px-2">
+                        <div className="flex justify-around">{link.icon}</div>
+                        {/* <p
+                          className={`${
+                            pathname.includes(link.name)
+                              ? "text-primary2 dark:text-primary2 text-xs flex mx-2 justify-evenly"
+                              : "dark:text-textColor text-black text-xs flex mx-2 justify-evenly"
+                          } " text-black"`}
+                        >
+                          {link.name}
+                        </p> */}
+                      </div>
+                    </Link>
+                    {/* <Link
+                      href={link.path}
                       className={`group relative flex items-center rounded-sm py-[4px] mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
                         pathname.includes(link.path) &&
                         "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
@@ -253,7 +273,7 @@ const Sidebar = () => {
                           {link.name}
                         </p>
                       </div>
-                    </Link>
+                    </Link> */}
                   </li>
                 </BootstrapTooltip>
               ))}

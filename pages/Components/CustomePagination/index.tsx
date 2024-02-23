@@ -54,7 +54,7 @@ const CustomPagination = ({
             onClick={() => handlePageChange(i)}
             className={
               i === currentPage
-                ? "text-primary2  bg-textColor dark:bg-dark-border w-[20px] rounded"
+                ? "text-black dark:text-textColor  bg-textColor dark:bg-[#3C3C3C] w-[20px] rounded"
                 : ""
             }
           >
@@ -114,6 +114,23 @@ const CustomPagination = ({
           <span className="mx-2">
             {/* {startIndex}-{endIndex} of {totalCount} */}
             {renderPageNumbers()}
+            <button
+            className="mx-2"
+            // key={i}
+            // onClick={() => handlePageChange(i)}
+            // className={i === currentPage ? "active" : ""}
+            >
+              2
+            </button>
+
+            <button
+            className="mx-2"
+            // key={i}
+            // onClick={() => handlePageChange(i)}
+            // className={i === currentPage ? "active" : ""}
+            >
+              3
+            </button>
           </span>
           <button
             className="mx-[4px] cursor-pointer"

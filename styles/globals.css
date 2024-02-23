@@ -178,3 +178,7 @@ main::before {
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   background-color: none;
 }
+.css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
+  border-left: 0;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+}
