@@ -350,8 +350,8 @@ const CredntialProfileTable = (props: any) => {
         //   label={deviceIds.length}
         //   className="pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
         // />
-        <div className=" items-center pt-1 h-[22px] w-[30px] bg-primary2 dark:text-textColor dark:bg-dark-border rounded-full">
-          {deviceIds.length}
+        <div className=" items-center h-[22px] w-[30px] bg-primary2 dark:text-textColor dark:bg-dark-border rounded-full">
+          <p className="mt-[2px]">{deviceIds.length}</p>
         </div>
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
@@ -638,7 +638,7 @@ const CredntialProfileTable = (props: any) => {
                               className={`flex  ${
                                 colIndex == 0 || colIndex == 1
                                   ? "justify-start  "
-                                  : "justify-start ml-8  "
+                                  : "justify-start"
                               }`}
                               //   style={{
                               //     display: "flex",
@@ -786,7 +786,7 @@ const CredntialProfileTable = (props: any) => {
                                     className={`flex ${
                                       colIndex == 0 || colIndex == 1
                                         ? "justify-start"
-                                        : "justify-start ml-4"
+                                        : "justify-start "
                                     }`}
                                   >
                                     {column.format &&
