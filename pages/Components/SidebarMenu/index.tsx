@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import Link from "next/link";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { usePathname } from "next/navigation";
@@ -373,7 +373,7 @@ const SidebarMenu = () => {
                                               );
                                             }}
                                           >
-                                            <p
+                                            <Link href={dropdownItem.subMenuDropdownpathName}
                                               className={` ${
                                                 // selectedDropdown === dropdownIndex
                                                 selectedDropdown[
@@ -384,7 +384,7 @@ const SidebarMenu = () => {
                                               }`}
                                             >
                                               {dropdownItem.subMenuDropdownname}
-                                            </p>
+                                            </Link>
                                             {/* {dropdownIndex !==
                                               dropdownItem.subMenuDropdownname
                                                 .length -

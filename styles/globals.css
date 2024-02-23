@@ -65,6 +65,7 @@ body {
 }
 
 @layer utilities {
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -77,6 +78,7 @@ body {
     /* Firefox */
   }
 }
+
 /* Add this CSS to your stylesheet */
 /* main{
   position: relative;
@@ -137,11 +139,11 @@ main::before {
 
 /* Tooltip css */
 
-.MuiTooltip-popper[data-popper-placement*="left"]
-  .css-ja5taz-MuiTooltip-tooltip {
+.MuiTooltip-popper[data-popper-placement*="left"] .css-ja5taz-MuiTooltip-tooltip {
   transform-origin: right center;
   margin-right: 8px;
 }
+
 .css-ja5taz-MuiTooltip-tooltip {
   font-size: 0.7875rem;
 }
@@ -169,12 +171,22 @@ main::before {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 .css-y8ay40-MuiTableCell-root {
   border-bottom: 1px solid #3c3c3c;
 }
+
 .css-1rxtwhz-MuiPaper-root {
   box-shadow: none;
 }
+
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   background-color: none;
+}
+
+
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon{
+  opacity: 1;
+  color: "blue";
 }

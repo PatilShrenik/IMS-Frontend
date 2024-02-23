@@ -346,10 +346,13 @@ const CredntialProfileTable = (props: any) => {
       const deviceIds = row[column.field];
       //   console.log("deviceids", deviceIds);
       return (
-        <Chip
-          label={deviceIds.length}
-          className=" pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
-        />
+        // <Chip
+        //   label={deviceIds.length}
+        //   className="pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
+        // />
+        <div className=" items-center pt-1 h-[22px] w-[30px] bg-primary2 dark:text-textColor dark:bg-dark-border rounded-full">
+          {deviceIds.length}
+        </div>
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
 
@@ -576,35 +579,28 @@ const CredntialProfileTable = (props: any) => {
               {/* Global Downlad and delete button for table */}
             </div>
           </div>
-          <Paper
-            className="dark:bg-black"
-            sx={{
+          <div
+            className=""
+            style={{
               width: "100%",
               overflow: "hidden",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
-            <TableContainer
-              sx={{
-                maxHeight: 440,
-              }}
-            >
-              <Table
-                stickyHeader
-                aria-label="sticky table"
-                style={{ overflow: "hidden" }}
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+            <div className="max-h-440 overflow-hidden">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    <th
+                      className="bg-textColor  dark:bg-tabel-header dark:text-textColor"
                       style={{
                         padding: "8px",
                         fontSize: "11px",
                         textAlign: "center",
                         borderBottom: "0",
                         fontWeight: "bolder",
+                        // backgroundColor:"#D8D8D8"
                       }}
                     >
                       <Checkbox
@@ -614,7 +610,7 @@ const CredntialProfileTable = (props: any) => {
                         checked={selectAll}
                         onChange={handleSelectAllCheckboxToggle}
                       />
-                    </TableCell>
+                    </th>
                     {columns
                       .filter((column: any) =>
                         visibleColumns.includes(column.field)
@@ -622,8 +618,8 @@ const CredntialProfileTable = (props: any) => {
                       .map((column: any, colIndex: any) => {
                         const iconDirection = column.field ? order : "asc";
                         return (
-                          <TableCell
-                            className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header"
+                          <th
+                            className="bg-textColor text-start text-tabel-header dark:text-textColor dark:bg-tabel-header "
                             key={column.id}
                             align={column.align}
                             style={{
@@ -635,13 +631,14 @@ const CredntialProfileTable = (props: any) => {
                               letterSpacing: ".7px",
                               fontStyle: "normal",
                               fontFamily: `"Poppins", sans-serif`,
+                              // backgroundColor:"#D8D8D8"
                             }}
                           >
-                            <TableSortLabel
-                              className={`flex ${
+                            <TableSortLabel 
+                              className={`flex  ${
                                 colIndex == 0 || colIndex == 1
-                                  ? "justify-start"
-                                  : "justify-center pl-8 "
+                                  ? "justify-start  "
+                                  : "justify-start ml-8  "
                               }`}
                               //   style={{
                               //     display: "flex",
@@ -653,6 +650,7 @@ const CredntialProfileTable = (props: any) => {
                                 iconDirection as "asc" | "desc" | undefined
                               }
                               onClick={() => handleRequestSort(column.field)}
+                              style={{ color: "inherit", textDecoration: "none" }}
                             >
                               {column.headerName
                                 .split(" ")
@@ -668,48 +666,79 @@ const CredntialProfileTable = (props: any) => {
                                 )
                                 .join(" ")}
                             </TableSortLabel>
-                          </TableCell>
+                            {/* <th
+                              className={`flex ${
+                                colIndex === 0 || colIndex === 1
+                                  ? "justify-start"
+                                  : "justify-start ml-8"
+                              } cursor-pointer`}
+                              onClick={() => handleRequestSort(column.field)}
+                              style={{
+                                color: "inherit",
+                                textDecoration: "none",
+                              }}
+                            >
+                              <span className="uppercase">
+                                {column.headerName
+                                  .split(" ")
+                                  .map((word: any) =>
+                                    word
+                                      .split("_")
+                                      .map(
+                                        (subWord: any) =>
+                                          subWord.charAt(0).toUpperCase() +
+                                          subWord.slice(1)
+                                      )
+                                      .join(" ")
+                                  )
+                                  .join(" ")}
+                              </span>
+                              {orderBy === column.field && (
+                                <span className="ml-1">
+                                  {iconDirection === "asc" ? "▲" : "▼"}
+                                </span>
+                              )}
+                            </th> */}
+                          </th>
                         );
                       })}
-                    <TableCell
-                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header"
+                    <th
+                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
                       style={{
                         padding: "0px 8px",
                         fontSize: "14px",
                         fontWeight: "600",
                         borderBottom: "0",
                         letterSpacing: ".7px",
-                        textAlign: "center",
+                        textAlign: "start",
                         fontStyle: "normal",
                         fontFamily: `"Poppins", sans-serif`,
+                        // backgroundColor:"#D8D8D8"
                       }}
                     >
                       Actions
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
                   {stableSort(filteredData, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: any, rowIndex: any) => {
                       const isLastRow = rowIndex === data.length - 1;
                       return (
-                        <TableRow
+                        <tr
                           className="bg-light-container dark:bg-dark-container dark:text-textColor border-b-2"
-                          hover
                           role="checkbox"
                           tabIndex={-1}
                           key={row._id}
                         >
-                          <TableCell
+                          <td
                             style={{
                               padding: "8px",
                               textAlign: "center",
                             }}
-                            className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
-                              isLastRow
-                                ? "border-b"
-                                : "border-b"
+                            className={`bg-light-container dark:bg-dark-container dark:text-textColor  ${
+                              isLastRow ? "border-b" : "border-b"
                             }`}
                           >
                             <Checkbox
@@ -723,7 +752,7 @@ const CredntialProfileTable = (props: any) => {
                               checked={selectedRows.includes(row._id)}
                               onChange={() => handleRowCheckboxToggle(row._id)}
                             />
-                          </TableCell>
+                          </td>
                           {columns
                             .filter((column: any) =>
                               visibleColumns.includes(column.field)
@@ -736,12 +765,10 @@ const CredntialProfileTable = (props: any) => {
                               );
 
                               return (
-                                <TableCell
+                                <td
                                   className={`dark:bg-dark-container dark:text-textColor ${
-                                    isLastRow
-                                      ? "border-b "
-                                      : "border-b "
-                                  }`}
+                                    isLastRow ? "border-b " : "border-b "
+                                  }  `}
                                   key={column.id}
                                   align={column.align}
                                   style={{
@@ -756,21 +783,18 @@ const CredntialProfileTable = (props: any) => {
                                     className={`flex ${
                                       colIndex == 0 || colIndex == 1
                                         ? "justify-start"
-                                        : "justify-center"
+                                        : "justify-start ml-4"
                                     }`}
                                   >
-                       
                                     {column.format &&
                                     typeof processedValue === "number"
                                       ? column.format(processedValue)
                                       : processedValue}
-                                 
                                   </span>
-                                
-                                </TableCell>
+                                </td>
                               );
                             })}
-                          <TableCell
+                          <td
                             className={`bg-light-container dark:bg-dark-container dark:text-textColor ${
                               isLastRow
                                 ? "border-b border-gray-300"
@@ -780,19 +804,19 @@ const CredntialProfileTable = (props: any) => {
                               fontSize: "11px",
                               fontWeight: "normal",
                               padding: "0",
-                              textAlign: "center",
+                              textAlign: "start",
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
                             <CredentialProfileMenu />
                             {/* <CredentialProfileMenu rowData={row} /> */}
-                          </TableCell>
-                        </TableRow>
+                          </td>
+                        </tr>
                       );
                     })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                </tbody>
+              </table>
+            </div>
             {/* <TablePagination
               className="bg-light-container dark:bg-dark-container dark:text-textColor pt-12"
               rowsPerPageOptions={[10, 25, 100]}
@@ -803,7 +827,7 @@ const CredntialProfileTable = (props: any) => {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
-          </Paper>
+          </div>
         </div>
       )}
     </>

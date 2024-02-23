@@ -41,9 +41,9 @@ const Sidebar = () => {
       icon: (
         <DashboardOutlinedIcon
           className={` ${
-            pathname.includes("Dashboard") && "text-primary2 dark:text-primary2"
+            pathname.includes("dashboard") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -55,7 +55,7 @@ const Sidebar = () => {
           className={` ${
             pathname.includes("Assets") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -65,9 +65,9 @@ const Sidebar = () => {
       icon: (
         <NotificationsActiveIcon
           className={` ${
-            pathname.includes("Alerts") && "text-primary2 dark:text-primary2"
+            pathname.includes("alerts") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -79,7 +79,7 @@ const Sidebar = () => {
           className={` ${
             pathname.includes("Topology") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -89,9 +89,9 @@ const Sidebar = () => {
       icon: (
         <DataSaverOffIcon
           className={` ${
-            pathname.includes("Explorer") && "text-primary2 dark:text-primary2"
+            pathname.includes("explorer") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -103,7 +103,7 @@ const Sidebar = () => {
           className={` ${
             pathname.includes("Reports") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -113,10 +113,10 @@ const Sidebar = () => {
       icon: (
         <ConstructionIcon
           className={` ${
-            pathname.includes("Diagnostics") &&
+            pathname.includes("diagnostics") &&
             "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -128,7 +128,7 @@ const Sidebar = () => {
           className={` ${
             pathname.includes("NCM") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -140,7 +140,7 @@ const Sidebar = () => {
           className={` ${
             pathname.includes("Audit") && "text-primary2 dark:text-primary2"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -153,7 +153,7 @@ const Sidebar = () => {
             pathname.includes("Settings") &&
             "text-[#0078D4] dark:text-[#0078D4]"
           } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
@@ -246,7 +246,7 @@ const Sidebar = () => {
                         <p
                           className={`${
                             pathname.includes(link.name)
-                              ? "text-primary2 dark:text-primary2 text-[8px] flex mx-2 justify-evenly"
+                              ? "text-black dark:text-primary2 text-[8px] flex mx-2 justify-evenly"
                               : "dark:text-textColor text-black text-[8px] flex mx-2 justify-evenly"
                           } " text-black"`}
                         >
