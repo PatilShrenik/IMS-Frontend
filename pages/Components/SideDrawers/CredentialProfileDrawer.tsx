@@ -27,8 +27,8 @@ const CredentialProfileDrawer = (props: any) => {
 
   const [protocol, setProtocol] = React.useState<any>("SNMPv1");
   const [authType, setAuthType] = React.useState("");
-  // const { getCredProfileApiState, togglegetCredProfileApiState } =
-  //   useAppContext();
+  const { togglegetCredProfileApiState } =
+  useAppContext();
   const [encryptType, setEncryptType] = React.useState("");
   const [msg_flag, setMsgFlag] = React.useState("");
   const [snmpObject, setSnmpObject] = React.useState({
@@ -185,7 +185,7 @@ const CredentialProfileDrawer = (props: any) => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
         if (response.status == "success") {
-          // togglegetCredProfileApiState();
+           togglegetCredProfileApiState();
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
@@ -225,7 +225,7 @@ const CredentialProfileDrawer = (props: any) => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
         if (response.status == "success") {
-          // togglegetCredProfileApiState();
+           togglegetCredProfileApiState();
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
@@ -377,7 +377,7 @@ const CredentialProfileDrawer = (props: any) => {
                     <CustomeCancelButton title="Cancel" />
                   </div>
                 </div>
-              </div>
+              </div>  
             ) : protocol == "SSH" ? (
               <div>
                 <div className="flex flex-col">

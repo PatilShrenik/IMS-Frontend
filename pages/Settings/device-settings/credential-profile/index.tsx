@@ -5,7 +5,9 @@ import TablePagination from "@mui/material/TablePagination";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
-
+import { useAppContext } from "@/pages/Components/AppContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const CredentialProfile = () => {
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
@@ -15,7 +17,8 @@ const CredentialProfile = () => {
 
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
-
+  const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
+  useAppContext();
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
     // Fetch data for the new page if needed
@@ -90,7 +93,7 @@ const CredentialProfile = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [getCredProfileApiState]);
   const totalCount = data && data.length;
   const handleChangePage = (
     event: any,
@@ -106,6 +109,7 @@ const CredentialProfile = () => {
 
   return (
     <>
+    <ToastContainer />
       <div className="w-full">
         {/* <PageHeading heading="Credential Profile" /> */}
         <CredntialProfileTable
