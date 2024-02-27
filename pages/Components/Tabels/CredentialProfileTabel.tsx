@@ -6,16 +6,11 @@ import {
   MenuItem,
   Checkbox,
   Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
+  Modal,
+  Typography,
+  Box,
   TableSortLabel,
-  TableBody,
-  TablePagination,
   Tooltip,
-  Chip,
   Button,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
@@ -33,10 +28,15 @@ import { useAppContext } from "../AppContext";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+import {
+  bulkActionCredsProfileDelete,
+  deleteCredsProfile,
+  getAllCredsProfile,
+} from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
+import CustomeButton, { CustomeCancelButton } from "../Buttons";
 
 const CredntialProfileTable = (props: any) => {
   const {
@@ -65,9 +65,14 @@ const CredntialProfileTable = (props: any) => {
   const [anchorE3, setAnchorE3] = useState(null);
   const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isModalopen, setIsModalOpen] = React.useState(false);
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
+
   const [isAddMultipleDialogOpen, setIsAddMultipleDialogOpen] = useState(false);
   const open = Boolean(anchorE2);
-  const { themeSwitch } = useAppContext();
+  const { togglegetCredProfileApiState } =
+    useAppContext();
   const ITEM_HEIGHT = 48;
   const groupValues =
     allGroups &&
@@ -213,28 +218,31 @@ const CredntialProfileTable = (props: any) => {
     }
   }, [selectedRows]);
 
-  //   const deleteDevice = async () => {
-  //     console.log("delete array", selectedRows);
-  //     try {
-  //       let response = await deleteCredsProfile(selectedRows);
+  const deleteDevice = async () => {
+    console.log("delete array", selectedRows);
+    try {
+      let response = await bulkActionCredsProfileDelete(selectedRows);
 
-  //       if (response.status == "success") {
-  //         togglegetCredProfileApiState();
-  //         toast.success(response.message, {
-  //           position: "bottom-right",
-  //           autoClose: 1000,
-  //         });
-  //       } else {
-  //         toast.error(response.message, {
-  //           position: "bottom-right",
-  //           autoClose: 2000,
-  //         });
-  //       }
-  //       // setIsPopupOpen(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
+      if (response.status == "success") {
+        handleModalClose();
+
+        togglegetCredProfileApiState();
+
+        toast.success(response.message, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+      // setIsPopupOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const downloadCSV = () => {
     const selectedRowsData = data.filter((row: any) =>
@@ -458,13 +466,34 @@ const CredntialProfileTable = (props: any) => {
                         placement="top"
                       >
                         <DeleteForeverIcon
-                          //   onClick={deleteDevice}
+                          onClick={handleModalOpen}
                           className="cursor-pointer"
                           style={{
                             margin: "0 5px",
                           }}
                         />
                       </Tooltip>
+                      <Modal open={isModalopen} onClose={handleModalClose}>
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md">
+                          <p className="mb-5 text-lg font-medium">
+                            Are you sure you want to delete?
+                          </p>
+                          <button
+                            onClick={deleteDevice}
+                            className="bg-primary2 hover:bg-primary2 text-white font-normal py-1 px-4 rounded mr-2"
+                          >
+                            Confirm
+                          </button>
+                          {/* <CustomeButton  onClick={deleteDevice} title="Confirm" /> */}
+                          <button
+                            onClick={handleModalClose}
+                            className="bg-light3 hover:bg-light3 text-white font-normal py-1 px-4 rounded"
+                          >
+                            Cancel
+                          </button>
+                           {/* <CustomeCancelButton onClick={handleModalClose} title="Cancel" /> */}
+                        </div>
+                      </Modal>
                       <Tooltip
                         TransitionComponent={Zoom}
                         title="Download selected credentials"
@@ -811,7 +840,7 @@ const CredntialProfileTable = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <CredentialProfileMenu />
+                            <CredentialProfileMenu id={row._id} />
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </td>
                         </tr>

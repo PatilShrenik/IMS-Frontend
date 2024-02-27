@@ -19,6 +19,9 @@ const AppContext = createContext<{
   toggleCloud: (cloud: any) => void;
   themeSwitch: boolean;
   toggleThemeSwitch: () => void;
+  getCredProfileApiState: boolean;
+  togglegetCredProfileApiState: () => void;
+  
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -38,6 +41,8 @@ const AppContext = createContext<{
   toggleCloud: (cloud: any) => {},
   themeSwitch: false,
   toggleThemeSwitch: () => {},
+  getCredProfileApiState: false,
+  togglegetCredProfileApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -48,6 +53,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarClick, setSidebarClick] = useState(false);
   const [themeSwitch, setThemeSwitch] = useState(false);
+  const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
   const toggleSideBarClickState = () => {
     setSidebarClick((prevState) => !prevState);
   };
@@ -67,6 +73,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   // console.log("jhejfehjh")
   const toggleEstimateCalc = () => {
     setEstimateCalc((prevState) => !prevState);
+  };
+  const togglegetCredProfileApiState = () => {
+    setGetCredProfileApiState((prevState) => !prevState);
   };
 
   const [time, setTime] = useState(
@@ -107,6 +116,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleCloud,
         themeSwitch,
         toggleThemeSwitch,
+        getCredProfileApiState,
+        togglegetCredProfileApiState,
       }}
     >
       {children}

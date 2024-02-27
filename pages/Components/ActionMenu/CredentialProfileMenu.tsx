@@ -3,19 +3,65 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-
-const options = ["Edit", "Delete"];
+import { deleteCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+import { toast } from "react-toastify";
+import EditCredentialProfileDrawer from "../SideDrawers/EditCredentialProfileDrawer";
+import { useState } from "react";
+import { useAppContext } from "../AppContext";
 
 const ITEM_HEIGHT = 48;
 
-export default function CredentialProfileMenu() {
+const CredentialProfileMenu = (props: any) => {
+  const { id  } = props;
+  const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
+  useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleEditDrawerClose = () => {
+    setIsEditDrawerOpen(false);
+  };
+  const handleEditClick = (rowId: number) => {
+    //console.log("EditRowId", rowId);
+    setIsEditDrawerOpen(true);
+    handleClose();
+  };
+
+  const handleDeleteClick = async (rowId: number) => {
+   // console.log("DeleteRowId", rowId);
+
+    try {
+      const response = await deleteCredsProfile(rowId);
+
+      if (response.status == "success") {
+        togglegetCredProfileApiState();
+        toast.success(response.message, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else if (response.status == "fail" && response.code == 400) {
+        toast.error("Bad Request: The request could not be understood or was missing required parameters.", {
+            position: "bottom-right",
+            autoClose: 2000,
+        }); 
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+      // setIsPopupOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+    handleClose();
   };
 
   return (
@@ -30,11 +76,8 @@ export default function CredentialProfileMenu() {
       >
         <MoreVertIcon className="dark:text-textColor" />
       </IconButton>
+
       <Menu
-        id="long-menu"
-        MenuListProps={{
-          "aria-labelledby": "long-button",
-        }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -45,17 +88,28 @@ export default function CredentialProfileMenu() {
           },
         }}
       >
-        {options.map((option) => (
-          <MenuItem
-            className="bg-textColor dark:bg-tabel-header dark:text-textColor"
-            key={option}
-            selected={option === "Pyxis"}
-            onClick={handleClose}
-          >
-            {option}
-          </MenuItem>
-        ))}
+        <MenuItem
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+          onClick={() =>  handleEditClick(id)}
+        >
+          Edit
+        </MenuItem>
+     
+        <MenuItem
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+          onClick={() => handleDeleteClick(id)}
+        >
+          Delete
+        </MenuItem>
       </Menu>
+     
+        <EditCredentialProfileDrawer
+        rowId={id}
+        open={isEditDrawerOpen}
+        handleDrawerClose={handleEditDrawerClose}
+      />
+      
     </div>
   );
-}
+};
+export default CredentialProfileMenu;

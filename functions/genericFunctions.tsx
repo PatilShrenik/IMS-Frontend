@@ -71,3 +71,33 @@ export default function replacePeriodsWithUnderscoresSingleObject(obj: any) {
     return formattedDate;
   }
   
+
+  export function replaceDotsWithUnderscores(obj: any) {
+    const newObj : any = {};
+  
+    for (const key in obj) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        newObj[key.replace(/\./g, '_')] = replaceDotsWithUnderscores(obj[key]);
+      } else {
+        newObj[key.replace(/\./g, '_')] = obj[key];
+      }
+    }
+  
+    return newObj;
+  }
+
+
+ export function replaceUnderscoresWithDotsNested(obj: any) {
+    const newObj :  any = {};
+  
+    for (const key in obj) {
+      if (key === '_id' || typeof obj[key] !== 'object' || obj[key] === null) {
+        newObj[key] = obj[key];
+      } else {
+        newObj[key.replace(/_/g, '.')] = replaceUnderscoresWithDots(obj[key]);
+      }
+    }
+  
+    return newObj;
+  }
+  
