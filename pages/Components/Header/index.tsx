@@ -34,28 +34,28 @@ const Header = (props: {
       {/* <div></div> */}
       <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-2 ">
         <div className="flex">
-          {pathname.includes("Explorer") ||
+          {(pathname.includes("Explorer") ||
             pathname.includes("Diagnostics") ||
-            (pathname.includes("Settings") && (
-              <div
-                className=" flex cursor-pointer items-center"
-                onClick={() => {
-                  toggleSideBarState();
-                  // toggleSideBarClickState();
-                }}
-              >
-                <MenuIcon
-                  className={` ${
-                    sidebarOpen
-                      ? "text-primary2 dark:text-primary2"
-                      : "text-black dark:text-white"
-                  }`}
-                />
-              </div>
-            ))}
-          <div className="ml-4">
+            pathname.includes("Settings")) && (
+            <div
+              className=" flex cursor-pointer items-center"
+              onClick={() => {
+                toggleSideBarState();
+                // toggleSideBarClickState();
+              }}
+            >
+              <MenuIcon
+                className={` ${
+                  sidebarOpen
+                    ? "text-primary2 dark:text-primary2"
+                    : "text-black dark:text-white"
+                }`}
+              />
+            </div>
+          )}
+          {/* <div className="ml-4">
             <Breadcrumb />
-          </div>
+          </div> */}
         </div>
         {/* <div className="flex items-left gap-2 sm:gap-4">{path}</div> */}
 

@@ -8,9 +8,12 @@ interface LayoutProps {
 import { useRouter } from "next/router";
 import { memo } from "react";
 import Header from "./Header";
+import MenuIcon from "@mui/icons-material/Menu";
 import NewSidebar from "./NewSidebar";
 import SidebarMenu from "./SidebarMenu";
 import CloudGateway from "../page/FinOps/Settings";
+import { usePathname } from "next/navigation";
+import Breadcrumb from "./BreadCrumbs";
 // import router from "next/router";
 
 const Footer = memo(() => (
@@ -33,7 +36,7 @@ const Footer = memo(() => (
 ));
 Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
-  const { state, toggleState } = useAppContext();
+  const { sidebarOpen, toggleSideBarState } = useAppContext();
   // const [uEmail, setEmail] = useState<any>(false);
   const router = useRouter();
   // const currentUrl = router.asPath;
@@ -47,6 +50,14 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   //     router.push("/");
   //   }
   // }, [router.asPath]);
+  const pathname = usePathname();
+  const path = pathname.substring(1);
+  const transformedString = path
+    .replace(/\//g, " > ")
+    .replace(/-/g, " ")
+    .split("/")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" > ");
   return (
     <div
       id="appLayout"
@@ -68,7 +79,33 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
         <Header />
         <main className="flex min-h-[calc(100vh)] bg-white dark:bg-dark-container">
           <SidebarMenu />
-          <div className="w-full p-2">{children}</div>
+          <div className="w-full p-2">
+            <div className="flex">
+              {/* {pathname.includes("Explorer") ||
+                pathname.includes("Diagnostics") ||
+                (pathname.includes("Settings") && (
+                  <div
+                    className=" flex cursor-pointer items-center"
+                    onClick={() => {
+                      toggleSideBarState();
+                      // toggleSideBarClickState();
+                    }}
+                  >
+                    <MenuIcon
+                      className={` ${
+                        sidebarOpen
+                          ? "text-primary2 dark:text-primary2"
+                          : "text-black dark:text-white"
+                      }`}
+                    />
+                  </div>
+                ))} */}
+              <div className="ml-4">
+                <Breadcrumb />
+              </div>
+            </div>
+            <div className="mt-2">{children}</div>
+          </div>
         </main>
         {/* <Footer /> */}
       </div>

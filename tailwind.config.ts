@@ -292,6 +292,8 @@ const config: Config = {
         "light-menu-color": "#E8E8E8",
         "dark-border": "#3C3C3C",
         light3: "#b9b9b9",
+        success: "green",
+        danger: "red",
       },
     },
   },

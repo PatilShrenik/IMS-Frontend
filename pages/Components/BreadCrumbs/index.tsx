@@ -43,7 +43,6 @@ export default function Breadcrumb() {
   const transformedArray = arrayOfStrings.map((word) =>
     word.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
   );
-  console.log("seperated", transformedArray);
 
   const breadcrumbs = arrayOfStrings
     .slice(0, arrayOfStrings.length - 1)

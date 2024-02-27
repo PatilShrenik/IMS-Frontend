@@ -172,7 +172,7 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-      className={`left-0 top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+      className={`left-0 top-0 w-[3.7rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
         sidebarOpen && ""
       } `}
       // className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
@@ -205,36 +205,36 @@ const Sidebar = () => {
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {links.map((link, index) => (
-                <BootstrapTooltip
-                  TransitionComponent={Zoom}
-                  title={link.name}
-                  arrow
-                  placement="right"
-                  slotProps={{
-                    popper: {
-                      sx: {
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                          {
-                            marginTop: "0px",
-                          },
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                          {
-                            marginBottom: "0px",
-                          },
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                          {
-                            marginLeft: "4px",
-                          },
-                        [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                          {
-                            marginRight: "0px",
-                          },
-                      },
-                    },
-                  }}
-                >
-                  <li key={index}>
-                    <Link
+                // <BootstrapTooltip
+                //   TransitionComponent={Zoom}
+                //   title={link.name}
+                //   arrow
+                //   placement="right"
+                //   slotProps={{
+                //     popper: {
+                //       sx: {
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginTop: "0px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginBottom: "0px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginLeft: "4px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginRight: "0px",
+                //           },
+                //       },
+                //     },
+                //   }}
+                // >
+                <li key={index}>
+                  {/* <Link
                       href={link.path}
                       className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
                         pathname.includes(link.path) &&
@@ -243,39 +243,30 @@ const Sidebar = () => {
                     >
                       <div className="w-full px-2">
                         <div className="flex justify-around">{link.icon}</div>
-                        {/* <p
-                          className={`${
-                            pathname.includes(link.name)
-                              ? "text-primary2 dark:text-primary2 text-xs flex mx-2 justify-evenly"
-                              : "dark:text-textColor text-black text-xs flex mx-2 justify-evenly"
-                          } " text-black"`}
-                        >
-                          {link.name}
-                        </p> */}
-                      </div>
-                    </Link>
-                    {/* <Link
-                      href={link.path}
-                      className={`group relative flex items-center rounded-sm py-[4px] mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
-                        pathname.includes(link.path) &&
-                        "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
-                      }`}
-                    >
-                      <div className="w-full px-2">
-                        <div className="flex justify-around">{link.icon}</div>
-                        <p
-                          className={`${
-                            pathname.includes(link.name)
-                              ? "text-black dark:text-primary2 text-[8px] flex mx-2 justify-evenly"
-                              : "dark:text-textColor text-black text-[8px] flex mx-2 justify-evenly"
-                          } " text-black"`}
-                        >
-                          {link.name}
-                        </p>
                       </div>
                     </Link> */}
-                  </li>
-                </BootstrapTooltip>
+                  <Link
+                    href={link.path}
+                    className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
+                      pathname.includes(link.path) &&
+                      "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                    }`}
+                  >
+                    <div className="w-full px-2">
+                      <div className="flex justify-around">{link.icon}</div>
+                      <p
+                        className={`${
+                          pathname.includes(link.name)
+                            ? "text-black dark:text-primary2 text-[9px] flex mx-2 justify-evenly"
+                            : "dark:text-textColor text-black text-[9px] flex mx-2 justify-evenly"
+                        } " text-black"`}
+                      >
+                        {link.name}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+                // {/* </BootstrapTooltip> */}
               ))}
             </ul>
           </div>
