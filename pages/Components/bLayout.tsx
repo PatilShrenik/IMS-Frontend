@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import Login from "../page/login/login";
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,12 +10,12 @@ const BLayout: React.FC<LayoutProps> = ({ children }: any) => {
     
     <div
       style={{
-        position: "relative",
+        // position: "relative",
         height: "100%",
       }}
     >
       <title>IMS</title>
-
+{/* 
       <div
         style={{
           position: "absolute",
@@ -28,20 +29,21 @@ const BLayout: React.FC<LayoutProps> = ({ children }: any) => {
           opacity: 0.2,
         }}
       ></div>
+ */} 
 
       <div
         style={{
-          position: "relative",
-          zIndex: 1,
+          // position: "relative",
+          // zIndex: 1,
           color: "white",
           height: "100%",
         }}
       >
         <div className="flex-1 overflow-x-hidden overflow-y-auto z-10 h-[100vh]">
-          {/* Page content */}
-          <main className=" p-6 h-[100%]">{children}</main>
+       
+          <main className="h-[100%]">{children}</main>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };

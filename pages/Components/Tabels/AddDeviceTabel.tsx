@@ -233,6 +233,7 @@ const AllDeviceTabel = (props: any) => {
   //         toast.success(response.message, {
   //           position: "bottom-right",
   //           autoClose: 1000,
+  
   //         });
   //       } else {
   //         toast.error(response.message, {
@@ -866,7 +867,7 @@ const AllDeviceTabel = (props: any) => {
                                 : "border-b border-gray-300"
                             }`}
                             style={{
-                              fontSize: "11px",
+                              // fontSize: "11px",
                               fontWeight: "normal",
                               padding: "0",
                               textAlign: "start",

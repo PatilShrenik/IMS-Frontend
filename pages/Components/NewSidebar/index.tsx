@@ -257,7 +257,7 @@ const Sidebar = () => {
                       <p
                         className={`${
                           pathname.includes(link.name)
-                            ? "text-black dark:text-primary2 text-[9px] flex mx-2 justify-evenly"
+                            ? "text-black dark:text-white text-[9px] flex mx-2 justify-evenly"
                             : "dark:text-textColor text-black text-[9px] flex mx-2 justify-evenly"
                         } " text-black"`}
                       >
