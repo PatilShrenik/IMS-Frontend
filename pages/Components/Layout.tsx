@@ -100,9 +100,9 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
                     />
                   </div>
                 ))} */}
-              <div className="ml-4">
+              {/* <div className="ml-4">
                 <Breadcrumb />
-              </div>
+              </div> */}
             </div>
             <div className="mt-2">{children}</div>
           </div>

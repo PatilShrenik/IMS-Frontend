@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }: any) {
         <AppContextProvider>
           <ReactFlowProvider>
             <Layout>
-            <NextProgress options={{ showSpinner: false }} />
+            {/* <NextProgress options={{ showSpinner: false }} /> */}
               <Component {...pageProps} />
             </Layout>
           </ReactFlowProvider>

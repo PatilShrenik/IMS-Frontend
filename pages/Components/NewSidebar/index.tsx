@@ -172,7 +172,7 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-      className={`left-0 top-0 w-[3.7rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+      className={`left-0 top-0 w-[4rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
         sidebarOpen && ""
       } `}
       // className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
@@ -247,9 +247,9 @@ const Sidebar = () => {
                     </Link> */}
                   <Link
                     href={link.path}
-                    className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
-                      pathname.includes(link.path) &&
-                      "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                    className={`flex items-center rounded-sm py-1 mr-1 mt-1 font-medium text-bodydark1 duration-300 text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
+                      pathname.includes(link.path) ?
+                      "border-l-4 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]" : "pl-1"
                     }`}
                   >
                     <div className="w-full px-2">
@@ -257,7 +257,7 @@ const Sidebar = () => {
                       <p
                         className={`${
                           pathname.includes(link.name)
-                            ? "text-black dark:text-primary2 text-[9px] flex mx-2 justify-evenly"
+                            ? "text-black dark:text-textColor text-[9px] flex mx-2 justify-evenly"
                             : "dark:text-textColor text-black text-[9px] flex mx-2 justify-evenly"
                         } " text-black"`}
                       >
@@ -271,94 +271,6 @@ const Sidebar = () => {
             </ul>
           </div>
         </nav>
-
-        {/* <nav className="pb-4">
-          <div>
-            <ul className="mb-6 flex flex-col ju gap-1.5">
-              {links.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.path}
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-textColor hover:text-textColor dark:hover:bg-meta-4 ${
-                      pathname.includes(link.path) && " dark:bg-meta-4 "
-                    }`}
-                  >
-                    <Box>
-                      <div className="flex flex-col">
-                        {link.icon}
-                        <span className="mr-3 text-xs font-light ml-[-12px]">
-                          {link.name}
-                        </span>
-                      </div>
-                    </Box>
-                  </Link>
-                </li>
-                // <li>
-                //   <Link
-                //     href="/page/FinOps/reports"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-textColor hover:text-textColor dark:hover:bg-meta-4 ${
-                //       pathname.includes("page/FinOps/reports") &&
-                //       " dark:bg-meta-4 "
-                //     }`}
-                //   >
-                //    <Box>
-                //     <DashboardIcon
-                //       sx={{ color: "white" }}
-                // className={` ${
-                //   pathname.includes("page/FinOps/reports") &&
-                //   "dark:bg-meta-4 text-blue-700"
-                // }`}
-                //     />
-                //  <span className="mr-3 text-xs font-light ml-[-12px]">Dashboard</span>
-                //       </Box>
-                //   </Link>
-                // </li>
-                // <li>
-                //   <Link
-                //     href="/page/FinOps/Settings"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  dark:hover:bg-meta-4 text-textColor hover:text-textColor ${
-                //       pathname.includes("/page/FinOps/Settings") &&
-                //       " dark:bg-meta-4"
-                //     }`}
-                //   >
-                //     <Box>
-                //     <EqualizerIcon
-                //       sx={{ color: "white" }}
-                //       className={`${
-                //         pathname.includes("/page/FinOps/Settings") &&
-                //         "dark:bg-meta-4 text-blue-700"
-                //       }`}
-                //     />
-                //      <span className="mr-3 text-xs font-light ml-[-5px]">Assets</span>
-                //     </Box>
-
-                //   </Link>
-                // </li>
-                // <li>
-                //   <Link
-                //     href="/page/Topology"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  dark:hover:bg-meta-4 text-textColor hover:text-textColor ${
-                //       pathname.includes("/page/Topology") &&
-                //       " dark:bg-meta-4"
-                //     }`}
-                //   >
-                //     <Box>
-                //     <EqualizerIcon
-                //       sx={{ color: "white" }}
-                //       className={`${
-                //         pathname.includes("/page/Topology") &&
-                //         "dark:bg-meta-4 text-blue-700"
-                //       }`}
-                //     />
-                //      <span className="mr-3 text-xs font-light ml-[-5px]">Topology</span>
-                //     </Box>
-
-                //   </Link>
-                // </li>
-              ))}
-            </ul>
-          </div>
-        </nav> */}
       </div>
     </aside>
   );

@@ -193,3 +193,15 @@ main::before {
   opacity: 1;
   color: "blue";
 }
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the position as needed */
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: #000 transparent transparent transparent; /* Adjust the color as needed */
+  pointer-events: none; /* Allow clicks to pass through to the select element */
+}

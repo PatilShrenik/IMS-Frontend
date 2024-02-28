@@ -97,6 +97,7 @@ const AddDeviceDrawer = (props: any) => {
       // hideBackdrop = {false}temporary
       anchor="right"
       open={open}
+      // elevation={55}
       // transitionDuration
       // className={classes.drawer}
       variant="temporary"
@@ -105,7 +106,7 @@ const AddDeviceDrawer = (props: any) => {
       }}
       className={`shadow-sm shadow-dark-container w-full  ${classes.drawer}`}
     >
-      <div className="h-full bg-white dark:bg-dark-menu-color">
+      <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">Add Asset</p>
           <CloseSharpIcon
@@ -231,7 +232,11 @@ const AddSingleDeviceTab = (props: any) => {
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
-      <ButtonGroup variant="outlined" aria-label="Basic button group" className="mx-8">
+      <ButtonGroup
+        variant="outlined"
+        aria-label="Basic button group"
+        className="mx-8"
+      >
         <Button
           onClick={() => setValue("address")}
           className={`${value == "address" && "bg-primary2 text-white"}`}

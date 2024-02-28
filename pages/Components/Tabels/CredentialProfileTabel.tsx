@@ -18,6 +18,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
@@ -37,6 +38,7 @@ import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
+import Chips from "../Chips";
 
 const CredntialProfileTable = (props: any) => {
   const {
@@ -71,8 +73,7 @@ const CredntialProfileTable = (props: any) => {
 
   const [isAddMultipleDialogOpen, setIsAddMultipleDialogOpen] = useState(false);
   const open = Boolean(anchorE2);
-  const { togglegetCredProfileApiState } =
-    useAppContext();
+  const { togglegetCredProfileApiState } = useAppContext();
   const ITEM_HEIGHT = 48;
   const groupValues =
     allGroups &&
@@ -358,9 +359,12 @@ const CredntialProfileTable = (props: any) => {
         //   label={deviceIds.length}
         //   className="pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
         // />
-        <div className=" items-center h-[22px] w-[30px] bg-primary2 dark:text-textColor dark:bg-dark-border rounded-full">
-          <p className="mt-[2px]">{deviceIds.length}</p>
-        </div>
+        <>
+          <Chips value={deviceIds.length} />
+          {/* <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2  rounded-full">
+            <p className="mt-[2px]">{deviceIds.length}</p>
+          </div> */}
+        </>
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
 
@@ -491,7 +495,7 @@ const CredntialProfileTable = (props: any) => {
                           >
                             Cancel
                           </button>
-                           {/* <CustomeCancelButton onClick={handleModalClose} title="Cancel" /> */}
+                          {/* <CustomeCancelButton onClick={handleModalClose} title="Cancel" /> */}
                         </div>
                       </Modal>
                       <Tooltip
@@ -577,6 +581,14 @@ const CredntialProfileTable = (props: any) => {
                 {/* Add Device Menu and Model */}
 
                 <div className="m-4 mr-0 ml-2 h-fit">
+                  <Button
+                    onClick={handleDrawerOpen}
+                    variant="contained"
+                    className="bg-primary3 capitalize items-center mr-2"
+                    size="small"
+                  >
+                    <FileUploadIcon fontSize="small" className="mr-2" /> Upload CSV
+                  </Button>
                   <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
@@ -759,7 +771,7 @@ const CredntialProfileTable = (props: any) => {
                       const isLastRow = rowIndex === data.length - 1;
                       return (
                         <tr
-                          className="bg-white dark:bg-dark-container dark:text-textColor border-b-2"
+                          className="bg-white dark:bg-dark-container dark:text-textColor"
                           role="checkbox"
                           tabIndex={-1}
                           key={row._id}
@@ -769,7 +781,7 @@ const CredntialProfileTable = (props: any) => {
                               padding: "8px",
                               textAlign: "center",
                             }}
-                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
+                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
                               isLastRow ? "border-b" : "border-b"
                             }`}
                           >
@@ -798,7 +810,7 @@ const CredntialProfileTable = (props: any) => {
 
                               return (
                                 <td
-                                  className={`dark:bg-dark-container dark:text-textColor ${
+                                  className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
                                     isLastRow ? "border-b " : "border-b "
                                   }`}
                                   key={column.id}
@@ -827,7 +839,7 @@ const CredntialProfileTable = (props: any) => {
                               );
                             })}
                           <td
-                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
+                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
                               isLastRow
                                 ? "border-b border-gray-300"
                                 : "border-b border-gray-300"

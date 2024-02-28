@@ -21,12 +21,15 @@ import {
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
@@ -41,6 +44,7 @@ import {
 import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
+import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -61,6 +65,7 @@ const AllDeviceTabel = (props: any) => {
   const [search, setSearch] = useState("");
   //   const [visibleColumns, setVisibleColumns] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedButtons, setSelectedButtons] = useState([]) as any;
   const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -223,29 +228,6 @@ const AllDeviceTabel = (props: any) => {
     }
   }, [selectedRows]);
 
-  //   const deleteDevice = async () => {
-  //     console.log("delete array", selectedRows);
-  //     try {
-  //       let response = await deleteCredsProfile(selectedRows);
-
-  //       if (response.status == "success") {
-  //         togglegetCredProfileApiState();
-  //         toast.success(response.message, {
-  //           position: "bottom-right",
-  //           autoClose: 1000,
-  //         });
-  //       } else {
-  //         toast.error(response.message, {
-  //           position: "bottom-right",
-  //           autoClose: 2000,
-  //         });
-  //       }
-  //       // setIsPopupOpen(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
   const downloadCSV = () => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
@@ -276,12 +258,28 @@ const AllDeviceTabel = (props: any) => {
   const filteredData =
     data &&
     data.filter((row: any) => {
-      return visibleColumns.some(
+      const matchesSearch = visibleColumns.some(
         (columnField: any) =>
           typeof row[columnField] === "string" &&
           row[columnField].toLowerCase().includes(search.toLowerCase())
       );
+
+      const matchesButtons =
+        selectedButtons.length === 0 ||
+        selectedButtons.some((button: any) => row["plugin_type"] === button);
+      console.log("matched button", row["plugin_type"]);
+      return matchesSearch && matchesButtons;
     });
+
+  const handleButtonClick = (title: any) => {
+    setSelectedButtons((prevSelectedButtons: any) => {
+      if (prevSelectedButtons.includes(title)) {
+        return prevSelectedButtons.filter((button: any) => button !== title);
+      } else {
+        return [...prevSelectedButtons, title];
+      }
+    });
+  };
 
   const stableSort = (array: any, comparator: any) => {
     const stabilizedThis = array.map((el: any, index: any) => [el, index]);
@@ -312,18 +310,6 @@ const AllDeviceTabel = (props: any) => {
     }
     return 0;
   };
-
-  //   const handleChangePage = (
-  //     event: any,
-  //     newPage: React.SetStateAction<number>
-  //   ) => {
-  //     setPage(newPage);
-  //   };
-
-  //   const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
-  //     setRowsPerPage(parseInt(event.target.value, 10));
-  //     setPage(0);
-  //   };
 
   const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -381,10 +367,10 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="OnLine" placement="top-end">
               <div className="flex items-center">
                 {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <ArrowUpwardIcon className="text-success" />
+                <ArrowDropUpIcon className="text-success" fontSize="large" />
               </div>
             </Tooltip>
-            {/* <ArrowUpwardIcon color="success" fontSize="small" /> */}
+            {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
           </>
         );
       } else if (
@@ -396,11 +382,11 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="Offline" placement="top-end">
               <div className=" flex items-center">
                 {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <ArrowDownwardIcon className="text-danger" />
+                <ArrowDropDownIcon className="text-danger" fontSize="large" />
               </div>
             </Tooltip>
 
-            {/* <ArrowDownwardIcon color="error" fontSize="small" /> */}
+            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
           </>
         );
       }
@@ -414,7 +400,7 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="OnLine" placement="top-end">
               <div className="flex items-center">
                 {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <ArrowUpwardIcon className="text-success" />
+                <ArrowDropUpIcon className="text-success" fontSize="large" />
               </div>
             </Tooltip>
           </>
@@ -428,10 +414,10 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="OffLine" placement="top-end">
               <div className=" flex items-center">
                 {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <ArrowDownwardIcon className="text-danger" />
+                <ArrowDropDownIcon className="text-danger" fontSize="large" />
               </div>
             </Tooltip>
-            {/* <ArrowDownwardIcon color="error" fontSize="small" /> */}
+            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
           </>
         );
       }
@@ -442,10 +428,10 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="OnLine" placement="top-end">
               <div className="flex items-center">
                 {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <ArrowUpwardIcon className="text-success" />
+                <ArrowDropUpIcon fontSize="large" className="text-success" />
               </div>
             </Tooltip>
-            {/* <ArrowUpwardIcon color="success" fontSize="small" /> */}
+            {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
           </>
         );
       } else if (row[column.field] == "no") {
@@ -454,11 +440,11 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="Offline" placement="top-end">
               <div className=" flex items-center">
                 {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <ArrowDownwardIcon className="text-danger" />
+                <ArrowDropDownIcon className="text-danger" fontSize="large" />
               </div>
             </Tooltip>
 
-            {/* <ArrowDownwardIcon color="error" fontSize="small" /> */}
+            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
           </>
         );
       }
@@ -501,27 +487,45 @@ const AllDeviceTabel = (props: any) => {
             </div> */}
             <div className="flex justify-between dark:text-white">
               {/* Global Search for table */}
-
-              <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
-                <IconButton>
-                  <SearchIcon
-                    className="dark:text-[#3C3C3C] text-[#CCCFD9] "
-                    fontSize="small"
+              <div className="flex">
+                <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
+                  <IconButton>
+                    <SearchIcon
+                      className="dark:text-[#3C3C3C] text-[#CCCFD9] "
+                      fontSize="small"
+                    />
+                  </IconButton>
+                  <InputBase
+                    className="dark:text-textColor"
+                    placeholder="Search"
+                    value={search}
+                    onChange={handleSearchChange}
                   />
-                </IconButton>
-                <InputBase
-                  className="dark:text-textColor"
-                  placeholder="Search"
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-                {search != "" && (
-                  <ClearIcon
-                    className="dark:text-white border rounded-2xl"
-                    fontSize="small"
-                    sx={{ fontSize: "13px", marginRight: "3px" }}
-                  />
-                )}
+                  {search != "" && (
+                    <ClearIcon
+                      className="dark:text-white border rounded-2xl"
+                      fontSize="small"
+                      sx={{ fontSize: "13px", marginRight: "8px" }}
+                    />
+                  )}
+                </div>
+                <div className="flex items-center ml-2">
+                  <p className="text-sm dark:text-textColor pr-1">
+                    Plugin Type Filter :{" "}
+                  </p>
+                  <div onClick={() => handleButtonClick("SNMP")}>
+                    <CustomeButtonGroupButton title="Newtork SNMP" />
+                  </div>
+                  <div onClick={() => handleButtonClick("SSH")}>
+                    <CustomeButtonGroupButton title="Linux SSH" />
+                  </div>
+                  <div>
+                    <CustomeButtonGroupButton title="Windows WinRm" />
+                  </div>
+                  <CustomeButtonGroupButton title="API" />
+                  <CustomeButtonGroupButton title="Cloud" />
+                  <CustomeButtonGroupButton title="ICMP" />
+                </div>
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
@@ -622,7 +626,16 @@ const AllDeviceTabel = (props: any) => {
 
                 {/* Add Device Menu and Model */}
 
-                <div className="m-4 mr-0 ml-2 h-fit">
+                <div className="flex m-4 mr-0 ml-2 h-fit">
+                  <Button
+                    onClick={handleDrawerOpen}
+                    variant="contained"
+                    className="bg-primary3 capitalize items-center mx-2"
+                    size="small"
+                  >
+                    <FileUploadIcon fontSize="small" className="mr-2" /> Upload
+                    CSV
+                  </Button>
                   <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
@@ -731,39 +744,6 @@ const AllDeviceTabel = (props: any) => {
                                 )
                                 .join(" ")}
                             </TableSortLabel>
-                            {/* <th
-                              className={`flex ${
-                                colIndex === 0 || colIndex === 1
-                                  ? "justify-start"
-                                  : "justify-start ml-8"
-                              } cursor-pointer`}
-                              onClick={() => handleRequestSort(column.field)}
-                              style={{
-                                color: "inherit",
-                                textDecoration: "none",
-                              }}
-                            >
-                              <span className="uppercase">
-                                {column.headerName
-                                  .split(" ")
-                                  .map((word: any) =>
-                                    word
-                                      .split("_")
-                                      .map(
-                                        (subWord: any) =>
-                                          subWord.charAt(0).toUpperCase() +
-                                          subWord.slice(1)
-                                      )
-                                      .join(" ")
-                                  )
-                                  .join(" ")}
-                              </span>
-                              {orderBy === column.field && (
-                                <span className="ml-1">
-                                  {iconDirection === "asc" ? "▲" : "▼"}
-                                </span>
-                              )}
-                            </th> */}
                           </th>
                         );
                       })}
@@ -792,17 +772,17 @@ const AllDeviceTabel = (props: any) => {
                       const isLastRow = rowIndex === data.length - 1;
                       return (
                         <tr
-                          className="bg-white dark:bg-dark-container dark:text-textColor border-b-2"
+                          className="bg-white dark:bg-dark-container dark:text-textColor"
                           role="checkbox"
                           tabIndex={-1}
                           key={row._id}
                         >
                           <td
                             style={{
-                              padding: "8px",
+                              //   padding: "8px",
                               textAlign: "center",
                             }}
-                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
+                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
                               isLastRow ? "border-b" : "border-b"
                             }`}
                           >
@@ -831,7 +811,7 @@ const AllDeviceTabel = (props: any) => {
 
                               return (
                                 <td
-                                  className={`dark:bg-dark-container dark:text-textColor ${
+                                  className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
                                     isLastRow ? "border-b " : "border-b "
                                   }`}
                                   key={column.id}
@@ -839,7 +819,7 @@ const AllDeviceTabel = (props: any) => {
                                   style={{
                                     fontSize: "13px",
                                     fontWeight: "normal",
-                                    padding: "8px",
+                                    padding: "px",
                                     textAlign: "center",
                                     fontFamily: `"Poppins", sans-serif`,
                                   }}
@@ -860,10 +840,8 @@ const AllDeviceTabel = (props: any) => {
                               );
                             })}
                           <td
-                            className={`bg-white dark:bg-dark-container dark:text-textColor ${
-                              isLastRow
-                                ? "border-b border-gray-300"
-                                : "border-b border-gray-300"
+                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                              isLastRow ? "border-b" : "border-b "
                             }`}
                             style={{
                               fontSize: "11px",

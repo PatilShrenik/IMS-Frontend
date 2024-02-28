@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const SingleSelect = (props: any) => {
   const { label, selectData, onChange, require, value } = props;
@@ -36,20 +36,18 @@ const SingleSelect = (props: any) => {
     <div className="flex items-center mx-4 my-4">
       <div className="relative bg-white dark:bg-dark-menu-color dark:text-textColor">
         <select
-          ref={selectRef}
+          // ref={selectRef}
           className={`relative z-20 w-[18rem]  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
             selectFocused || value ? "select-focused" : ""
           }`}
-          placeholder={label}
+          // placeholder={label}
           onChange={handleSelectChange}
-          value={value && value}
+          // value={value && value}
           multiple={false}
           onFocus={() => setSelectFocused(true)}
           onBlur={() => setSelectFocused(false)}
         >
-          <option disabled hidden className="dark:text-[#949ba6]">
-            {label && label}
-          </option>
+          <option style={{ color: "red" }}>{label && label}</option>
 
           {selectData &&
             selectData.map((item: any, index: any) => (
@@ -62,6 +60,7 @@ const SingleSelect = (props: any) => {
               </option>
             ))}
         </select>
+        {/* <div className="custom-arrow" /> */}
         {label && (
           <label
             className={`absolute transition-all pointer-events-none left-1 opacity-0 ${
@@ -71,10 +70,10 @@ const SingleSelect = (props: any) => {
             {label} {require && "*"}
           </label>
         )}
-        <ArrowDropDownIcon
+        {/* <ArrowDropDownIcon
           style={{ fontSize: "8px" }}
           className="absolute top-1/2 right-4 z-10 -translate-y-1/2 text-textColor dark:text-textColor"
-        />
+        /> */}
         <style jsx>{`
           .select-focused {
             border-color: #0078d4; /* Hide the border when focused */
