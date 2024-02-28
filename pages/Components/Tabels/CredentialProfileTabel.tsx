@@ -18,13 +18,13 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
@@ -40,6 +40,10 @@ import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import Chips from "../Chips";
 
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import DeleteForever from "@mui/icons-material/DeleteForever";
+import DeleteModal from "../Modals/DeleteModal";
 const CredntialProfileTable = (props: any) => {
   const {
     data,
@@ -232,11 +236,25 @@ const CredntialProfileTable = (props: any) => {
         toast.success(response.message, {
           position: "bottom-right",
           autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
       // setIsPopupOpen(false);
@@ -477,27 +495,12 @@ const CredntialProfileTable = (props: any) => {
                           }}
                         />
                       </Tooltip>
-                      <Modal open={isModalopen} onClose={handleModalClose}>
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md">
-                          <p className="mb-5 text-lg font-medium">
-                            Are you sure you want to delete?
-                          </p>
-                          <button
-                            onClick={deleteDevice}
-                            className="bg-primary2 hover:bg-primary2 text-white font-normal py-1 px-4 rounded mr-2"
-                          >
-                            Confirm
-                          </button>
-                          {/* <CustomeButton  onClick={deleteDevice} title="Confirm" /> */}
-                          <button
-                            onClick={handleModalClose}
-                            className="bg-light3 hover:bg-light3 text-white font-normal py-1 px-4 rounded"
-                          >
-                            Cancel
-                          </button>
-                          {/* <CustomeCancelButton onClick={handleModalClose} title="Cancel" /> */}
-                        </div>
-                      </Modal>
+                      <DeleteModal
+                        open={isModalopen}
+                        handleModalClose={handleModalClose}
+                        deleteRow={deleteDevice}
+                      />
+
                       <Tooltip
                         TransitionComponent={Zoom}
                         title="Download selected credentials"
@@ -587,7 +590,8 @@ const CredntialProfileTable = (props: any) => {
                     className="bg-primary3 capitalize items-center mr-2"
                     size="small"
                   >
-                    <FileUploadIcon fontSize="small" className="mr-2" /> Upload CSV
+                    <FileUploadIcon fontSize="small" className="mr-2" /> Upload
+                    CSV
                   </Button>
                   <Button
                     onClick={handleDrawerOpen}
@@ -845,7 +849,7 @@ const CredntialProfileTable = (props: any) => {
                                 : "border-b border-gray-300"
                             }`}
                             style={{
-                              fontSize: "11px",
+                              // fontSize: "11px",
                               fontWeight: "normal",
                               padding: "0",
                               textAlign: "start",

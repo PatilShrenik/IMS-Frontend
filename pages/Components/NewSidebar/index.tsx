@@ -248,8 +248,9 @@ const Sidebar = () => {
                   <Link
                     href={link.path}
                     className={`flex items-center rounded-sm py-1 mr-1 mt-1 font-medium text-bodydark1 duration-300 text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
-                      pathname.includes(link.path) ?
-                      "border-l-4 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]" : "pl-1"
+                      pathname.includes(link.path)
+                        ? "border-l-4 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                        : "pl-1"
                     }`}
                   >
                     <div className="w-full px-2">

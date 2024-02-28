@@ -844,7 +844,7 @@ const AllDeviceTabel = (props: any) => {
                               isLastRow ? "border-b" : "border-b "
                             }`}
                             style={{
-                              fontSize: "11px",
+                              // fontSize: "11px",
                               fontWeight: "normal",
                               padding: "0",
                               textAlign: "start",

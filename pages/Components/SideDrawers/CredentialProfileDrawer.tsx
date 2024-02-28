@@ -4,7 +4,7 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import Select from "react-select";
 import CustomeInput from "../Inputs";
 import { useAppContext } from "../AppContext";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
 import { createCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
@@ -27,8 +27,7 @@ const CredentialProfileDrawer = (props: any) => {
 
   const [protocol, setProtocol] = React.useState<any>("SNMPv1");
   const [authType, setAuthType] = React.useState("");
-  const { togglegetCredProfileApiState } =
-  useAppContext();
+  const { togglegetCredProfileApiState } = useAppContext();
   const [encryptType, setEncryptType] = React.useState("");
   const [msg_flag, setMsgFlag] = React.useState("");
   const [snmpObject, setSnmpObject] = React.useState({
@@ -119,7 +118,7 @@ const CredentialProfileDrawer = (props: any) => {
   ];
   const handleChange = (values: any) => {
     setProtocol(values);
-    console.log(values);
+    console.log("values-----------", values);
     let value = "";
     if (values == "SNMPv1") {
       value = "V1";
@@ -166,6 +165,17 @@ const CredentialProfileDrawer = (props: any) => {
     }));
   };
 
+  const handleInputSNMPv3Change = (event: any) => {
+    const { name, value } = event.target;
+    setSnmpv3Object((prevSnmpObject) => ({
+      ...prevSnmpObject,
+      credential_context: {
+        ...prevSnmpObject.credential_context,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleFieldChange = (event: any) => {
     const { name, value } = event.target;
     setSSHObject({ ...sshObject, [name]: value });
@@ -179,21 +189,35 @@ const CredentialProfileDrawer = (props: any) => {
 
   const handleSSHSave = () => {
     const modifiedData = replaceUnderscoresWithDots(sshObject);
-    console.log("snmp object", modifiedData);
+    console.log("ssh object", modifiedData);
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
         if (response.status == "success") {
-           togglegetCredProfileApiState();
+          togglegetCredProfileApiState();
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
       };
@@ -225,15 +249,79 @@ const CredentialProfileDrawer = (props: any) => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
         if (response.status == "success") {
-           togglegetCredProfileApiState();
+          togglegetCredProfileApiState();
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        }
+      };
+      createprofile();
+      setProtocol(null);
+      // setSnmpObject({
+      //   name: "",
+      //   protocol: "SNMP",
+      //   credential_context: {
+      //     snmp_version: "",
+      //     snmp_community: "",
+      //   },
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+    handleDrawerClose();
+  };
+  const handleSNMPv3Save = () => {
+    // console.log("snmp object", snmpObject);
+    const modifiedData = replaceUnderscoresWithDots(snmpv3Object);
+    console.log("snmpv3 Object ", modifiedData);
+    try {
+      const createprofile = async () => {
+        let response = await createCredsProfile(modifiedData);
+        console.log(response);
+        if (response.status == "success") {
+          togglegetCredProfileApiState();
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
       };
@@ -322,7 +410,7 @@ const CredentialProfileDrawer = (props: any) => {
                       label="UserName"
                       name="username"
                       value={snmpv3Object.credential_context.username}
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSNMPv3Change}
                       type="text"
                       disable={false}
                       require={true}
@@ -333,7 +421,7 @@ const CredentialProfileDrawer = (props: any) => {
                       value={
                         snmpv3Object.credential_context.authentication_password
                       }
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSNMPv3Change}
                       type="password"
                       disable={false}
                       require={true}
@@ -364,7 +452,7 @@ const CredentialProfileDrawer = (props: any) => {
                       label="Encryption Key"
                       name="privacy_password"
                       value={snmpv3Object.credential_context.privacy_password}
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSNMPv3Change}
                       type="password"
                       disable={false}
                       require={true}
@@ -372,12 +460,14 @@ const CredentialProfileDrawer = (props: any) => {
                   </div>
                 </div>
                 <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                  <CustomeButton title="Save" />
+                  <div onClick={handleSNMPv3Save}>
+                    <CustomeButton title="Save" />
+                  </div>
                   <div onClick={handleDrawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
                 </div>
-              </div>  
+              </div>
             ) : protocol == "SSH" ? (
               <div>
                 <div className="flex flex-col">

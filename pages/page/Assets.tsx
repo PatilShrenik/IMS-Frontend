@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { tableData } from "../api/tableData";
 import Link from "next/link";
-import { ToastContainer, toast } from "react-toastify";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Assets = () => {
@@ -24,6 +24,13 @@ const Assets = () => {
     toast.error("This action is not Permitted!", {
       position: "bottom-right",
       autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
     });
   };
 

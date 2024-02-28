@@ -23,7 +23,7 @@ import Select from "react-select";
 import CustomeInput, { CustomeTextArea } from "../Inputs";
 import Typography from "@mui/material/Typography";
 import { useAppContext } from "../AppContext";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
 import {
   createCredsProfile,
@@ -447,6 +447,13 @@ const IPAddress = (props: any) => {
         toast.success(response && response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "colored",
+transition: Bounce,
         });
         // togglegetTableApiState();
         handleDrawerClose();
@@ -455,6 +462,13 @@ const IPAddress = (props: any) => {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "colored",
+transition: Bounce,
         });
       }
     }
@@ -839,6 +853,13 @@ const IPRange = (props: any) => {
         toast.success(response && "Device Created Successfully", {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "colored",
+transition: Bounce,
         });
         // togglegetTableApiState();
         handleDrawerClose();
@@ -847,6 +868,13 @@ const IPRange = (props: any) => {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "colored",
+transition: Bounce,
         });
       }
     }

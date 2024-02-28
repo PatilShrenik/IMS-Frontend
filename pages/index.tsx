@@ -3,13 +3,15 @@ import { Inter } from "next/font/google";
 import Login from "./page/login/login";
 import BLayout from "./Components/bLayout";
 import { AppContextProvider } from "./Components/AppContext";
+//import NewLogin from "./page/login/newLogin";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <div>
+    <div >
       <Login />
+      {/* <NewLogin /> */}
     </div>
   );
 }

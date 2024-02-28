@@ -4,7 +4,7 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import Select from "react-select";
 import CustomeInput from "../Inputs";
 import { useAppContext } from "../AppContext";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import replacePeriodsWithUnderscoresSingleObject, {
   replaceDotsWithUnderscores,
   replaceUnderscoresWithDots,
@@ -177,11 +177,25 @@ const EditCredentialProfileDrawer = (props: any) => {
       toast.success(response.status, {
         position: "bottom-right",
         autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
       });
     } else {
       toast.error(response.message, {
         position: "bottom-right",
         autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
       });
     }
   };
@@ -199,14 +213,80 @@ const EditCredentialProfileDrawer = (props: any) => {
       toast.success(response.status, {
         position: "bottom-right",
         autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
       });
     } else {
       toast.error(response.message, {
         position: "bottom-right",
         autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
       });
     }
   };
+
+  const handleSNMPv3Save = () => {
+    // console.log("snmp object", snmpObject);
+    const modifiedData = replaceUnderscoresWithDots(data);
+    console.log("snmpv3 Object ", modifiedData);
+    try {
+      const createprofile = async () => {
+        let response = await createCredsProfile(modifiedData);
+        console.log(response);
+        if (response.status == "success") {
+          togglegetCredProfileApiState();
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        }
+      };
+      createprofile();
+      setProtocol(null);
+      // setSnmpObject({
+      //   name: "",
+      //   protocol: "SNMP",
+      //   credential_context: {
+      //     snmp_version: "",
+      //     snmp_community: "",
+      //   },
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+    handleDrawerClose();
+  };
+
   const handleChange = (values: any) => {
     setProtocol(values);
     console.log(values);
@@ -263,7 +343,7 @@ const EditCredentialProfileDrawer = (props: any) => {
       <div className="h-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p
-            style={{ fontSize: "17px" }}
+          
             className="text-primary2 font-semibold"
           >
             Edit Credential Profile
@@ -509,7 +589,9 @@ const EditCredentialProfileDrawer = (props: any) => {
                   </div>
                 </div>
                 <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                  <CustomeButton title="Save" />
+                <div onClick={handleSNMPv3Save}>
+                    <CustomeButton title="Save" />
+                  </div>
                   <div onClick={handleDrawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
@@ -560,7 +642,7 @@ const EditCredentialProfileDrawer = (props: any) => {
                   </div>
                 </div>
 
-                <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+                <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
                   <div onClick={handleSSHSave}>
                     <CustomeButton title="Save" />
                   </div>
