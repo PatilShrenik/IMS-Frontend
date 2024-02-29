@@ -87,11 +87,11 @@ const SidebarMenu = () => {
       subMenu: [
         {
           subMenuName: "Metric",
-          subMenuPathName: "#",
+          subMenuPathName: "/Explorer/metric",
         },
         {
           subMenuName: "Flow",
-          subMenuPathName: "#",
+          subMenuPathName: "/Explorer/flow",
         },
       ],
     },
@@ -106,27 +106,27 @@ const SidebarMenu = () => {
       subMenu: [
         {
           subMenuName: "Ping",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/ping",
         },
         {
           subMenuName: "SNMP",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/snmp",
         },
         {
           subMenuName: "SSH",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/ssh",
         },
         {
           subMenuName: "TCPDUMP",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/tcpdump",
         },
         {
           subMenuName: "API",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/api",
         },
         {
           subMenuName: "Traceroute",
-          subMenuPathName: "#",
+          subMenuPathName: "/Diagnostics/traceroute",
         },
       ],
     },
@@ -150,23 +150,23 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "User",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/user-settings/user",
             },
             {
               subMenuDropdownname: "Role",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/user-settings/role",
             },
             {
               subMenuDropdownname: "Group",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/user-settings/group",
             },
             {
               subMenuDropdownname: "Password Settings",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/user-settings/password",
             },
             {
               subMenuDropdownname: "LDAP",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/user-settings/ldap",
             },
           ],
         },
@@ -178,15 +178,15 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Global Settings",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/system-settings/global-settings",
             },
             {
               subMenuDropdownname: "Mail Server",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/system-settings/mail-server",
             },
             {
               subMenuDropdownname: "SMS Server",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/system-settings/sms-server",
             },
           ],
         },
@@ -198,11 +198,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Alarm",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/policy/alarm",
             },
             {
               subMenuDropdownname: "Policy",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/policy/policy",
             },
           ],
         },
@@ -219,7 +219,7 @@ const SidebarMenu = () => {
             },
             {
               subMenuDropdownname: "Site Management",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/device-settings/site-management",
             },
           ],
         },
@@ -231,7 +231,7 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "SNMP",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/catalog/snmp",
             },
           ],
         },
@@ -242,11 +242,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Flow",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/traffic/flow",
             },
             {
               subMenuDropdownname: "Trap",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/traffic/trap",
             },
           ],
         },
@@ -257,11 +257,11 @@ const SidebarMenu = () => {
           subMenuDropdown: [
             {
               subMenuDropdownname: "Discovery Schedular",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/schedular/discovery-schedular",
             },
             {
               subMenuDropdownname: "Report Schedular",
-              subMenuDropdownpathName: "#",
+              subMenuDropdownpathName: "/Settings/schedular/report-schedular",
             },
           ],
         },
@@ -324,13 +324,13 @@ const SidebarMenu = () => {
                                           }`,
                                         }
                                       )}
-                                    <p
+                                           <Link href={submenuItem.subMenuPathName || "#"}
                                       className={`mx-2 text-[14px]  ${
                                         openSubmenu === subIndex ? "" : ""
                                       }`}
                                     >
                                       {submenuItem.subMenuName}
-                                    </p>
+                                    </Link>
                                   </div>
                                   {submenuItem.subMenuDropdown && (
                                     <KeyboardArrowRightIcon

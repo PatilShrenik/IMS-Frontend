@@ -1,7 +1,7 @@
 import React from "react";
 
 const Topology = () => {
-  return <div>Topology</div>;
+  return <div className="dark:text-textColor">Topology</div>;
 };
 
 export default Topology;

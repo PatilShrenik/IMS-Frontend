@@ -205,3 +205,7 @@ main::before {
   border-color: #000 transparent transparent transparent; /* Adjust the color as needed */
   pointer-events: none; /* Allow clicks to pass through to the select element */
 }
+.css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
+  border-left: 0;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+}

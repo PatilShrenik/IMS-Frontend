@@ -19,6 +19,7 @@ import {
   Button,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -31,12 +32,15 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+import {
+  bulkActionCredsProfileDelete,
+  getAllCredsProfile,
+} from "@/pages/api/api/CredentialProfileAPI";
 import {
   convertEpochToDateMonthYear,
   replacePeriodsWithUnderscores,
@@ -45,6 +49,7 @@ import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
 import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
+import DeleteModal from "../Modals/DeleteModal";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -63,6 +68,8 @@ const AllDeviceTabel = (props: any) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
+  const { togglegetCredProfileApiState } = useAppContext();
+
   //   const [visibleColumns, setVisibleColumns] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState([]) as any;
@@ -78,7 +85,11 @@ const AllDeviceTabel = (props: any) => {
   const [isAddSingleDrawerOpen, setIsAddSingleDrawerOpen] = useState(false);
   const [isAddMultipleDrawerOpen, setIsAddMultipleDrawerOpen] = useState(false);
   const open = Boolean(anchorE2);
+  const [isModalopen, setIsModalOpen] = React.useState(false);
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
   const { themeSwitch } = useAppContext();
+
   const ITEM_HEIGHT = 48;
   const groupValues =
     allGroups &&
@@ -281,6 +292,10 @@ const AllDeviceTabel = (props: any) => {
     });
   };
 
+  const handleResetButtonClick = () => {
+    setSelectedButtons([]);
+  };
+
   const stableSort = (array: any, comparator: any) => {
     const stabilizedThis = array.map((el: any, index: any) => [el, index]);
     stabilizedThis.sort((a: any, b: any) => {
@@ -461,7 +476,45 @@ const AllDeviceTabel = (props: any) => {
     // If no specific processing needed, return the original value
     return row[column.field];
   };
+  const deleteDevice = async () => {
+    console.log("delete array", selectedRows);
+    try {
+      let response = await bulkActionCredsProfileDelete(selectedRows);
 
+      if (response.status == "success") {
+        handleModalClose();
+
+        togglegetCredProfileApiState();
+
+        toast.success(response.message, {
+          position: "bottom-right",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+      // setIsPopupOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleAddMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorE2(event.currentTarget);
   };
@@ -513,18 +566,25 @@ const AllDeviceTabel = (props: any) => {
                   <p className="text-sm dark:text-textColor pr-1">
                     Plugin Type Filter :{" "}
                   </p>
+                  <div onClick={handleResetButtonClick} >
+                    <div className="mx-[2px] inline-flex items-center justify-center text-sm rounded-md py-1 px-3 text-center font-medium dark:text-textColor border border-primary2 hover:bg-primary2 cursor-pointer">
+                      Reset
+                    </div>
+                   {/* <PublishedWithChangesIcon onClick={handleResetButtonClick}/>  */}
+                  </div>
                   <div onClick={() => handleButtonClick("SNMP")}>
-                    <CustomeButtonGroupButton title="Newtork SNMP" />
+                    <CustomeButtonGroupButton selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="Newtork SNMP" />
                   </div>
                   <div onClick={() => handleButtonClick("SSH")}>
-                    <CustomeButtonGroupButton title="Linux SSH" />
+                    <CustomeButtonGroupButton selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="Linux SSH" />
                   </div>
                   <div>
-                    <CustomeButtonGroupButton title="Windows WinRm" />
+                    <CustomeButtonGroupButton  selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="Windows WinRm" />
                   </div>
-                  <CustomeButtonGroupButton title="API" />
-                  <CustomeButtonGroupButton title="Cloud" />
-                  <CustomeButtonGroupButton title="ICMP" />
+                  <CustomeButtonGroupButton  selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="API" />
+                  <CustomeButtonGroupButton  selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="Cloud" />
+                  <CustomeButtonGroupButton   selectedButtons={selectedButtons} setSelectedButtons={setSelectedButtons} title="ICMP" />
+                 
                 </div>
               </div>
               <div className="flex">
@@ -537,13 +597,18 @@ const AllDeviceTabel = (props: any) => {
                         placement="top"
                       >
                         <DeleteForeverIcon
-                          //   onClick={deleteDevice}
+                          onClick={handleModalOpen}
                           className="cursor-pointer"
                           style={{
                             margin: "0 5px",
                           }}
                         />
                       </Tooltip>
+                      <DeleteModal
+                        open={isModalopen}
+                        handleModalClose={handleModalClose}
+                        deleteRow={deleteDevice}
+                      />
                       <Tooltip
                         TransitionComponent={Zoom}
                         title="Download selected credentials"

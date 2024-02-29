@@ -351,9 +351,9 @@ const CredentialProfileDrawer = (props: any) => {
       classes={{
         paper: classes.drawerPaper,
       }}
-      className={`shadow-sm shadow-dark-container ${classes.drawer}`}
+      className={`shadow-sm shadow-dark-container dark:border-l-0 ${classes.drawer}`}
     >
-      <div className="h-full bg-white dark:bg-dark-menu-color">
+      <div className="h-full bg-white dark:bg-dark-menu-color  ">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">Add Credential Profile</p>
           <CloseSharpIcon

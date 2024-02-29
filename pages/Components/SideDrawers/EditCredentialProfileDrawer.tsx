@@ -18,6 +18,7 @@ import {
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import SingleSelect from "../Selects";
 import { makeStyles } from "@material-ui/core/styles";
+import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   drawer: {
@@ -25,7 +26,9 @@ const useStyles = makeStyles(() => ({
     flexShrink: 100,
   },
   drawerPaper: {
-    // width: drawerWidth,
+    //  backgroundColor: dark ? "black" : "white",   
+      borderLeft: 0, 
+      boxShadow: "-5px 0 5px rgba(0, 0, 0, 0.1)",
     backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
@@ -332,15 +335,16 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   return (
     <Drawer
+ 
       anchor="right"
-      open={open}
+      open={props.open}
       variant="persistent"
       classes={{
         paper: classes.drawerPaper,
       }}
-      className={`shadow-sm shadow-dark-container ${classes.drawer}`}
+      className={`shadow-sm  shadow-dark-container ${classes.drawer}`}
     >
-      <div className="h-full bg-white dark:bg-dark-menu-color">
+      <div className="h-full  dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p
           

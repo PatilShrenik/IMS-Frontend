@@ -851,7 +851,7 @@ const CredntialProfileTable = (props: any) => {
                             style={{
                               // fontSize: "11px",
                               fontWeight: "normal",
-                              padding: "0",
+                              // padding: "0",
                               textAlign: "start",
                               fontFamily: `"Poppins", sans-serif`,
                             }}
