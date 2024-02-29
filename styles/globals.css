@@ -205,3 +205,13 @@ main::before {
   border-color: #000 transparent transparent transparent; /* Adjust the color as needed */
   pointer-events: none; /* Allow clicks to pass through to the select element */
 }
+.css-r8u8y9 {
+  list-style: none;
+  margin: 0px;
+  padding: 0px 0px !important; 
+  position: relative;
+  outline: 0px;
+}
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+  background-color: none;
+}

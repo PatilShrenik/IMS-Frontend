@@ -49,7 +49,7 @@ const Sidebar = () => {
     },
     {
       name: "Assets",
-      path: "/assets",
+      path: "/Assets",
       icon: (
         <EqualizerIcon
           className={` ${
@@ -73,7 +73,7 @@ const Sidebar = () => {
     },
     {
       name: "Topology",
-      path: "/topology",
+      path: "/Topology",
       icon: (
         <CameraRoundedIcon
           className={` ${
@@ -97,7 +97,7 @@ const Sidebar = () => {
     },
     {
       name: "Reports",
-      path: "/reports",
+      path: "/Reports",
       icon: (
         <AssignmentIcon
           className={` ${
@@ -122,7 +122,7 @@ const Sidebar = () => {
     },
     {
       name: "NCM",
-      path: "/ncm",
+      path: "/NCM",
       icon: (
         <Person2Icon
           className={` ${
@@ -134,7 +134,7 @@ const Sidebar = () => {
     },
     {
       name: "Audit",
-      path: "/audit",
+      path: "/Audit",
       icon: (
         <DynamicFormIcon
           className={` ${

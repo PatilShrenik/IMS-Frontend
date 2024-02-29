@@ -587,8 +587,9 @@ const CredntialProfileTable = (props: any) => {
                   <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
-                    className="bg-primary3 capitalize items-center mr-2"
+                    className="bg-primary3 capitalize items-center"
                     size="small"
+                    style={{ margin: "0 4px" }}
                   >
                     <FileUploadIcon fontSize="small" className="mr-2" /> Upload
                     CSV

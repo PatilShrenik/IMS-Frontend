@@ -40,17 +40,11 @@ import {
 } from "@/pages/api/api/DeviceManagementAPI";
 // import MultiSelect from "../MultiSelect";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
-    // width: drawerWidth,
-    flexShrink: 100,
-  },
-  drawerPaper: {
-    // width: drawerWidth,
-    backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
+    width: "100%",
   },
 }));
-
 const AddDeviceDrawer = (props: any) => {
   const { open, handleDrawerClose } = props;
   const classes = useStyles();
@@ -97,14 +91,10 @@ const AddDeviceDrawer = (props: any) => {
       // hideBackdrop = {false}temporary
       anchor="right"
       open={open}
-      // elevation={55}
-      // transitionDuration
-      // className={classes.drawer}
+      sx={{ width: "100%" }}
       variant="temporary"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      className={`shadow-sm shadow-dark-container w-full  ${classes.drawer}`}
+      classes={{ paper: classes.drawer }}
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
     >
       <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
@@ -132,34 +122,34 @@ const AddDeviceDrawer = (props: any) => {
               sx={{ borderRight: 1, borderColor: "#3C3C3C" }}
             >
               <Tab
-                label="Network SNMP"
+                label="SNMP"
                 {...a11yProps(0)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
               <Tab
-                label="Linux SSH"
+                label="SSH"
                 {...a11yProps(1)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
               <Tab
-                label="Windows WinRM"
+                label="WinRM"
                 {...a11yProps(2)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
               <Tab
                 label="API"
                 {...a11yProps(3)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
               <Tab
                 label="Cloud"
                 {...a11yProps(4)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
               <Tab
                 label="ICMP"
                 {...a11yProps(5)}
-                className="dark:text-textColor items-baseline"
+                className="dark:text-textColor items-baseline mx-4"
               />
             </Tabs>
             <TabPanel value={value} index={0}>
@@ -169,7 +159,7 @@ const AddDeviceDrawer = (props: any) => {
               Linux SSH
             </TabPanel>
             <TabPanel value={value} index={2}>
-              Item Three
+              Windows WinRm
             </TabPanel>
             <TabPanel value={value} index={3}>
               API
@@ -448,12 +438,12 @@ const IPAddress = (props: any) => {
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: true,
-closeOnClick: true,
-pauseOnHover: true,
-draggable: true,
-progress: undefined,
-theme: "colored",
-transition: Bounce,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
         // togglegetTableApiState();
         handleDrawerClose();
@@ -463,12 +453,12 @@ transition: Bounce,
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: true,
-closeOnClick: true,
-pauseOnHover: true,
-draggable: true,
-progress: undefined,
-theme: "colored",
-transition: Bounce,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     }
@@ -561,7 +551,7 @@ transition: Bounce,
             type="text"
             require={true}
           /> */}
-            <div className="grid grid-flow-row-dense grid-cols-4">
+            <div className="grid grid-flow-row-dense grid-cols-3">
               <CustomeInput
                 label="Alias"
                 name="alias"
@@ -700,7 +690,7 @@ transition: Bounce,
                 Discovery Only
               </Typography>
             </div>
-            <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+            <div className=" fixed bottom-0 right-0 p-2 my-2 flex justify-end mt-6">
               <div onClick={handleSave}>
                 <CustomeButton title="Save" />
               </div>
@@ -854,12 +844,12 @@ const IPRange = (props: any) => {
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: true,
-closeOnClick: true,
-pauseOnHover: true,
-draggable: true,
-progress: undefined,
-theme: "colored",
-transition: Bounce,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
         // togglegetTableApiState();
         handleDrawerClose();
@@ -869,12 +859,12 @@ transition: Bounce,
           position: "bottom-right",
           autoClose: 2000,
           hideProgressBar: true,
-closeOnClick: true,
-pauseOnHover: true,
-draggable: true,
-progress: undefined,
-theme: "colored",
-transition: Bounce,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     }

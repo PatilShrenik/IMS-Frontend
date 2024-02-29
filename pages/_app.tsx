@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: any) {
     const getLayout = Component.getLayout || ((page: any) => page);
     return getLayout(
       <MsalProvider instance={pca}>
-        <NextProgress options={{ showSpinner: false }} />
+        {/* <NextProgress options={{ showSpinner: false }} /> */}
         <Component {...pageProps} />
       </MsalProvider>
     );

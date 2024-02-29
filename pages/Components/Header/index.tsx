@@ -36,7 +36,7 @@ const Header = (props: {
         <div className="flex">
           {(pathname.includes("Explorer") ||
             pathname.includes("Diagnostics") ||
-            pathname.includes("Settings")) && (
+            pathname.includes("settings")) && (
             <>
               <div
                 className=" flex cursor-pointer items-center"

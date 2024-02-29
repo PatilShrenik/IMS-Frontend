@@ -6,7 +6,7 @@ import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
-import AllDeviceTabel from "../Components/Tabels/AddDeviceTabel";
+import AllDeviceTabel from "../Components/Tabels/AllDeviceTabel";
 
 const Assets = () => {
   const [data, setData] = useState<any>();
@@ -103,7 +103,7 @@ const Assets = () => {
           "alias",
           "discovery_schedulers",
           "country",
-          "groups",
+          // "groups",
           "profile_type",
           "port",
           "credential_profiles",
@@ -121,6 +121,7 @@ const Assets = () => {
           "created_on",
           "updated_by",
           "updated_on",
+          "timestamp",
           "timezone",
         ];
 

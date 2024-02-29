@@ -64,7 +64,7 @@ const SidebarMenu = () => {
   const menuItems: MenuItem[] = [
     {
       name: "Dashboard",
-      pathName: "/Dashboard",
+      pathName: "/dashboard",
     },
 
     {
@@ -74,7 +74,7 @@ const SidebarMenu = () => {
 
     {
       name: "Alerts",
-      pathName: "/Alerts",
+      pathName: "/alerts",
     },
 
     {
@@ -83,7 +83,7 @@ const SidebarMenu = () => {
     },
     {
       name: "Explorer",
-      pathName: "/Explorer",
+      pathName: "/explorer",
       subMenu: [
         {
           subMenuName: "Metric",
@@ -102,7 +102,7 @@ const SidebarMenu = () => {
 
     {
       name: "Diagnostics",
-      pathName: "/Diagnostics",
+      pathName: "/diagnostics",
       subMenu: [
         {
           subMenuName: "Ping",
@@ -141,7 +141,7 @@ const SidebarMenu = () => {
 
     {
       name: "Settings",
-      pathName: "/Settings",
+      pathName: "/settings",
       subMenu: [
         {
           subMenuName: "User Settings",
@@ -215,7 +215,7 @@ const SidebarMenu = () => {
             {
               subMenuDropdownname: "Credential Profile",
               subMenuDropdownpathName:
-                "/Settings/device-settings/credential-profile",
+                "/settings/device-settings/credential-profile",
             },
             {
               subMenuDropdownname: "Site Management",
@@ -269,6 +269,7 @@ const SidebarMenu = () => {
     },
   ];
 
+  console.log("idejbd", sidebarOpen);
   return (
     <>
       {menuItems.map((menuItem, index) =>
@@ -298,7 +299,7 @@ const SidebarMenu = () => {
                               >
                                 <div
                                   className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] p-2 ${
-                                    openSubmenu == subIndex 
+                                    openSubmenu == subIndex
                                     // "dark:bg-[#282828] bg-[#D8D8D8]"
                                   }`}
                                   onClick={() => handleSubmenuClick(subIndex)}
@@ -373,7 +374,10 @@ const SidebarMenu = () => {
                                               );
                                             }}
                                           >
-                                            <Link href={dropdownItem.subMenuDropdownpathName}
+                                            <Link
+                                              href={
+                                                dropdownItem.subMenuDropdownpathName
+                                              }
                                               className={` ${
                                                 // selectedDropdown === dropdownIndex
                                                 selectedDropdown[

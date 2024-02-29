@@ -116,22 +116,25 @@ const CredentialProfileMenu = (props: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: "10ch",
-          },
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
         }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{ padding: "0" }}
       >
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
           onClick={() => handleEditClick(id)}
         >
           Edit
         </MenuItem>
 
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
           //  onClick={() => handleDeleteClick(id)}
           onClick={handleModalOpen}
         >
