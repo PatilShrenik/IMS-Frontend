@@ -2,7 +2,7 @@ import React from 'react'
 
 const Diagnostics = () => {
   return (
-    <div>Diagnostics</div>
+    <div className="dark:text-textColor">Diagnostics</div>
   )
 }
 

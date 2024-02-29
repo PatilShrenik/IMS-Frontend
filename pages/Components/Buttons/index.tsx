@@ -19,18 +19,44 @@ export const CustomeCancelButton = (props: any) => {
   );
 };
 
+// export const CustomeButtonGroupButton = (props: any) => {
+//   const [isActive, setIsActive] = useState(false);
+
+//   const handleButtonClick = () => {
+//     setIsActive(!isActive);
+//   };
+
+//   return (
+//     <div
+//       className={`mx-[2px] inline-flex items-center justify-center text-sm rounded-md py-1 px-3 text-center font-medium dark:text-textColor border border-primary2 hover:bg-primary2 cursor-pointer ${
+//         isActive ? "bg-primary2" : ""
+//       }`}
+//       onClick={handleButtonClick}
+//     >
+//       {props.title} {isActive && <CheckIcon fontSize="inherit" className="ml-1" />}
+//     </div>
+//   );
+// };
+// CustomeButtonGroupButton component
 export const CustomeButtonGroupButton = (props: any) => {
-  const { title, reset } = props;
-  const [isActive, setIsActive] = useState(false);
+  const { title, selectedButtons, setSelectedButtons } = props;
+
+  const isActive = selectedButtons.includes(title);
 
   const handleButtonClick = () => {
-    setIsActive(!isActive);
+    setSelectedButtons((prevSelectedButtons: any) => {
+      if (isActive) {
+        return prevSelectedButtons.filter((button: any) => button !== title);
+      } else {
+        return [...prevSelectedButtons, title];
+      }
+    });
   };
 
   return (
     <div
       className={`mx-[2px] h-[2.2rem] w-20 inline-flex items-center justify-center text-[12px] rounded-md py-2 px-3 text-center font-medium dark:text-textColor border border-primary2 hover:bg-primary2 cursor-pointer ${
-        isActive  ? "bg-primary2" : ""
+        isActive ? "bg-primary2" : ""
       }`}
       onClick={handleButtonClick}
     >
