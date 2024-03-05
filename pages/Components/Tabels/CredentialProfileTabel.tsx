@@ -591,7 +591,7 @@ const CredntialProfileTable = (props: any) => {
                           }}
                           size="small"
                           checked={visibleColumns.includes(column.field)}
-                          onChange={() => handleMenuItemClick(column.field)}
+                          // onChange={() => handleMenuItemClick(column.field)}
                         />
                         {column.headerName
                           .split(" ")

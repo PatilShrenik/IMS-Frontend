@@ -1,7 +1,6 @@
 import { Drawer } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import Select from "react-select";
 import CustomeInput from "../Inputs";
 import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
@@ -15,10 +14,10 @@ import {
   getCredsProfileById,
   updateCredsProfile,
 } from "@/pages/api/api/CredentialProfileAPI";
-import CustomeButton, { CustomeCancelButton } from "../Buttons";
+import SubmitButton, { CustomeCancelButton } from "../Buttons";
 import SingleSelect from "../Selects";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   drawer: {
@@ -26,9 +25,9 @@ const useStyles = makeStyles(() => ({
     flexShrink: 100,
   },
   drawerPaper: {
-    //  backgroundColor: dark ? "black" : "white",   
-      borderLeft: 0, 
-      boxShadow: "-5px 0 5px rgba(0, 0, 0, 0.1)",
+    //  backgroundColor: dark ? "black" : "white",
+    borderLeft: 0,
+    boxShadow: "-5px 0 5px rgba(0, 0, 0, 0.1)",
     backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
@@ -86,10 +85,7 @@ const EditCredentialProfileDrawer = (props: any) => {
       id: "auth.priv",
       name: "Auth Privacy",
     },
-    {
-      id: "reportable",
-      name: "Reportable",
-    },
+    
   ];
 
   useEffect(() => {
@@ -106,10 +102,10 @@ const EditCredentialProfileDrawer = (props: any) => {
     const savedProtocolValue =
       data && data.credential_context && data.credential_context.snmp_version
         ? `${data.protocol}${data.credential_context.snmp_version}`
-        :  `${data.protocol}`;
+        : `${data.protocol}`;
     setProtocol(savedProtocolValue);
   }, [open]);
-console.log("protocol",protocol);
+  console.log("protocol", protocol);
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({
@@ -142,14 +138,12 @@ console.log("protocol",protocol);
           username: data.credential_context.username,
           password: data.credential_context.password,
         },
-        public_key: "",
-        paraphase: "",
+        public_key: data.public_key,
+        paraphase: data.paraphase,
       });
     }
   }, [protocol]);
 
-
- 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setSnmpObject((prevSnmpObject) => ({
@@ -290,8 +284,9 @@ console.log("protocol",protocol);
   };
 
   const handleChange = (values: any) => {
+    setMsgFlag("no.auth.no.priv");
     setProtocol(values);
-    console.log("protocol------------------",values);
+    console.log("protocol------------------", values);
     let value = "";
     if (values == "SNMPV1") {
       value = "V1";
@@ -341,8 +336,20 @@ console.log("protocol",protocol);
     const { name, value } = event.target;
     setSSHObject({ ...sshObject, [name]: value });
   };
-  console.log("prto",protocol);
+  console.log("prto", protocol);
 
+  const handleSave = (event: any) => {
+    event.preventDefault();
+    console.log("click", event);
+    // Choose the appropriate onSubmit method based on the protocol
+    if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
+      handlesnmpSave();
+    } else if (protocol === "SNMPV3") {
+      handleSNMPv3Save();
+    } else if (protocol === "SSH") {
+      handleSSHSave();
+    }
+  };
   return (
     <Drawer
       anchor="right"
@@ -355,19 +362,14 @@ console.log("protocol",protocol);
     >
       <div className="h-full  dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-          <p
-          
-            className="text-primary2 font-semibold"
-          >
-            Edit Credential Profile
-          </p>
+          <p className="text-primary2 font-semibold">Edit Credential Profile</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
             onClick={props.handleDrawerClose}
           />
         </div>
         <div className="py-8 px-6">
-          <form>
+          <form onSubmit={handleSave}>
             <div className="flex">
               <CustomeInput
                 label="Profile Name"
@@ -378,151 +380,16 @@ console.log("protocol",protocol);
                 disable={false}
                 require={true}
               />
+
               <SingleSelect
                 label="Protocol"
                 value={protocol}
                 selectData={["SNMPV1", "SNMPV2C", "SNMPV3", "SSH"]}
                 onChange={handleChange}
-                require={true}
+                require={false}
               />
             </div>
-            {/* {data.protocol === "SNMP" &&
-              data.credential_context &&
-              (data.credential_context.snmp_version === "V2C" ||
-              data.credential_context.snmp_version === "V1" ? (
-                <div className="">
-                  <CustomeInput
-                    label="Community"
-                    name="snmp_community"
-                    value={data.credential_context.snmp_community}
-                    onChange={handleInputChange}
-                    type="text"
-                    disable={false}
-                    require={true}
-                  />
-                  <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                    <div onClick={handlesnmpSave}>
-                      <CustomeButton title="Save" />
-                    </div>
-                    <div onClick={handleDrawerClose}>
-                      <CustomeCancelButton title="Cancel" />
-                    </div>
-                  </div>
-                </div>
-              ) : data.protocol == "SNMP" && data.credential_context && data.credential_context.snmp_version == "V3" ? (
-                <div className="">
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <CustomeInput
-                      label="UserName"
-                      name="username"
-                      value={snmpv3Object.credential_context.username}
-                      onChange={handleInputSSHChange}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Authentication Password"
-                      name="authentication_password"
-                      value={
-                        snmpv3Object.credential_context.authentication_password
-                      }
-                      onChange={handleInputSSHChange}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
-                  </div>
-                  <div className="flex">
-                   
-                    <SingleSelect
-                      label="Authentication Protocol"
-                      selectData={["None", "MD5", "SHA"]}
-                      onChange={handleAuthChange}
-                      require={true}
-                    />
-                  </div>
-                  <div className="flex">
-                    <SingleSelect
-                      label="Privacy Protocol"
-                      selectData={["None", "AES", "DES"]}
-                      onChange={handleEncryptChange}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Encryption Key"
-                      name="privacy_password"
-                      value={snmpv3Object.credential_context.privacy_password}
-                      onChange={handleInputSSHChange}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
-                  </div>
-                </div>
-                <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                  <CustomeButton title="Save" />
-                  <div onClick={handleDrawerClose}>
-                    <CustomeCancelButton title="Cancel" />
-                  </div>
-                </div>
-              </div> 
-              ): data.protocol == "SSH" ? (
-                <div>
-                  <div className="flex flex-col">
-                    <div className="flex">
-                      <CustomeInput
-                        label="UserName"
-                        name="username"
-                        value={sshObject.credential_context.username}
-                        onChange={handleInputSSHChange}
-                        type="text"
-                        disable={false}
-                        require={true}
-                      />
-                      <CustomeInput
-                        label="Password"
-                        name="password"
-                        value={sshObject.credential_context.password}
-                        onChange={handleInputSSHChange}
-                        type="password"
-                        disable={false}
-                        require={true}
-                      />
-                    </div>
-                    <div className="flex">
-                      <CustomeInput
-                        label="SSH Public Key"
-                        name="public_key"
-                        value={sshObject.public_key}
-                        onChange={handleFieldChange}
-                        type="text"
-                        disable={false}
-                        require={true}
-                      />
-                      <CustomeInput
-                        label="Paraphrase"
-                        name="paraphase"
-                        value={sshObject.paraphase}
-                        onChange={handleFieldChange}
-                        type="text"
-                        disable={false}
-                        require={true}
-                      />
-                    </div>
-                  </div>
-  
-                  <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                    <div onClick={handlesshSave}>
-                      <CustomeButton title="Save" />
-                    </div>
-                    <div onClick={handleDrawerClose}>
-                      <CustomeCancelButton title="Cancel" />
-                    </div>
-                  </div>
-                </div>
-              ) : ("") )} */}
+
             {protocol == "SNMPV2C" || protocol == "SNMPV1" ? (
               <div className="">
                 <CustomeInput
@@ -534,81 +401,118 @@ console.log("protocol",protocol);
                   disable={false}
                   require={true}
                 />
-                <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                  <div onClick={handlesnmpSave}>
-                    <CustomeButton title="Save" />
-                  </div>
-                  {/* <CustomeButtons title="Save & Discover" /> */}
-                  <div onClick={handleDrawerClose}>
-                    <CustomeCancelButton title="Cancel" />
-                  </div>
-                </div>
               </div>
             ) : protocol == "SNMPV3" ? (
               <div className="">
                 <div className="flex flex-col">
                   <div className="flex">
-                    <CustomeInput
-                      label="UserName"
-                      name="username"
-                      value={snmpv3Object.credential_context.username}
-                      onChange={handleInputSnmpv3Change}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Authentication Password"
-                      name="authentication_password"
-                      value={
-                        snmpv3Object.credential_context.authentication_password
-                      }
-                      onChange={handleInputSnmpv3Change}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
+                    {/* <div className="flex flex-col items-start mx-2"> */}
+                      <CustomeInput
+                        label="UserName"
+                        name="username"
+                        value={snmpv3Object.credential_context.username}
+                        onChange={handleInputSnmpv3Change}
+                        type="text"
+                        disable={false}
+                        require={true}
+                      />{" "}
+                    {/* </div> */}
+                    {/* <div className="flex flex-col items-start mx-2"> */}
+                      <SingleSelect
+                        label="Security"
+                        selectData={msg_flag_values}
+                        onChange={handleFlagChange}
+                        // require={true}
+                      />
+                    {/* </div> */}
                   </div>
-                  <div className="flex">
-                    <SingleSelect
-                      label="Message Flag"
-                      selectData={msg_flag_values}
-                      onChange={handleFlagChange}
-                      // require={true}
-                    />
-                    <SingleSelect
-                      label="Authentication Protocol"
-                      selectData={["None", "MD5", "SHA"]}
-                      onChange={handleAuthChange}
-                      require={true}
-                    />
-                  </div>
-                  <div className="flex">
-                    <SingleSelect
-                      label="Privacy Protocol"
-                      selectData={["None", "AES", "DES"]}
-                      onChange={handleEncryptChange}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Encryption Key"
-                      name="privacy_password"
-                      value={snmpv3Object.credential_context.privacy_password}
-                      onChange={handleInputSnmpv3Change}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
-                  </div>
+                  {msg_flag === "auth.priv" ? (
+                    <div>
+                      <div className="flex">
+                        {/* <div className="flex flex-col items-start mx-2"> */}
+                          <SingleSelect
+                            label="Authentication Protocol"
+                            selectData={["Select", "MD5", "SHA"]}
+                            onChange={handleAuthChange}
+                            require={false}
+                          />
+                        {/* </div>
+                        <div className="flex flex-col items-start mx-2"> */}
+                          <CustomeInput
+                            label="Authentication Password"
+                            name="authentication_password"
+                            value={
+                              snmpv3Object.credential_context
+                                .authentication_password
+                            }
+                            onChange={handleInputSnmpv3Change}
+                            type="password"
+                            disable={false}
+                            require={true}
+                          />
+                        {/* </div> */}
+                      </div>
+                      <div className="flex">
+                        {/* <div className="flex flex-col items-start mx-2"> */}
+                          <SingleSelect
+                            label="Privacy Protocol"
+                            selectData={["Select", "AES", "DES"]}
+                            onChange={handleEncryptChange}
+                            require={false}
+                          />
+                        {/* </div>
+                        <div className="flex flex-col items-start mx-2"> */}
+                          <CustomeInput
+                            label="Privacy Password"
+                            name="privacy_password"
+                            value={
+                              snmpv3Object.credential_context.privacy_password
+                            }
+                            onChange={handleInputSnmpv3Change}
+                            type="password"
+                            disable={false}
+                            require={true}
+                          />
+                        {/* </div> */}
+                      </div>
+                    </div>
+                  ) : msg_flag === "auth.no.priv" ? (
+                    <div className="flex">
+                      {/* <div className="flex flex-col items-start mx-2"> */}
+                        <SingleSelect
+                          label="Authentication Protocol"
+                          selectData={["Select", "MD5", "SHA"]}
+                          onChange={handleAuthChange}
+                          require={false}
+                        />
+                      {/* </div>
+                      <div className="flex flex-col items-start mx-2"> */}
+                        <CustomeInput
+                          label="Authentication Password"
+                          name="authentication_password"
+                          value={
+                            snmpv3Object.credential_context
+                              .authentication_password
+                          }
+                          onChange={handleInputSnmpv3Change}
+                          type="password"
+                          disable={false}
+                          require={true}
+                        />
+                      {/* </div> */}
+                    </div>
+                  ) : (
+                    " "
+                  )}
                 </div>
-                <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                <div onClick={handleSNMPv3Save}>
-                    <CustomeButton title="Save" />
-                  </div>
-                  <div onClick={handleDrawerClose}>
-                    <CustomeCancelButton title="Cancel" />
-                  </div>
+                {/* <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+                <div >
+                  <SubmitButton title="Save" />
                 </div>
+                <div>
+                  <CustomeCancelButton title="Cancel" />
+                </div>
+              </div> */}
               </div>
             ) : protocol == "SSH" ? (
               <div>
@@ -655,18 +559,27 @@ console.log("protocol",protocol);
                   </div>
                 </div>
 
-                <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                  <div onClick={handleSSHSave}>
-                    <CustomeButton title="Save" />
+                {/* <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+                  <div >
+                    <SubmitButton title="Save" />
                   </div>
                   <div onClick={handleDrawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
-                </div>
+                </div> */}
               </div>
             ) : (
               ""
             )}
+            <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+              <div>
+                {/* <SubmitButton title="Save" /> */}
+                <button className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer" type="submit">save</button>
+              </div>
+              <div onClick={handleDrawerClose}>
+                <CustomeCancelButton title="Cancel" />
+              </div>
+            </div>
           </form>
         </div>
       </div>

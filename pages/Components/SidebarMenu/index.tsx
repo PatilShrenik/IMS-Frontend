@@ -296,12 +296,12 @@ const SidebarMenu = () => {
                         <ul className="w-full p-0 py-[2px]">
                           {menuItem.subMenu.map((submenuItem, subIndex) => (
                             <>
-                              <li 
+                              <li
                                 key={subIndex}
                                 className="relative w-full py-2 items-center text-black dark:text-textColor font-light"
                               >
-                               
-                                <Link href={submenuItem.subMenuPathName || "#"}
+                                <Link
+                                  href={submenuItem.subMenuPathName || "#"}
                                   className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] p-2 ${
                                     openSubmenu == subIndex
                                     // "dark:bg-[#282828] bg-[#D8D8D8]"
@@ -349,7 +349,7 @@ const SidebarMenu = () => {
                                     />
                                   )}
                                 </Link>
-                             
+
                                 <Collapse
                                   in={openSubmenu === subIndex}
                                   timeout="auto"
@@ -362,45 +362,50 @@ const SidebarMenu = () => {
                                     <ul className="ml-[1.3rem] pY-[5px] transition-opacity ">
                                       {submenuItem.subMenuDropdown.map(
                                         (dropdownItem, dropdownIndex) => (
-                                          <li 
-                                            key={dropdownIndex}
-                                            className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
-                                              // selectedDropdown === dropdownIndex
-                                              selectedDropdown[
-                                                `submenu${subIndex}`
-                                              ] === dropdownIndex
-                                                ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
-                                                : ""
-                                            }`}
-                                            onClick={() => {
-                                              handleDropdownClick(
-                                                subIndex,
-                                                dropdownIndex
-                                              );
-                                            }}
+                                          <Link
+                                            href={
+                                              dropdownItem.subMenuDropdownpathName
+                                            }
                                           >
-                                            <Link 
-                                              href={
-                                                dropdownItem.subMenuDropdownpathName
-                                              }
-                                              className={` ${
+                                            <li
+                                              key={dropdownIndex}
+                                              className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
                                                 // selectedDropdown === dropdownIndex
                                                 selectedDropdown[
                                                   `submenu${subIndex}`
                                                 ] === dropdownIndex
-                                                  ? "pl-[.75rem]"
-                                                  : "pl-[1.3rem]"
+                                                  ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
+                                                  : ""
                                               }`}
+                                              onClick={() => {
+                                                handleDropdownClick(
+                                                  subIndex,
+                                                  dropdownIndex
+                                                );
+                                              }}
                                             >
-                                              {dropdownItem.subMenuDropdownname}
-                                            </Link>
-                                            {/* {dropdownIndex !==
+                                              <div
+                                                className={` ${
+                                                  // selectedDropdown === dropdownIndex
+                                                  selectedDropdown[
+                                                    `submenu${subIndex}`
+                                                  ] === dropdownIndex
+                                                    ? "pl-[.75rem]"
+                                                    : "pl-[1.3rem]"
+                                                }`}
+                                              >
+                                                {
+                                                  dropdownItem.subMenuDropdownname
+                                                }
+                                              </div>
+                                              {/* {dropdownIndex !==
                                               dropdownItem.subMenuDropdownname
                                                 .length -
                                                 1 && (
                                               <div className="absolute top-0 bottom-0 left-0 bg-[#B9B9B9] dark:bg-[#464646] w-[1px]" />
                                             )} */}
-                                          </li>
+                                            </li>
+                                          </Link>
                                         )
                                       )}
                                     </ul>
