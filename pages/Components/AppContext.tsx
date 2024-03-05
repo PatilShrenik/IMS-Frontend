@@ -21,7 +21,8 @@ const AppContext = createContext<{
   toggleThemeSwitch: () => void;
   getCredProfileApiState: boolean;
   togglegetCredProfileApiState: () => void;
-  
+  groupState: boolean;
+  toggleGroupState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -43,10 +44,13 @@ const AppContext = createContext<{
   toggleThemeSwitch: () => {},
   getCredProfileApiState: false,
   togglegetCredProfileApiState: () => {},
+  groupState: false,
+  toggleGroupState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [state, setState] = useState(false);
+  const [groupState, setgroupState] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [estimateCalc, setEstimateCalc] = useState(false);
   const [cloud, setCloud] = useState("AWS");
@@ -65,6 +69,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleState = () => {
     setState(!state);
+  };
+  const toggleGroupState = () => {
+    setgroupState(!state);
   };
   const toggleAuthenticated = (isAuth: any) => {
     // console.log('dskjjk')
@@ -118,6 +125,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleThemeSwitch,
         getCredProfileApiState,
         togglegetCredProfileApiState,
+        groupState,
+        toggleGroupState,
       }}
     >
       {children}
