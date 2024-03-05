@@ -219,3 +219,11 @@ main::before {
   border-left: 0;
   box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
 }
+.css-1betqn-MuiAccordionSummary-content{
+  display: flex;
+  justify-content:space-between;
+    /* -webkit-box-flex: 1;   
+    -ms-flex-positive: 1; */
+    flex-grow: 1;
+    margin: 12px 0;
+}

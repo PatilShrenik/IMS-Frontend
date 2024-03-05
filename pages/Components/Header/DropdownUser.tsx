@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Divider } from "@mui/material";
+import { Divider, Modal } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { logout } from "@/app/api/AuthAPI";
 import { useRouter } from "next/navigation";
@@ -10,11 +10,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userName, setUserName] = useState(null) as any;
-  const [isSignOutModalOpen, setSignOutModalOpen] = useState(false);
+ // const [isSignOutModalOpen, setSignOutModalOpen] = useState(false);
   const { themeSwitch } = useAppContext();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
   const router = useRouter();
+  const [isModalopen, setIsModalOpen] = useState(false);
+ 
   // close on click outside
   // const userName = sessionStorage.getItem("userName");
   useEffect(() => {
@@ -44,29 +46,21 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
-
-  const handleSignOutClick = async () => {
-    setSignOutModalOpen(true);
-
-    // try {
-    //   await instance.logoutPopup();
-    //   router.push("/");
-    //   sessionStorage.clear();
-    //   localStorage.clear();
-    // } catch (error) {
-    //   console.log("Logout error", error);
-    // }
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    // handleClose();
   };
+  const handleModalClose = () => setIsModalOpen(false);
+
 
   const handleSignOutConfirm = () => {
     // Perform sign-out logic here
+    router.push("/");
     localStorage.clear();
     sessionStorage.clear();
     // setSignOutModalOpen(false);
   };
-  const handleSignOutCancel = () => {
-    setSignOutModalOpen(false);
-  };
+ 
   return (
     <div className="">
       <Link
@@ -190,10 +184,10 @@ const DropdownUser = () => {
             <Divider />
           </li>
         </ul>
-        <Link href="/">
+        <p>
           <button
             className="flex items-center gap-3.5 py-2 px-2 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-textColor  lg:text-base"
-            onClick={handleSignOutConfirm}
+            onClick={handleModalOpen}
           >
             <svg
               className="fill-current"
@@ -214,11 +208,40 @@ const DropdownUser = () => {
             </svg>
             Log Out
           </button>
-        </Link>
+        </p>
       </div>
       {/* <!-- Dropdown End --> */}
+      <Modal open={isModalopen} onClose={handleModalClose}>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 min-w-[23.75rem] rounded-md dark:bg-tabel-row">
+          {/* <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " /> */}
+          <div className="ml-4 mb-5 ">
+            <p className=" text-xl font-normal  border-b-2 py-3   text-justify  dark:text-textColor  dark:border-dark-border ">
+              {" "}
+              Confirm logout{" "}
+            </p>
+            <p className="text-gray-500 text-sm mt-5 mb-5">
+              Are you sure you want to log out ?
+            </p>
+          </div>
+          <div className="flex justify-end p-4">
+           
+            <button
+              onClick={handleModalClose}
+              className=" border border-light3 font-normal py-1 px-3 rounded-xl mr-4 dark:text-textColor"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSignOutConfirm}
+              className="bg-primary2 hover:bg-primary2 text-white font-normal py-1 px-3 rounded-xl  dark:text-textColor"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </Modal>
 
-      {isSignOutModalOpen && (
+      {/* {isSignOutModalOpen && (
         <div className="fixed top-[50%] left-1/3 transform-translate-x-1/2  flex items-center justify-center z-50">
           <div className="bg-white border-2 border-gray-600 px-7 py-4 rounded-lg shadow-xl dark:text-textColor">
             <p className="text-lg">Are you sure you want to sign out?</p>
@@ -242,7 +265,7 @@ const DropdownUser = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

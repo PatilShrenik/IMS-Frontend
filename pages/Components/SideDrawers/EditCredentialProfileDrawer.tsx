@@ -98,7 +98,7 @@ const EditCredentialProfileDrawer = (props: any) => {
       let response = await getCredsProfileById(rowId);
       console.log("rowid", rowId);
       const modifiedData = replaceDotsWithUnderscores(response.result);
-      console.log("data-----------------", modifiedData);
+      //console.log("data-----------------", modifiedData);
       setData(modifiedData);
     };
     getById();
@@ -106,9 +106,10 @@ const EditCredentialProfileDrawer = (props: any) => {
     const savedProtocolValue =
       data && data.credential_context && data.credential_context.snmp_version
         ? `${data.protocol}${data.credential_context.snmp_version}`
-        : data && data.protocol;
+        :  `${data.protocol}`;
     setProtocol(savedProtocolValue);
   }, [open]);
+console.log("protocol",protocol);
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({
@@ -147,10 +148,8 @@ const EditCredentialProfileDrawer = (props: any) => {
     }
   }, [protocol]);
 
-  console.log("open", open);
-  console.log("protocol", protocol);
-  // console.log("snmp", snmpObject);
-  // console.log("ssh",sshObject);
+
+ 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setSnmpObject((prevSnmpObject) => ({
@@ -292,7 +291,7 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const handleChange = (values: any) => {
     setProtocol(values);
-    console.log(values);
+    console.log("protocol------------------",values);
     let value = "";
     if (values == "SNMPV1") {
       value = "V1";
@@ -320,10 +319,20 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const handleInputSSHChange = (event: any) => {
     const { name, value } = event.target;
-    setSSHObject((prevSnmpObject) => ({
-      ...prevSnmpObject,
+    setSSHObject((prevSshObject) => ({
+      ...prevSshObject,
       credential_context: {
-        ...prevSnmpObject.credential_context,
+        ...prevSshObject.credential_context,
+        [name]: value,
+      },
+    }));
+  };
+  const handleInputSnmpv3Change = (event: any) => {
+    const { name, value } = event.target;
+    setSnmpv3Object((prevSnmpv3Object) => ({
+      ...prevSnmpv3Object,
+      credential_context: {
+        ...prevSnmpv3Object.credential_context,
         [name]: value,
       },
     }));
@@ -332,10 +341,10 @@ const EditCredentialProfileDrawer = (props: any) => {
     const { name, value } = event.target;
     setSSHObject({ ...sshObject, [name]: value });
   };
+  console.log("prto",protocol);
 
   return (
     <Drawer
- 
       anchor="right"
       open={props.open}
       variant="persistent"
@@ -543,7 +552,7 @@ const EditCredentialProfileDrawer = (props: any) => {
                       label="UserName"
                       name="username"
                       value={snmpv3Object.credential_context.username}
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSnmpv3Change}
                       type="text"
                       disable={false}
                       require={true}
@@ -554,19 +563,19 @@ const EditCredentialProfileDrawer = (props: any) => {
                       value={
                         snmpv3Object.credential_context.authentication_password
                       }
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSnmpv3Change}
                       type="password"
                       disable={false}
                       require={true}
                     />
                   </div>
                   <div className="flex">
-                    {/* <SingleSelect
+                    <SingleSelect
                       label="Message Flag"
                       selectData={msg_flag_values}
                       onChange={handleFlagChange}
                       // require={true}
-                    /> */}
+                    />
                     <SingleSelect
                       label="Authentication Protocol"
                       selectData={["None", "MD5", "SHA"]}
@@ -585,7 +594,7 @@ const EditCredentialProfileDrawer = (props: any) => {
                       label="Encryption Key"
                       name="privacy_password"
                       value={snmpv3Object.credential_context.privacy_password}
-                      onChange={handleInputSSHChange}
+                      onChange={handleInputSnmpv3Change}
                       type="password"
                       disable={false}
                       require={true}

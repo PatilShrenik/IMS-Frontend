@@ -10,10 +10,12 @@ import { useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { deleteSingleDevice } from "@/pages/api/api/DeviceManagementAPI";
+import EditDeviceDrawer from "../SideDrawers/EditDeviceDrawer";
 
 const ITEM_HEIGHT = 48;
 
-const CredentialProfileMenu = (props: any) => {
+const AllDeviceMenu = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -21,7 +23,7 @@ const CredentialProfileMenu = (props: any) => {
   };
   const handleModalClose = () => setIsModalOpen(false);
   const { id } = props;
-  const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
+  const { togglegetCredProfileApiState } =
     useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -44,10 +46,10 @@ const CredentialProfileMenu = (props: any) => {
   };
 
   const handleDeleteClick = async (rowId: number) => {
-    // console.log("DeleteRowId", rowId);
+     console.log("DeleteId - device", rowId);
 
     try {
-      const response = await deleteCredsProfile(rowId);
+      const response = await deleteSingleDevice(rowId);
 
       if (response.status == "success") {
         togglegetCredProfileApiState();
@@ -62,22 +64,7 @@ const CredentialProfileMenu = (props: any) => {
           theme: "colored",
           transition: Bounce,
         });
-      } else if (response.status == "fail" && response.code == 400) {
-        toast.error(
-          "Bad Request: The request could not be understood or was missing required parameters.",
-          {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          }
-        );
-      } else {
+      }  else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
@@ -91,11 +78,12 @@ const CredentialProfileMenu = (props: any) => {
         });
       }
 
-      // setIsPopupOpen(false);
+
     } catch (error) {
       console.log(error);
     }
     handleClose();
+   
   };
 
   return (
@@ -169,7 +157,7 @@ const CredentialProfileMenu = (props: any) => {
         </div>
       </Modal>
 
-      <EditCredentialProfileDrawer
+      <EditDeviceDrawer
         rowId={id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
@@ -177,4 +165,4 @@ const CredentialProfileMenu = (props: any) => {
     </div>
   );
 };
-export default CredentialProfileMenu;
+export default AllDeviceMenu;

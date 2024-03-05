@@ -5,7 +5,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 const SingleSelect = (props: any) => {
   const { label, selectData, onChange, require, value } = props;
   const [selectFocused, setSelectFocused] = useState(false);
-
+console.log("val",value)
   // useEffect(() => {
   //   if(value) {
 
@@ -31,23 +31,23 @@ const SingleSelect = (props: any) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  console.log("============", selectFocused, value);
+ // console.log("============", selectFocused, value);
   return (
     <div className="flex items-center mx-4 my-4">
       <div className="relative bg-white dark:bg-dark-menu-color dark:text-textColor">
         <select
           // ref={selectRef}
-          className={`relative z-20 w-[18rem]  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
+          className={`relative z-20 w-[18rem] text-gray-400  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
             selectFocused || value ? "select-focused" : ""
           }`}
           // placeholder={label}
           onChange={handleSelectChange}
-          // value={value && value}
+          value={value && value}
           multiple={false}
           onFocus={() => setSelectFocused(true)}
           onBlur={() => setSelectFocused(false)}
         >
-          <option style={{ color: "red" }}>{label && label}</option>
+         {/* <option >{label && label}</option> */}
 
           {selectData &&
             selectData.map((item: any, index: any) => (

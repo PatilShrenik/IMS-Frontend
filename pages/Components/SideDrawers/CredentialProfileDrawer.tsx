@@ -1,11 +1,16 @@
 import { Drawer } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import Select from "react-select";
 import CustomeInput from "../Inputs";
 import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
-import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
+import {
+  getAllKeys,
+  replaceDotsWithUnderscores,
+  replaceUnderscoresWithDots,
+  replaceUnderscoresWithDotsNested,
+} from "@/functions/genericFunctions";
 import { createCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import SingleSelect from "../Selects";
@@ -30,6 +35,8 @@ const CredentialProfileDrawer = (props: any) => {
   const { togglegetCredProfileApiState } = useAppContext();
   const [encryptType, setEncryptType] = React.useState("");
   const [msg_flag, setMsgFlag] = React.useState("");
+  const [errorKeys, setErrorKeys] = React.useState<any>([]);
+  const [errors, setErrors] = React.useState<any>({});
   const [snmpObject, setSnmpObject] = React.useState({
     name: "",
     protocol: "SNMP",
@@ -98,6 +105,19 @@ const CredentialProfileDrawer = (props: any) => {
       setProtocol("SNMPv1");
     }
   }, [open]);
+
+  useEffect(() => {
+    const error = replaceDotsWithUnderscores(errors);
+    console.log("errors", errors);
+    console.log("er===", error);
+    // const errorKey = err && Object.keys(err);
+    const errorKeys: string[] = error ? getAllKeys(error) : [];
+    //  const  errorKey = err && err.credential_context && Object.keys(err.credential_context);
+
+    console.log("err---------", errorKeys);
+    setErrorKeys(errorKeys);
+  }, [errors]);
+
   const msg_flag_values = [
     {
       id: "no.auth.no.priv",
@@ -111,11 +131,8 @@ const CredentialProfileDrawer = (props: any) => {
       id: "auth.priv",
       name: "Auth Privacy",
     },
-    {
-      id: "reportable",
-      name: "Reportable",
-    },
   ];
+
   const handleChange = (values: any) => {
     setProtocol(values);
     console.log("values-----------", values);
@@ -139,6 +156,7 @@ const CredentialProfileDrawer = (props: any) => {
   const handleFlagChange = (values: any) => {
     setMsgFlag(values);
   };
+  console.log("msg",msg_flag);
   const handleEncryptChange = (values: any) => {
     setEncryptType(values);
   };
@@ -185,6 +203,13 @@ const CredentialProfileDrawer = (props: any) => {
     const { name, value } = event.target;
     setSSHObject({ ...sshObject, [name]: value });
     setSnmpObject({ ...snmpObject, [name]: value });
+    setSnmpv3Object({ ...snmpv3Object, [name]: value });
+  };
+  const drawerClose = () => {
+    props.handleDrawerClose(); // This might include calling setOpen(false) or similar
+
+    // Clear errors when closing the drawer
+    setErrors({});
   };
 
   const handleSSHSave = () => {
@@ -194,35 +219,39 @@ const CredentialProfileDrawer = (props: any) => {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
-        if (response.status == "success") {
-          togglegetCredProfileApiState();
-          toast.success(response.status, {
-            position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
-        } else {
-          toast.error(response.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
+        if (response) {
+          if (response.status == "success") {
+            togglegetCredProfileApiState();
+            toast.success(response.status, {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+            handleDrawerClose();
+          } else {
+            setErrors(response.errors);
+            toast.error(response.message, {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+          }
         }
       };
       createprofile();
-      setProtocol(null);
+      //setProtocol(null);
       // setSSHObject({
       //   name: "",
       //   protocol: "SSH",
@@ -236,7 +265,6 @@ const CredentialProfileDrawer = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-    handleDrawerClose();
   };
   // console.log("open in cred prof", open);
 
@@ -247,36 +275,40 @@ const CredentialProfileDrawer = (props: any) => {
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
-        console.log(response);
-        if (response.status == "success") {
-          togglegetCredProfileApiState();
-          toast.success(response.status, {
-            position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
-        } else {
-          toast.error(response.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
+        response && console.log(response);
+        if (response) {
+          if (response.status == "success") {
+            togglegetCredProfileApiState();
+            toast.success(response.status, {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+            handleDrawerClose();
+          } else {
+            setErrors(response.errors);
+            toast.error(response.message, {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+          }
         }
       };
       createprofile();
-      setProtocol(null);
+      // setProtocol(null);
       // setSnmpObject({
       //   name: "",
       //   protocol: "SNMP",
@@ -288,7 +320,6 @@ const CredentialProfileDrawer = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-    handleDrawerClose();
   };
   const handleSNMPv3Save = () => {
     // console.log("snmp object", snmpObject);
@@ -298,35 +329,38 @@ const CredentialProfileDrawer = (props: any) => {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
         console.log(response);
-        if (response.status == "success") {
-          togglegetCredProfileApiState();
-          toast.success(response.status, {
-            position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
-        } else {
-          toast.error(response.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
+        if (response) {
+          if (response.status == "success") {
+            togglegetCredProfileApiState();
+            toast.success(response.status, {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+          } else setErrors(response.errors);
+          {
+            toast.error(response.message, {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
+            });
+          }
         }
       };
       createprofile();
-      setProtocol(null);
+      //setProtocol(null);
       // setSnmpObject({
       //   name: "",
       //   protocol: "SNMP",
@@ -338,7 +372,6 @@ const CredentialProfileDrawer = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-    handleDrawerClose();
   };
   return (
     <Drawer
@@ -358,46 +391,68 @@ const CredentialProfileDrawer = (props: any) => {
           <p className="text-primary2 font-semibold">Add Credential Profile</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
-            onClick={props.handleDrawerClose}
+            onClick={drawerClose}
           />
         </div>
         <div className="py-8 px-6">
           <form>
             <div className="flex">
-              <CustomeInput
-                label="Profile Name"
-                name="name"
-                value={snmpObject.name}
-                onChange={handleNameChange}
-                type="text"
-                disable={false}
-                require={true}
-              />
-              {/* <Select options={options} className="p-4 bg-red-900"/> */}
-              <SingleSelect
-                label="Protocol"
-                selectData={["SNMPv1", "SNMPv2c", "SNMPv3", "SSH"]}
-                onChange={handleChange}
-                require={true}
-              />
-            </div>
-            {protocol == "SNMPv2c" || protocol == "SNMPv1" ? (
-              <div className="">
+              <div className="flex flex-col items-start mx-2">
                 <CustomeInput
-                  label="Community"
-                  name="snmp_community"
-                  value={snmpObject.credential_context.snmp_community}
-                  onChange={handleInputChange}
+                  label="Profile Name"
+                  name="name"
+                  value={snmpObject.name}
+                  onChange={handleNameChange}
                   type="text"
                   disable={false}
                   require={true}
                 />
+                {errorKeys && errorKeys.includes("name") && (
+                  <p className="text-danger text-sm ml-2">
+                    Name is {errors["name"]}*
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col items-start mx-2">
+                {/* <Select options={options} className="p-4 bg-red-900"/> */}
+                <SingleSelect
+                  className="dark:text-textColor "
+                  label="Protocol"
+                  selectData={["SNMPv1", "SNMPv2c", "SNMPv3", "SSH"]}
+                  onChange={handleChange}
+                  require={false}
+                />
+                {/* {errorKeys && errorKeys.includes("protocol") && (
+                  <p className="text-danger text-sm ml-2">
+                    protocol is {errors["protocol"]}*
+                  </p>
+                )} */}
+              </div>
+            </div>
+            {protocol == "SNMPv2c" || protocol == "SNMPv1" ? (
+              <div className="">
+                <div className="flex flex-col items-start mx-4 my-4">
+                  <CustomeInput
+                    label="Community"
+                    name="snmp_community"
+                    value={snmpObject.credential_context.snmp_community}
+                    onChange={handleInputChange}
+                    type="text"
+                    disable={false}
+                    require={true}
+                  />
+                  {errorKeys && errorKeys.includes("snmp_community") && (
+                    <p className="text-danger text-sm ml-2">
+                      Community is required
+                    </p>
+                  )}
+                </div>
                 <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
                   <div onClick={handlesnmpSave}>
                     <CustomeButton title="Save" />
                   </div>
                   {/* <CustomeButtons title="Save & Discover" /> */}
-                  <div onClick={handleDrawerClose}>
+                  <div onClick={drawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
                 </div>
@@ -406,64 +461,98 @@ const CredentialProfileDrawer = (props: any) => {
               <div className="">
                 <div className="flex flex-col">
                   <div className="flex">
-                    <CustomeInput
-                      label="UserName"
-                      name="username"
-                      value={snmpv3Object.credential_context.username}
-                      onChange={handleInputSNMPv3Change}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Authentication Password"
-                      name="authentication_password"
-                      value={
-                        snmpv3Object.credential_context.authentication_password
-                      }
-                      onChange={handleInputSNMPv3Change}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="UserName"
+                        name="username"
+                        value={snmpv3Object.credential_context.username}
+                        onChange={handleInputSNMPv3Change}
+                        type="text"
+                        disable={false}
+                        require={false}
+                      />{" "}
+                      {errorKeys && errorKeys.includes("username") && (
+                        <p className="text-danger text-sm ml-2">
+                          Username is {errors["username"]}*
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-start mx-2">
+                      <SingleSelect
+                        label="Security"
+                        selectData={msg_flag_values}
+                        onChange={handleFlagChange}
+                        // require={true}
+                      />
+                    </div>
+                   
+                  </div>
+                  {msg_flag === 'auth.priv' && (
+                  <div>
+                  <div className="flex">
+                  <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="Authentication Password"
+                        name="authentication_password"
+                        value={
+                          snmpv3Object.credential_context
+                            .authentication_password
+                        }
+                        onChange={handleInputSNMPv3Change}
+                        type="password"
+                        disable={false}
+                        require={false}
+                      />
+                      {errorKeys && errorKeys.includes("password") && (
+                        <p className="text-danger text-sm ml-2">
+                          Password is {errors["password"]}*
+                        </p>
+                      )}
+                    </div>
+                   
+                    <div className="flex flex-col items-start mx-2">
+                      <SingleSelect
+                        label="Authentication Protocol"
+                        selectData={["None", "MD5", "SHA"]}
+                        onChange={handleAuthChange}
+                        require={false}
+                      />
+                    </div>
                   </div>
                   <div className="flex">
-                    <SingleSelect
-                      label="Message Flag"
-                      selectData={msg_flag_values}
-                      onChange={handleFlagChange}
-                      // require={true}
-                    />
-                    <SingleSelect
-                      label="Authentication Protocol"
-                      selectData={["None", "MD5", "SHA"]}
-                      onChange={handleAuthChange}
-                      require={true}
-                    />
+                    <div className="flex flex-col items-start mx-2">
+                      <SingleSelect
+                        label="Privacy Protocol"
+                        selectData={["None", "AES", "DES"]}
+                        onChange={handleEncryptChange}
+                        require={false}
+                      />
+                    </div>
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="Privacy Password"
+                        name="privacy_password"
+                        value={snmpv3Object.credential_context.privacy_password}
+                        onChange={handleInputSNMPv3Change}
+                        type="password"
+                        disable={false}
+                        require={false}
+                      />
+                      {errorKeys && errorKeys.includes("privacy_password") && (
+                        <p className="text-danger text-sm ml-2">
+                          Encryption Key is {errors["privacy_password"]}*
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex">
-                    <SingleSelect
-                      label="Privacy Protocol"
-                      selectData={["None", "AES", "DES"]}
-                      onChange={handleEncryptChange}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Encryption Key"
-                      name="privacy_password"
-                      value={snmpv3Object.credential_context.privacy_password}
-                      onChange={handleInputSNMPv3Change}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
                   </div>
+                  )}
                 </div>
                 <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
                   <div onClick={handleSNMPv3Save}>
                     <CustomeButton title="Save" />
                   </div>
-                  <div onClick={handleDrawerClose}>
+                  <div onClick={drawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
                 </div>
@@ -472,44 +561,52 @@ const CredentialProfileDrawer = (props: any) => {
               <div>
                 <div className="flex flex-col">
                   <div className="flex">
-                    <CustomeInput
-                      label="UserName"
-                      name="username"
-                      value={sshObject.credential_context.username}
-                      onChange={handleInputSSHChange}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Password"
-                      name="password"
-                      value={sshObject.credential_context.password}
-                      onChange={handleInputSSHChange}
-                      type="password"
-                      disable={false}
-                      require={true}
-                    />
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="UserName"
+                        name="username"
+                        value={sshObject.credential_context.username}
+                        onChange={handleInputSSHChange}
+                        type="text"
+                        disable={false}
+                        //   require={true}
+                      />
+                    </div>
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="Password"
+                        name="password"
+                        value={sshObject.credential_context.password}
+                        onChange={handleInputSSHChange}
+                        type="password"
+                        disable={false}
+                        //   require={true}
+                      />
+                    </div>
                   </div>
                   <div className="flex">
-                    <CustomeInput
-                      label="SSH Public Key"
-                      name="public_key"
-                      value={sshObject.public_key}
-                      onChange={handleFieldChange}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
-                    <CustomeInput
-                      label="Paraphrase"
-                      name="paraphase"
-                      value={sshObject.paraphase}
-                      onChange={handleFieldChange}
-                      type="text"
-                      disable={false}
-                      require={true}
-                    />
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="SSH Public Key"
+                        name="public_key"
+                        value={sshObject.public_key}
+                        onChange={handleFieldChange}
+                        type="text"
+                        disable={false}
+                        //  require={true}
+                      />
+                    </div>
+                    <div className="flex flex-col items-start mx-2">
+                      <CustomeInput
+                        label="Paraphrase"
+                        name="paraphase"
+                        value={sshObject.paraphase}
+                        onChange={handleFieldChange}
+                        type="text"
+                        disable={false}
+                        //require={true}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -517,7 +614,7 @@ const CredentialProfileDrawer = (props: any) => {
                   <div onClick={handleSSHSave}>
                     <CustomeButton title="Save" />
                   </div>
-                  <div onClick={handleDrawerClose}>
+                  <div onClick={drawerClose}>
                     <CustomeCancelButton title="Cancel" />
                   </div>
                 </div>

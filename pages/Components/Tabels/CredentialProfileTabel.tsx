@@ -39,7 +39,7 @@ import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import Chips from "../Chips";
-
+import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import DeleteForever from "@mui/icons-material/DeleteForever";
@@ -480,7 +480,7 @@ const CredntialProfileTable = (props: any) => {
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
-                  {selected && (
+                {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -500,7 +500,6 @@ const CredntialProfileTable = (props: any) => {
                         handleModalClose={handleModalClose}
                         deleteRow={deleteDevice}
                       />
-
                       <Tooltip
                         TransitionComponent={Zoom}
                         title="Download selected credentials"
@@ -515,6 +514,37 @@ const CredntialProfileTable = (props: any) => {
                         />
                       </Tooltip>
                     </>
+                  ) : (
+                    <>
+                      <Tooltip
+                        TransitionComponent={Zoom}
+                        title="Delete selected credentials (Disabled)"
+                        placement="top"
+                      >
+                        <DeleteForeverIcon
+                        //   onClick={deleteDevice}
+                          color="disabled"
+                          className="cursor-pointer"
+                          style={{
+                            margin: "0 5px",
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip
+                        TransitionComponent={Zoom}
+                        title="Download selected credentials (Disabled)"
+                        placement="top"
+                      >
+                        <FileDownloadIcon
+                          // onClick={downloadCSV}
+                          className="cursor-pointer"
+                          color="disabled"
+                          style={{
+                            margin: "0 5px",
+                          }}
+                        />
+                      </Tooltip>
+                    </>
                   )}
                   {/* Hide and Show column */}
                   <Tooltip
@@ -522,7 +552,7 @@ const CredntialProfileTable = (props: any) => {
                     title="Hide/UnHide Columns"
                     placement="top"
                   >
-                    <VisibilityIcon
+                    <ViewColumnIcon
                       className="text-dark-border dark:text-light-menu-color"
                       style={{ margin: "0 10px 0 5px" }}
                       onClick={handleMenuOpen}
@@ -584,7 +614,7 @@ const CredntialProfileTable = (props: any) => {
                 {/* Add Device Menu and Model */}
 
                 <div className="m-4 mr-0 ml-2 h-fit">
-                  <Button
+                  {/* <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
                     className="bg-primary3 capitalize items-center"
@@ -593,7 +623,7 @@ const CredntialProfileTable = (props: any) => {
                   >
                     <FileUploadIcon fontSize="small" className="mr-2" /> Upload
                     CSV
-                  </Button>
+                  </Button> */}
                   <Button
                     onClick={handleDrawerOpen}
                     variant="contained"

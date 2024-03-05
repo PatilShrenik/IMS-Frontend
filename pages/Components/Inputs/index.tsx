@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 const CustomeInput = (props: any) => {
   const { label, type, require, disable, value, name, onChange } = props;
-  console.log("value.length", value && value.length);
+ // console.log("value.length", value && value.length);
   const [inputFocused, setInputFocused] = useState(false);
   return (
     <div className="items-center mx-4 my-4">

@@ -36,7 +36,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
-import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
+import { bulkActionDeviceDelete, getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import {
@@ -53,6 +53,7 @@ import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
 import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
 import Chips, { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
+import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -511,7 +512,7 @@ const AllDeviceTabel = (props: any) => {
   const deleteDevice = async () => {
     console.log("delete array", selectedRows);
     try {
-      let response = await bulkActionCredsProfileDelete(selectedRows);
+      let response = await bulkActionDeviceDelete(selectedRows);
 
       if (response.status == "success") {
         handleModalClose();
@@ -689,7 +690,7 @@ const AllDeviceTabel = (props: any) => {
                         placement="top"
                       >
                         <DeleteForeverIcon
-                          //   onClick={deleteDevice}
+                        //   onClick={deleteDevice}
                           color="disabled"
                           className="cursor-pointer"
                           style={{
@@ -1006,7 +1007,7 @@ const AllDeviceTabel = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <CredentialProfileMenu />
+                            <AllDeviceMenu  id={row._id} />
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </td>
                         </tr>
