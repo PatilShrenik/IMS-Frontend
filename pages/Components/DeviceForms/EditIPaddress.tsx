@@ -16,7 +16,8 @@ import { toast, Bounce } from "react-toastify";
 import { SubmitButton, CustomeCancelButton } from "../Buttons";
 import CustomeInput from "../Inputs";
 import SingleSelect from "../Selects";
-
+import Select from "react-select";
+import { AnyNsRecord } from "dns";
 const EditIPAddress = (props: any) => {
   const { device_id, handleDrawerClose } = props;
   const { toggleDeviceTableState } = useAppContext();
@@ -60,7 +61,7 @@ const EditIPAddress = (props: any) => {
   const [errorKeys, setErrorKeys] = React.useState<any>([]);
   const [errors, setErrors] = React.useState<any>({});
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
-
+  const [selectedValue, setSelectedValue] = useState();
   // Add your dialog content and functionality here
 
   React.useEffect(() => {
@@ -81,6 +82,7 @@ const EditIPAddress = (props: any) => {
     getDiscoveryScheduler();
   }, []);
 
+  // console.log("data in assets", data.credential_profiles[0]);
   React.useEffect(() => {
     const getDataById = async () => {
       let response = await getDeviceByID(device_id);
@@ -92,7 +94,6 @@ const EditIPAddress = (props: any) => {
     };
     getDataById();
   }, [device_id]);
-
   const credsProfileValues =
     allCredsPrfile &&
     allCredsPrfile.map((item: any) => ({
@@ -105,6 +106,7 @@ const EditIPAddress = (props: any) => {
       label: item.name,
       value: item._id,
     }));
+  console.log("groups", groupValues);
 
   //Functions to set value into the state
 
@@ -153,10 +155,10 @@ const EditIPAddress = (props: any) => {
     setData({ ...data, flow_enabled: event.target.checked });
   };
 
-  const handleDeviceType = (value: any) => {
+  const handleDeviceType = (selectedOption: any) => {
     setData({
       ...data,
-      device_type: value,
+      device_type: selectedOption.value,
     });
   };
 
@@ -167,13 +169,20 @@ const EditIPAddress = (props: any) => {
       credential_profiles: [val],
     });
   };
-  const handleGroupDropdown = (value: any) => {
+
+  useEffect(() => {
+    if (data && data.credential_profiles) {
+      setSelectedValue(data.credential_profiles[0]);
+    }
+  }, [data]);
+
+  const handleGroupDropdown = (selectedOptions: any) => {
+    const selectedValues = selectedOptions.map((option: any) => option.value);
     setData({
       ...data,
-      groups: value,
+      groups: selectedValues,
     });
   };
-
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
@@ -221,6 +230,20 @@ const EditIPAddress = (props: any) => {
       }
     }
   };
+  const [selectedValues, setSelectedValues] = useState([]);
+
+  // const handleGroupDropdown = (selectedOptions) => {
+  //   setSelectedValues(selectedOptions);
+  //   // Your other logic here
+  // };
+
+  // Extracting groups from the data
+  const groups = data.groups;
+
+  // Filtering groupValues array to find objects whose value matches the values in groups
+  const defaultSelectedOptions = groupValues.filter((option) =>
+    groups.includes(option.value)
+  );
   return (
     <div className=" rounded-lg m-2 p-2">
       {/* <SingleSelect
@@ -273,14 +296,27 @@ const EditIPAddress = (props: any) => {
           </div>
           {/* <div className="flex"> */}
           <div className="flex flex-col">
-            <SingleSelect
-              label="Select Credential Profile"
+            {/* <SingleSelect
+              // label="Select Credential Profile"
               selectData={credsProfileValues}
               onChange={handleCredProfile}
               require={true}
               value={data.credential_profiles[0]}
               isMulti={false}
+            /> */}
+
+            <Select
+              onChange={handleCredProfile}
+              value={credsProfileValues.find(
+                (option) => option.value === selectedValue
+              )}
+              // defaultValue={data.credential_profiles[0]}
+              required={true}
+              options={credsProfileValues}
+              className="my-react-select-container w-[18rem] rounded-lg  mx-4 my-4 z-999"
+              classNamePrefix="my-react-select"
             />
+
             {errorKeys && errorKeys.includes("credential.profiles") && (
               <p className="text-danger text-sm ml-2">
                 Credential Profiles is {errors["credential.profiles"]} *
@@ -288,13 +324,23 @@ const EditIPAddress = (props: any) => {
             )}
           </div>
           <div className="flex flex-col">
-            <SingleSelect
+            {/* <SingleSelect
               label="Select Group"
               selectData={groupValues}
               onChange={handleGroupDropdown}
               require={true}
               values={data.group}
               isMulti={true}
+            /> */}
+
+            <Select
+              onChange={handleGroupDropdown}
+              value={defaultSelectedOptions}
+              isMulti={true}
+              required={true}
+              options={groupValues}
+              className="my-react-select-container w-[18rem] rounded-lg mx-4 my-4 z-999"
+              classNamePrefix="my-react-select"
             />
             {errorKeys && errorKeys.includes("groups") && (
               <p className="text-danger text-sm ml-2">
@@ -320,7 +366,7 @@ const EditIPAddress = (props: any) => {
               type="text"
               require={false}
             />
-            <SingleSelect
+            {/* <SingleSelect
               label="Device Type"
               selectData={[
                 { label: "Router", value: "Router" },
@@ -329,7 +375,19 @@ const EditIPAddress = (props: any) => {
               ]}
               onChange={handleDeviceType}
               require={true}
-              // values={[]}
+              values={[]}
+            /> */}
+            <Select
+              onChange={handleDeviceType}
+              value={{ label: data.device_type, value: data.device_type }} // Setting value based on data.device_type
+              required={true}
+              options={[
+                { label: "Router", value: "Router" },
+                { label: "Switch", value: "Switch" },
+                { label: "FireWall", value: "FireWall" },
+              ]}
+              className="my-react-select-container w-[18rem] rounded-lg mx-4 my-4 z-999"
+              classNamePrefix="my-react-select"
             />
             <CustomeInput
               label="OEM"
