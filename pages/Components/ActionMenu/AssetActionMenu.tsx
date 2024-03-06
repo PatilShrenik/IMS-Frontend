@@ -10,7 +10,14 @@ import { useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { deleteSingleDevice } from "@/pages/api/api/DeviceManagementAPI";
+import {
+  deleteSingleDevice,
+  disableFlowSingle,
+  disableMonitoring,
+  enableFlowSingle,
+  enableMonitoring,
+  runDiscovery,
+} from "@/pages/api/api/DeviceManagementAPI";
 import EditDeviceDrawer from "../SideDrawers/EditDeviceDrawer";
 
 const ITEM_HEIGHT = 48;
@@ -100,6 +107,115 @@ const AssetsActionMenu = (props: any) => {
     handleClose();
   };
 
+  const runDeviceDiscovery = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await runDiscovery(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const enableFlow = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await enableFlowSingle(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const disableFlow = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await disableFlowSingle(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const enableMonitoringSingleDevice = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await enableMonitoring(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const disableMonitoringSingleDevice = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await disableMonitoring(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="ml-4">
       <IconButton
@@ -141,6 +257,52 @@ const AssetsActionMenu = (props: any) => {
         >
           Delete
         </MenuItem>
+        {rowData.flow_enabled == "no" ? (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={enableFlow}
+          >
+            Enable Flow
+          </MenuItem>
+        ) : (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={disableFlow}
+          >
+            Disable Flow
+          </MenuItem>
+        )}
+        {/* {rowData.device_status == "new" && (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={runDeviceDiscovery}
+          >
+            Run Discovery Now
+          </MenuItem>
+        )} */}
+        {rowData.device_status == "discovery" && (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={enableMonitoringSingleDevice}
+          >
+            Enable Monitoring
+          </MenuItem>
+        )}
+        {rowData.device_status == "monitoring" && (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={disableMonitoringSingleDevice}
+          >
+            Disable Monitoring
+          </MenuItem>
+        )}
+        {/* <MenuItem onClick={handleOpenEditDialog}>Enable Device</MenuItem> */}
+        {/* <MenuItem
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          onClick={() => setMonitorOpen(true)}
+        >
+          Monitoring Settings
+        </MenuItem> */}
       </Menu>
 
       <Modal open={isModalopen} onClose={handleModalClose}>

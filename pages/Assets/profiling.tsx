@@ -16,9 +16,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -29,11 +27,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
-import { useAppContext } from "../AppContext";
 import {
   bulkActionDeviceDelete,
-  getAllDevice,
-  runDiscovery,
+  getAllDeviceManager,
 } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
@@ -45,30 +41,22 @@ import {
   convertEpochToDateMonthYear,
   replacePeriodsWithUnderscores,
 } from "@/functions/genericFunctions";
-import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
-import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
-import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
-import { StatusChips } from "../Chips";
-import DeleteModal from "../Modals/DeleteModal";
-import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
-import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
-import UploadCSVDrawer from "../SideDrawers/UploadCSV";
+
 import Link from "next/link";
+import { useAppContext } from "../Components/AppContext";
+import DeleteModal from "../Components/Modals/DeleteModal";
+import { StatusChips } from "../Components/Chips";
+import CustomPagination from "../Components/CustomePagination";
 
-const AllDeviceTabel = (props: any) => {
-  const {
-    data,
-    visibleColumns,
-    setVisibleColumns,
-    columns,
-    page,
-    rowsPerPage,
-  } = props;
-
+const Profiling = () => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
   const { toggleDeviceTableState } = useAppContext();
+  const [page, setPage] = React.useState(0);
+  const [visibleColumns, setVisibleColumns] = useState<any>([]);
+  const [currentPage, setCurrentPage] = useState(1) as any;
+  const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState([]) as any;
   const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
@@ -84,6 +72,8 @@ const AllDeviceTabel = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
+  const [data, setData] = useState<any>();
+  const [columns, setColumns] = useState<any>();
 
   const groupValues =
     allGroups &&
@@ -120,6 +110,141 @@ const AllDeviceTabel = (props: any) => {
     getDiscoveryScheduler();
   }, []);
 
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        let cols: any = [];
+        let response = await getAllDeviceManager();
+        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        console.log("profiling data", modifiedData);
+        const col = Object.keys(modifiedData[0]);
+        // const indexOfObjectWithAvailabilityContext = modifiedData.findIndex(
+        //   (obj: any) => obj.availability_context !== undefined
+        // );
+        // console.log("modifidData", indexOfObjectWithAvailabilityContext);
+        // const col = Object.keys(
+        //   modifiedData[indexOfObjectWithAvailabilityContext]
+        // );
+        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
+        // console.log(filteredCols);
+        filteredCols.filter((key: any) => {
+          if (!key.startsWith("_")) {
+            if (key == "availability_context") {
+              cols.unshift({
+                field: "icmp_availability",
+                headerName: "icmp_Avl.",
+                minWidth: 120,
+              });
+              cols.unshift({
+                field: "plugin_availability",
+                headerName: "plugin_Avl.",
+                minWidth: 120,
+              });
+              cols.push({
+                field: "timestamp",
+                headerName: "timestamp",
+                minWidth: 120,
+              });
+            } else if (key == "port") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: key.replace(/\./g, " "),
+                minWidth: 80,
+              });
+            } else if (key == "credential_profiles") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: key.replace(/\./g, " "),
+                minWidth: 200,
+              });
+            } else if (key == "hostname") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: "Host Name",
+                minWidth: 150,
+              });
+            } else {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: key.replace(/\./g, " "),
+                minWidth: 150,
+              });
+            }
+          }
+        });
+        const x = filteredCols.includes("availabilty_context");
+        if (x) {
+          cols.unshift({
+            field: "icmp_availability",
+            headerName: "icmp_Avl.",
+            minWidth: 120,
+          });
+          cols.unshift({
+            field: "plugin_availability",
+            headerName: "plugin_Avl.",
+            minWidth: 120,
+          });
+          cols.push({
+            field: "timestamp",
+            headerName: "timestamp",
+            minWidth: 120,
+          });
+        }
+        cols.push({
+          field: "last_availability_on",
+          headerName: "Last Avaiable On",
+          minWidth: 120,
+        });
+        console.log("cols", cols);
+        setColumns(cols);
+        console.log("rows", modifiedData);
+        const hiddenColumnsValues = [
+          // "alias",
+          "discovery_schedulers",
+          "country",
+          // "groups",
+          "profile_type",
+          "port",
+          "credential_profiles",
+          "availability_interval",
+          // "flow_enabled",
+          "auto_provision",
+          "location",
+          "site",
+          "oem",
+          "os_version",
+          "vendor",
+          "check_without_save",
+          "device_list",
+          "site_code",
+          "device_name",
+          "service",
+          "latitude",
+          "longitude",
+          "created_by",
+          "created_on",
+          "updated_by",
+          "updated_on",
+          "timestamp",
+          "timezone",
+          "valid_credential_profile",
+          // "last_discovered_on",
+        ];
+
+        setVisibleColumns(
+          cols
+            .map((column: any) => column.field)
+            .filter((field: any) => !hiddenColumnsValues.includes(field))
+        );
+
+        setData(modifiedData);
+      };
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  const totalCount = data && data.length;
   const handleRequestSort = (property: any) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -394,10 +519,10 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="OnLine" placement="top-end">
               <div className="flex items-center">
                 {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <CheckCircleOutlineIcon
+                <ArrowDropUpIcon
                   fontSize="large"
                   className="text-success"
-                  style={{ fontSize: "1.5rem" }}
+                  style={{ fontSize: "2.5rem" }}
                 />
               </div>
             </Tooltip>
@@ -410,10 +535,10 @@ const AllDeviceTabel = (props: any) => {
             <Tooltip title="Offline" placement="top-end">
               <div className=" flex items-center">
                 {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <HighlightOffIcon
+                <ArrowDropDownIcon
                   className="text-danger"
                   fontSize="large"
-                  style={{ fontSize: "1.5rem" }}
+                  style={{ fontSize: "2.5rem" }}
                 />
               </div>
             </Tooltip>
@@ -501,28 +626,6 @@ const AllDeviceTabel = (props: any) => {
     setAnchorE3(null);
   };
 
-  const runDeviceDiscovery = async (row: any) => {
-    try {
-      const bodyData = [row._id];
-      let response = await runDiscovery(bodyData);
-      // console.log(response);
-      if (response.status == "success") {
-        toggleDeviceTableState();
-        toast.success(response.status, {
-          position: "bottom-right",
-          autoClose: 1000,
-        });
-      } else {
-        toast.error(response.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       {data && (
@@ -557,60 +660,11 @@ const AllDeviceTabel = (props: any) => {
                     />
                     {/* )} */}
                   </div>
-
-                  <div className="flex items-center">
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="SNMP"
-                      />
-                    </div>
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="SSH"
-                      />
-                    </div>
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="WinRm"
-                      />
-                    </div>
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="API"
-                    />
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="Cloud"
-                    />
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="ICMP"
-                    />
-                    <Tooltip
-                      TransitionComponent={Zoom}
-                      title="Reset Filter"
-                      placement="top"
-                    >
-                      <RestartAltIcon
-                        onClick={handleResetButtonClick}
-                        className="cursor-pointer mx-2"
-                      />
-                    </Tooltip>
-                  </div>
                 </div>
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
-                  {selected ? (
+                  {/* {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -675,7 +729,7 @@ const AllDeviceTabel = (props: any) => {
                         />
                       </Tooltip>
                     </>
-                  )}
+                  )} */}
                   {/* Hide and Show column */}
                   <Tooltip
                     TransitionComponent={Zoom}
@@ -736,13 +790,8 @@ const AllDeviceTabel = (props: any) => {
                       </MenuItem>
                     ))}
                   </Menu>
-                </div>
-
-                {/* Add Device Menu and Model */}
-
-                <div className="flex m-4 mr-0 ml-2 h-fit">
                   <div>
-                    <Link href="/Assets/profiling">
+                    <Link href="/Assets/">
                       <Button
                         // onClick={handleDrawerOpen}
                         variant="contained"
@@ -750,10 +799,15 @@ const AllDeviceTabel = (props: any) => {
                         size="small"
                       >
                         {/* <AddIcon fontSize="small" className="mr-2" />  */}
-                        Profiling
+                        Assets
                       </Button>
                     </Link>
                   </div>
+                </div>
+
+                {/* Add Device Menu and Model */}
+
+                {/* <div className="flex m-4 mr-0 ml-2 h-fit">
                   <Button
                     onClick={handleCSVDrawerOpen}
                     variant="contained"
@@ -781,7 +835,7 @@ const AllDeviceTabel = (props: any) => {
                     open={isCSVDrawerOpen}
                     handleDrawerClose={handleCSVDrawerClose}
                   />
-                </div>
+                </div> */}
               </div>
               {/* Global Downlad and delete button for table */}
             </div>
@@ -879,7 +933,7 @@ const AllDeviceTabel = (props: any) => {
                           </th>
                         );
                       })}
-                    <th
+                    {/* <th
                       className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
                       style={{
                         padding: "0px 8px",
@@ -894,7 +948,7 @@ const AllDeviceTabel = (props: any) => {
                       }}
                     >
                       Actions
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -902,7 +956,6 @@ const AllDeviceTabel = (props: any) => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: any, rowIndex: any) => {
                       const isLastRow = rowIndex === data.length - 1;
-                      // console.log("---------------", row.device_status);
                       return (
                         <tr
                           className="bg-white dark:bg-dark-container dark:text-textColor"
@@ -952,7 +1005,7 @@ const AllDeviceTabel = (props: any) => {
                                   style={{
                                     fontSize: "13px",
                                     fontWeight: "normal",
-                                    padding: "px",
+                                    padding: "8px",
                                     textAlign: "center",
                                     fontFamily: `"Poppins", sans-serif`,
                                   }}
@@ -984,34 +1037,17 @@ const AllDeviceTabel = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <div className="flex items-center">
-                              {row.device_status == "new" ? (
-                                <Tooltip
-                                  TransitionComponent={Zoom}
-                                  title="Run Discovery Now"
-                                  placement="top"
-                                >
-                                  <div onClick={() => runDeviceDiscovery(row)}>
-                                    <SlowMotionVideoIcon className="cursor-pointer" />
-                                  </div>
-                                </Tooltip>
-                              ) : (
-                                <Tooltip
-                                  TransitionComponent={Zoom}
-                                  title="Run Discovery Now"
-                                  placement="top"
-                                >
-                                  {/* <div onClick={() => runDeviceDiscovery(row)}> */}
-                                  <SlowMotionVideoIcon
-                                    color="disabled"
-                                    className="cursor-pointer dark:text-gray-700"
-                                  />
-                                  {/* </div> */}
-                                </Tooltip>
-                              )}
+                            {/* <div className="flex items-center">
+                              <Tooltip
+                                TransitionComponent={Zoom}
+                                title="Run Discovery Now"
+                                placement="top"
+                              >
+                                <SlowMotionVideoIcon />
+                               
+                              </Tooltip>
                               <AssetsActionMenu rowData={row} />
-                            </div>
-                            {/* <CredentialProfileMenu rowData={row} /> */}
+                            </div> */}
                           </td>
                         </tr>
                       );
@@ -1020,10 +1056,17 @@ const AllDeviceTabel = (props: any) => {
               </table>
             </div>
           </div>
+          {/* <CustomPagination
+            totalCount={totalCount}
+            rowsPerPage={rowsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+          /> */}
         </>
       )}
     </>
   );
 };
 
-export default AllDeviceTabel;
+export default Profiling;

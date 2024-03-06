@@ -250,7 +250,7 @@ main::before {
   } */
 
   .my-react-select-container .my-react-select__indicator-separator {
-    @apply bg-neutral-400;
+    @apply !bg-transparent;
   }
   .my-react-select-container .my-react-select__multi-value {
     @apply dark:bg-[#1E1E1E] dark:text-[#D8D8D8];

@@ -14,7 +14,7 @@ import React, { useState, useEffect } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
 import { baseURL } from "@/constants";
 import {
@@ -28,6 +28,12 @@ import { keys } from "highcharts";
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: "50%",
+    flexShrink: 0,
+    // height: "100%",
+  },
+  bottomContent: {
+    marginTop: "auto",
+    // padding: theme.spacing(2),
   },
 }));
 const UploadCSVDrawer = (props: any) => {
@@ -79,11 +85,25 @@ const UploadCSVDrawer = (props: any) => {
               toast.success(data.status, {
                 position: "bottom-right",
                 autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
               });
             } else {
               toast.error(data.message, {
                 position: "bottom-right",
-                autoClose: 2000,
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
               });
             }
             const file_name = Object.keys(data.result)[0];
@@ -112,11 +132,25 @@ const UploadCSVDrawer = (props: any) => {
         toast.success(response.status, {
           position: "bottom-right",
           autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
       const data = replacePeriodsWithUnderscoresnested(response);
@@ -154,7 +188,7 @@ const UploadCSVDrawer = (props: any) => {
       open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
+      className="shadow-sm shadow-dark-container w-full h-full overflow-y-auto"
     >
       <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
@@ -165,12 +199,15 @@ const UploadCSVDrawer = (props: any) => {
           />
         </div>
         <div className="py-2 px-6">
-          <div className="mr-6 flex justify-end items-center">
+          <div
+            className="mr-6 flex justify-end items-center cursor-pointer"
+            onClick={downloadFile}
+          >
             <CloudDownloadIcon
               className="dark:text-primary2"
               fontSize="small"
             />
-            <p className="ml-2 dark:text-primary2 text-sm">
+            <p className="ml-2 dark:text-primary2 text-sm italic">
               Download Sample File
             </p>
             <VisuallyHiddenInput
@@ -179,11 +216,11 @@ const UploadCSVDrawer = (props: any) => {
               onClick={downloadFile}
             />
           </div>
-          <div className="flex items-center px-4">
+          <div className="flex items-center px-2">
             <Button
               component="label"
               variant="contained"
-              className="my-2"
+              style={{ margin: "12px 10px" }}
               startIcon={<CloudUploadIcon />}
             >
               {selectedFileName ? selectedFileName : "Select file"}
@@ -225,32 +262,64 @@ const UploadCSVDrawer = (props: any) => {
           <div>
             {show && (
               <>
-                <h5 className="text-red-500 m-2">{message}</h5>
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        {keys.map((key: any) => (
-                          <TableCell key={key}>{key}</TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {errorData.map((data: any, index: any) => (
-                        <TableRow key={index}>
+                <h5 className="text-red-500 m-2">*{message}*</h5>
+                {/* <TableContainer component={Paper}> */}
+                <table className="w-full border-collapse overflow-x-scroll">
+                  <thead>
+                    <tr>
+                      {keys.map((key: any) => {
+                        const formattedKey = key
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (char: any) => char.toUpperCase());
+
+                        return (
+                          <th
+                            className="bg-textColor dark:bg-tabel-header dark:text-textColor"
+                            key={key}
+                          >
+                            {formattedKey}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {errorData.map((data: any, index: any) => {
+                      const isLastRow = index === data.length - 1;
+                      return (
+                        <tr
+                          className="bg-white dark:bg-dark-container dark:text-textColor"
+                          key={index}
+                        >
                           {keys.map((key: any) => (
-                            <TableCell key={key}>
+                            <td
+                              style={{
+                                //   padding: "8px",
+                                textAlign: "center",
+                              }}
+                              className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                                isLastRow ? "border-b" : "border-b"
+                              }`}
+                              key={key}
+                            >
                               {JSON.stringify(data[key])}
-                            </TableCell>
+                            </td>
                           ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {/* </TableContainer> */}
               </>
             )}
           </div>
+        </div>
+        <div className="absolute bottom-0 px-4 py-2">
+          <p className="text-danger text-sm ">
+            * Mendatory Fields : HostName, Plugin Type, IP Address, Port,
+            Credential Profile, Groups *
+          </p>
         </div>
       </div>
     </Drawer>

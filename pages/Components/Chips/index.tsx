@@ -19,7 +19,7 @@ export const StatusChips = (props: any) => {
     <div
       className={`items-center h-[25px] w-[110px] border-[3px] ${
         value == "new"
-          ? "border-black text-black dark:border-white dark:text-white"
+          ? "border-black text-black dark:border-textColor dark:text-white"
           : value == "discovered"
           ? "border-primary2 text-primary2 dark:text-primary2"
           : value == "monitoring"

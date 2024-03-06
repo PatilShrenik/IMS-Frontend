@@ -324,7 +324,6 @@ const IPAddress = (props: any) => {
       value: item._id,
     }));
 
-
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
