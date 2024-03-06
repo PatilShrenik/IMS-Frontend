@@ -74,16 +74,16 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const msg_flag_values = [
     {
-      id: "no.auth.no.priv",
-      name: "No Auth No Privacy",
+      value: "no.auth.no.priv",
+      label: "No Auth No Privacy",
     },
     {
-      id: "auth.no.priv",
-      name: "Auth No Privacy",
+      value: "auth.no.priv",
+      label: "Auth No Privacy",
     },
     {
-      id: "auth.priv",
-      name: "Auth Privacy",
+      value: "auth.priv",
+      label: "Auth Privacy",
     },
   ];
 
@@ -385,7 +385,12 @@ const EditCredentialProfileDrawer = (props: any) => {
               <SingleSelect
                 label="Protocol"
                 value={protocol}
-                selectData={["SNMPV1", "SNMPV2C", "SNMPV3", "SSH"]}
+                selectData={[
+                  { value: "SNMPv1", label: "SNMPv1" },
+                  { value: "SNMPv2c", label: "SNMPv2c" },
+                  { value: "SNMPv3", label: "SNMPv3" },
+                  { value: "SSH", label: "SSH" },
+                ]}
                 onChange={handleChange}
                 require={false}
               />
@@ -433,7 +438,12 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SingleSelect
                           label="Authentication Protocol"
-                          selectData={["Select", "MD5", "SHA"]}
+                          selectData={[
+                            { value: "MD5", label: "MD5" },
+                            { value: "SHA", label: "SHA" },
+                            // { value: "SNMPv3", label: "SNMPv3" },
+                            // { value: "SSH", label: "SSH" },
+                          ]}
                           onChange={handleAuthChange}
                           require={false}
                         />
@@ -457,7 +467,12 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SingleSelect
                           label="Privacy Protocol"
-                          selectData={["Select", "AES", "DES"]}
+                          selectData={[
+                            { value: "AES", label: "AES" },
+                            { value: "DES", label: "DES" },
+                            // { value: "SNMPv3", label: "SNMPv3" },
+                            // { value: "SSH", label: "SSH" },
+                          ]}
                           onChange={handleEncryptChange}
                           require={false}
                         />
@@ -482,7 +497,12 @@ const EditCredentialProfileDrawer = (props: any) => {
                       {/* <div className="flex flex-col items-start mx-2"> */}
                       <SingleSelect
                         label="Authentication Protocol"
-                        selectData={["Select", "MD5", "SHA"]}
+                        selectData={[
+                          { value: "MD5", label: "MD5" },
+                          { value: "SHA", label: "SHA" },
+                          // { value: "SNMPv3", label: "SNMPv3" },
+                          // { value: "SSH", label: "SSH" },
+                        ]}
                         onChange={handleAuthChange}
                         require={false}
                       />
