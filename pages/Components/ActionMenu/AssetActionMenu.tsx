@@ -129,7 +129,7 @@ const AssetsActionMenu = (props: any) => {
       >
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-          onClick={() => handleEditClick(rowData._id)}
+          onClick={() => handleEditClick(rowData && rowData._id)}
         >
           Edit
         </MenuItem>
@@ -157,7 +157,7 @@ const AssetsActionMenu = (props: any) => {
           </div>
 
           <button
-            onClick={() => handleDeleteClick(rowData._id)}
+            onClick={() => handleDeleteClick(rowData && rowData._id)}
             className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
           >
             Delete
@@ -195,7 +195,7 @@ const AssetsActionMenu = (props: any) => {
       </Modal>
 
       <EditDeviceDrawer
-        rowId={rowData._id}
+        rowId={rowData && rowData._id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
       />

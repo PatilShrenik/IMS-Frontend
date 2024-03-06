@@ -23,6 +23,8 @@ const AppContext = createContext<{
   togglegetCredProfileApiState: () => void;
   deviceTabelState: Boolean;
   toggleDeviceTableState: () => void;
+  groupState: boolean;
+  toggleGroupState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -46,10 +48,13 @@ const AppContext = createContext<{
   togglegetCredProfileApiState: () => {},
   deviceTabelState: false,
   toggleDeviceTableState: () => {},
+  groupState: false,
+  toggleGroupState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [state, setState] = useState(false);
+  const [groupState, setgroupState] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [estimateCalc, setEstimateCalc] = useState(false);
   const [cloud, setCloud] = useState("AWS");
@@ -73,6 +78,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleState = () => {
     setState(!state);
+  };
+  const toggleGroupState = () => {
+    setgroupState(!state);
   };
   const toggleAuthenticated = (isAuth: any) => {
     // console.log('dskjjk')
@@ -128,6 +136,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetCredProfileApiState,
         deviceTabelState,
         toggleDeviceTableState,
+        groupState,
+        toggleGroupState,
       }}
     >
       {children}

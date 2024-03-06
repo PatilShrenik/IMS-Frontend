@@ -47,8 +47,8 @@ import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
 import { CustomeButtonGroupButton } from "../Buttons";
 import { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
-import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
+import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -641,7 +641,7 @@ const AllDeviceTabel = (props: any) => {
                         placement="top"
                       >
                         <DeleteForeverIcon
-                        //   onClick={deleteDevice}
+                          //   onClick={deleteDevice}
                           color="disabled"
                           className="cursor-pointer dark:text-gray-700"
                           style={{

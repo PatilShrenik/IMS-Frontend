@@ -74,18 +74,17 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const msg_flag_values = [
     {
-      id: "no.auth.no.priv",
-      name: "No Auth No Privacy",
+      value: "no.auth.no.priv",
+      label: "No Auth No Privacy",
     },
     {
-      id: "auth.no.priv",
-      name: "Auth No Privacy",
+      value: "auth.no.priv",
+      label: "Auth No Privacy",
     },
     {
-      id: "auth.priv",
-      name: "Auth Privacy",
+      value: "auth.priv",
+      label: "Auth Privacy",
     },
-    
   ];
 
   useEffect(() => {
@@ -386,7 +385,12 @@ const EditCredentialProfileDrawer = (props: any) => {
               <SingleSelect
                 label="Protocol"
                 value={protocol}
-                selectData={["SNMPV1", "SNMPV2C", "SNMPV3", "SSH"]}
+                selectData={[
+                  { value: "SNMPv1", label: "SNMPv1" },
+                  { value: "SNMPv2c", label: "SNMPv2c" },
+                  { value: "SNMPv3", label: "SNMPv3" },
+                  { value: "SSH", label: "SSH" },
+                ]}
                 onChange={handleChange}
                 require={false}
               />
@@ -409,86 +413,42 @@ const EditCredentialProfileDrawer = (props: any) => {
                 <div className="flex flex-col">
                   <div className="flex">
                     {/* <div className="flex flex-col items-start mx-2"> */}
-                      <CustomeInput
-                        label="UserName"
-                        name="username"
-                        value={snmpv3Object.credential_context.username}
-                        onChange={handleInputSnmpv3Change}
-                        type="text"
-                        disable={false}
-                        require={true}
-                      />{" "}
+                    <CustomeInput
+                      label="UserName"
+                      name="username"
+                      value={snmpv3Object.credential_context.username}
+                      onChange={handleInputSnmpv3Change}
+                      type="text"
+                      disable={false}
+                      require={true}
+                    />{" "}
                     {/* </div> */}
                     {/* <div className="flex flex-col items-start mx-2"> */}
-                      <SingleSelect
-                        label="Security"
-                        selectData={msg_flag_values}
-                        onChange={handleFlagChange}
-                        // require={true}
-                      />
+                    <SingleSelect
+                      label="Security"
+                      selectData={msg_flag_values}
+                      onChange={handleFlagChange}
+                      // require={true}
+                    />
                     {/* </div> */}
                   </div>
                   {msg_flag === "auth.priv" ? (
                     <div>
                       <div className="flex">
                         {/* <div className="flex flex-col items-start mx-2"> */}
-                          <SingleSelect
-                            label="Authentication Protocol"
-                            selectData={["Select", "MD5", "SHA"]}
-                            onChange={handleAuthChange}
-                            require={false}
-                          />
-                        {/* </div>
-                        <div className="flex flex-col items-start mx-2"> */}
-                          <CustomeInput
-                            label="Authentication Password"
-                            name="authentication_password"
-                            value={
-                              snmpv3Object.credential_context
-                                .authentication_password
-                            }
-                            onChange={handleInputSnmpv3Change}
-                            type="password"
-                            disable={false}
-                            require={true}
-                          />
-                        {/* </div> */}
-                      </div>
-                      <div className="flex">
-                        {/* <div className="flex flex-col items-start mx-2"> */}
-                          <SingleSelect
-                            label="Privacy Protocol"
-                            selectData={["Select", "AES", "DES"]}
-                            onChange={handleEncryptChange}
-                            require={false}
-                          />
-                        {/* </div>
-                        <div className="flex flex-col items-start mx-2"> */}
-                          <CustomeInput
-                            label="Privacy Password"
-                            name="privacy_password"
-                            value={
-                              snmpv3Object.credential_context.privacy_password
-                            }
-                            onChange={handleInputSnmpv3Change}
-                            type="password"
-                            disable={false}
-                            require={true}
-                          />
-                        {/* </div> */}
-                      </div>
-                    </div>
-                  ) : msg_flag === "auth.no.priv" ? (
-                    <div className="flex">
-                      {/* <div className="flex flex-col items-start mx-2"> */}
                         <SingleSelect
                           label="Authentication Protocol"
-                          selectData={["Select", "MD5", "SHA"]}
+                          selectData={[
+                            { value: "MD5", label: "MD5" },
+                            { value: "SHA", label: "SHA" },
+                            // { value: "SNMPv3", label: "SNMPv3" },
+                            // { value: "SSH", label: "SSH" },
+                          ]}
                           onChange={handleAuthChange}
                           require={false}
                         />
-                      {/* </div>
-                      <div className="flex flex-col items-start mx-2"> */}
+                        {/* </div>
+                        <div className="flex flex-col items-start mx-2"> */}
                         <CustomeInput
                           label="Authentication Password"
                           name="authentication_password"
@@ -501,13 +461,71 @@ const EditCredentialProfileDrawer = (props: any) => {
                           disable={false}
                           require={true}
                         />
+                        {/* </div> */}
+                      </div>
+                      <div className="flex">
+                        {/* <div className="flex flex-col items-start mx-2"> */}
+                        <SingleSelect
+                          label="Privacy Protocol"
+                          selectData={[
+                            { value: "AES", label: "AES" },
+                            { value: "DES", label: "DES" },
+                            // { value: "SNMPv3", label: "SNMPv3" },
+                            // { value: "SSH", label: "SSH" },
+                          ]}
+                          onChange={handleEncryptChange}
+                          require={false}
+                        />
+                        {/* </div>
+                        <div className="flex flex-col items-start mx-2"> */}
+                        <CustomeInput
+                          label="Privacy Password"
+                          name="privacy_password"
+                          value={
+                            snmpv3Object.credential_context.privacy_password
+                          }
+                          onChange={handleInputSnmpv3Change}
+                          type="password"
+                          disable={false}
+                          require={true}
+                        />
+                        {/* </div> */}
+                      </div>
+                    </div>
+                  ) : msg_flag === "auth.no.priv" ? (
+                    <div className="flex">
+                      {/* <div className="flex flex-col items-start mx-2"> */}
+                      <SingleSelect
+                        label="Authentication Protocol"
+                        selectData={[
+                          { value: "MD5", label: "MD5" },
+                          { value: "SHA", label: "SHA" },
+                          // { value: "SNMPv3", label: "SNMPv3" },
+                          // { value: "SSH", label: "SSH" },
+                        ]}
+                        onChange={handleAuthChange}
+                        require={false}
+                      />
+                      {/* </div>
+                      <div className="flex flex-col items-start mx-2"> */}
+                      <CustomeInput
+                        label="Authentication Password"
+                        name="authentication_password"
+                        value={
+                          snmpv3Object.credential_context
+                            .authentication_password
+                        }
+                        onChange={handleInputSnmpv3Change}
+                        type="password"
+                        disable={false}
+                        require={true}
+                      />
                       {/* </div> */}
                     </div>
                   ) : (
                     " "
                   )}
                 </div>
-<<<<<<< HEAD
                 {/* <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
                 <div >
                   <SubmitButton title="Save" />
@@ -520,6 +538,11 @@ const EditCredentialProfileDrawer = (props: any) => {
                     <CustomeCancelButton title="Cancel" />
                   </div>
 >>>>>>> 0e618d9e17126d169343e0de3ab4e0f295a54a17
+=======
+                {/* <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+                <div >
+                  <SubmitButton title="Save" />
+>>>>>>> 9d21edaa32b8f16f82625b7dfcc4aa495893304f
                 </div>
                 <div>
                   <CustomeCancelButton title="Cancel" />
@@ -586,7 +609,12 @@ const EditCredentialProfileDrawer = (props: any) => {
             <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
               <div>
                 {/* <SubmitButton title="Save" /> */}
-                <button className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer" type="submit">save</button>
+                <button
+                  className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
+                  type="submit"
+                >
+                  save
+                </button>
               </div>
               <div onClick={handleDrawerClose}>
                 <CustomeCancelButton title="Cancel" />
