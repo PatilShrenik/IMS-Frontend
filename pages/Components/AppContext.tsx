@@ -21,7 +21,8 @@ const AppContext = createContext<{
   toggleThemeSwitch: () => void;
   getCredProfileApiState: boolean;
   togglegetCredProfileApiState: () => void;
-  
+  deviceTabelState: Boolean;
+  toggleDeviceTableState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -43,6 +44,8 @@ const AppContext = createContext<{
   toggleThemeSwitch: () => {},
   getCredProfileApiState: false,
   togglegetCredProfileApiState: () => {},
+  deviceTabelState: false,
+  toggleDeviceTableState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -53,6 +56,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarClick, setSidebarClick] = useState(false);
   const [themeSwitch, setThemeSwitch] = useState(false);
+  const [deviceTabelState, setDevieTabelState] = useState(false);
   const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
   const toggleSideBarClickState = () => {
     setSidebarClick((prevState) => !prevState);
@@ -62,6 +66,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleThemeSwitch = () => {
     setThemeSwitch((prevState) => !prevState);
+  };
+
+  const toggleDeviceTableState = () => {
+    setDevieTabelState((prevState) => !prevState);
   };
   const toggleState = () => {
     setState(!state);
@@ -118,6 +126,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleThemeSwitch,
         getCredProfileApiState,
         togglegetCredProfileApiState,
+        deviceTabelState,
+        toggleDeviceTableState,
       }}
     >
       {children}

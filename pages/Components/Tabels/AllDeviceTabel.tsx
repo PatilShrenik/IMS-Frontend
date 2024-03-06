@@ -5,21 +5,13 @@ import {
   Menu,
   MenuItem,
   Checkbox,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
   TableSortLabel,
-  TableBody,
-  TablePagination,
   Tooltip,
-  Chip,
   Button,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -36,7 +28,10 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
-import { bulkActionDeviceDelete, getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
+import {
+  bulkActionDeviceDelete,
+  getAllDevice,
+} from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import {
@@ -47,13 +42,13 @@ import {
   convertEpochToDateMonthYear,
   replacePeriodsWithUnderscores,
 } from "@/functions/genericFunctions";
-import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
-import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
-import Chips, { StatusChips } from "../Chips";
+import { CustomeButtonGroupButton } from "../Buttons";
+import { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
 import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
+import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -72,7 +67,7 @@ const AllDeviceTabel = (props: any) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
-  const { togglegetCredProfileApiState } = useAppContext();
+  const { toggleDeviceTableState } = useAppContext();
 
   //   const [visibleColumns, setVisibleColumns] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -130,71 +125,6 @@ const AllDeviceTabel = (props: any) => {
     };
     getDiscoveryScheduler();
   }, []);
-
-  //   useEffect(() => {
-  //     try {
-  //       const getData = async () => {
-  //         let cols: any = [];
-  //         let response = await getAllCredsProfile();
-  //         const modifiedData = replacePeriodsWithUnderscores(response.result);
-  //         console.log("modifidData", modifiedData);
-  //         const col = Object.keys(modifiedData[0]);
-  //         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-  //         console.log("filtered cols", filteredCols);
-  //         filteredCols.filter((key: any) => {
-  //           if (!key.startsWith("_")) {
-  //             if (key == "credential_context") {
-  //               cols.push({
-  //                 field: "snmp_community",
-  //                 headerName: "SNMP Comm.",
-  //                 minWidth: 80,
-  //               });
-  //               cols.push({
-  //                 field: "snmp_version",
-  //                 headerName: "SNMP Version",
-  //                 minWidth: 80,
-  //               });
-  //             } else if (key == "device_ids") {
-  //               cols.push({
-  //                 field: "device_ids",
-  //                 headerName: "Devices",
-  //                 minWidth: 150,
-  //               });
-  //             } else {
-  //               cols.push({
-  //                 field: key.replace(/\./g, "_"),
-  //                 headerName: key.replace(/\./g, " "),
-  //                 minWidth: 110,
-  //               });
-  //             }
-  //           }
-  //         });
-
-  //         console.log("cols", cols);
-  //         setColumns(cols);
-  //         console.log("rows", modifiedData);
-  //         const hiddenColumnsValues = [
-  //           "snmp_community",
-  //           "snmp_version",
-  //           "created_by",
-  //           "created_on",
-  //           "updated_by",
-  //           "updated_on",
-  //         ];
-
-  //         setVisibleColumns(
-  //           cols
-  //             .map((column: any) => column.field)
-  //             .filter((field: any) => !hiddenColumnsValues.includes(field))
-  //         );
-
-  //         setData(modifiedData);
-  //       };
-  //       getData();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, []);
 
   const handleRequestSort = (property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -340,6 +270,7 @@ const AllDeviceTabel = (props: any) => {
   };
 
   const handleMenuItemClick = (columnField: any) => {
+    console.log("clicked");
     handleColumnToggle(columnField);
     // handleMenuClose();
   };
@@ -493,11 +424,20 @@ const AllDeviceTabel = (props: any) => {
           </>
         );
       }
-    } else if (column.field === "timestamp") {
+    } else if (
+      column.field === "timestamp" ||
+      column.field == "last_discovered_on"
+    ) {
       const timestamp =
-        row.availability_context && row.availability_context["timestamp"];
+        row.availability_context &&
+        (row.availability_context["timestamp"] ||
+          row.availability_context["last_discovered_on"]);
 
-      if (row.availability_context && row.availability_context["timestamp"]) {
+      if (
+        row.availability_context &&
+        (row.availability_context["timestamp"] ||
+          row.availability_context["last_discovered_on"])
+      ) {
         const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp);
         return formattedDateMonthYear;
       }
@@ -517,7 +457,7 @@ const AllDeviceTabel = (props: any) => {
       if (response.status == "success") {
         handleModalClose();
 
-        togglegetCredProfileApiState();
+        toggleDeviceTableState();
 
         toast.success(response.message, {
           position: "bottom-right",
@@ -568,7 +508,7 @@ const AllDeviceTabel = (props: any) => {
       {data && (
         <>
           <div>
-            <div className="">
+            <div className="flex justify-between">
               <div className="flex justify-between dark:text-white">
                 {/* Global Search for table */}
                 <div className="flex">
@@ -590,10 +530,9 @@ const AllDeviceTabel = (props: any) => {
                       onClick={() => {
                         setSearch("");
                       }}
-                      className={`dark:text-white border cursor-pointer rounded-2xl ${
-                        search != "" ? "inline" : "hidden"
-                      }`}
+                      className="cursor-pointer rounded-2xl"
                       fontSize="small"
+                      color={search == "" ? "disabled" : "warning"}
                       sx={{ fontSize: "13px", marginRight: "8px" }}
                     />
                     {/* )} */}
@@ -608,42 +547,54 @@ const AllDeviceTabel = (props: any) => {
                     </div>
                    {/* <PublishedWithChangesIcon onClick={handleResetButtonClick}/>  */}
                   </div>
-                  <div onClick={() => handleButtonClick("SNMP")}>
+                  <div className="flex items-center">
+                    <div>
+                      <CustomeButtonGroupButton
+                        selectedButtons={selectedButtons}
+                        setSelectedButtons={setSelectedButtons}
+                        title="SNMP"
+                      />
+                    </div>
+                    <div>
+                      <CustomeButtonGroupButton
+                        selectedButtons={selectedButtons}
+                        setSelectedButtons={setSelectedButtons}
+                        title="SSH"
+                      />
+                    </div>
+                    <div>
+                      <CustomeButtonGroupButton
+                        selectedButtons={selectedButtons}
+                        setSelectedButtons={setSelectedButtons}
+                        title="WinRm"
+                      />
+                    </div>
                     <CustomeButtonGroupButton
                       selectedButtons={selectedButtons}
                       setSelectedButtons={setSelectedButtons}
-                      title="Newtork SNMP"
+                      title="API"
                     />
-                  </div>
-                  <div onClick={() => handleButtonClick("SSH")}>
                     <CustomeButtonGroupButton
                       selectedButtons={selectedButtons}
                       setSelectedButtons={setSelectedButtons}
-                      title="Linux SSH"
+                      title="Cloud"
                     />
-                  </div>
-                  <div>
                     <CustomeButtonGroupButton
                       selectedButtons={selectedButtons}
                       setSelectedButtons={setSelectedButtons}
-                      title="Windows WinRm"
+                      title="ICMP"
                     />
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Reset Filter"
+                      placement="top"
+                    >
+                      <RestartAltIcon
+                        onClick={handleResetButtonClick}
+                        className="cursor-pointer mx-2"
+                      />
+                    </Tooltip>
                   </div>
-                  <CustomeButtonGroupButton
-                    selectedButtons={selectedButtons}
-                    setSelectedButtons={setSelectedButtons}
-                    title="API"
-                  />
-                  <CustomeButtonGroupButton
-                    selectedButtons={selectedButtons}
-                    setSelectedButtons={setSelectedButtons}
-                    title="Cloud"
-                  />
-                  <CustomeButtonGroupButton
-                    selectedButtons={selectedButtons}
-                    setSelectedButtons={setSelectedButtons}
-                    title="ICMP"
-                  />
                 </div>
               </div>
               <div className="flex">
@@ -657,7 +608,7 @@ const AllDeviceTabel = (props: any) => {
                       >
                         <DeleteForeverIcon
                           onClick={handleModalOpen}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-textColor"
                           style={{
                             margin: "0 5px",
                           }}
@@ -675,7 +626,7 @@ const AllDeviceTabel = (props: any) => {
                       >
                         <FileDownloadIcon
                           onClick={downloadCSV}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-textColor"
                           style={{
                             margin: "0 5px",
                           }}
@@ -692,7 +643,7 @@ const AllDeviceTabel = (props: any) => {
                         <DeleteForeverIcon
                         //   onClick={deleteDevice}
                           color="disabled"
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-gray-700"
                           style={{
                             margin: "0 5px",
                           }}
@@ -705,7 +656,7 @@ const AllDeviceTabel = (props: any) => {
                       >
                         <FileDownloadIcon
                           // onClick={downloadCSV}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-gray-700"
                           color="disabled"
                           style={{
                             margin: "0 5px",
@@ -742,24 +693,21 @@ const AllDeviceTabel = (props: any) => {
                   >
                     {columns.map((column: any) => (
                       <MenuItem
-                        className="bg-light-container dark:bg-dark-container dark:text-[#DEE4EE]"
+                        className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                         style={{
-                          // backgroundColor: themeSwitch ? "#24303F" : "",
-                          // color: themeSwitch ? "#DEE4EE" : "",
                           fontFamily: `"Poppins", sans-serif`,
-                          // padding: "0px .5rem",
                         }}
                         key={column.field}
                         onClick={() => handleMenuItemClick(column.field)}
                       >
                         <Checkbox
-                          className=" dark:text-[#DEE4EE]"
+                          className=" dark:text-textColor"
                           style={{
                             padding: "0 .5rem",
                           }}
                           size="small"
                           checked={visibleColumns.includes(column.field)}
-                          onChange={() => handleMenuItemClick(column.field)}
+                          // onChange={() => handleMenuItemClick(column.field)}
                         />
                         {column.headerName
                           .split(" ")
@@ -783,7 +731,7 @@ const AllDeviceTabel = (props: any) => {
 
                 <div className="flex m-4 mr-0 ml-2 h-fit">
                   <Button
-                    onClick={handleDrawerOpen}
+                    // onClick={handleDrawerOpen}
                     variant="contained"
                     className="bg-primary3 capitalize items-center"
                     size="small"
@@ -814,13 +762,13 @@ const AllDeviceTabel = (props: any) => {
             className=""
             style={{
               width: "100%",
-              overflow: "hidden",
+              overflow: "scroll",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
-            <div className="max-h-440 overflow-hidden">
-              <table className="w-full border-collapse">
+            <div className="max-h-440 ">
+              <table className="w-full border-collapse overflow-x-scroll">
                 <thead>
                   <tr>
                     <th
@@ -996,7 +944,7 @@ const AllDeviceTabel = (props: any) => {
                               );
                             })}
                           <td
-                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                            className={` bg-white items-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
                               isLastRow ? "border-b" : "border-b "
                             }`}
                             style={{
@@ -1007,7 +955,18 @@ const AllDeviceTabel = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <AllDeviceMenu  id={row._id} />
+                            <div className="flex items-center">
+                              <Tooltip
+                                TransitionComponent={Zoom}
+                                title="Run Discovery Now"
+                                placement="top"
+                              >
+                                {/* <div onClick = {runDeviceDiscovery}> */}
+                                <SlowMotionVideoIcon />
+                                {/* </div> */}
+                              </Tooltip>
+                              <AssetsActionMenu rowData={row} />
+                            </div>
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </td>
                         </tr>

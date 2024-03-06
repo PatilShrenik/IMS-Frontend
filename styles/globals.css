@@ -65,6 +65,7 @@ body {
 }
 
 @layer utilities {
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -138,8 +139,7 @@ main::before {
 
 /* Tooltip css */
 
-.MuiTooltip-popper[data-popper-placement*="left"]
-  .css-ja5taz-MuiTooltip-tooltip {
+.MuiTooltip-popper[data-popper-placement*="left"] .css-ja5taz-MuiTooltip-tooltip {
   transform-origin: right center;
   margin-right: 8px;
 }
@@ -183,28 +183,33 @@ main::before {
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   background-color: none;
 }
+
 .css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
   border-left: 0;
   box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active
-  .MuiTableSortLabel-icon {
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
   opacity: 1;
   color: "blue";
 }
+
 .custom-arrow {
   position: absolute;
   top: 50%;
-  right: 10px; /* Adjust the position as needed */
+  right: 10px;
+  /* Adjust the position as needed */
   transform: translateY(-50%);
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 6px 6px 0 6px;
-  border-color: #000 transparent transparent transparent; /* Adjust the color as needed */
-  pointer-events: none; /* Allow clicks to pass through to the select element */
+  border-color: #000 transparent transparent transparent;
+  /* Adjust the color as needed */
+  pointer-events: none;
+  /* Allow clicks to pass through to the select element */
 }
+
 .css-r8u8y9 {
   list-style: none;
   margin: 0px;
@@ -212,18 +217,73 @@ main::before {
   position: relative;
   outline: 0px;
 }
+
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   background-color: none;
 }
+
 .css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
   border-left: 0;
   box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
 }
-.css-1betqn-MuiAccordionSummary-content{
+
+.css-1betqn-MuiAccordionSummary-content {
   display: flex;
-  justify-content:space-between;
-    /* -webkit-box-flex: 1;   
+  justify-content: space-between;
+  /* -webkit-box-flex: 1;   
     -ms-flex-positive: 1; */
-    flex-grow: 1;
-    margin: 12px 0;
+  flex-grow: 1;
+  margin: 12px 0;
+}
+
+.css-79xub {
+  background-color: none !important;
+  color: none !important;
+}
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: none;
+}
+
+@layer components {
+
+  /* .my-react-select-container {
+  } */
+  .my-react-select-container .my-react-select__control {
+    @apply py-[.4rem] rounded-lg bg-white dark:bg-[#1E1E1E] border-2 border-neutral-200 dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply border-neutral-500 hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-white dark:bg-[#1E1E1E] border-2 border-neutral-200 dark:border-neutral-600;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply text-neutral-600 dark:text-[#D8D8D8] bg-white hover:bg-neutral-200 dark:bg-[#1E1E1E] dark:hover:bg-neutral-800;
+  }
+
+  /* .my-react-select-container .my-react-select__option--is-focused {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  } */
+
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply bg-neutral-400;
+  }
+
+  .my-react-select-container .my-react-select__multi-value {
+    @apply dark:bg-[#1E1E1E] dark:text-[#D8D8D8];
+  }
+
+  .my-react-select-container .my-react-select__multi-value__label {
+    @apply dark:text-[#D8D8D8];
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__placeholder,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-neutral-600 dark:text-[#D8D8D8];
+  }
 }

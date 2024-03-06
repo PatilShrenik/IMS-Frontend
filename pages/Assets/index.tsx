@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import PageHeading from "@/pages/Components/PageHeading";
-import CredntialProfileTable from "@/pages/Components/Tabels/CredentialProfileTabel";
-import TablePagination from "@mui/material/TablePagination";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import AllDeviceTabel from "../Components/Tabels/AllDeviceTabel";
-
+import { ToastContainer } from "react-toastify";
+import { useAppContext } from "../Components/AppContext";
+import "react-toastify/dist/ReactToastify.css";
 const Assets = () => {
+  const { deviceTabelState } = useAppContext();
+
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [page, setPage] = React.useState(0);
@@ -35,22 +35,27 @@ const Assets = () => {
         let cols: any = [];
         let response = await getAllDevice();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        // console.log("modifidData", modifiedData);
-        const col = Object.keys(modifiedData[0]);
+        const indexOfObjectWithAvailabilityContext = modifiedData.findIndex(
+          (obj: any) => obj.availability_context !== undefined
+        );
+        console.log("modifidData", indexOfObjectWithAvailabilityContext);
+        const col = Object.keys(
+          modifiedData[indexOfObjectWithAvailabilityContext]
+        );
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        console.log(filteredCols);
+        // console.log(filteredCols);
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "availability_context") {
               cols.unshift({
                 field: "icmp_availability",
                 headerName: "icmp_Avl.",
-                minWidth: 80,
+                minWidth: 120,
               });
               cols.unshift({
                 field: "plugin_availability",
                 headerName: "plugin_Avl.",
-                minWidth: 80,
+                minWidth: 120,
               });
               cols.push({
                 field: "timestamp",
@@ -67,13 +72,19 @@ const Assets = () => {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
+                minWidth: 200,
+              });
+            } else if (key == "hostname") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: "Host Name",
                 minWidth: 150,
               });
             } else {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
-                minWidth: 110,
+                minWidth: 150,
               });
             }
           }
@@ -83,12 +94,12 @@ const Assets = () => {
           cols.unshift({
             field: "icmp_availability",
             headerName: "icmp_Avl.",
-            minWidth: 80,
+            minWidth: 120,
           });
           cols.unshift({
             field: "plugin_availability",
             headerName: "plugin_Avl.",
-            minWidth: 80,
+            minWidth: 120,
           });
           cols.push({
             field: "timestamp",
@@ -96,11 +107,16 @@ const Assets = () => {
             minWidth: 120,
           });
         }
+        cols.push({
+          field: "last_availability_on",
+          headerName: "Last Avaiable On",
+          minWidth: 120,
+        });
         console.log("cols", cols);
         setColumns(cols);
         console.log("rows", modifiedData);
         const hiddenColumnsValues = [
-          "alias",
+          // "alias",
           "discovery_schedulers",
           "country",
           // "groups",
@@ -108,7 +124,7 @@ const Assets = () => {
           "port",
           "credential_profiles",
           "availability_interval",
-          "flow_enabled",
+          // "flow_enabled",
           "auto_provision",
           "location",
           "site",
@@ -123,6 +139,8 @@ const Assets = () => {
           "updated_on",
           "timestamp",
           "timezone",
+          "valid_credential_profile",
+          // "last_discovered_on",
         ];
 
         setVisibleColumns(
@@ -137,7 +155,7 @@ const Assets = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [deviceTabelState]);
   const totalCount = data && data.length;
   const handleChangePage = (
     event: any,
@@ -153,6 +171,7 @@ const Assets = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="w-full">
         {/* <PageHeading heading="Credential Profile" /> */}
         <AllDeviceTabel
@@ -165,13 +184,8 @@ const Assets = () => {
         />
         <div
           style={{
-            // width: "100%",
             position: "fixed",
             bottom: 0,
-            // left: 0,
-            // right: 0,
-            // marginRight : "17rem",
-            // borderTop: "1px solid",
             backgroundColor: "#fff", // Set your desired background color
             zIndex: 0, // Adjust the z-index as needed
           }}

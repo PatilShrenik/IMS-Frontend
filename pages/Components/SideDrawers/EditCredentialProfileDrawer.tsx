@@ -90,22 +90,24 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   useEffect(() => {
     // console.log(id);
-    const getById = async () => {
-      let response = await getCredsProfileById(rowId);
-      console.log("rowid", rowId);
-      const modifiedData = replaceDotsWithUnderscores(response.result);
-      //console.log("data-----------------", modifiedData);
-      setData(modifiedData);
-    };
-    getById();
+    if (open) {
+      const getById = async () => {
+        let response = await getCredsProfileById(rowId);
+        console.log("rowid", rowId);
+        const modifiedData = replaceDotsWithUnderscores(response.result);
+        console.log("data-----------------", modifiedData);
+        setData(modifiedData);
+      };
+      getById();
 
-    const savedProtocolValue =
-      data && data.credential_context && data.credential_context.snmp_version
-        ? `${data.protocol}${data.credential_context.snmp_version}`
-        : `${data.protocol}`;
-    setProtocol(savedProtocolValue);
+      const savedProtocolValue =
+        data && data.credential_context && data.credential_context.snmp_version
+          ? `${data.protocol}${data.credential_context.snmp_version}`
+          : data && data.protocol;
+      setProtocol(savedProtocolValue);
+    }
   }, [open]);
-  console.log("protocol", protocol);
+
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({
@@ -505,9 +507,19 @@ const EditCredentialProfileDrawer = (props: any) => {
                     " "
                   )}
                 </div>
+<<<<<<< HEAD
                 {/* <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
                 <div >
                   <SubmitButton title="Save" />
+=======
+                <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+                  <div onClick={handleSNMPv3Save}>
+                    <CustomeButton title="Save" />
+                  </div>
+                  <div onClick={handleDrawerClose}>
+                    <CustomeCancelButton title="Cancel" />
+                  </div>
+>>>>>>> 0e618d9e17126d169343e0de3ab4e0f295a54a17
                 </div>
                 <div>
                   <CustomeCancelButton title="Cancel" />

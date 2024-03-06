@@ -11,6 +11,16 @@ const CustomeButton = (props: any) => {
 
 export default CustomeButton;
 
+export const SubmitButton = (props: any) => {
+  return (
+    <button className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer">
+      {props.title}
+    </button>
+  );
+};
+
+
+
 export const CustomeCancelButton = (props: any) => {
   return (
     <div className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium dark:text-textColor border border-light3 dark:border-light3 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer">

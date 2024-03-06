@@ -1,12 +1,9 @@
 import {
   Button,
   ButtonGroup,
+  Checkbox,
   Drawer,
-  FormControl,
   FormControlLabel,
-  FormGroup,
-  Radio,
-  RadioGroup,
   Switch,
   Tabs,
 } from "@mui/material";
@@ -14,9 +11,7 @@ import React, { useState, useEffect } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+
 import countries from "country-list";
 import timezones from "timezones-list";
 import Select from "react-select";
@@ -25,11 +20,8 @@ import Typography from "@mui/material/Typography";
 import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
 import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
-import {
-  createCredsProfile,
-  getAllCredsProfile,
-} from "@/pages/api/api/CredentialProfileAPI";
-import CustomeButton, { CustomeCancelButton } from "../Buttons";
+import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+import CustomeButton, { CustomeCancelButton, SubmitButton } from "../Buttons";
 import SingleSelect from "../Selects";
 import { makeStyles } from "@material-ui/core/styles";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
@@ -80,18 +72,17 @@ const AddDeviceDrawer = (props: any) => {
     );
   }
 
-  function a11yProps(index: number) {
-    return {
-      id: `vertical-tab-${index}`,
-      "aria-controls": `vertical-tabpanel-${index}`,
-    };
-  }
+  // function a11yProps(index: number) {
+  //   return {
+  //     id: `vertical-tab-${index}`,
+  //     "aria-controls": `vertical-tabpanel-${index}`,
+  //   };
+  // }
   return (
     <Drawer
       // hideBackdrop = {false}temporary
       anchor="right"
       open={open}
-      sx={{ width: "100%" }}
       variant="temporary"
       classes={{ paper: classes.drawer }}
       className="shadow-sm shadow-dark-container w-full overflow-y-auto"
@@ -119,37 +110,40 @@ const AddDeviceDrawer = (props: any) => {
               value={value}
               onChange={handleChange}
               aria-label="Vertical tabs example"
-              sx={{ borderRight: 1, borderColor: "#3C3C3C" }}
+              // sx={{ borderRight: 1, borderColor: "#3C3C3C" }}
             >
               <Tab
                 label="SNMP"
-                {...a11yProps(0)}
-                className="dark:text-textColor items-baseline mx-4"
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
               <Tab
                 label="SSH"
-                {...a11yProps(1)}
-                className="dark:text-textColor items-baseline mx-4"
+                disabled
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
               <Tab
                 label="WinRM"
-                {...a11yProps(2)}
-                className="dark:text-textColor items-baseline mx-4"
+                // {...a11yProps(2)}
+                disabled
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
               <Tab
                 label="API"
-                {...a11yProps(3)}
-                className="dark:text-textColor items-baseline mx-4"
+                // {...a11yProps(3)}
+                disabled
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
               <Tab
                 label="Cloud"
-                {...a11yProps(4)}
-                className="dark:text-textColor items-baseline mx-4"
+                // {...a11yProps(4)}
+                disabled
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
               <Tab
                 label="ICMP"
-                {...a11yProps(5)}
-                className="dark:text-textColor items-baseline mx-4"
+                // {...a11yProps(5)}
+                disabled
+                className="dark:text-textColor text-black items-baseline mx-4"
               />
             </Tabs>
             <TabPanel value={value} index={0}>
@@ -171,38 +165,6 @@ const AddDeviceDrawer = (props: any) => {
               ICMP
             </TabPanel>
           </Box>
-
-          {/* <Box sx={{ width: "100%", typography: "body1" }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList
-                  onChange={handleTabChange}
-                  aria-label="lab API tabs example"
-                >
-                  <Tab
-                    label="IP Address"
-                    value="address"
-                    className="dark:text-textColor"
-                  />
-                  <Tab
-                    label="IP Range"
-                    value="range"
-                    className="dark:text-textColor"
-                  />
-                  <Tab
-                    label="CIDR"
-                    value="cidr"
-                    className="dark:text-textColor"
-                  />
-                </TabList>
-              </Box>
-              <TabPanel value="address">
-                <AddSingleDeviceTab handleClose={handleDrawerClose} />
-              </TabPanel>
-              <TabPanel value="range">Item Two</TabPanel>
-              <TabPanel value="cidr">Item Three</TabPanel>
-            </TabContext>
-          </Box> */}
         </div>
       </div>
     </Drawer>
@@ -229,63 +191,58 @@ const AddSingleDeviceTab = (props: any) => {
       >
         <Button
           onClick={() => setValue("address")}
-          className={`${value == "address" && "bg-primary2 text-white"}`}
+          style={{
+            backgroundColor: value == "address" ? "#0078d4" : "",
+            color: value == "address" ? "white" : "",
+          }}
+          className={`${
+            value == "address" && "bg-primary2 text-white"
+          } text-primary2`}
         >
           IP Address
         </Button>
         <Button
           onClick={() => setValue("range")}
-          className={`${value == "range" && "bg-primary2 text-white"}`}
+          style={{
+            backgroundColor: value == "range" ? "#0078d4" : "",
+            color: value == "range" ? "white" : "",
+          }}
+          className={`${
+            value == "range" && "bg-primary2 text-white"
+          } text-primary2`}
         >
           IP Range
         </Button>
         <Button
           onClick={() => setValue("cidr")}
-          className={`${value == "cidr" && "bg-primary2 text-white"}`}
+          style={{
+            backgroundColor: value == "cidr" ? "#0078d4" : "",
+            color: value == "cidr" ? "white" : "",
+          }}
+          className={`${
+            value == "cidr" && "bg-primary2 text-white"
+          } text-primary2`}
         >
           CIDR
         </Button>
       </ButtonGroup>
       <div>
         {value == "address" ? (
-          <IPAddress />
+          <IPAddress handleDrawerClose={handleDrawerClose} />
         ) : value == "range" ? (
-          <IPRange />
+          <IPRange handleDrawerClose={handleDrawerClose} />
         ) : (
-          <p>cidr</p>
+          <CIDR handleDrawerClose={handleDrawerClose} />
+          // <p>hi</p>
         )}
       </div>
-      {/* <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "#3C3C3C" }}>
-          <TabList onChange={handleTabChange} aria-label="lab API tabs example">
-            <Tab
-              label="IP Address"
-              value="address"
-              className="dark:text-textColor"
-            />
-            <Tab
-              label="IP Range"
-              value="range"
-              className="dark:text-textColor"
-            />
-            <Tab label="CIDR" value="cidr" className="dark:text-textColor" />
-          </TabList>
-        </Box>
-        <TabPanel value="address">
-          <IPAddress handleClose={handleDrawerClose} />
-        </TabPanel>
-        <TabPanel value="range">
-          <IPRange handleDrawerClose={handleDrawerClose} />
-        </TabPanel>
-        <TabPanel value="cidr">Item Three</TabPanel>
-      </TabContext> */}
     </Box>
   );
 };
 
 const IPAddress = (props: any) => {
   const { handleDrawerClose } = props;
-
+  const { toggleDeviceTableState } = useAppContext();
   const initialState = {
     plugin_type: "SNMP",
     profile_type: "ip.address",
@@ -295,24 +252,29 @@ const IPAddress = (props: any) => {
     credential_profiles: [],
     discovery_schedulers: [],
     groups: [],
+    device_type: "",
+    oem: "",
+    os: "",
+    os_version: "",
+    vendor: "",
     // device_name: "",
-    description: "",
+    // description: "",
     alias: "",
-    country: "",
-    location: "",
+    // country: "",
+    // location: "",
     site: "",
-    site_code: 0,
-    service: "",
-    latitude: 0,
-    longitude: 0,
-    timezone: "",
+    // site_code: 0,
+    // service: "",
+    // latitude: 0,
+    // longitude: 0,
+    // timezone: "",
+    flow_enabled: false,
     device_status: "new",
-    availability_interval: 60,
+    // availability_interval: 60,
     auto_provision: "discovery",
     // check_without_save: "yes",
   };
 
-  // const { togglegetTableApiState } = useAppContext();
   const [data, setData] = React.useState<any>(initialState);
   const [protocol, setProtocol] = React.useState("10");
   const [fullWidth, setFullWidth] = React.useState(true);
@@ -324,9 +286,6 @@ const IPAddress = (props: any) => {
 
   // Add your dialog content and functionality here
 
-  const countryNames = countries.getNames();
-  const tzCodes = timezones.map((timezone) => timezone.tzCode);
-
   React.useEffect(() => {
     const getCredsProfile = async () => {
       let response = await getAllCredsProfile();
@@ -336,6 +295,13 @@ const IPAddress = (props: any) => {
     const getGroups = async () => {
       let response = await getAllGropus();
       setAllGroups(response.result);
+      const groupValues =
+        response.result &&
+        response.result.map((item: any) => ({
+          label: item.name,
+          value: item._id,
+        }));
+      console.log("----", groupValues);
     };
     getGroups();
     const getDiscoveryScheduler = async () => {
@@ -348,17 +314,16 @@ const IPAddress = (props: any) => {
   const credsProfileValues =
     allCredsPrfile &&
     allCredsPrfile.map((item: any) => ({
-      name: item.name,
-      id: item._id,
+      label: item.name,
+      value: item._id,
     }));
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
-      name: item.name,
-      id: item._id,
+      label: item.name,
+      value: item._id,
     }));
 
-  //Functions to set value into the state
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -400,10 +365,15 @@ const IPAddress = (props: any) => {
       timezone: value,
     });
   };
-  const handleCountryDropdown = (value: any) => {
+
+  const handleCheckboxChange = (event: any) => {
+    setData({ ...data, flow_enabled: event.target.checked });
+  };
+
+  const handleDeviceType = (value: any) => {
     setData({
       ...data,
-      country: value,
+      device_type: value,
     });
   };
 
@@ -426,10 +396,15 @@ const IPAddress = (props: any) => {
     setErrorKeys(errorKey);
   }, [errors]);
 
-  const handleSave = async () => {
+  const handleSave = async (event: any) => {
+    event.preventDefault();
     let response;
     data.port = parseInt(data.port);
+    // if(data.hostname == "") {
+    //   setErrors({})
+    // }
     const modifiedData = replaceUnderscoresWithDots(data);
+    console.log("ip address save data", modifiedData);
     response = await addSingleDevice(modifiedData);
     response && console.log(response);
     if (response) {
@@ -445,7 +420,7 @@ const IPAddress = (props: any) => {
           theme: "colored",
           transition: Bounce,
         });
-        // togglegetTableApiState();
+        toggleDeviceTableState();
         handleDrawerClose();
       } else {
         setErrors(response.errors);
@@ -471,201 +446,159 @@ const IPAddress = (props: any) => {
         onChange={handleChange}
       /> */}
       {data.plugin_type == "SNMP" && (
-        <form>
-          <>
-            <div className="flex flex-wrap">
-              <div className="flex flex-col">
-                <CustomeInput
-                  label="Host Name"
-                  name="hostname"
-                  value={data.hostname}
-                  onChange={handleInputChange}
-                  type="text"
-                  require={true}
-                />
-                {errorKeys && errorKeys.includes("hostname") && (
-                  <p className="text-danger text-sm ml-2">
-                    HostName is {errors["hostname"]}*
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <CustomeInput
-                  label="IP Address"
-                  name="ip_address"
-                  value={data.ip_address}
-                  onChange={handleInputChange}
-                  type="text"
-                  require={true}
-                />
-                {errorKeys && errorKeys.includes("ip.address") && (
-                  <p className="text-danger text-sm ml-2">
-                    IP Address is {errors["ip.address"]}*
-                  </p>
-                )}
-              </div>
-
+        <form onSubmit={handleSave} method="POST">
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <div className="flex flex-col">
               <CustomeInput
-                label="Port"
-                name="port"
-                value={data.port}
+                label="Host Name"
+                name="hostname"
+                value={data.hostname}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
               />
-            </div>
-            {/* <div className="flex"> */}
-            <div className="flex flex-col">
-              <SingleSelect
-                label="Select Credential Profile"
-                selectData={credsProfileValues}
-                onChange={handleCredProfile}
-                require={true}
-              />
-              {errorKeys && errorKeys.includes("credential.profiles") && (
+              {errorKeys && errorKeys.includes("hostname") && (
                 <p className="text-danger text-sm ml-2">
-                  Credential Profiles is {errors["credential.profiles"]}*
+                  HostName is {errors["hostname"]} *
                 </p>
               )}
             </div>
             <div className="flex flex-col">
-              <SingleSelect
-                label="Select Group"
-                selectData={groupValues}
-                onChange={handleGroupDropdown}
+              <CustomeInput
+                label="IP Address"
+                name="ip_address"
+                value={data.ip_address}
+                onChange={handleInputChange}
+                type="text"
                 require={true}
-                // values={[]}
               />
-              {errorKeys && errorKeys.includes("groups") && (
+              {errorKeys && errorKeys.includes("ip.address") && (
                 <p className="text-danger text-sm ml-2">
-                  Groups is {errors["groups"]}*
+                  IP Address is {errors["ip.address"]} *
                 </p>
               )}
             </div>
-            {/* </div> */}
-            {/* <CustomeInput
-            label="Device Name"
-            name="device_name"
-            value={data.device_name}
-            onChange={handleInputChange}
-            type="text"
-            require={true}
-          /> */}
-            <div className="grid grid-flow-row-dense grid-cols-3">
-              <CustomeInput
-                label="Alias"
-                name="alias"
-                value={data.alias}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeTextArea
-                label="Device Description"
-                name="description"
-                value={data.description}
-                onChange={handleInputChange}
-                rows="1"
-                require={true}
-              />
-              <SingleSelect
-                label="Select Country"
-                selectData={countryNames}
-                onChange={handleCountryDropdown}
-              />
-              <CustomeInput
-                label="Location"
-                name="location"
-                value={data.location}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Site"
-                name="site"
-                value={data.site}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Site Code"
-                name="site_code"
-                value={data.site_code}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Service"
-                name="service"
-                value={data.service}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Latitudes"
-                name="latitude"
-                value={data.latitude}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Longitudes"
-                name="longitude"
-                value={data.longitude}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <SingleSelect
-                label="Select TimeZone"
-                selectData={tzCodes}
-                onChange={handleTimeZoneDropdown}
-              />
 
-              {/* <FormControl style={{ margin: ".5rem" }}>
-                <RadioGroup
-                  style={{ display: "flex", flexDirection: "row" }}
-                  aria-labelledby="demo-controlled-radio-buttons-group"
-                  name="auto_provision"
-                  value={data.auto_provision}
-                  onChange={handleRadioChange}
-                >
-                  <FormControlLabel
-                    className="dark:text-textColor"
-                    value="monitoring"
-                    control={
-                      <Radio size="small" className="dark:text-textColor" />
-                    }
-                    label="Auto Provision"
-                  />
-                  <FormControlLabel
-                    className="dark:text-textColor"
-                    value="discovery"
-                    control={
-                      <Radio size="small" className="dark:text-textColor" />
-                    }
-                    label="Discovery Only"
-                  />
-                </RadioGroup>
-              </FormControl> */}
-            </div>
+            <CustomeInput
+              label="Port"
+              name="port"
+              value={data.port}
+              onChange={handleInputChange}
+              type="text"
+              require={true}
+            />
+          </div>
+          {/* <div className="flex"> */}
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Credential Profile"
+              selectData={credsProfileValues}
+              onChange={handleCredProfile}
+              require={true}
+              isMulti={false}
+            />
+            {errorKeys && errorKeys.includes("credential.profiles") && (
+              <p className="text-danger text-sm ml-2">
+                Credential Profiles is {errors["credential.profiles"]} *
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Group"
+              selectData={groupValues}
+              onChange={handleGroupDropdown}
+              require={true}
+              isMulti={true}
+            />
+            {errorKeys && errorKeys.includes("groups") && (
+              <p className="text-danger text-sm ml-2">
+                Groups is {errors["groups"]} *
+              </p>
+            )}
+          </div>
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <CustomeInput
+              label="Alias"
+              name="alias"
+              value={data.alias}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+
+            <CustomeInput
+              label="Site"
+              name="site"
+              value={data.site}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <SingleSelect
+              label="Device Type"
+              selectData={[
+                { label: "Router", value: "Router" },
+                { label: "Switch", value: "Switch" },
+                { label: "FireWall", value: "FireWall" },
+              ]}
+              onChange={handleDeviceType}
+              require={false}
+              // values={[]}
+            />
+            <CustomeInput
+              label="OEM"
+              name="oem"
+              value={data.oem}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System"
+              name="os"
+              value={data.os}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Vendor"
+              name="vendor"
+              value={data.vendor}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System Version"
+              name="os_version"
+              value={data.os_version}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+          </div>
+          <div className="flex items-center">
+            <FormControlLabel
+              className="mx-4 dark:text-gray-400 text-sm"
+              control={
+                <Checkbox
+                  className="dark:text-primary2"
+                  checked={data.flow_enabled}
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label="Flow Enabled"
+            />
             <div
               style={{
                 margin: ".5rem 1rem",
                 display: "flex",
-                // justifyContent: "space-evenly",
                 alignItems: "center",
               }}
             >
-              <Typography
-                className="dark:text-textColor"
-                // style={{ marginRight: "1rem" }}
-              >
+              <Typography className="dark:text-gray-400">
                 Auto Provision
               </Typography>
               <Switch
@@ -684,21 +617,21 @@ const IPAddress = (props: any) => {
                 color="primary"
               />
               <Typography
-                className="dark:text-textColor"
+                className="dark:text-gray-400"
                 // style={{ marginLeft: "1rem" }}
               >
                 Discovery Only
               </Typography>
             </div>
-            <div className=" fixed bottom-0 right-0 p-2 my-2 flex justify-end mt-6">
-              <div onClick={handleSave}>
-                <CustomeButton title="Save" />
-              </div>
-              <div onClick={handleDrawerClose}>
-                <CustomeCancelButton title="Cancel" />
-              </div>
+          </div>
+          <div className=" fixed bottom-0 right-0 p-2 my-2 flex justify-end mt-6">
+            {/* <div onClick={handleSave}> */}
+            <SubmitButton title="Save" />
+            {/* </div> */}
+            <div onClick={handleDrawerClose}>
+              <CustomeCancelButton title="Cancel" />
             </div>
-          </>
+          </div>
         </form>
       )}
     </div>
@@ -707,9 +640,10 @@ const IPAddress = (props: any) => {
 
 const IPRange = (props: any) => {
   const { handleDrawerClose } = props;
+  const { toggleDeviceTableState } = useAppContext();
   const initialState = {
     plugin_type: "SNMP",
-    profile_type: "ip.address",
+    profile_type: "ip.range",
     hostname: "",
     start_ip: null,
     end_ip: null,
@@ -717,17 +651,22 @@ const IPRange = (props: any) => {
     credential_profiles: [],
     discovery_schedulers: [],
     groups: [],
-    device_name: "",
-    description: "",
+    device_type: "",
+    oem: "",
+    os: "",
+    os_version: "",
+    vendor: "",
+    // device_name: "",
+    // description: "",
     alias: "",
-    country: "",
-    location: "",
+    // country: "",
+    // location: "",
     site: "",
-    site_code: 0,
-    service: "",
-    latitude: 0,
-    longitude: 0,
-    timezone: "",
+    // site_code: 0,
+    // service: "",
+    // latitude: 0,
+    // longitude: 0,
+    // timezone: "",
     device_status: "new",
     availability_interval: 60,
     auto_provision: "yes",
@@ -767,14 +706,14 @@ const IPRange = (props: any) => {
   const credsProfileValues =
     allCredsPrfile &&
     allCredsPrfile.map((item: any) => ({
-      name: item.name,
-      id: item._id,
+      label: item.name,
+      value: item._id,
     }));
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
-      name: item.name,
-      id: item._id,
+      label: item.name,
+      value: item._id,
     }));
 
   //Functions to set value into the state
@@ -813,6 +752,16 @@ const IPRange = (props: any) => {
     });
   };
 
+  const handleDeviceType = (value: any) => {
+    setData({
+      ...data,
+      device_type: value,
+    });
+  };
+  const handleCheckboxChange = (event: any) => {
+    setData({ ...data, flow_enabled: event.target.checked });
+  };
+
   const handleCredProfile = (values: any) => {
     setData({
       ...data,
@@ -832,7 +781,8 @@ const IPRange = (props: any) => {
   }, [errors]);
   // console.log("errorkey", errorKeys && errorKeys.includes("ip.address"));
 
-  const handleSave = async () => {
+  const handleSave = async (event: any) => {
+    event.preventDefault();
     let response;
     data.port = parseInt(data.port);
     const modifiedData = replaceUnderscoresWithDots(data);
@@ -851,7 +801,7 @@ const IPRange = (props: any) => {
           theme: "colored",
           transition: Bounce,
         });
-        // togglegetTableApiState();
+        toggleDeviceTableState();
         handleDrawerClose();
       } else {
         setErrors(response.errors);
@@ -878,201 +828,172 @@ const IPRange = (props: any) => {
         onChange={handleChange}
       /> */}
       {data.plugin_type == "SNMP" && (
-        <form>
-          <>
-            <div className="flex flex-wrap">
-              {/* <div className="flex flex-col">
-                <CustomeInput
-                  label="Host Name"
-                  name="hostname"
-                  value={data.hostname}
-                  onChange={handleInputChange}
-                  type="text"
-                  require={true}
-                />
-                {errorKeys && errorKeys.includes("hostname") && (
-                  <p className="text-danger text-sm ml-2">
-                    HostName is {errors["hostname"]}*
-                  </p>
-                )}
-              </div> */}
-              <div className="flex flex-col">
-                <CustomeInput
-                  label="Start IP"
-                  name="start_ip"
-                  value={data.start_ip}
-                  onChange={handleInputChange}
-                  type="text"
-                  require={true}
-                />
-                {errorKeys && errorKeys.includes("start.ip") && (
-                  <p className="text-danger text-sm ml-2">
-                    Start IP is {errors["start.ip"]}*
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <CustomeInput
-                  label="End IP"
-                  name="end_ip"
-                  value={data.end_ip}
-                  onChange={handleInputChange}
-                  type="text"
-                  require={true}
-                />
-                {errorKeys && errorKeys.includes("end.ip") && (
-                  <p className="text-danger text-sm ml-2">
-                    End IP is {errors["end.ip"]}*
-                  </p>
-                )}
-              </div>
+        <form onSubmit={handleSave} method="POST">
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <div className="flex flex-col">
+              <CustomeInput
+                label="Host Name"
+                name="hostname"
+                value={data.hostname}
+                onChange={handleInputChange}
+                type="text"
+                require={true}
+              />
+              {errorKeys && errorKeys.includes("hostname") && (
+                <p className="text-danger text-sm ml-2">
+                  HostName is {errors["hostname"]}*
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <CustomeInput
+                label="Start IP"
+                name="start_ip"
+                value={data.start_ip}
+                onChange={handleInputChange}
+                type="text"
+                require={true}
+              />
+              {errorKeys && errorKeys.includes("start.ip") && (
+                <p className="text-danger text-sm ml-2">
+                  Start IP is {errors["start.ip"]}*
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <CustomeInput
+                label="End IP"
+                name="end_ip"
+                value={data.end_ip}
+                onChange={handleInputChange}
+                type="text"
+                require={true}
+              />
+              {errorKeys && errorKeys.includes("end.ip") && (
+                <p className="text-danger text-sm ml-2">
+                  End IP is {errors["end.ip"]}*
+                </p>
+              )}
+            </div>
 
-              <CustomeInput
-                label="Port"
-                name="port"
-                value={data.port}
-                onChange={handleInputChange}
-                type="text"
-                require={true}
-              />
-            </div>
-            {/* <div className="flex"> */}
-            <div className="flex flex-col">
-              <SingleSelect
-                label="Select Credential Profile"
-                selectData={credsProfileValues}
-                onChange={handleCredProfile}
-                require={true}
-              />
-              {errorKeys && errorKeys.includes("credential.profiles") && (
-                <p className="text-danger text-sm ml-2">
-                  Credential Profiles is {errors["credential.profiles"]}*
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <SingleSelect
-                label="Select Group"
-                selectData={groupValues}
-                onChange={handleGroupDropdown}
-                require={true}
-              />
-              {errorKeys && errorKeys.includes("groups") && (
-                <p className="text-danger text-sm ml-2">
-                  Groups is {errors["groups"]}*
-                </p>
-              )}
-            </div>
-            <div className="grid grid-flow-row-dense grid-cols-4">
-              {/* </div> */}
-              {/* <CustomeInput
-                label="Device Name"
-                name="device_name"
-                value={data.device_name}
-                onChange={handleInputChange}
-                type="text"
-                require={true}
-              /> */}
-              <CustomeInput
-                label="Alias"
-                name="alias"
-                value={data.alias}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeTextArea
-                label="Device Description"
-                name="description"
-                value={data.description}
-                onChange={handleInputChange}
-                rows="1"
-                require={true}
-              />
-              <SingleSelect
-                label="Select Country"
-                selectData={countryNames}
-                onChange={handleCountryDropdown}
-                require={true}
-              />
-              <CustomeInput
-                label="Location"
-                name="location"
-                value={data.location}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Site"
-                name="site"
-                value={data.site}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Site Code"
-                name="site_code"
-                value={data.site_code}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Service"
-                name="service"
-                value={data.service}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Latitudes"
-                name="latitude"
-                value={data.latitude}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <CustomeInput
-                label="Longitudes"
-                name="longitude"
-                value={data.longitude}
-                onChange={handleInputChange}
-                type="text"
-                require={false}
-              />
-              <SingleSelect
-                label="Select TimeZone"
-                selectData={tzCodes}
-                onChange={handleTimeZoneDropdown}
-              />
-              {/* <div className="flex ml-2 mt-6">
-                <CheckboxTwo
-                  label="Auto Provision"
-                  checked={data.auto_provision}
-                  onChange={handleAutoProvisionCheck}
+            <CustomeInput
+              label="Port"
+              name="port"
+              value={data.port}
+              onChange={handleInputChange}
+              type="text"
+              require={true}
+            />
+          </div>
+          {/* <div className="flex"> */}
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Credential Profile"
+              selectData={credsProfileValues}
+              onChange={handleCredProfile}
+              require={true}
+            />
+            {errorKeys && errorKeys.includes("credential.profiles") && (
+              <p className="text-danger text-sm ml-2">
+                Credential Profiles is {errors["credential.profiles"]}*
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Group"
+              selectData={groupValues}
+              onChange={handleGroupDropdown}
+              require={true}
+            />
+            {errorKeys && errorKeys.includes("groups") && (
+              <p className="text-danger text-sm ml-2">
+                Groups is {errors["groups"]}*
+              </p>
+            )}
+          </div>
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <CustomeInput
+              label="Alias"
+              name="alias"
+              value={data.alias}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+
+            <CustomeInput
+              label="Site"
+              name="site"
+              value={data.site}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <SingleSelect
+              label="Device Type"
+              selectData={[
+                { value: "Router", label: "Router" },
+                { value: "Switch", label: "Switch" },
+                { value: "FireWall", label: "FireWall" },
+              ]}
+              onChange={handleDeviceType}
+              require={false}
+              // values={[]}
+            />
+            <CustomeInput
+              label="OEM"
+              name="oem"
+              value={data.oem}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System"
+              name="os"
+              value={data.os}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Vendor"
+              name="vendor"
+              value={data.vendor}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System Version"
+              name="os_version"
+              value={data.os_version}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+          </div>
+          <div className="flex items-center">
+            <FormControlLabel
+              className="mx-4 dark:text-gray-400 text-sm"
+              control={
+                <Checkbox
+                  className="dark:text-primary2"
+                  checked={data.flow_enabled}
+                  onChange={handleCheckboxChange}
                 />
-                <CheckboxTwo
-                  label="Check Without Save"
-                  checked={data.check_without_save}
-                  onChange={handleCheckWithoudSaveCheck}
-                />
-              </div> */}
-            </div>
+              }
+              label="Flow Enabled"
+            />
             <div
               style={{
                 margin: ".5rem 1rem",
                 display: "flex",
-                // justifyContent: "space-evenly",
                 alignItems: "center",
               }}
             >
-              <Typography
-                className="dark:text-textColor"
-                // style={{ marginRight: "1rem" }}
-              >
+              <Typography className="dark:text-gray-400">
                 Auto Provision
               </Typography>
               <Switch
@@ -1091,21 +1012,416 @@ const IPRange = (props: any) => {
                 color="primary"
               />
               <Typography
-                className="dark:text-textColor"
+                className="dark:text-gray-400"
                 // style={{ marginLeft: "1rem" }}
               >
                 Discovery Only
               </Typography>
             </div>
-            <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-              <div onClick={handleSave}>
-                <CustomeButton title="Save" />
-              </div>
-              <div onClick={handleDrawerClose}>
-                <CustomeCancelButton title="Cancel" />
-              </div>
+          </div>
+          <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+            {/* <div onClick={handleSave}> */}
+            <SubmitButton title="Save" />
+            {/* </div> */}
+            <div onClick={handleDrawerClose}>
+              <CustomeCancelButton title="Cancel" />
             </div>
-          </>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+};
+
+const CIDR = (props: any) => {
+  const { toggleDeviceTableState } = useAppContext();
+  const { handleDrawerClose } = props;
+  const initialState = {
+    plugin_type: "SNMP",
+    profile_type: "cidr",
+    hostname: "",
+    cidr: null,
+    port: "161",
+    credential_profiles: [],
+    discovery_schedulers: [],
+    groups: [],
+    device_type: "",
+    oem: "",
+    os: "",
+    os_version: "",
+    vendor: "",
+    // device_name: "",
+    // description: "",
+    alias: "",
+    // country: "",
+    // location: "",
+    site: "",
+    // site_code: 0,
+    // service: "",
+    // latitude: 0,
+    // longitude: 0,
+    // timezone: "",
+    device_status: "new",
+    availability_interval: 60,
+    auto_provision: "yes",
+    check_without_save: "yes",
+  };
+
+  // const { togglegetTableApiState } = useAppContext();
+  const [data, setData] = React.useState<any>(initialState);
+  const [protocol, setProtocol] = React.useState("10");
+  const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
+  const [allGroups, setAllGroups] = React.useState([]);
+  const [errorKeys, setErrorKeys] = React.useState<any>([]);
+  const [errors, setErrors] = React.useState<any>({});
+  const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
+
+  const countryNames = countries.getNames();
+  const tzCodes = timezones.map((timezone) => timezone.tzCode);
+
+  React.useEffect(() => {
+    const getCredsProfile = async () => {
+      let response = await getAllCredsProfile();
+      setAllCredsProfil(response.result);
+    };
+    getCredsProfile();
+    const getGroups = async () => {
+      let response = await getAllGropus();
+      setAllGroups(response.result);
+    };
+    getGroups();
+    const getDiscoveryScheduler = async () => {
+      let response = await getAllDiscoverySch();
+      setAllDiscoverySch(response.result);
+    };
+    getDiscoveryScheduler();
+  }, []);
+
+  const credsProfileValues =
+    allCredsPrfile &&
+    allCredsPrfile.map((item: any) => ({
+      label: item.name,
+      value: item._id,
+    }));
+  const groupValues =
+    allGroups &&
+    allGroups.map((item: any) => ({
+      label: item.name,
+      value: item._id,
+    }));
+
+  //Functions to set value into the state
+
+  const handleInputChange = (event: any) => {
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const handleChange = (event: any) => {
+    const proto: any = event.target.value as string;
+    console.log(proto);
+    // setFormValue(true);
+    setProtocol(proto);
+    // setData({ ...data, port: proto == "10" ? "161" : "22" });
+  };
+
+  const handleRadioChange = (event: any) => {
+    const { name, value } = event.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleTimeZoneDropdown = (value: any) => {
+    setData({
+      ...data,
+      timezone: value,
+    });
+  };
+  const handleCountryDropdown = (value: any) => {
+    setData({
+      ...data,
+      country: value,
+    });
+  };
+
+  const handleCheckboxChange = (event: any) => {
+    setData({ ...data, flow_enabled: event.target.checked });
+  };
+
+  const handleDeviceType = (value: any) => {
+    setData({
+      ...data,
+      device_type: value,
+    });
+  };
+
+  const handleCredProfile = (values: any) => {
+    setData({
+      ...data,
+      credential_profiles: [values],
+    });
+  };
+  const handleGroupDropdown = (value: any) => {
+    setData({
+      ...data,
+      groups: [value],
+    });
+  };
+
+  useEffect(() => {
+    const errorKey = errors && Object.keys(errors);
+    setErrorKeys(errorKey);
+  }, [errors]);
+  // console.log("errorkey", errorKeys && errorKeys.includes("ip.address"));
+
+  const handleSave = async (event: any) => {
+    event.preventDefault();
+    let response;
+    data.port = parseInt(data.port);
+    const modifiedData = replaceUnderscoresWithDots(data);
+    response = await addDeviceManager(modifiedData);
+    response && console.log(response);
+    if (response) {
+      if (response.status == "success") {
+        toast.success(response && "Device Created Successfully", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        toggleDeviceTableState();
+        handleDrawerClose();
+      } else {
+        setErrors(response.errors);
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+    }
+  };
+
+  return (
+    <div className=" rounded-lg m-2 p-2">
+      {/* <SingleSelect
+        label="Protocol"
+        selectData={["SNMP"]}
+        onChange={handleChange}
+      /> */}
+      {data.plugin_type == "SNMP" && (
+        <form onSubmit={handleSave} method="POST">
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <div className="flex flex-col">
+              <CustomeInput
+                label="Host Name"
+                name="hostname"
+                value={data.hostname}
+                onChange={handleInputChange}
+                type="text"
+                require={true}
+              />
+              {errorKeys && errorKeys.includes("hostname") && (
+                <p className="text-danger text-sm ml-2">
+                  HostName is {errors["hostname"]}*
+                </p>
+              )}
+            </div>
+            {/* <div className="flex flex-col">
+                <CustomeInput
+                  label="Start IP"
+                  name="start_ip"
+                  value={data.start_ip}
+                  onChange={handleInputChange}
+                  type="text"
+                  require={true}
+                />
+                {errorKeys && errorKeys.includes("start.ip") && (
+                  <p className="text-danger text-sm ml-2">
+                    Start IP is {errors["start.ip"]}*
+                  </p>
+                )}
+              </div> */}
+            <div className="flex flex-col">
+              <CustomeInput
+                label="CIDR"
+                name="cidr"
+                value={data.cide}
+                onChange={handleInputChange}
+                type="text"
+                require={true}
+              />
+              {errorKeys && errorKeys.includes("cidr") && (
+                <p className="text-danger text-sm ml-2">
+                  End IP is {errors["cidr"]}*
+                </p>
+              )}
+            </div>
+
+            <CustomeInput
+              label="Port"
+              name="port"
+              value={data.port}
+              onChange={handleInputChange}
+              type="text"
+              require={true}
+            />
+          </div>
+          {/* <div className="flex"> */}
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Credential Profile"
+              selectData={credsProfileValues}
+              onChange={handleCredProfile}
+              require={true}
+            />
+            {errorKeys && errorKeys.includes("credential.profiles") && (
+              <p className="text-danger text-sm ml-2">
+                Credential Profiles is {errors["credential.profiles"]}*
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <SingleSelect
+              label="Select Group"
+              selectData={groupValues}
+              onChange={handleGroupDropdown}
+              require={true}
+            />
+            {errorKeys && errorKeys.includes("groups") && (
+              <p className="text-danger text-sm ml-2">
+                Groups is {errors["groups"]}*
+              </p>
+            )}
+          </div>
+          <div className="grid grid-flow-row-dense grid-cols-4">
+            <CustomeInput
+              label="Alias"
+              name="alias"
+              value={data.alias}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+
+            <CustomeInput
+              label="Site"
+              name="site"
+              value={data.site}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <SingleSelect
+              label="Device Type"
+              selectData={[
+                { label: "Router", value: "Router" },
+                { label: "Switch", value: "Switch" },
+                { label: "FireWall", value: "FireWall" },
+              ]}
+              onChange={handleDeviceType}
+              require={false}
+              // values={[]}
+            />
+            <CustomeInput
+              label="OEM"
+              name="oem"
+              value={data.oem}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System"
+              name="os"
+              value={data.os}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Vendor"
+              name="vendor"
+              value={data.vendor}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Operating System Version"
+              name="os_version"
+              value={data.os_version}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+          </div>
+          <div className="flex items-center">
+            <FormControlLabel
+              className="mx-4 dark:text-gray-400 text-sm"
+              control={
+                <Checkbox
+                  className="dark:text-primary2"
+                  checked={data.flow_enabled}
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label="Flow Enabled"
+            />
+            <div
+              style={{
+                margin: ".5rem 1rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography className="dark:text-gray-400">
+                Auto Provision
+              </Typography>
+              <Switch
+                checked={data.auto_provision === "discovery"}
+                onChange={() =>
+                  handleRadioChange({
+                    target: {
+                      name: "auto_provision",
+                      value:
+                        data.auto_provision === "monitoring"
+                          ? "discovery"
+                          : "monitoring",
+                    },
+                  })
+                }
+                color="primary"
+              />
+              <Typography
+                className="dark:text-gray-400"
+                // style={{ marginLeft: "1rem" }}
+              >
+                Discovery Only
+              </Typography>
+            </div>
+          </div>
+          <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+            {/* <div onClick={handleSave}> */}
+            <SubmitButton title="Save" />
+            {/* </div> */}
+            <div onClick={handleDrawerClose}>
+              <CustomeCancelButton title="Cancel" />
+            </div>
+          </div>
         </form>
       )}
     </div>

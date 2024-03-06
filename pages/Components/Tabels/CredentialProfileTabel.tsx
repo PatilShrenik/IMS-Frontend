@@ -574,7 +574,7 @@ const CredntialProfileTable = (props: any) => {
                   >
                     {columns.map((column: any) => (
                       <MenuItem
-                        className="bg-light-container dark:bg-dark-container dark:text-[#DEE4EE]"
+                        className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                         style={{
                           // backgroundColor: themeSwitch ? "#24303F" : "",
                           // color: themeSwitch ? "#DEE4EE" : "",
@@ -585,7 +585,7 @@ const CredntialProfileTable = (props: any) => {
                         onClick={() => handleMenuItemClick(column.field)}
                       >
                         <Checkbox
-                          className=" dark:text-[#DEE4EE]"
+                          className=" dark:text-textColor"
                           style={{
                             padding: "0 .5rem",
                           }}
@@ -634,7 +634,7 @@ const CredntialProfileTable = (props: any) => {
                     Profile
                   </Button>
                   {/* <AddIcon
-                    className=" dark:text-[#DEE4EE]"
+                    className=" dark:text-textColor"
                     onClick={handleDrawerOpen}
                     fontSize="medium"
                     sx={{
@@ -659,13 +659,13 @@ const CredntialProfileTable = (props: any) => {
             className=""
             style={{
               width: "100%",
-              overflow: "hidden",
+              overflow: "scroll",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
-            <div className="max-h-440 overflow-hidden">
-              <table className="w-full border-collapse">
+            <div className="max-h-440">
+              <table className="w-full border-collapse overflow-x-scroll">
                 <thead>
                   <tr>
                     <th
