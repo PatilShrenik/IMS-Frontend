@@ -58,7 +58,7 @@ const Group = () => {
       data && data.filter((item: any) => item.parent_id === parentId);
 
     // Base case: if no children found, return null
-    if (children.length === 0) {
+    if (children && children.length === 0) {
       return null;
     }
 
@@ -101,7 +101,7 @@ const Group = () => {
     apiData && apiData.filter((item: any) => item._id === topLevelParentId);
 
   // const nestedStructure2 = buildNestedStructure(apiData, topLevelParentId);
-  const nestedStructure: any = [
+  const nestedStructure: any = RootNode && [
     {
       children: buildNestedStructure(apiData, topLevelParentId),
       ...RootNode[0],
@@ -145,7 +145,9 @@ const Group = () => {
         </Accordion>
       </AccordionDetails>
     </Accordion> */}
-      <ToastContainer />
+      <div>
+        <ToastContainer />
+      </div>
 
       <div className="my-4">
         <NestedAccordion
