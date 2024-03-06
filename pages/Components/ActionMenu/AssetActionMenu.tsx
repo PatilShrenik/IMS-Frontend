@@ -257,7 +257,7 @@ const AssetsActionMenu = (props: any) => {
         >
           Delete
         </MenuItem>
-        {rowData.flow_enabled == "no" ? (
+        {rowData && rowData.flow_enabled == "no" ? (
           <MenuItem
             className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
             onClick={enableFlow}
@@ -280,7 +280,7 @@ const AssetsActionMenu = (props: any) => {
             Run Discovery Now
           </MenuItem>
         )} */}
-        {rowData.device_status == "discovery" && (
+        {rowData && rowData.device_status == "discovery" && (
           <MenuItem
             className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
             onClick={enableMonitoringSingleDevice}
@@ -288,7 +288,7 @@ const AssetsActionMenu = (props: any) => {
             Enable Monitoring
           </MenuItem>
         )}
-        {rowData.device_status == "monitoring" && (
+        {rowData && rowData.device_status == "monitoring" && (
           <MenuItem
             className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
             onClick={disableMonitoringSingleDevice}
