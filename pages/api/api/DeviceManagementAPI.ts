@@ -169,13 +169,13 @@ export const bulkActionDeviceDelete = async (props: any) => {
   }
 };
 
-export const updateSingleDevice = async (props: any) => {
-  console.log(props);
+export const updateSingleDevice = async (bodyData: any, device_id: any) => {
+  // console.log(props);
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(baseURL + `/api/v1/settings/device/${props.id}`, {
+    const res = await fetch(baseURL + `/api/v1/settings/device/${device_id}`, {
       method: "PUT",
-      body: JSON.stringify(props.bodydata),
+      body: JSON.stringify(bodyData),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -192,7 +192,7 @@ export const updateSingleDevice = async (props: any) => {
 export const runDiscovery = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(baseURL + `/api/v1/settings/device/runDiscovery`, {
+    const res = await fetch(baseURL + `/api/v1/settings/device/run-discovery`, {
       method: "POST",
       body: JSON.stringify(props),
       headers: {
@@ -212,7 +212,7 @@ export const enableMonitoring = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(
-      baseURL + `/api/v1/settings/device/enableMonitoring`,
+      baseURL + `/api/v1/settings/device/enable-monitoring`,
       {
         method: "POST",
         body: JSON.stringify(props),
@@ -234,7 +234,7 @@ export const disableMonitoring = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(
-      baseURL + `/api/v1/settings/device/disableMonitoring`,
+      baseURL + `/api/v1/settings/device/disable-monitoring`,
       {
         method: "POST",
         body: JSON.stringify(props),
@@ -364,14 +364,17 @@ export const addDeviceManager = async (props: any) => {
   }
 };
 
-export const updateSingleDeviceManager = async (props: any) => {
+export const updateSingleDeviceManager = async (
+  bodyData: any,
+  device_id: any
+) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(
-      baseURL + `/api/v1/settings/device-manager/${props.bodyData._id}`,
+      baseURL + `/api/v1/settings/device-manager/${device_id}`,
       {
         method: "PUT",
-        body: JSON.stringify(props.bodyData),
+        body: JSON.stringify(bodyData),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

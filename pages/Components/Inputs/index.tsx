@@ -1,39 +1,33 @@
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-} from "@mui/material";
 import React, { useState } from "react";
 
 const CustomeInput = (props: any) => {
-  const { label, type, require, disable, value, name, onChange } = props;
-  console.log("value.length", value && value.length);
+  const { type, require, disable, name, onChange } = props;
+  // console.log("value.length", value && value.length);
   const [inputFocused, setInputFocused] = useState(false);
   return (
     <div className="items-center mx-4 my-4">
       <div className="relative">
         <input
-          className={`w-[18rem] dark:text-textColor border-[1px] rounded-lg dark:border-dark-border bg-transparent py-3 px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+          className={`w-[18rem]  text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent py-3 px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
             inputFocused ? "input-focused" : ""
           }`}
           type={type ? type : "text"}
-          placeholder={!inputFocused ? `${label}${require ? " *" : ""}` : ""}
+          placeholder={!inputFocused ? `${props.label}${require ? " *" : ""}` : ""}
           required={require ? true : false}
           disabled={disable ? true : false}
-          value={value ? value : ""}
+          value={props.value ? props.value : ""}
           name={name ? name : ""}
           onChange={onChange ? onChange : ""}
           onFocus={() => setInputFocused(true)}
           onBlur={() => setInputFocused(false)}
         />
-        {label && (
+        {props.label && (
           <label
             className={`absolute transition-all pointer-events-none left-2 opacity-0 ${
-              inputFocused || (value && value.length > 0) ? "label-focused" : ""
+              inputFocused || props.value ? "label-focused" : ""
             }`}
           >
-            {label} {require == true && <span className="text-red-400">*</span>}
+            {props.label} {require == true && <span className="text-red-400">*</span>}
           </label>
         )}
         <style jsx>{`
@@ -84,7 +78,7 @@ export const CustomeTextArea = (props: any) => {
               inputFocused || (value && value.length > 0) ? "input-focused" : ""
             }`}
             // type={type ? type : "text"}
-            placeholder={!inputFocused ? `${label}${require ? " *" : ""}` : ""}
+            // placeholder={!inputFocused ? `${label}${require ? " *" : ""}` : ""}
             required={require ? true : false}
             disabled={disable ? true : false}
             value={value ? value : ""}

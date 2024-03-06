@@ -10,19 +10,21 @@ import { useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { deleteSingleDevice } from "@/pages/api/api/DeviceManagementAPI";
+import EditDeviceDrawer from "../SideDrawers/EditDeviceDrawer";
 
 const ITEM_HEIGHT = 48;
 
-const CredentialProfileMenu = (props: any) => {
+const AssetsActionMenu = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(true);
     // handleClose();
   };
   const handleModalClose = () => setIsModalOpen(false);
-  const { id } = props;
-  const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
-    useAppContext();
+  const { rowData } = props;
+  //   console.log("asset menu props", rowData);
+  const { toggleDeviceTableState } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
@@ -47,10 +49,10 @@ const CredentialProfileMenu = (props: any) => {
     // console.log("DeleteRowId", rowId);
 
     try {
-      const response = await deleteCredsProfile(rowId);
+      const response = await deleteSingleDevice(rowId);
 
       if (response.status == "success") {
-        togglegetCredProfileApiState();
+        toggleDeviceTableState();
         toast.success(response.message, {
           position: "bottom-right",
           autoClose: 1000,
@@ -127,7 +129,7 @@ const CredentialProfileMenu = (props: any) => {
       >
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-          onClick={() => handleEditClick(id)}
+          onClick={() => handleEditClick(rowData._id)}
         >
           Edit
         </MenuItem>
@@ -155,7 +157,7 @@ const CredentialProfileMenu = (props: any) => {
           </div>
 
           <button
-            onClick={() => handleDeleteClick(id)}
+            onClick={() => handleDeleteClick(rowData._id)}
             className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
           >
             Delete
@@ -192,12 +194,12 @@ const CredentialProfileMenu = (props: any) => {
         </div> */}
       </Modal>
 
-      <EditCredentialProfileDrawer
-        rowId={id}
+      <EditDeviceDrawer
+        rowId={rowData._id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
       />
     </div>
   );
 };
-export default CredentialProfileMenu;
+export default AssetsActionMenu;

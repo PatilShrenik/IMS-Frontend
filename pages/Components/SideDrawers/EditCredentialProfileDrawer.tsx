@@ -18,7 +18,7 @@ import {
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import SingleSelect from "../Selects";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   drawer: {
@@ -26,9 +26,9 @@ const useStyles = makeStyles(() => ({
     flexShrink: 100,
   },
   drawerPaper: {
-    //  backgroundColor: dark ? "black" : "white",   
-      borderLeft: 0, 
-      boxShadow: "-5px 0 5px rgba(0, 0, 0, 0.1)",
+    //  backgroundColor: dark ? "black" : "white",
+    borderLeft: 0,
+    boxShadow: "-5px 0 5px rgba(0, 0, 0, 0.1)",
     backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
@@ -94,21 +94,24 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   useEffect(() => {
     // console.log(id);
-    const getById = async () => {
-      let response = await getCredsProfileById(rowId);
-      console.log("rowid", rowId);
-      const modifiedData = replaceDotsWithUnderscores(response.result);
-      console.log("data-----------------", modifiedData);
-      setData(modifiedData);
-    };
-    getById();
+    if (open) {
+      const getById = async () => {
+        let response = await getCredsProfileById(rowId);
+        console.log("rowid", rowId);
+        const modifiedData = replaceDotsWithUnderscores(response.result);
+        console.log("data-----------------", modifiedData);
+        setData(modifiedData);
+      };
+      getById();
 
-    const savedProtocolValue =
-      data && data.credential_context && data.credential_context.snmp_version
-        ? `${data.protocol}${data.credential_context.snmp_version}`
-        : data && data.protocol;
-    setProtocol(savedProtocolValue);
+      const savedProtocolValue =
+        data && data.credential_context && data.credential_context.snmp_version
+          ? `${data.protocol}${data.credential_context.snmp_version}`
+          : data && data.protocol;
+      setProtocol(savedProtocolValue);
+    }
   }, [open]);
+
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({
@@ -335,7 +338,6 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   return (
     <Drawer
- 
       anchor="right"
       open={props.open}
       variant="persistent"
@@ -346,12 +348,7 @@ const EditCredentialProfileDrawer = (props: any) => {
     >
       <div className="h-full  dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-          <p
-          
-            className="text-primary2 font-semibold"
-          >
-            Edit Credential Profile
-          </p>
+          <p className="text-primary2 font-semibold">Edit Credential Profile</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
             onClick={props.handleDrawerClose}
@@ -593,7 +590,7 @@ const EditCredentialProfileDrawer = (props: any) => {
                   </div>
                 </div>
                 <div className=" fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-                <div onClick={handleSNMPv3Save}>
+                  <div onClick={handleSNMPv3Save}>
                     <CustomeButton title="Save" />
                   </div>
                   <div onClick={handleDrawerClose}>

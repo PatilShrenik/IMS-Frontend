@@ -114,23 +114,6 @@ const CustomPagination = ({
           <span className="mx-2">
             {/* {startIndex}-{endIndex} of {totalCount} */}
             {renderPageNumbers()}
-            <button
-            className="mx-2"
-            // key={i}
-            // onClick={() => handlePageChange(i)}
-            // className={i === currentPage ? "active" : ""}
-            >
-              2
-            </button>
-
-            <button
-            className="mx-2"
-            // key={i}
-            // onClick={() => handlePageChange(i)}
-            // className={i === currentPage ? "active" : ""}
-            >
-              3
-            </button>
           </span>
           <button
             className="mx-[4px] cursor-pointer"

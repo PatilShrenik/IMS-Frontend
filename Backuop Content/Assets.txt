@@ -1,0 +1,85 @@
+   {/* <CustomeInput
+            label="Device Name"
+            name="device_name"
+            value={data.device_name}
+            onChange={handleInputChange}
+            type="text"
+            require={true}
+          /> */}
+             {/* <CustomeTextArea
+                label="Device Description"
+                name="description"
+                value={data.description}
+                onChange={handleInputChange}
+                rows="1"
+                require={true}
+              />
+              <SingleSelect
+                label="Select Country"
+                selectData={countryNames}
+                onChange={handleCountryDropdown}
+              />
+              <CustomeInput
+                label="Location"
+                name="location"
+                value={data.location}
+                onChange={handleInputChange}
+                type="text"
+                require={false}
+              /> */}
+                       {/* <CustomeInput
+                label="Service"
+                name="service"
+                value={data.service}
+                onChange={handleInputChange}
+                type="text"
+                require={false}
+              />
+              <CustomeInput
+                label="Latitudes"
+                name="latitude"
+                value={data.latitude}
+                onChange={handleInputChange}
+                type="text"
+                require={false}
+              />
+              <CustomeInput
+                label="Longitudes"
+                name="longitude"
+                value={data.longitude}
+                onChange={handleInputChange}
+                type="text"
+                require={false}
+              />
+              <SingleSelect
+                label="Select TimeZone"
+                selectData={tzCodes}
+                onChange={handleTimeZoneDropdown}
+              /> */}
+
+              {/* <FormControl style={{ margin: ".5rem" }}>
+                <RadioGroup
+                  style={{ display: "flex", flexDirection: "row" }}
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="auto_provision"
+                  value={data.auto_provision}
+                  onChange={handleRadioChange}
+                >
+                  <FormControlLabel
+                    className="dark:text-textColor"
+                    value="monitoring"
+                    control={
+                      <Radio size="small" className="dark:text-textColor" />
+                    }
+                    label="Auto Provision"
+                  />
+                  <FormControlLabel
+                    className="dark:text-textColor"
+                    value="discovery"
+                    control={
+                      <Radio size="small" className="dark:text-textColor" />
+                    }
+                    label="Discovery Only"
+                  />
+                </RadioGroup>
+              </FormControl> */}

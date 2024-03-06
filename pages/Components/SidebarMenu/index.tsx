@@ -269,7 +269,7 @@ const SidebarMenu = () => {
     },
   ];
 
-  console.log("idejbd", sidebarOpen);
+  // console.log("idejbd", sidebarOpen);
   return (
     <>
       {menuItems.map((menuItem, index) =>
