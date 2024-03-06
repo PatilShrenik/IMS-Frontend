@@ -48,6 +48,7 @@ import { CustomeButtonGroupButton } from "../Buttons";
 import { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
 import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
+import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 
 const AllDeviceTabel = (props: any) => {
   const {

@@ -75,3 +75,12 @@ export const CustomeButtonGroupButton = (props: any) => {
     </div>
   );
 };
+
+
+export const SubmitButton = (props: any) => {
+  return (
+    <button type = "submit" className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer">
+      {props.title}
+    </button>
+  );
+};

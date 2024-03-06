@@ -266,3 +266,11 @@ main::before {
     @apply text-neutral-600 dark:text-[#D8D8D8];
   }
 }
+.css-1betqn-MuiAccordionSummary-content {
+  display: flex;
+  justify-content: space-between;
+  /* -webkit-box-flex: 1;   
+    -ms-flex-positive: 1; */
+  flex-grow: 1;
+  margin: 12px 0;
+}

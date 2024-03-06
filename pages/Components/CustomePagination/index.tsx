@@ -54,8 +54,8 @@ const CustomPagination = ({
             onClick={() => handlePageChange(i)}
             className={
               i === currentPage
-                ? "text-black dark:text-textColor  bg-textColor dark:bg-[#3C3C3C] w-[20px] rounded"
-                : ""
+                ? "text-black dark:text-textColor  bg-textColor dark:bg-[#3C3C3C] w-[20px] rounded mr-2"
+                : " mr-2"
             }
           >
             {i}
@@ -80,7 +80,7 @@ const CustomPagination = ({
           <button
             key={i}
             onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "active" : ""}
+            className={`m-2 ${i === currentPage ? "active" : ""}`}
           >
             {i}
           </button>
