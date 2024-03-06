@@ -235,7 +235,7 @@ const EditIPAddress = (props: any) => {
               <CustomeInput
                 label="Host Name"
                 name="hostname"
-                value={data.hostname}
+                value={data && data.hostname}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
@@ -250,7 +250,7 @@ const EditIPAddress = (props: any) => {
               <CustomeInput
                 label="IP Address"
                 name="ip_address"
-                value={data.ip_address}
+                value={data && data.ip_address}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
@@ -265,7 +265,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Port"
               name="port"
-              value={data.port}
+              value={data && data.port}
               onChange={handleInputChange}
               type="text"
               require={true}
@@ -293,7 +293,7 @@ const EditIPAddress = (props: any) => {
               selectData={groupValues}
               onChange={handleGroupDropdown}
               require={true}
-              values={data.group}
+              values={data && data.group}
               isMulti={true}
             />
             {errorKeys && errorKeys.includes("groups") && (
@@ -306,7 +306,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Alias"
               name="alias"
-              value={data.alias}
+              value={data && data.alias}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -315,7 +315,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Site"
               name="site"
-              value={data.site}
+              value={data && data.site}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -334,7 +334,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="OEM"
               name="oem"
-              value={data.oem}
+              value={data && data.oem}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -342,7 +342,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Operating System"
               name="os"
-              value={data.os}
+              value={data && data.os}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -350,7 +350,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Vendor"
               name="vendor"
-              value={data.vendor}
+              value={data && data.vendor}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -358,7 +358,7 @@ const EditIPAddress = (props: any) => {
             <CustomeInput
               label="Operating System Version"
               name="os_version"
-              value={data.os_version}
+              value={data && data.os_version}
               onChange={handleInputChange}
               type="text"
               require={false}
@@ -370,7 +370,7 @@ const EditIPAddress = (props: any) => {
               control={
                 <Checkbox
                   className="dark:text-primary2"
-                  checked={data.flow_enabled}
+                  checked={data && data.flow_enabled}
                   onChange={handleCheckboxChange}
                 />
               }
@@ -387,13 +387,13 @@ const EditIPAddress = (props: any) => {
                 Auto Provision
               </Typography>
               <Switch
-                checked={data.auto_provision === "discovery"}
+                checked={data && data.auto_provision === "discovery"}
                 onChange={() =>
                   handleRadioChange({
                     target: {
                       name: "auto_provision",
                       value:
-                        data.auto_provision === "monitoring"
+                        data && data.auto_provision === "monitoring"
                           ? "discovery"
                           : "monitoring",
                     },

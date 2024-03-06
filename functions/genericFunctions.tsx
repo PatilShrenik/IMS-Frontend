@@ -26,6 +26,25 @@ export function replacePeriodsWithUnderscores(arrayOfObjects: any) {
     })
   );
 }
+export function replacePeriodsWithUnderscoresnested(obj: any) {
+  const result: any = {};
+
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        // If the value is an object, recursively replace periods in nested object
+        result[key.replace(/\./g, "_")] =
+          replacePeriodsWithUnderscoresSingleObject(obj[key]);
+      } else {
+        // Replace period with underscore
+        const newKey = key.replace(/\./g, "_");
+        result[newKey] = obj[key];
+      }
+    }
+  }
+
+  return result;
+}
 
 export function replaceUnderscoresWithDots(obj: any) {
   if (obj && typeof obj === "object") {

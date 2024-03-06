@@ -392,7 +392,7 @@ export const updateSingleDeviceManager = async (
 export const onBoardDeviceCsv = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(baseURL + "/api/v1/settings/device/csvUpload", {
+    const res = await fetch(baseURL + "/api/v1/settings/device/csv-upload", {
       method: "POST",
       body: JSON.stringify(props),
       headers: {

@@ -44,11 +44,12 @@ import {
 } from "@/functions/genericFunctions";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
-import { CustomeButtonGroupButton } from "../Buttons";
+import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
 import { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
 import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
 import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
+import UploadCSVDrawer from "../SideDrawers/UploadCSV";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -82,6 +83,7 @@ const AllDeviceTabel = (props: any) => {
   const [anchorE3, setAnchorE3] = useState(null);
   const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isCSVDrawerOpen, setICSVDrawerOpen] = useState(false);
   const [isAddSingleDrawerOpen, setIsAddSingleDrawerOpen] = useState(false);
   const [isAddMultipleDrawerOpen, setIsAddMultipleDrawerOpen] = useState(false);
   const open = Boolean(anchorE2);
@@ -280,6 +282,12 @@ const AllDeviceTabel = (props: any) => {
   };
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
+  };
+  const handleCSVDrawerOpen = () => {
+    setICSVDrawerOpen(true);
+  };
+  const handleCSVDrawerClose = () => {
+    setICSVDrawerOpen(false);
   };
 
   const isMenuOpen = Boolean(anchorEl);
@@ -537,16 +545,7 @@ const AllDeviceTabel = (props: any) => {
                     />
                     {/* )} */}
                   </div>
-                  <div className="flex items-center ml-2">
-                    {/* <p className="text-sm dark:text-textColor pr-1">
-                    Plugin Type Filter :{" "}
-                  </p>
-                  <div onClick={handleResetButtonClick} >
-                    <div className="mx-[2px] inline-flex items-center justify-center text-sm rounded-md py-1 px-3 text-center font-medium dark:text-textColor border border-primary2 hover:bg-primary2 cursor-pointer">
-                      Reset
-                    </div>
-                   {/* <PublishedWithChangesIcon onClick={handleResetButtonClick}/>  */}
-                  </div>
+
                   <div className="flex items-center">
                     <div>
                       <CustomeButtonGroupButton
@@ -594,6 +593,17 @@ const AllDeviceTabel = (props: any) => {
                         className="cursor-pointer mx-2"
                       />
                     </Tooltip>
+                    <div>
+                      <Button
+                        // onClick={handleDrawerOpen}
+                        variant="contained"
+                        className="bg-primary3 capitalize items-center ml-3"
+                        size="small"
+                      >
+                        {/* <AddIcon fontSize="small" className="mr-2" />  */}
+                        Profiling
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -731,7 +741,7 @@ const AllDeviceTabel = (props: any) => {
 
                 <div className="flex m-4 mr-0 ml-2 h-fit">
                   <Button
-                    // onClick={handleDrawerOpen}
+                    onClick={handleCSVDrawerOpen}
                     variant="contained"
                     className="bg-primary3 capitalize items-center"
                     size="small"
@@ -752,6 +762,10 @@ const AllDeviceTabel = (props: any) => {
                   <AddSingleDeviceDrawer
                     open={isDrawerOpen}
                     handleDrawerClose={handleDrawerClose}
+                  />
+                  <UploadCSVDrawer
+                    open={isCSVDrawerOpen}
+                    handleDrawerClose={handleCSVDrawerClose}
                   />
                 </div>
               </div>
