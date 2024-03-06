@@ -152,6 +152,7 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleAuthChange = (values: any) => {
     setAuthType(values);
+    
   };
   const handleFlagChange = (values: any) => {
     setMsgFlag(values);
@@ -268,7 +269,7 @@ const CredentialProfileDrawer = (props: any) => {
       console.log(error);
     }
   };
-  // console.log("open in cred prof", open);
+  // console.log("msg_flag",msg_flag );
 
   const handlesnmpSave = () => {
     // console.log("snmp object", snmpObject);

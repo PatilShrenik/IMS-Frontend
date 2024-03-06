@@ -2,7 +2,7 @@ import { baseURL } from "@/constants";
 
 export const login = async (props: any) => {
   try {
-    const res = await fetch(baseURL + "/api/v1/authenticate", {
+    const res = await fetch(baseURL + "/login", {
       method: "POST",
       body: JSON.stringify(props),
       headers: {
