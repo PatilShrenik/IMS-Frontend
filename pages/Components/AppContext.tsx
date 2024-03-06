@@ -21,7 +21,6 @@ const AppContext = createContext<{
   toggleThemeSwitch: () => void;
   getCredProfileApiState: boolean;
   togglegetCredProfileApiState: () => void;
-  
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},

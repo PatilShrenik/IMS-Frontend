@@ -11,6 +11,14 @@ import AddIcon from "@mui/icons-material/Add";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DashboardCustomizeRoundedIcon from "@mui/icons-material/DashboardCustomizeRounded";
+import Select from "react-select";
+import MultiSelectDropdown from "../Components/Selects/Multiselect";
+import { useAppContext } from "../Components/AppContext";
+import { CustomProvider, DatePicker, DateRangePicker } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
+
+import moment from "moment";
+
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -22,6 +30,125 @@ const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const open = Boolean(anchorEl);
+
+  //--------------------------------------code required for DateRangePicker-----------------------------
+  const { time, toggleTime } = useAppContext();
+  const { timeEnd, toggleTimeEnd } = useAppContext();
+  const [timePeriod, setTimePeriod] = React.useState<any>([
+    new Date(time),
+    new Date(timeEnd),
+  ]);
+  const today = moment();
+  const financialYearStartMonth = 3;
+  let financialYearStart;
+  let financialYearEnd;
+  if (today.month() < financialYearStartMonth) {
+    financialYearStart = moment()
+      .subtract(1, "year")
+      .month(financialYearStartMonth)
+      .startOf("month")
+      .hour(15)
+      .minute(30)
+      .second(0)
+      .millisecond(0);
+    financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
+  } else {
+    financialYearStart = moment()
+      .month(financialYearStartMonth)
+      .startOf("month")
+      .hour(15)
+      .minute(30)
+      .second(0)
+      .millisecond(0);
+    financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
+  }
+  const predefinedRanges: any = [
+    {
+      label: "Last day",
+
+      value: [
+        new Date(moment().subtract(1, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 7 days",
+
+      value: [
+        new Date(moment().subtract(7, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 15 days",
+
+      value: [
+        new Date(moment().subtract(15, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 30 days",
+
+      value: [
+        new Date(moment().subtract(30, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 90 days",
+
+      value: [
+        new Date(moment().subtract(90, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Last 120 days",
+
+      value: [
+        new Date(moment().subtract(120, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Last 180 days",
+
+      value: [
+        new Date(moment().subtract(180, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Current FY",
+      value: [
+        new Date(financialYearStart.format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(financialYearEnd.format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+      placement: "left",
+    },
+  ];
+  const { afterToday }: any = DateRangePicker;
+
+  //-----------------------------code required for DateRangePicker ENDS-----------------------------
 
   const widgets: Widget[] = [
     {
@@ -104,9 +231,71 @@ const index = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const options: any[] = [
+    { value: "apple", label: "Apple" },
+    { value: "banana", label: "Banana" },
+    { value: "cherry", label: "Cherry" },
+    { value: "grape", label: "Grape" },
+    { value: "kiwi", label: "Kiwi" },
+    { value: "orange", label: "Orange" },
+  ];
+
+  const { themeSwitch, toggleThemeSwitch } = useAppContext();
+
+  // Effect to update the color theme when it changes in localStorage
+
+  // console.log("colotheme", { colorTheme });
+
+  const isBrowser = typeof window !== "undefined";
+
+  // State to store the color theme
+  const [colorTheme, setColorTheme] = useState<any>(
+    isBrowser ? localStorage.getItem("color-theme") : null
+  );
+  useEffect(() => {
+    const handleStorageChange = () => {
+      console.log("Storage change detected");
+      const newColorTheme = localStorage.getItem("color-theme");
+      console.log("New color theme:", newColorTheme);
+      setColorTheme(newColorTheme);
+    };
+    handleStorageChange();
+  }, [themeSwitch]);
 
   return (
     <div>
+      {/* <div>
+        <Select
+          // onChange={(val: any) => setSelectedReportsDropDown(val)}
+          closeMenuOnSelect={false}
+          // value={selectedReportsDropDown}
+          // defaultValue={selectedReportsDropDown}
+          isMulti
+          options={options}
+          className="my-react-select-container w-[20rem] ml-4 z-10"
+          classNamePrefix="my-react-select"
+        />
+      </div> */}
+      {/* <div className="container mx-auto p-4">
+        <MultiSelectDropdown options={options} />
+      </div> */}
+      {/* <div className="w-[20rem] ml-4 mt-4"> */}
+        {/* <CustomProvider theme="dark"> */}
+        {/* <label className="dark:text-textColor">Select Date Range : </label>
+        <DateRangePicker
+          placement="auto"
+          value={timePeriod}
+          onChange={setTimePeriod}
+          ranges={predefinedRanges}
+          // showOneCalendar
+          style={{ width: "100%" }}
+          shouldDisableDate={afterToday()}
+          placeholder="Select Date Range"
+          format="yyyy-MM-dd"
+          className="hover:bg-gray-50 focus:bg-gray-50 dark:bg-card-color"
+        /> */}
+        {/* </CustomProvider> */}
+      {/* </div> */}
       <div
         onClick={handleButtonClick}
         className="rounded-2xl border-2 border-primary2 p-2 bottom-2 right-4 fixed cursor-pointer "

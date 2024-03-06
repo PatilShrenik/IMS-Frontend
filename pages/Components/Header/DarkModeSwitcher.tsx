@@ -5,10 +5,10 @@ import { useEffect } from "react";
 const DarkModeSwitcher = () => {
   const [colorMode, setColorMode] = useColorMode();
   const { themeSwitch, toggleThemeSwitch } = useAppContext();
-  // useEffect(() => {
-  //   console.log("theme", colorMode);
-  //   console.log("state", themeSwitch);
-  // });
+  useEffect(() => {
+    console.log("theme", colorMode);
+    console.log("state", themeSwitch);
+  });
   return (
     <li>
       <label
@@ -22,7 +22,7 @@ const DarkModeSwitcher = () => {
           onChange={() => {
             if (typeof setColorMode === "function") {
               setColorMode(colorMode === "light" ? "dark" : "light");
-              // toggleThemeSwitch();
+              toggleThemeSwitch();
             }
           }}
           className="dur absolute top-0 z-50 m-0 h-full w-full cursor-pointer opacity-0"
