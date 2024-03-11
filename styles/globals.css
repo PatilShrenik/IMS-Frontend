@@ -226,7 +226,6 @@ main::before {
   border-left: 0;
   box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
 }
-<<<<<<< HEAD
 
 .css-1betqn-MuiAccordionSummary-content {
   display: flex;
@@ -237,8 +236,6 @@ main::before {
   margin: 12px 0;
 }
 
-=======
->>>>>>> 9d21edaa32b8f16f82625b7dfcc4aa495893304f
 .css-79xub {
   background-color: none !important;
   color: none !important;
@@ -289,10 +286,8 @@ main::before {
   .my-react-select-container .my-react-select__single-value {
     @apply text-neutral-600 dark:text-[#D8D8D8];
   }
-<<<<<<< HEAD
 }
-=======
-}
+
 .css-1betqn-MuiAccordionSummary-content {
   display: flex;
   justify-content: space-between;
@@ -301,4 +296,3 @@ main::before {
   flex-grow: 1;
   margin: 12px 0;
 }
->>>>>>> 9d21edaa32b8f16f82625b7dfcc4aa495893304f
