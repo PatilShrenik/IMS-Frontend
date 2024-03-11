@@ -30,7 +30,7 @@ const Header = (props: {
     .join(" > ");
   // console.log("header path", path.substring(1));
   return (
-    <header className="sticky top-0 z-[100] h-[3rem] flex bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color  lg:translate-x-0">
+    <header className="absolute w-full top-0 z-[100] h-[3rem] flex bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color  lg:translate-x-0">
       {/* <div></div> */}
       <div className="flex flex-grow items-center justify-between px-2 py-4 shadow-2 ">
         <div className="flex ml-52">

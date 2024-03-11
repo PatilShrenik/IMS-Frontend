@@ -41,7 +41,7 @@ const Sidebar = () => {
       icon: (
         <DashboardOutlinedIcon
           className={` ${
-            pathname.includes("dashboard") && "text-primary2 dark:text-primary2"
+            pathname.includes("dashboard") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -53,7 +53,7 @@ const Sidebar = () => {
       icon: (
         <EqualizerIcon
           className={` ${
-            pathname.includes("Assets") && "text-primary2 dark:text-primary2"
+            pathname.includes("Assets") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -65,7 +65,7 @@ const Sidebar = () => {
       icon: (
         <NotificationsActiveIcon
           className={` ${
-            pathname.includes("alerts") && "text-primary2 dark:text-primary2"
+            pathname.includes("alerts") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -77,7 +77,7 @@ const Sidebar = () => {
       icon: (
         <CameraRoundedIcon
           className={` ${
-            pathname.includes("Topology") && "text-primary2 dark:text-primary2"
+            pathname.includes("Topology") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -89,7 +89,7 @@ const Sidebar = () => {
       icon: (
         <DataSaverOffIcon
           className={` ${
-            pathname.includes("explorer") && "text-primary2 dark:text-primary2"
+            pathname.includes("explorer") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -101,7 +101,7 @@ const Sidebar = () => {
       icon: (
         <AssignmentIcon
           className={` ${
-            pathname.includes("Reports") && "text-primary2 dark:text-primary2"
+            pathname.includes("Reports") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -113,8 +113,7 @@ const Sidebar = () => {
       icon: (
         <ConstructionIcon
           className={` ${
-            pathname.includes("diagnostics") &&
-            "text-primary2 dark:text-primary2"
+            pathname.includes("diagnostics") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -126,7 +125,7 @@ const Sidebar = () => {
       icon: (
         <Person2Icon
           className={` ${
-            pathname.includes("NCM") && "text-primary2 dark:text-primary2"
+            pathname.includes("NCM") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -138,7 +137,7 @@ const Sidebar = () => {
       icon: (
         <DynamicFormIcon
           className={` ${
-            pathname.includes("Audit") && "text-primary2 dark:text-primary2"
+            pathname.includes("Audit") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -150,8 +149,7 @@ const Sidebar = () => {
       icon: (
         <SettingsIcon
           className={` ${
-            pathname.includes("Settings") &&
-            "text-[#0078D4] dark:text-[#0078D4]"
+            pathname.includes("Settings") && ""
           } text-dark-menu-color dark:text-light-menu-color`}
           sx={{ color: "black", margin: "0 1.5rem" }}
         />
@@ -172,7 +170,7 @@ const Sidebar = () => {
   return (
     <aside
       ref={sidebar}
-      className={`left-0 top-0 w-[4rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+      className={`left-0 top-0 w-[4rem] flex  flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
         sidebarOpen && ""
       } `}
       // className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "

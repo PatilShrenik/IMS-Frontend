@@ -392,8 +392,6 @@ const CredentialProfileDrawer = (props: any) => {
       // hideBackdrop = {false}temporary
       anchor="right"
       open={props.open}
-      // transitionDuration
-      // className={classes.drawer}
       variant="temporary"
       classes={{
         paper: classes.drawerPaper,

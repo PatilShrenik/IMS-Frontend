@@ -4,7 +4,7 @@ export const getIndicatorMapper = async () => {
   const token = localStorage.getItem("token");
   let res: any;
   try {
-    res = await fetch(baseURL + "/api/v1/default/misc/indicatorMapper", {
+    res = await fetch(baseURL + "/api/v1/default/misc/indicator-mapper", {
       method: "GET",
       // body: JSON.stringify(props),
       headers: {

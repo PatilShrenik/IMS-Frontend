@@ -131,6 +131,25 @@ export const getDeviceByID = async (props: any) => {
   }
 };
 
+export const getDeviceByID2 = async (props: any) => {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(baseURL + `/api/v1/settings/device/`, {
+      method: "GET",
+      body: JSON.stringify(props),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    // console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const deleteSingleDevice = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
@@ -290,7 +309,7 @@ export const disableDeviceSingle = async (props: any) => {
 export const enableFlowSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(baseURL + `/api/v1/settings/device/enableFlow`, {
+    const res = await fetch(baseURL + `/api/v1/settings/device/enable-flow`, {
       method: "POST",
       body: JSON.stringify(props),
       headers: {
@@ -308,7 +327,7 @@ export const enableFlowSingle = async (props: any) => {
 export const disableFlowSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
-    const res = await fetch(baseURL + `/api/v1/settings/device/disableFlow`, {
+    const res = await fetch(baseURL + `/api/v1/settings/device/disable-flow`, {
       method: "POST",
       body: JSON.stringify(props),
       headers: {
@@ -475,7 +494,8 @@ export const getDeviceDetailsByID = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(
-      baseURL + `/api/v1/settings/device/discoveryContext/${props}`,
+      baseURL + `/api/v1/settings/device/discovery-context/13768359119604`,
+      // baseURL + `/api/v1/settings/device/discovery-context/${props}`,
       {
         method: "GET",
         // body: JSON.stringify(props),

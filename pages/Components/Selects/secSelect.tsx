@@ -3,37 +3,26 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const SecSingleSelect = (props: any) => {
-  const { label, selectData, onChange, require, value } = props;
-  const [selectFocused, setSelectFocused] = useState(false);
-console.log("val",value)
-  // useEffect(() => {
-  //   if(value) {
+  const { label, selectData, onChange, require, value, index, type } = props;
 
-  //   }
-  // },[value])
-  const selectRef = useRef(null) as any;
+  // console.log(index, type);
+  const [selectFocused, setSelectFocused] = useState(false);
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // console.log("single select", event.target.value);
     const selectedValue = event.target.value;
-
-    onChange(selectedValue);
-  };
-
-  const handleClickOutside = (event: any) => {
-    if (selectRef.current && !selectRef.current.contains(event.target)) {
-      setSelectFocused(false);
+    // console.log(index);
+    if (index === undefined) {
+      console.log("1");
+      onChange(selectedValue);
+    } else {
+      console.log("3");
+      onChange(index, type, selectedValue);
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
- // console.log("============", selectFocused, value);
   return (
-    <div className="flex items-center mx-4 my-4">
+    <div className="flex items-center mx-4 my-4 z-0">
       <div className="relative bg-white dark:bg-dark-menu-color dark:text-textColor">
         <select
           // ref={selectRef}
@@ -47,7 +36,13 @@ console.log("val",value)
           onFocus={() => setSelectFocused(true)}
           onBlur={() => setSelectFocused(false)}
         >
-         {/* <option >{label && label}</option> */}
+          {/* {selectFocused ? (
+            <option hidden disabled>
+              {label && label}
+            </option>
+          ) : (
+            <option>{label && label}</option>
+          )} */}
 
           {selectData &&
             selectData.map((item: any, index: any) => (
@@ -56,11 +51,10 @@ console.log("val",value)
                 key={index}
                 value={item.id ? item.id : item}
               >
-                {item.name ? item.name : item}
+                <p className="my-4">{item.name ? item.name : item}</p>
               </option>
             ))}
         </select>
-        {/* <div className="custom-arrow" /> */}
         {label && (
           <label
             className={`absolute transition-all pointer-events-none left-1 opacity-0 ${
@@ -70,10 +64,7 @@ console.log("val",value)
             {label} {require && "*"}
           </label>
         )}
-        {/* <ArrowDropDownIcon
-          style={{ fontSize: "8px" }}
-          className="absolute top-1/2 right-4 z-10 -translate-y-1/2 text-textColor dark:text-textColor"
-        /> */}
+
         <style jsx>{`
           .select-focused {
             border-color: #0078d4; /* Hide the border when focused */
@@ -89,27 +80,6 @@ console.log("val",value)
           }
         `}</style>
       </div>
-      {/* <div className="relative bg-white dark:bg-dark-container dark:text-textColor">
-        <select
-          className="relative z-20 w-[18rem]  border-b-[3px] dark:border-dark-border  py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2  dark:bg-dark-container dark:text-textColor"
-          onChange={handleSelectChange}
-          value={value && value}
-          multiple={false}
-        >
-          {selectData &&
-            selectData.map((item: any, index: any) => {
-              return (
-                <option key={index} value={item.id ? item.id : item}>
-                  {item.name ? item.name : item}
-                </option>
-              );
-            })}
-        </select>
-        <KeyboardArrowDownIcon
-          style={{ fontSize: "8px" }}
-          className="absolute top-1/2 right-4 z-10 -translate-y-1/2 text-textColor dark:text-textColor"
-        />
-      </div> */}
     </div>
   );
 };

@@ -61,7 +61,8 @@ const EditIPAddress = (props: any) => {
   const [errorKeys, setErrorKeys] = React.useState<any>([]);
   const [errors, setErrors] = React.useState<any>({});
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState([]);
+  const [groupselectedValue, setGroupSelectedValue] = useState([]);
   // Add your dialog content and functionality here
 
   React.useEffect(() => {
@@ -172,7 +173,10 @@ const EditIPAddress = (props: any) => {
 
   useEffect(() => {
     if (data && data.credential_profiles) {
-      setSelectedValue(data.credential_profiles[0]);
+      setSelectedValue(data.credential_profiles);
+    }
+    if (data && data.groups) {
+      setGroupSelectedValue(data.group);
     }
   }, [data]);
 
@@ -311,6 +315,7 @@ const EditIPAddress = (props: any) => {
                 (option) => option.value === selectedValue
               )}
               // defaultValue={data.credential_profiles[0]}
+              isMulti={true}
               required={true}
               options={credsProfileValues}
               className="my-react-select-container w-[18rem] rounded-lg  mx-4 my-4 z-999"
@@ -335,7 +340,10 @@ const EditIPAddress = (props: any) => {
 
             <Select
               onChange={handleGroupDropdown}
-              value={defaultSelectedOptions}
+              value={groupValues.find(
+                (option) => option.value === groupselectedValue
+              )}
+              // value={defaultSelectedOptions}
               isMulti={true}
               required={true}
               options={groupValues}

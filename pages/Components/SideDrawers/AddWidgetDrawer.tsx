@@ -27,27 +27,63 @@ const AddWidgetDrawer = (props: any) => {
 
   return (
     <Drawer
-      // hideBackdrop = {false}temporary
       anchor="right"
       open={open}
-      //   variant="persistent"
-      //   variant="permanent"
+      variant="permanent"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:bg-dark-menu-color"
     >
-      <div className="h-full w-full bg-white dark:bg-dark-menu-color">
-        <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-          <p className="text-primary2 font-semibold">Add Wdiget</p>
-          <CloseSharpIcon
-            className="cursor-pointer mr-3 dark:text-textColor"
-            onClick={handleAddDrawerClose}
-          />
-        </div>
-        <div className="py-6 px-6">
-          <Box sx={{ width: "100%", typography: "body1" }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "#3C3C3C" }}>
+      <div className="h-full w-full dark:bg-dark-menu-color bg-white ">
+        <Box sx={{ width: "100%", typography: "body1" }}>
+          <TabContext value={value}>
+            <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
+              <p className="text-primary2 font-semibold">Add Wdiget</p>
+              <div className="flex justify-between">
                 <TabList
+                  className="mr-16"
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label="Chart"
+                    value="chart"
+                    className="dark:text-textColor"
+                  />
+                  <Tab
+                    label="Grid"
+                    value="grid"
+                    className="dark:text-textColor"
+                  />
+                  <Tab
+                    label="TopN"
+                    value="topn"
+                    className="dark:text-textColor"
+                  />
+                  <Tab
+                    label="Gauge"
+                    value="gauge"
+                    className="dark:text-textColor"
+                  />
+                  {/* <Tab
+                    label="Sankey"
+                    value="sankey"
+                    className="dark:text-textColor"
+                  />
+                  <Tab
+                    label="Histogram"
+                    value="histogram"
+                    className="dark:text-textColor"
+                  /> */}
+                </TabList>
+                <CloseSharpIcon
+                  className="cursor-pointer mr-3 dark:text-textColor"
+                  onClick={handleAddDrawerClose}
+                />
+              </div>
+            </div>
+            <div className="py-6 px-6">
+              <Box>
+                {/* <TabList
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
@@ -81,19 +117,19 @@ const AddWidgetDrawer = (props: any) => {
                     value="histogram"
                     className="dark:text-textColor"
                   />
-                </TabList>
+                </TabList> */}
               </Box>
               <TabPanel style={{ padding: "0", height: "100%" }} value="chart">
-                {/* <ChartWidget /> */}
+                <ChartWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
               <TabPanel value="grid">Grid</TabPanel>
               <TabPanel value="topn">TopN</TabPanel>
               <TabPanel value="gauge">Gauge</TabPanel>
               <TabPanel value="sankey">Sankey</TabPanel>
               <TabPanel value="histogram">TopN</TabPanel>
-            </TabContext>
-          </Box>
-        </div>
+            </div>
+          </TabContext>
+        </Box>
       </div>
     </Drawer>
   );

@@ -10,10 +10,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Pagination } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import DashboardCustomizeRoundedIcon from "@mui/icons-material/DashboardCustomizeRounded";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
+import { CustomProvider, DateRangePicker } from "rsuite";
+import moment from "moment";
+import { useAppContext } from "../Components/AppContext";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -27,6 +27,139 @@ const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const open = Boolean(anchorEl);
+
+  const { time, toggleTime, timeEnd, toggleTimeEnd, themeSwitch } =
+    useAppContext();
+
+  const [timePeriod, setTimePeriod] = React.useState<any>([
+    new Date(time),
+    new Date(timeEnd),
+  ]);
+  const today = moment();
+  const financialYearStartMonth = 3;
+  let financialYearStart;
+  let financialYearEnd;
+  if (today.month() < financialYearStartMonth) {
+    financialYearStart = moment()
+      .subtract(1, "year")
+      .month(financialYearStartMonth)
+      .startOf("month")
+      .hour(15)
+      .minute(30)
+      .second(0)
+      .millisecond(0);
+    financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
+  } else {
+    financialYearStart = moment()
+      .month(financialYearStartMonth)
+      .startOf("month")
+      .hour(15)
+      .minute(30)
+      .second(0)
+      .millisecond(0);
+    financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
+  }
+  const predefinedRanges: any = [
+    {
+      label: "Last day",
+
+      value: [
+        new Date(moment().subtract(1, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 7 days",
+
+      value: [
+        new Date(moment().subtract(7, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 15 days",
+
+      value: [
+        new Date(moment().subtract(15, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 30 days",
+
+      value: [
+        new Date(moment().subtract(30, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+
+    {
+      label: "Last 90 days",
+
+      value: [
+        new Date(moment().subtract(90, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Last 120 days",
+
+      value: [
+        new Date(moment().subtract(120, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Last 180 days",
+
+      value: [
+        new Date(moment().subtract(180, "day").format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+
+      placement: "left",
+    },
+    {
+      label: "Current FY",
+      value: [
+        new Date(financialYearStart.format("YYYY-MM-DDTHH:mm:ss")),
+        new Date(financialYearEnd.format("YYYY-MM-DDTHH:mm:ss")),
+      ],
+      placement: "left",
+    },
+  ];
+  const { afterToday }: any = DateRangePicker;
+
+  const isBrowser = typeof window !== "undefined";
+
+  // State to store the color theme
+  const [colorTheme, setColorTheme] = useState<any>(
+    isBrowser ? localStorage.getItem("color-theme") : null
+  );
+  useEffect(() => {
+    const handleStorageChange = () => {
+      console.log("Storage change detected");
+      const newColorTheme = localStorage.getItem("color-theme");
+      console.log("New color theme:", newColorTheme);
+      setColorTheme(newColorTheme);
+    };
+    handleStorageChange();
+  }, [themeSwitch]);
 
   const widgets: Widget[] = [
     {
@@ -121,6 +254,18 @@ const index = () => {
 
   return (
     <div>
+      {/* <DateRangePicker
+        placement="auto"
+        value={timePeriod}
+        onChange={setTimePeriod}
+        ranges={predefinedRanges}
+        // showOneCalendar
+        style={{ width: "100%" }}
+        shouldDisableDate={afterToday()}
+        placeholder="Select Date Range"
+        format="yyyy-MM-dd"
+        className="hover:bg-gray-50 focus:bg-gray-50 dark:bg-card-color z-50"
+      /> */}
       <div
         onClick={handleButtonClick}
         className="rounded-2xl border-2 border-primary2 p-2 bottom-2 right-4 fixed cursor-pointer "
@@ -129,7 +274,7 @@ const index = () => {
       </div>
 
       <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
-        <div className="container h-full bg-light-container dark:bg-dark-container">
+        <div className="container h-full bg-white dark:bg-dark-container">
           <div className="flex border-b-2  justify-between py-2">
             <span className="px-4 font-bold dark:text-textColor">
               {" "}

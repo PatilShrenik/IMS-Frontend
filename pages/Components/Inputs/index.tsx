@@ -78,7 +78,7 @@ export const CustomeTextArea = (props: any) => {
               inputFocused || (value && value.length > 0) ? "input-focused" : ""
             }`}
             // type={type ? type : "text"}
-            // placeholder={!inputFocused ? `${label}${require ? " *" : ""}` : ""}
+            placeholder={!inputFocused ? `${label}${require ? " *" : ""}` : ""}
             required={require ? true : false}
             disabled={disable ? true : false}
             value={value ? value : ""}

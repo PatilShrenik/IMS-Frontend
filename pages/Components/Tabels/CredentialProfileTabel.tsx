@@ -12,6 +12,8 @@ import {
   TableSortLabel,
   Tooltip,
   Button,
+  Backdrop,
+  Fade,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -44,6 +46,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import DeleteModal from "../Modals/DeleteModal";
+import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
 const CredntialProfileTable = (props: any) => {
   const {
     data,
@@ -53,11 +56,7 @@ const CredntialProfileTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  //   const [data, setData] = useState<any>();
-  // const [columns, setColumns] = useState<any>();
-  //   const [page, setPage] = React.useState(0);
-  //   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  console.log("pageination", page, rowsPerPage);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
@@ -70,6 +69,8 @@ const CredntialProfileTable = (props: any) => {
   const [selected, setSelected] = useState(false);
   const [anchorE3, setAnchorE3] = useState(null);
   const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
+  const [currentDeviceIds, setCurrentDeviceIds] = useState([]);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
@@ -355,6 +356,14 @@ const CredntialProfileTable = (props: any) => {
     // handleMenuClose();
   };
 
+  const handleClickOpen = (deviceIds: any) => {
+    setDialogOpen(deviceIds);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   const isMenuOpen = Boolean(anchorEl);
 
   const processColumnData = (column: any, row: any) => {
@@ -371,17 +380,23 @@ const CredntialProfileTable = (props: any) => {
       return matchingGroup ? matchingGroup.name : row[column.field];
     } else if (column.field === "device_ids") {
       const deviceIds = row[column.field];
-      //   console.log("deviceids", deviceIds);
       return (
-        // <Chip
-        //   label={deviceIds.length}
-        //   className="pt-1 h-[22px] py-0 bg-primary2 dark:text-textColor dark:bg-dark-border"
-        // />
         <>
-          <Chips value={deviceIds.length} />
-          {/* <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2  rounded-full">
-            <p className="mt-[2px]">{deviceIds.length}</p>
-          </div> */}
+          <div
+            className={`${deviceIds.length > 0 ? "cursor-pointer" : ""}`}
+            onClick={
+              deviceIds.length > 0
+                ? () => handleClickOpen(deviceIds)
+                : undefined
+            }
+          >
+            <Chips value={deviceIds.length} />
+          </div>
+          <DeviceDetailsModal
+            open={dialogOpen === deviceIds}
+            handleDialogClose={handleDialogClose}
+            device_ids={deviceIds}
+          />
         </>
       );
       //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
@@ -480,7 +495,7 @@ const CredntialProfileTable = (props: any) => {
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
-                {selected ? (
+                  {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -522,7 +537,7 @@ const CredntialProfileTable = (props: any) => {
                         placement="top"
                       >
                         <DeleteForeverIcon
-                        //   onClick={deleteDevice}
+                          //   onClick={deleteDevice}
                           color="disabled"
                           className="cursor-pointer"
                           style={{

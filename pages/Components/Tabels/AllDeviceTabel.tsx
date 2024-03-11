@@ -12,48 +12,34 @@ import {
 import Zoom from "@mui/material/Zoom";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ClearIcon from "@mui/icons-material/Clear";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-// import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
 import {
   bulkActionDeviceDelete,
-  getAllDevice,
   runDiscovery,
 } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import {
-  bulkActionCredsProfileDelete,
-  getAllCredsProfile,
-} from "@/pages/api/api/CredentialProfileAPI";
-import {
-  convertEpochToDateMonthYear,
-  replacePeriodsWithUnderscores,
-} from "@/functions/genericFunctions";
-import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
+import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+import { convertEpochToDateMonthYear } from "@/functions/genericFunctions";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
-import CustomeButton, { CustomeButtonGroupButton } from "../Buttons";
+import { CustomeButtonGroupButton } from "../Buttons";
 import { StatusChips } from "../Chips";
 import DeleteModal from "../Modals/DeleteModal";
 import AssetsActionMenu from "../ActionMenu/AssetActionMenu";
 import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 import UploadCSVDrawer from "../SideDrawers/UploadCSV";
 import Link from "next/link";
+import DiscoveryContext from "../Modals/DiscoveryContextModal";
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -68,6 +54,7 @@ const AllDeviceTabel = (props: any) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
+  const [deviceIds, setDeviceIds] = useState() as any;
   const { toggleDeviceTableState } = useAppContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState([]) as any;
@@ -82,8 +69,15 @@ const AllDeviceTabel = (props: any) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCSVDrawerOpen, setICSVDrawerOpen] = useState(false);
   const [isModalopen, setIsModalOpen] = React.useState(false);
+  const [isContextModalopen, setIsContextModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
+
+  const handleContextModalOpen = (rowId: any) => {
+    setIsContextModalOpen(rowId);
+  };
+
+  const handleContextModalClose = () => setIsContextModalOpen(false);
 
   const groupValues =
     allGroups &&
@@ -207,7 +201,7 @@ const AllDeviceTabel = (props: any) => {
       const matchesButtons =
         selectedButtons.length === 0 ||
         selectedButtons.some((button: any) => row["plugin_type"] === button);
-      console.log("matched button", row["plugin_type"]);
+      // console.log("matched button", row["plugin_type"]);
       return matchesSearch && matchesButtons;
     });
 
@@ -387,42 +381,61 @@ const AllDeviceTabel = (props: any) => {
           </>
         );
       }
-    } else if (column.field === "flow_enabled") {
-      if (row[column.field] == "yes") {
-        return (
-          <>
-            <Tooltip title="OnLine" placement="top-end">
-              <div className="flex items-center">
-                {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <CheckCircleOutlineIcon
-                  fontSize="large"
-                  className="text-success"
-                  style={{ fontSize: "1.5rem" }}
-                />
-              </div>
-            </Tooltip>
-            {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
-          </>
-        );
-      } else if (row[column.field] == "no") {
-        return (
-          <>
-            <Tooltip title="Offline" placement="top-end">
-              <div className=" flex items-center">
-                {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <HighlightOffIcon
-                  className="text-danger"
-                  fontSize="large"
-                  style={{ fontSize: "1.5rem" }}
-                />
-              </div>
-            </Tooltip>
+    } else if (column.field == "hostname") {
+      const value = row[column.field];
+      return (
+        <>
+          <p
+            className="cursor-pointer underline"
+            onClick={() => handleContextModalOpen(row._id)}
+          >
+            {value}
+          </p>
+          <DiscoveryContext
+            open={isContextModalopen === row._id}
+            handleModalClose={handleContextModalClose}
+            deviceIds={row._id}
+          />
+        </>
+      );
+    }
+    // else if (column.field === "flow_enabled") {
+    //   if (row[column.field] == "yes") {
+    //     return (
+    //       <>
+    //         <Tooltip title="OnLine" placement="top-end">
+    //           <div className="flex items-center">
+    //             {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
+    //             <CheckCircleOutlineIcon
+    //               fontSize="large"
+    //               className="text-success"
+    //               style={{ fontSize: "1.5rem" }}
+    //             />
+    //           </div>
+    //         </Tooltip>
+    //         {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
+    //       </>
+    //     );
+    //   } else if (row[column.field] == "no") {
+    //     return (
+    //       <>
+    //         <Tooltip title="Offline" placement="top-end">
+    //           <div className=" flex items-center">
+    //             {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
+    //             <HighlightOffIcon
+    //               className="text-danger"
+    //               fontSize="large"
+    //               style={{ fontSize: "1.5rem" }}
+    //             />
+    //           </div>
+    //         </Tooltip>
 
-            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
-          </>
-        );
-      }
-    } else if (
+    //         {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
+    //       </>
+    //     );
+    //   }
+    // }
+    else if (
       column.field === "timestamp" ||
       column.field == "last_discovered_on"
     ) {
@@ -614,7 +627,7 @@ const AllDeviceTabel = (props: any) => {
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
-                        title="Delete selected credentials"
+                        title="Delete selected Assets"
                         placement="top"
                       >
                         <DeleteForeverIcon
@@ -632,7 +645,7 @@ const AllDeviceTabel = (props: any) => {
                       />
                       <Tooltip
                         TransitionComponent={Zoom}
-                        title="Download selected credentials"
+                        title="Download selected Assets"
                         placement="top"
                       >
                         <FileDownloadIcon
@@ -648,7 +661,7 @@ const AllDeviceTabel = (props: any) => {
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
-                        title="Delete selected credentials (Disabled)"
+                        title="Delete selected Assets (Disabled)"
                         placement="top"
                       >
                         <DeleteForeverIcon
@@ -662,7 +675,7 @@ const AllDeviceTabel = (props: any) => {
                       </Tooltip>
                       <Tooltip
                         TransitionComponent={Zoom}
-                        title="Download selected credentials (Disabled)"
+                        title="Download selected Assets (Disabled)"
                         placement="top"
                       >
                         <FileDownloadIcon
@@ -741,7 +754,7 @@ const AllDeviceTabel = (props: any) => {
                 {/* Add Device Menu and Model */}
 
                 <div className="flex m-4 mr-0 ml-2 h-fit">
-                  <div>
+                  {/* <div>
                     <Link href="/Assets/profiling">
                       <Button
                         // onClick={handleDrawerOpen}
@@ -749,11 +762,10 @@ const AllDeviceTabel = (props: any) => {
                         className="bg-primary3 capitalize items-center ml-3"
                         size="small"
                       >
-                        {/* <AddIcon fontSize="small" className="mr-2" />  */}
                         Profiling
                       </Button>
                     </Link>
-                  </div>
+                  </div> */}
                   <Button
                     onClick={handleCSVDrawerOpen}
                     variant="contained"
@@ -796,7 +808,7 @@ const AllDeviceTabel = (props: any) => {
             }}
           >
             <div className="max-h-440 ">
-              <table className="w-full border-collapse overflow-x-scroll">
+              <table className="w-full border-collapse overflow-x-auto">
                 <thead>
                   <tr>
                     <th
@@ -880,7 +892,7 @@ const AllDeviceTabel = (props: any) => {
                         );
                       })}
                     <th
-                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                      className=" bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
                       style={{
                         padding: "0px 8px",
                         fontSize: "14px",
@@ -1020,6 +1032,11 @@ const AllDeviceTabel = (props: any) => {
               </table>
             </div>
           </div>
+          {/* <DeleteModal
+            open={isContextModalopen}
+            handleModalClose={handleContextModalClose}
+            deviceIds={deviceIds}
+          /> */}
         </>
       )}
     </>

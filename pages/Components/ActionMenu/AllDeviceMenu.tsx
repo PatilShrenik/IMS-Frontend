@@ -23,8 +23,7 @@ const AllDeviceMenu = (props: any) => {
   };
   const handleModalClose = () => setIsModalOpen(false);
   const { id } = props;
-  const { togglegetCredProfileApiState } =
-    useAppContext();
+  const { togglegetCredProfileApiState } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
@@ -46,7 +45,7 @@ const AllDeviceMenu = (props: any) => {
   };
 
   const handleDeleteClick = async (rowId: number) => {
-     console.log("DeleteId - device", rowId);
+    console.log("DeleteId - device", rowId);
 
     try {
       const response = await deleteSingleDevice(rowId);
@@ -64,7 +63,7 @@ const AllDeviceMenu = (props: any) => {
           theme: "colored",
           transition: Bounce,
         });
-      }  else {
+      } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
@@ -77,13 +76,10 @@ const AllDeviceMenu = (props: any) => {
           transition: Bounce,
         });
       }
-
-
     } catch (error) {
       console.log(error);
     }
     handleClose();
-   
   };
 
   return (
@@ -103,6 +99,11 @@ const AllDeviceMenu = (props: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            backgroundColor: "transparent",
+          },
+        }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",

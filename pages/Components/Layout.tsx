@@ -104,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
                 <Breadcrumb />
               </div> */}
             </div>
-            <div className="mt-2">{children}</div>
+            <div className="mt-12 ">{children}</div>
           </div>
         </main>
         {/* <Footer /> */}

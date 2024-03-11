@@ -104,8 +104,7 @@ const EditCredentialProfileDrawer = (props: any) => {
         : `${data.protocol}`;
     setProtocol(savedProtocolValue);
   }, [open]);
-  console.log("data---------", data);
-  console.log("protocol---------", protocol);
+
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({

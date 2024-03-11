@@ -233,6 +233,11 @@ const AssetsActionMenu = (props: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            backgroundColor: "transparent",
+          },
+        }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",

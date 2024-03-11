@@ -43,10 +43,10 @@ import {
 } from "@/functions/genericFunctions";
 
 import Link from "next/link";
-import { useAppContext } from "../Components/AppContext";
-import DeleteModal from "../Components/Modals/DeleteModal";
-import { StatusChips } from "../Components/Chips";
-import CustomPagination from "../Components/CustomePagination";
+import { useAppContext } from "../../../Components/AppContext";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
+import { StatusChips } from "../../../Components/Chips";
+import CustomPagination from "../../../Components/CustomePagination";
 
 const Profiling = () => {
   const [order, setOrder] = useState("asc");

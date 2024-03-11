@@ -13,7 +13,7 @@ const CustomPagination = ({
   onPageChange,
   onRowsPerPageChange,
 }: any) => {
-  const [age, setAge] = React.useState("10");
+  const [age, setAge] = React.useState("5");
 
   const totalPages = Math.ceil(totalCount / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage + 1;

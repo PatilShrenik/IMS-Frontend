@@ -42,8 +42,10 @@ const Assets = () => {
         const col = Object.keys(
           modifiedData[indexOfObjectWithAvailabilityContext]
         );
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        // console.log(filteredCols);
+        let filteredCols = col.filter((key: any) => !key.startsWith("_"));
+        filteredCols = col.filter((key: any) => key !== "flow_enabled");
+
+        console.log(filteredCols);
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "availability_context") {
@@ -62,6 +64,24 @@ const Assets = () => {
                 headerName: "timestamp",
                 minWidth: 120,
               });
+            } else if (key == "hostname") {
+              cols.unshift({
+                field: key.replace(/\./g, "_"),
+                headerName: "Host Name",
+                minWidth: 150,
+              });
+            } else if (key == "ip_address") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: "IP Address",
+                minWidth: 150,
+              });
+            } else if (key == "alias") {
+              cols.push({
+                field: key.replace(/\./g, "_"),
+                headerName: "Alias",
+                minWidth: 150,
+              });
             } else if (key == "port") {
               cols.push({
                 field: key.replace(/\./g, "_"),
@@ -73,12 +93,6 @@ const Assets = () => {
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
                 minWidth: 200,
-              });
-            } else if (key == "hostname") {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: "Host Name",
-                minWidth: 150,
               });
             } else {
               cols.push({
@@ -109,8 +123,13 @@ const Assets = () => {
         }
         cols.push({
           field: "last_availability_on",
-          headerName: "Last Avaiable On",
+          headerName: "Last Available On",
           minWidth: 120,
+        });
+        cols.push({
+          field: "last_availability_checked_on",
+          headerName: "Last Availability checked On",
+          minWidth: 250,
         });
         console.log("cols", cols);
         setColumns(cols);
@@ -123,7 +142,7 @@ const Assets = () => {
           "profile_type",
           "port",
           "credential_profiles",
-          "hostname",
+          // "hostname",
           "availability_interval",
           // "flow_enabled",
           "auto_provision",
@@ -179,7 +198,7 @@ const Assets = () => {
   return (
     <>
       <ToastContainer />
-      <div className="w-full">
+      <div className="w-full ">
         {/* <PageHeading heading="Credential Profile" /> */}
         <AllDeviceTabel
           data={data}

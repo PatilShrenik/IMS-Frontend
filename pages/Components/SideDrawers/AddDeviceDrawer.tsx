@@ -494,7 +494,7 @@ const IPAddress = (props: any) => {
               selectData={credsProfileValues}
               onChange={handleCredProfile}
               require={true}
-              isMulti={false}
+              isMulti={true}
             />
             {errorKeys && errorKeys.includes("credential.profiles") && (
               <p className="text-danger text-sm ml-2">
@@ -831,7 +831,7 @@ const IPRange = (props: any) => {
           <div className="grid grid-flow-row-dense grid-cols-4">
             <div className="flex flex-col">
               <CustomeInput
-                label="Host Name"
+                label="Name"
                 name="hostname"
                 value={data.hostname}
                 onChange={handleInputChange}
@@ -891,6 +891,7 @@ const IPRange = (props: any) => {
               selectData={credsProfileValues}
               onChange={handleCredProfile}
               require={true}
+              isMulti={true}
             />
             {errorKeys && errorKeys.includes("credential.profiles") && (
               <p className="text-danger text-sm ml-2">
@@ -904,6 +905,7 @@ const IPRange = (props: any) => {
               selectData={groupValues}
               onChange={handleGroupDropdown}
               require={true}
+              isMulti={true}
             />
             {errorKeys && errorKeys.includes("groups") && (
               <p className="text-danger text-sm ml-2">
@@ -1226,7 +1228,7 @@ const CIDR = (props: any) => {
           <div className="grid grid-flow-row-dense grid-cols-4">
             <div className="flex flex-col">
               <CustomeInput
-                label="Host Name"
+                label="Name"
                 name="hostname"
                 value={data.hostname}
                 onChange={handleInputChange}
@@ -1286,6 +1288,7 @@ const CIDR = (props: any) => {
               selectData={credsProfileValues}
               onChange={handleCredProfile}
               require={true}
+              isMulti={true}
             />
             {errorKeys && errorKeys.includes("credential.profiles") && (
               <p className="text-danger text-sm ml-2">
@@ -1299,6 +1302,7 @@ const CIDR = (props: any) => {
               selectData={groupValues}
               onChange={handleGroupDropdown}
               require={true}
+              isMulti={true}
             />
             {errorKeys && errorKeys.includes("groups") && (
               <p className="text-danger text-sm ml-2">

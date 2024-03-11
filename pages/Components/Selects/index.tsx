@@ -10,9 +10,9 @@ const SingleSelect = (props: any) => {
       : data.value;
 
     onChange(selectedValue);
+    console.log("============", selectData, selectedValue, value);
   };
 
-  console.log("============", selectData, value);
   return (
     <Select
       onChange={handleSelectChange}
