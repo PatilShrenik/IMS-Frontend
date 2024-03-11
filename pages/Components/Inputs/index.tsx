@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const CustomeInput = (props: any) => {
   const { type, require, disable, name, onChange } = props;
   // console.log("value.length", value && value.length);
@@ -131,3 +134,30 @@ export const CustomeTextArea = (props: any) => {
     </>
   );
 };
+
+
+export function DateInput(props: any) {
+  const [epochTime, setEpochTime] = React.useState(0);
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      const Time = dayjs(date).unix();
+      setEpochTime(Time);
+    }
+  };
+  React.useEffect(() => {
+    props.onChange(epochTime);
+  }, [epochTime, props]);
+  const dateObject = new Date(props.value * 1000);
+  return (
+    <>
+      {/* <lable>Select Date</lable> */}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label={props.label ? props.label : ""}
+          value={props.value ? dateObject : props.value}
+          onChange={handleDateChange}
+        />
+      </LocalizationProvider>
+    </>
+  );
+}

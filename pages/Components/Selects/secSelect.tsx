@@ -64,7 +64,6 @@ const SecSingleSelect = (props: any) => {
             {label} {require && "*"}
           </label>
         )}
-
         <style jsx>{`
           .select-focused {
             border-color: #0078d4; /* Hide the border when focused */

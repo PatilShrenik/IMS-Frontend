@@ -4,8 +4,8 @@ const Chips = (props: any) => {
   const { value } = props;
   // console.log("chip value", value);
   return (
-    <div className=" items-center h-[25px] w-[35px] border-[3px] border-primary2 text-primary2  rounded-full">
-      <p className="mt-[1px] text-sm">{value}</p>
+    <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2  rounded-full">
+      <p className="mt-[2px] text-sm">{value}</p>
     </div>
   );
 };

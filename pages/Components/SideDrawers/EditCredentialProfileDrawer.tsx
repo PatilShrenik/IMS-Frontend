@@ -104,7 +104,8 @@ const EditCredentialProfileDrawer = (props: any) => {
         : `${data.protocol}`;
     setProtocol(savedProtocolValue);
   }, [open]);
-
+  console.log("data---------", data);
+  console.log("protocol---------", protocol);
   useEffect(() => {
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       setSnmpObject({
@@ -202,7 +203,7 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const handleSSHSave = async () => {
     // console.log("snmp object", snmpObject);
-    const modifiedData = replaceUnderscoresWithDotsNested(sshObject);
+    const modifiedData = replaceUnderscoresWithDotsNested(data);
     // console.log("ssh object", modifiedData);
 
     let response = await updateCredsProfile(modifiedData, modifiedData._id);
@@ -408,7 +409,7 @@ const EditCredentialProfileDrawer = (props: any) => {
         <div className="py-8 px-6">
           <form onSubmit={handleSave}>
             <div className="flex">
-              {protocol == "SSH" ? (
+            {protocol == "SSH" ? (
                 <CustomeInput
                   label="Profile Name"
                   name="name"
@@ -429,6 +430,7 @@ const EditCredentialProfileDrawer = (props: any) => {
                   require={true}
                 />
               )}
+            
 
               <SecSingleSelect
                 label="Protocol"
@@ -481,7 +483,14 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SecSingleSelect
                           label="Authentication Protocol"
-                          selectData={["Select", "MD5", "SHA"]}
+                          selectData={[  
+                            { value: "no.auth", label: "None" },
+                          { value: "MD5", label: "MD5" },
+                          { value: "SHA", label: "SHA" },
+                          { value: "SHA224", label: "SHA224" },
+                          { value: "SHA256", label: "SHA256" },
+                          { value: "SHA384", label: "SHA384" },
+                          { value: "SHA512", label: "SHA512" },]}
                           onChange={handleAuthChange}
                           require={false}
                         />
@@ -505,7 +514,14 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SecSingleSelect
                           label="Privacy Protocol"
-                          selectData={["Select", "AES", "DES"]}
+                          selectData={[{ value: "no.priv", label: "None" },
+                            
+                          { value: "DES", label: "DES" },
+                          { value: "AES", label: "AES" },
+                          { value: "AES192", label: "AES192" },
+                          { value: "AES256", label: "AES256" },
+                          { value: "AES192C", label: "AES192C" },
+                          { value: "AES256C", label: "AES265C" }]}
                           onChange={handleEncryptChange}
                           require={false}
                         />
@@ -530,7 +546,13 @@ const EditCredentialProfileDrawer = (props: any) => {
                       {/* <div className="flex flex-col items-start mx-2"> */}
                       <SecSingleSelect
                         label="Authentication Protocol"
-                        selectData={["Select", "MD5", "SHA"]}
+                        selectData={[ { value: "no.auth", label: "None" },
+                        { value: "MD5", label: "MD5" },
+                        { value: "SHA", label: "SHA" },
+                        { value: "SHA224", label: "SHA224" },
+                        { value: "SHA256", label: "SHA256" },
+                        { value: "SHA384", label: "SHA384" },
+                        { value: "SHA512", label: "SHA512" }]}
                         onChange={handleAuthChange}
                         require={false}
                       />

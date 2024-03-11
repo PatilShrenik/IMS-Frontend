@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   InputBase,
   IconButton,
@@ -12,42 +12,27 @@ import {
   TableSortLabel,
   Tooltip,
   Button,
-  Backdrop,
-  Fade,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+import AddIcon from "@mui/icons-material/Add";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
+import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
-// import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
-import { useAppContext } from "../AppContext";
-import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
-import { getAllGropus } from "@/pages/api/api/GroupsAPI";
-import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import {
-  bulkActionCredsProfileDelete,
-  deleteCredsProfile,
-  getAllCredsProfile,
-} from "@/pages/api/api/CredentialProfileAPI";
-import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
-import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
-import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
-import CustomeButton, { CustomeCancelButton } from "../Buttons";
-import Chips from "../Chips";
+import { deleteBulkDiscoverySch, getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import DeleteForever from "@mui/icons-material/DeleteForever";
+import DiscoverySchedularDrawer from "@/pages/Components/SideDrawers/DiscoverySchedularDrawer";
+import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import DeleteModal from "../Modals/DeleteModal";
-import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
-const CredntialProfileTable = (props: any) => {
+import { useAppContext } from "../AppContext";
+import DiscoverySchedularMenu from "../ActionMenu/DiscoverySchedularMenu";
+
+
+const DiscoverySchedularTable = (props: any) => {
   const {
     data,
     visibleColumns,
@@ -56,30 +41,28 @@ const CredntialProfileTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  console.log("pageination", page, rowsPerPage);
+  const [selected, setSelected] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [order, setOrder] = useState("asc");
+  const [allGroupPrfile, setAllGroupProfile] = React.useState([]);
+  const [allDevicePrfile, setAllDeviceProfile] = React.useState([]);
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
-  //   const [visibleColumns, setVisibleColumns] = useState<any>([]);
+  const [allDevices, setAllDevices] = React.useState([]);
+  const [allGroups, setAllGroups] = React.useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [allDevices, setAllDevices] = React.useState([]);
-  const [allGroups, setAllGroups] = React.useState([]);
-  const [selected, setSelected] = useState(false);
-  const [anchorE3, setAnchorE3] = useState(null);
-  const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
-  const [currentDeviceIds, setCurrentDeviceIds] = useState([]);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isMenuOpen = Boolean(anchorEl);
+  const { togglegetDisSchedApiState } = useAppContext();
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
 
-  const [isAddMultipleDialogOpen, setIsAddMultipleDialogOpen] = useState(false);
-  const open = Boolean(anchorE2);
-  const { togglegetCredProfileApiState } = useAppContext();
-  const ITEM_HEIGHT = 48;
+  // console.log("data", data);
+  // console.log("col", columns);
+  // console.log("vis col", visibleColumns);
+
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
@@ -92,7 +75,6 @@ const CredntialProfileTable = (props: any) => {
       name: item.hostname,
       id: item._id,
     }));
-
   React.useEffect(() => {
     const getCredsProfile = async () => {
       let response = await getAllDevice();
@@ -104,108 +86,13 @@ const CredntialProfileTable = (props: any) => {
       setAllGroups(response.result);
     };
     getGroups();
-    const getDiscoveryScheduler = async () => {
-      let response = await getAllDiscoverySch();
-      // setAllDiscoverySch(response.result);
-    };
-    getDiscoveryScheduler();
   }, []);
-
-  //   useEffect(() => {
-  //     try {
-  //       const getData = async () => {
-  //         let cols: any = [];
-  //         let response = await getAllCredsProfile();
-  //         const modifiedData = replacePeriodsWithUnderscores(response.result);
-  //         console.log("modifidData", modifiedData);
-  //         const col = Object.keys(modifiedData[0]);
-  //         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-  //         console.log("filtered cols", filteredCols);
-  //         filteredCols.filter((key: any) => {
-  //           if (!key.startsWith("_")) {
-  //             if (key == "credential_context") {
-  //               cols.push({
-  //                 field: "snmp_community",
-  //                 headerName: "SNMP Comm.",
-  //                 minWidth: 80,
-  //               });
-  //               cols.push({
-  //                 field: "snmp_version",
-  //                 headerName: "SNMP Version",
-  //                 minWidth: 80,
-  //               });
-  //             } else if (key == "device_ids") {
-  //               cols.push({
-  //                 field: "device_ids",
-  //                 headerName: "Devices",
-  //                 minWidth: 150,
-  //               });
-  //             } else {
-  //               cols.push({
-  //                 field: key.replace(/\./g, "_"),
-  //                 headerName: key.replace(/\./g, " "),
-  //                 minWidth: 110,
-  //               });
-  //             }
-  //           }
-  //         });
-
-  //         console.log("cols", cols);
-  //         setColumns(cols);
-  //         console.log("rows", modifiedData);
-  //         const hiddenColumnsValues = [
-  //           "snmp_community",
-  //           "snmp_version",
-  //           "created_by",
-  //           "created_on",
-  //           "updated_by",
-  //           "updated_on",
-  //         ];
-
-  //         setVisibleColumns(
-  //           cols
-  //             .map((column: any) => column.field)
-  //             .filter((field: any) => !hiddenColumnsValues.includes(field))
-  //         );
-
-  //         setData(modifiedData);
-  //       };
-  //       getData();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, []);
-
-  const handleRequestSort = (property: any) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
   };
-
-  const handleSearchChange = (event: any) => {
-    setSearch(event.target.value);
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
   };
-
-  const handleColumnToggle = (columnField: any) => {
-    setVisibleColumns((prevVisibleColumns: any) => {
-      if (prevVisibleColumns.includes(columnField)) {
-        return prevVisibleColumns.filter((field: any) => field !== columnField);
-      } else {
-        return [...prevVisibleColumns, columnField];
-      }
-    });
-  };
-
-  const handleRowCheckboxToggle = (rowId: any) => {
-    setSelectedRows((prevSelectedRows: any) => {
-      if (prevSelectedRows.includes(rowId)) {
-        return prevSelectedRows.filter((id: any) => id !== rowId);
-      } else {
-        return [...prevSelectedRows, rowId];
-      }
-    });
-  };
-
   const handleSelectAllCheckboxToggle = () => {
     if (selectAll) {
       setSelectedRows([]);
@@ -216,6 +103,11 @@ const CredntialProfileTable = (props: any) => {
     setSelectAll(!selectAll);
   };
 
+  const handleRequestSort = (property: any) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
   useEffect(() => {
     if (selectedRows.length != 0) {
       setSelected(true);
@@ -224,15 +116,85 @@ const CredntialProfileTable = (props: any) => {
     }
   }, [selectedRows]);
 
-  const deleteDevice = async () => {
+
+  const stableSort = (array: any, comparator: any) => {
+    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+    stabilizedThis.sort((a: any, b: any) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el: any) => el[0]);
+  };
+
+  const getComparator = (order: any, orderBy: any) => {
+    return order === "desc"
+      ? (a: any, b: any) => descendingComparator(a, b, orderBy)
+      : (a: any, b: any) => -descendingComparator(a, b, orderBy);
+  };
+
+  const handleMenuOpen = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleColumnToggle = (columnField: any) => {
+    setVisibleColumns((prevVisibleColumns: any) => {
+      if (prevVisibleColumns.includes(columnField)) {
+        return prevVisibleColumns.filter((field: any) => field !== columnField);
+      } else {
+        return [...prevVisibleColumns, columnField];
+      }
+    });
+  };
+  const handleMenuItemClick = (columnField: any) => {
+    //console.log("clicked");
+    handleColumnToggle(columnField);
+    // handleMenuClose();
+  };
+  const filteredData =
+    data &&
+    data.filter((row: any) => {
+      return visibleColumns.some(
+        (columnField: any) =>
+          typeof row[columnField] === "string" &&
+          row[columnField].toLowerCase().includes(search.toLowerCase())
+      );
+    });
+
+  const descendingComparator = (
+    a: { [x: string]: number },
+    b: { [x: string]: number },
+    orderBy: string | number
+  ) => {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  };
+  const handleRowCheckboxToggle = (rowId: any) => {
+    setSelectedRows((prevSelectedRows: any) => {
+      if (prevSelectedRows.includes(rowId)) {
+        return prevSelectedRows.filter((id: any) => id !== rowId);
+      } else {
+        return [...prevSelectedRows, rowId];
+      }
+    });
+  };
+  const deleteDiscoverySch = async () =>{
     console.log("delete array", selectedRows);
     try {
-      let response = await bulkActionCredsProfileDelete(selectedRows);
+      let response = await deleteBulkDiscoverySch(selectedRows);
 
       if (response.status == "success") {
         handleModalClose();
 
-        togglegetCredProfileApiState();
+       togglegetDisSchedApiState();
 
         toast.success(response.message, {
           position: "bottom-right",
@@ -262,8 +224,34 @@ const CredntialProfileTable = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
+  const processColumnData = (column: any, row: any) => {
+    if (column.field === "entity_type") {
+      const entity_type = row[column.field];
+     // console.log("ent_type", entity_type);
+      // Find the corresponding object in groupValues array
+      if (entity_type === "GROUP") {
+        const groupId = row.entities;
+        // Find the corresponding object in groupValues array
+        // const matchingGroup: any = groupValues.find(
+        //   (group: any) => group.id === groupId[0]
+        // );
+        // console.log("entities", matchingGroup.name);
+        const matchingNames: string[] = groupId.map((id: any) => {
+          const matchingGroup: any = groupValues.find((group: any) => group.id === id);
+          return matchingGroup ? matchingGroup.name : null;
+        });
+       // console.log("entities", matchingNames);
+ 
+      }
+      if (entity_type === "DEVICE"){
+        const deviceId = row.entities;
+
+      }
+    }
+    return row[column.field] == "" ? "-" : row[column.field];
+  };
   const downloadCSV = () => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
@@ -291,181 +279,15 @@ const CredntialProfileTable = (props: any) => {
     }
   };
 
-  const filteredData =
-    data &&
-    data.filter((row: any) => {
-      return visibleColumns.some(
-        (columnField: any) =>
-          typeof row[columnField] === "string" &&
-          row[columnField].toLowerCase().includes(search.toLowerCase())
-      );
-    });
-
-  const stableSort = (array: any, comparator: any) => {
-    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
-    stabilizedThis.sort((a: any, b: any) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el: any) => el[0]);
-  };
-
-  const getComparator = (order: any, orderBy: any) => {
-    return order === "desc"
-      ? (a: any, b: any) => descendingComparator(a, b, orderBy)
-      : (a: any, b: any) => -descendingComparator(a, b, orderBy);
-  };
-
-  const descendingComparator = (
-    a: { [x: string]: number },
-    b: { [x: string]: number },
-    orderBy: string | number
-  ) => {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  };
-
-  //   const handleChangePage = (
-  //     event: any,
-  //     newPage: React.SetStateAction<number>
-  //   ) => {
-  //     setPage(newPage);
-  //   };
-
-  //   const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
-  //     setRowsPerPage(parseInt(event.target.value, 10));
-  //     setPage(0);
-  //   };
-
-  const handleMenuOpen = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (columnField: any) => {
-    handleColumnToggle(columnField);
-    // handleMenuClose();
-  };
-
-  const handleClickOpen = (deviceIds: any) => {
-    setDialogOpen(deviceIds);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
-
-  const isMenuOpen = Boolean(anchorEl);
-console.log("com",columns);
-  const processColumnData = (column: any, row: any) => {
-    // Perform operations based on the column and row data
-    // console.log("cols", column);
-    if (column.field === "groups") {
-      const groupId = row[column.field];
-      // Find the corresponding object in groupValues array
-      const matchingGroup: any = groupValues.find(
-        (group: any) => group.id === groupId[0]
-      );
-
-      // If a matching group is found, return its name, otherwise return null or a default value
-      return matchingGroup ? matchingGroup.name : row[column.field];
-    } else if (column.field === "device_ids") {
-      const deviceIds = row[column.field];
-      return (
-        <>
-          <div
-            className={`${deviceIds.length > 0 ? "cursor-pointer" : ""}`}
-            onClick={
-              deviceIds.length > 0
-                ? () => handleClickOpen(deviceIds)
-                : undefined
-            }
-          >
-            <Chips value={deviceIds.length} />
-          </div>
-          <DeviceDetailsModal
-            open={dialogOpen === deviceIds}
-            handleDialogClose={handleDialogClose}
-            device_ids={deviceIds}
-          />
-        </>
-      );
-      //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
-
-      //   const matchingDevices = numericDeviceIds.map((numericId: number) => {
-      //     const matchingDevice = deviceValues.find(
-      //       (device: any) => device.id === numericId
-      //     );
-      //     return matchingDevice ? matchingDevice.name : "-";
-      //   });
-
-      //   const namesInCommaSeparatedFormat = matchingDevices.join(", ");
-
-      //   return namesInCommaSeparatedFormat ? namesInCommaSeparatedFormat : "-";
-    } else if (column.field === "snmp_community") {
-      return row.credential_context["snmp.community"] == ""
-        ? "-"
-        : row.credential_context["snmp.community"];
-    } else if (column.field === "snmp_version") {
-      return row.credential_context["snmp.version"] == ""
-        ? "-"
-        : row.credential_context["snmp.version"];
-    }
-
-    // If no specific processing needed, return the original value
-    return row[column.field] == "" ? "-" : row[column.field];
-  };
-
-  const handleAddMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleAddMenuClose = () => {
-    setAnchorE2(null);
-  };
-
-  const handleDrawerOpen = () => {
-    setIsDrawerOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
-  };
-
-  //   const handleAddSingleCloseDialog = () => {
-  //     setIsAddSingleDialogOpen(false);
-  //     handleAddMenuClose();
-  //   };
-
-  const handleAddMultipleOpenDialog = () => {
-    setIsAddMultipleDialogOpen(true);
-  };
-
-  const handleAddMultipleCloseDialog = () => {
-    setIsAddMultipleDialogOpen(false);
-    handleAddMenuClose();
-  };
-
-  const handleActionClick = (event: any) => {
-    setAnchorE3(event.currentTarget);
-  };
-
-  const handleActionClose = () => {
-    setAnchorE3(null);
+  const handleSearchChange = (event: any) => {
+    setSearch(event.target.value);
   };
 
   return (
     <>
       {data && (
         <div className="">
-          <div className="">
+              <div className="">
             {/* <div>
               <p>All Credential Profiles</p>
             </div> */}
@@ -495,7 +317,7 @@ console.log("com",columns);
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
-                  {selected ? (
+                {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -504,7 +326,7 @@ console.log("com",columns);
                       >
                         <DeleteForeverIcon
                           onClick={handleModalOpen}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-textColor"
                           style={{
                             margin: "0 5px",
                           }}
@@ -513,7 +335,7 @@ console.log("com",columns);
                       <DeleteModal
                         open={isModalopen}
                         handleModalClose={handleModalClose}
-                        deleteRow={deleteDevice}
+                        deleteRow={deleteDiscoverySch}
                       />
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -522,7 +344,7 @@ console.log("com",columns);
                       >
                         <FileDownloadIcon
                           onClick={downloadCSV}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-textColor"
                           style={{
                             margin: "0 5px",
                           }}
@@ -537,9 +359,9 @@ console.log("com",columns);
                         placement="top"
                       >
                         <DeleteForeverIcon
-                          //   onClick={deleteDevice}
+                          //   onClick={deleteDiscoverySch}
                           color="disabled"
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-gray-700"
                           style={{
                             margin: "0 5px",
                           }}
@@ -552,7 +374,7 @@ console.log("com",columns);
                       >
                         <FileDownloadIcon
                           // onClick={downloadCSV}
-                          className="cursor-pointer"
+                          className="cursor-pointer dark:text-gray-700"
                           color="disabled"
                           style={{
                             margin: "0 5px",
@@ -591,10 +413,7 @@ console.log("com",columns);
                       <MenuItem
                         className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                         style={{
-                          // backgroundColor: themeSwitch ? "#24303F" : "",
-                          // color: themeSwitch ? "#DEE4EE" : "",
                           fontFamily: `"Poppins", sans-serif`,
-                          // padding: "0px .5rem",
                         }}
                         key={column.field}
                         onClick={() => handleMenuItemClick(column.field)}
@@ -624,6 +443,7 @@ console.log("com",columns);
                       </MenuItem>
                     ))}
                   </Menu>
+               
                 </div>
 
                 {/* Add Device Menu and Model */}
@@ -645,8 +465,8 @@ console.log("com",columns);
                     className="bg-primary3 capitalize items-center"
                     size="small"
                   >
-                    <AddIcon fontSize="small" className="mr-2" /> Credential
-                    Profile
+                    <AddIcon fontSize="small" className="mr-2" /> Add Discovery Schedular
+                    
                   </Button>
                   {/* <AddIcon
                     className=" dark:text-textColor"
@@ -656,7 +476,7 @@ console.log("com",columns);
                       cursor: "pointer",
                     }}
                   /> */}
-                  <CredentialProfileDrawer
+                  <DiscoverySchedularDrawer
                     open={isDrawerOpen}
                     handleDrawerClose={handleDrawerClose}
                   />
@@ -670,6 +490,7 @@ console.log("com",columns);
               {/* Global Downlad and delete button for table */}
             </div>
           </div>
+        <div className="">
           <div
             className=""
             style={{
@@ -760,39 +581,6 @@ console.log("com",columns);
                                 )
                                 .join(" ")}
                             </TableSortLabel>
-                            {/* <th
-                              className={`flex ${
-                                colIndex === 0 || colIndex === 1
-                                  ? "justify-start"
-                                  : "justify-start ml-8"
-                              } cursor-pointer`}
-                              onClick={() => handleRequestSort(column.field)}
-                              style={{
-                                color: "inherit",
-                                textDecoration: "none",
-                              }}
-                            >
-                              <span className="uppercase">
-                                {column.headerName
-                                  .split(" ")
-                                  .map((word: any) =>
-                                    word
-                                      .split("_")
-                                      .map(
-                                        (subWord: any) =>
-                                          subWord.charAt(0).toUpperCase() +
-                                          subWord.slice(1)
-                                      )
-                                      .join(" ")
-                                  )
-                                  .join(" ")}
-                              </span>
-                              {orderBy === column.field && (
-                                <span className="ml-1">
-                                  {iconDirection === "asc" ? "▲" : "▼"}
-                                </span>
-                              )}
-                            </th> */}
                           </th>
                         );
                       })}
@@ -886,9 +674,10 @@ console.log("com",columns);
                                       : processedValue}
                                   </span>
                                 </td>
+
                               );
                             })}
-                          <td
+                            <td
                             className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
                               isLastRow
                                 ? "border-b border-gray-300"
@@ -902,8 +691,8 @@ console.log("com",columns);
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <CredentialProfileMenu id={row._id} />
-                            {/* <CredentialProfileMenu rowData={row} /> */}
+                            {/* <CredentialProfileMenu id={row._id} /> */}
+                            <DiscoverySchedularMenu rowData={row} />
                           </td>
                         </tr>
                       );
@@ -923,9 +712,10 @@ console.log("com",columns);
             /> */}
           </div>
         </div>
+        </div>
       )}
     </>
   );
 };
 
-export default CredntialProfileTable;
+export default DiscoverySchedularTable;

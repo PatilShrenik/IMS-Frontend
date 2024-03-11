@@ -31,6 +31,6 @@ export const logout = async () => {
     // console.log("data", data);
     return data;
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };

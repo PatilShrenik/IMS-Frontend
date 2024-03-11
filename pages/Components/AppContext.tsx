@@ -25,6 +25,8 @@ const AppContext = createContext<{
   toggleDeviceTableState: () => void;
   groupState: boolean;
   toggleGroupState: () => void;
+  getDisSchedApiState: boolean;
+  togglegetDisSchedApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -50,6 +52,9 @@ const AppContext = createContext<{
   toggleDeviceTableState: () => {},
   groupState: false,
   toggleGroupState: () => {},
+  getDisSchedApiState: false,
+  togglegetDisSchedApiState: () => {},
+  
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -58,6 +63,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [estimateCalc, setEstimateCalc] = useState(false);
   const [cloud, setCloud] = useState("AWS");
+  const [getDisSchedApiState, setGetDisSchedApiState] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarClick, setSidebarClick] = useState(false);
   const [themeSwitch, setThemeSwitch] = useState(false);
@@ -78,6 +84,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleState = () => {
     setState(!state);
+  };
+  const togglegetDisSchedApiState = () => {
+    setGetDisSchedApiState((prevState) => !prevState);
   };
   const toggleGroupState = () => {
     setgroupState(!groupState);
@@ -124,6 +133,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleEstimateCalc,
         time,
         toggleTime,
+          getDisSchedApiState,
+        togglegetDisSchedApiState,
         timeEnd,
         toggleTimeEnd,
         authenticated,
