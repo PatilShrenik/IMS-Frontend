@@ -21,9 +21,11 @@ import NestedAccordion from "@/pages/Components/Accordion/GroupAccordian";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppContext } from "@/pages/Components/AppContext";
+import TreeViewGroup from "@/pages/Components/TreeView/TreeView";
 const Group = () => {
   const [apiData, setApiData] = React.useState([]);
   const { groupState, toggleGroupState } = useAppContext();
+
 
   React.useEffect(() => {
     try {
@@ -149,8 +151,13 @@ const Group = () => {
         <ToastContainer />
       </div>
 
-      <div className="my-4">
-        <NestedAccordion
+      <div className="">
+        {/* <NestedAccordion
+          data={nestedStructure}
+          onAdd={handleAdd}
+          onEdit={handleEdit}
+        /> */}
+        <TreeViewGroup
           data={nestedStructure}
           onAdd={handleAdd}
           onEdit={handleEdit}

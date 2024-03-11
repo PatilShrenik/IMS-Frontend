@@ -80,7 +80,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
     setState(!state);
   };
   const toggleGroupState = () => {
-    setgroupState(!state);
+    setgroupState(!groupState);
   };
   const toggleAuthenticated = (isAuth: any) => {
     // console.log('dskjjk')

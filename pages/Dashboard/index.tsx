@@ -14,6 +14,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DashboardCustomizeRoundedIcon from "@mui/icons-material/DashboardCustomizeRounded";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
+import { useWebSocketContext } from "../Components/WebSocketContext";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -27,6 +28,20 @@ const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const open = Boolean(anchorEl);
+  const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
+
+  // function renderer(payload: any) {
+  //   console.log("payload", payload);
+  // }
+
+  // useEffect(() => {
+  //   if (connection) {
+  //     Subscribe("1", "get.all", renderer);
+  //     return () => {
+  //       unsubscribe("1", "get.all");
+  //     };
+  //   }
+  // }, [connection]);
 
   const widgets: Widget[] = [
     {
