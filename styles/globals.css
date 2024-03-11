@@ -241,6 +241,25 @@ main::before {
   .my-react-select-container .my-react-select__single-value {
     @apply text-neutral-600 dark:text-[#D8D8D8];
   }
+
+  .tree-view .css-1bcfi89-MuiTreeItem-content {
+    @apply dark:bg-[#1E1E1E] rounded-md bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-1bcfi89-MuiTreeItem-content.Mui-selected {
+    @apply dark:bg-[#1E1E1E] rounded-md bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-tc4u2w.Mui-selected {
+    @apply dark:bg-[#1E1E1E] rounded-md  bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-tc4u2w {
+    @apply dark:bg-[#1E1E1E] rounded-md  bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+  .tree-view .css-j02aiz {
+    @apply pt-2;
+  }
 }
 .css-12a83d4-MultiValueRemove {
   background-color: #4b5563;

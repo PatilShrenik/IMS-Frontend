@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { MsalProvider } from "@azure/msal-react";
 import NextProgress from "next-progress";
 import { PublicClientApplication } from "@azure/msal-browser";
-
+import WebSocketContextProvider from "./Components/WebSocketContext";
 
 export default function App({ Component, pageProps }: any) {
   // Use the layout defined at the page level, if available
@@ -34,17 +34,18 @@ export default function App({ Component, pageProps }: any) {
         <Component {...pageProps} />
       </MsalProvider>
     );
-  }
-  else {
+  } else {
     return (
       <MsalProvider instance={pca}>
         <AppContextProvider>
-          <ReactFlowProvider>
-            <Layout>
-            {/* <NextProgress options={{ showSpinner: false }} /> */}
-              <Component {...pageProps} />
-            </Layout>
-          </ReactFlowProvider>
+          <WebSocketContextProvider>
+            <ReactFlowProvider>
+              <Layout>
+                {/* <NextProgress options={{ showSpinner: false }} /> */}
+                <Component {...pageProps} />
+              </Layout>
+            </ReactFlowProvider>
+          </WebSocketContextProvider>
         </AppContextProvider>
       </MsalProvider>
     );

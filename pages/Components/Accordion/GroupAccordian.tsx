@@ -201,8 +201,8 @@ const NestedAccordion = ({ data, onAdd, onEdit }: any) => {
         data.map((item: any) => (
           <Accordion
             key={item._id}
-            className="   dark:bg-dark-container dark:text-textColor  dark:border-dark-border"
-            variant="outlined"
+            className="   dark:bg-dark-container  border-l border-b border-l-gray-200 dark:border-b-gray-800 rounded-md dark:text-textColor  dark:border-dark-border dark:border-l-gray-600 "
+            // variant="elevation"
             disableGutters={true}
           >
             <AccordionSummary
