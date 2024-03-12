@@ -212,7 +212,7 @@ export const runDiscovery = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(baseURL + `/api/v1/settings/device/run-discovery`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(props),
       headers: {
         "Content-Type": "application/json",
@@ -233,7 +233,7 @@ export const enableMonitoring = async (props: any) => {
     const res = await fetch(
       baseURL + `/api/v1/settings/device/enable-monitoring`,
       {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify(props),
         headers: {
           "Content-Type": "application/json",
@@ -255,7 +255,7 @@ export const disableMonitoring = async (props: any) => {
     const res = await fetch(
       baseURL + `/api/v1/settings/device/disable-monitoring`,
       {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify(props),
         headers: {
           "Content-Type": "application/json",
@@ -274,7 +274,7 @@ export const enableDeviceSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(baseURL + `/api/v1/settings/device/enable`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(props),
       headers: {
         "Content-Type": "application/json",
@@ -292,7 +292,7 @@ export const disableDeviceSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(baseURL + `/api/v1/settings/device/disable`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(props),
       headers: {
         "Content-Type": "application/json",
@@ -310,7 +310,7 @@ export const enableFlowSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(baseURL + `/api/v1/settings/device/enable-flow`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(props),
       headers: {
         "Content-Type": "application/json",
@@ -328,7 +328,7 @@ export const disableFlowSingle = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(baseURL + `/api/v1/settings/device/disable-flow`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(props),
       headers: {
         "Content-Type": "application/json",

@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Drawer } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { Bounce, toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { createDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
+import { CustomProvider, DateRangePicker } from "rsuite";
 import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
 import CustomeInput, { DateInput } from "../Inputs";
 import { ButtonGroup } from "@mui/material";
-import { CustomeCancelButton } from "../Buttons";
+import { CustomeCancelButton, SubmitButton } from "../Buttons";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import SingleSelect from "../Selects";
 import { useAppContext } from "../AppContext";
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: "60%",
   },
@@ -39,13 +40,18 @@ const DiscoverySchedularDrawer = (props: any) => {
   const [frequency, setFrequency] = React.useState("CUSTOME");
   const [timeArray, setTimeArray] = React.useState<any>([]);
   const [change, setChange] = React.useState(true);
-  const { togglegetDisSchedApiState } = useAppContext();
+  const { themeSwitch, togglegetDisSchedApiState } = useAppContext();
   const [data, setData] = React.useState<any>(initialState);
   const [activeButton, setActiveButton] = React.useState<string | null>(
     "DEVICE"
   );
   const [frequencyButton, setFrequencyButton] = React.useState<string | null>(
     "CUSTOME"
+  );
+
+  const isBrowser = typeof window !== "undefined";
+  const [colorTheme, setColorTheme] = useState<any>(
+    isBrowser ? localStorage.getItem("color-theme") : null
   );
 
   const [allGroups, setAllGroups] = React.useState([]);
@@ -59,6 +65,16 @@ const DiscoverySchedularDrawer = (props: any) => {
     { value: "Friday", label: "Friday" },
     { value: "Saturday", label: "Saturday" },
   ];
+  useEffect(() => {
+    // const handleStorageChange = () => {
+    console.log("Storage change detected");
+    const newColorTheme = localStorage.getItem("color-theme");
+    console.log("New color theme:", newColorTheme);
+    setColorTheme(newColorTheme);
+    // };
+    // handleStorageChange();
+  }, [themeSwitch]);
+
   const generateTimeArray = () => {
     const times = [];
 
@@ -84,7 +100,7 @@ const DiscoverySchedularDrawer = (props: any) => {
         entity_type: "DEVICE",
         name: "",
         email: [""],
-       // message: "",
+        // message: "",
         scheduler_context: {
           scheduled_times: [""],
           cron: "",
@@ -317,16 +333,13 @@ const DiscoverySchedularDrawer = (props: any) => {
   };
   return (
     <Drawer
-      // hideBackdrop = {false}temporary
       anchor="right"
-      open={props.open}
-      // transitionDuration
-      // className={classes.drawer}
+      open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
+      className={`shadow-sm shadow-dark-container w-full overflow-y-auto ${classes.drawer}`}
     >
-      <div className="h-full bg-white dark:bg-dark-menu-color mx-4">
+      <div className="h-full bg-white dark:bg-dark-menu-color px-4">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">
             {" "}
@@ -341,7 +354,7 @@ const DiscoverySchedularDrawer = (props: any) => {
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
-                label="Scheduler Name"
+                label="Schedular Name"
                 name="name"
                 value={data.name}
                 onChange={handleInputChange}
@@ -355,38 +368,46 @@ const DiscoverySchedularDrawer = (props: any) => {
                 <ButtonGroup
                   variant="outlined"
                   aria-label="Basic button group"
-                  className="my-5 mx-5 "
+                  className="my-4 mx-4"
                 >
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
+                      activeButton == "DEVICE" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => {
                       handleButtonClick("DEVICE");
                     }}
-                    style={{
-                      width: "120px",
-                      backgroundColor:
-                        activeButton === "DEVICE" ? "#0078d4" : "",
+                    // style={{
+                    //   width: "120px",
+                    //   backgroundColor:
+                    //     activeButton === "DEVICE" ? "#0078d4" : "",
 
-                      color: activeButton === "DEVICE" ? "white" : "",
-                    }}
+                    //   color: activeButton === "DEVICE" ? "white" : "",
+                    // }}
                   >
                     Device
                   </Button>
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                      activeButton == "GROUP" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => {
                       handleButtonClick("GROUP");
                     }}
-                    style={{
-                      width: "120px",
-                      backgroundColor:
-                        activeButton === "GROUP" ? "#0078d4" : "",
-                      color: activeButton === "GROUP" ? "white" : "",
-                    }}
+                    // style={{
+                    //   width: "120px",
+                    //   backgroundColor:
+                    //     activeButton === "GROUP" ? "#0078d4" : "",
+                    //   color: activeButton === "GROUP" ? "white" : "",
+                    // }}
                   >
                     Group
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="ml-9">
+              <div className="">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
@@ -410,12 +431,13 @@ const DiscoverySchedularDrawer = (props: any) => {
             </div>
 
             <div>
-              <h5 className="m-4 font-normal dark:text-textColor">Notify To</h5>
+              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
+                Notify To
+              </h5>
               <CustomeInput
-                className="w-[36rem]"
-                label="Email"
+                label="Emails"
                 name="email"
-                 value={data && data.email.join(",")}
+                value={data && data.email.join(",")}
                 onChange={handleEmailChange}
                 type="email"
                 disable={false}
@@ -436,52 +458,72 @@ const DiscoverySchedularDrawer = (props: any) => {
             {/* </div> */}
             <div className="mx-4 py-2">
               <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
-              <DateInput label="Start Date" onChange={handleDate} />
+              <CustomProvider theme="dark">
+                <DateRangePicker
+                  showOneCalendar
+                  appearance="subtle"
+                  style={{
+                    // margin: "1rem 1rem",
+                    width: "18rem",
+                    height: "max-content",
+                    border:
+                      colorTheme == "light"
+                        ? "1px solid #e5e7eb"
+                        : "1px solid #ccc",
+                    padding: ".4rem",
+                  }}
+                  placeholder="Select Date Range"
+                  // format="yyyy-MM-dd"
+                  className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+                />
+              </CustomProvider>
+              {/* <DateInput label="Start Date" onChange={handleDate} /> */}
             </div>
             <div className="flex items-center">
               <Box>
                 <ButtonGroup
                   variant="outlined"
                   aria-label="Basic button group"
-                  className="my-5 mx-4"
+                  className="my-5 ml-4 mr-7"
                 >
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                      frequencyButton == "CUSTOME" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => handleFrequencyClick("CUSTOME")}
-                    style={{
-                      backgroundColor:
-                        frequencyButton === "CUSTOME" ? "#0078d4" : "",
-                      color: frequencyButton === "CUSTOME" ? "white" : "",
-                    }}
+                    // style={{
+                    //   backgroundColor:
+                    //     frequencyButton === "CUSTOME" ? "#0078d4" : "",
+                    //   color: frequencyButton === "CUSTOME" ? "white" : "",
+                    // }}
                   >
-                    Custome
+                    Custom
                   </Button>
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                      frequencyButton == "DAILY" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => handleFrequencyClick("DAILY")}
-                    style={{
-                      backgroundColor:
-                        frequencyButton === "DAILY" ? "#0078d4" : "",
-                      color: frequencyButton === "DAILY" ? "white" : "",
-                    }}
                   >
                     Daily
                   </Button>
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                      frequencyButton == "WEEKLY" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => handleFrequencyClick("WEEKLY")}
-                    style={{
-                      backgroundColor:
-                        frequencyButton === "WEEKLY" ? "#0078d4" : "",
-                      color: frequencyButton === "WEEKLY" ? "white" : "",
-                    }}
                   >
                     Weekly
                   </Button>
                   <Button
+                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                      frequencyButton == "MONTHLY" &&
+                      "bg-primary2 hover:bg-primary2 text-white"
+                    }`}
                     onClick={() => handleFrequencyClick("MONTHLY")}
-                    style={{
-                      backgroundColor:
-                        frequencyButton === "MONTHLY" ? "#0078d4" : "",
-                      color: frequencyButton === "MONTHLY" ? "white" : "",
-                    }}
                   >
                     Monthly
                   </Button>
@@ -489,7 +531,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               </Box>
               {frequency == "CUSTOME" ? (
                 <CustomeInput
-                  label="Cron"
+                  label="Cron Value"
                   name="cron"
                   value={data.scheduler_context.cron}
                   onChange={handleCronChange}

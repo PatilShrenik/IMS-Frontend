@@ -18,14 +18,12 @@ import {
   replaceDotsWithUnderscores,
   replacePeriodsWithUnderscoresArrayOfObjects,
 } from "@/functions/genericFunctions";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import DeviceDetailsObjectTable from "../Tabels/DeviceDetailsTable";
+import CustomPagination from "../CustomePagination";
 const DiscoveryContext = (props: any) => {
   const { open, handleModalClose, deviceIds } = props;
   const [data, setData] = useState() as any;
-  console.log("device ids in modal", deviceIds);
+  //   console.log("device ids in modal", deviceIds);
 
   const [value, setValue] = React.useState(0) as any;
 
@@ -40,6 +38,17 @@ const DiscoveryContext = (props: any) => {
 
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
+
+    const handlePageChange = (newPage: any) => {
+      setCurrentPage(newPage);
+      // Fetch data for the new page if needed
+    };
+
+    const handleRowsPerPageChange = (newRowsPerPage: any) => {
+      setRowsPerPage(newRowsPerPage);
+      setCurrentPage(1); // Reset to the first page when changing rows per page
+      // Fetch data for the new rowsPerPage if needed
+    };
 
     return (
       <div
@@ -61,7 +70,7 @@ const DiscoveryContext = (props: any) => {
     const getContext = async () => {
       let response = await getDeviceDetailsByID(deviceIds);
       const modifiedData = replaceDotsWithUnderscores(response.result);
-      console.log("context data", response.result);
+      //   console.log("context data", response.result);
       setData(modifiedData);
     };
     getContext();
@@ -76,9 +85,29 @@ const DiscoveryContext = (props: any) => {
     };
   }
 
+  const [page, setPage] = React.useState(0);
+
+  const [currentPage, setCurrentPage] = useState(1) as any;
+  const [rowsPerPage, setRowsPerPage] = useState(10) as any;
+
+  const totalCount = data && data.length;
+
+  const handlePageChange = (newPage: any) => {
+    setPage(newPage - 1);
+    setCurrentPage(newPage);
+    // Fetch data for the new page if needed
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: any) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
+    // Fetch data for the new rowsPerPage if needed
+  };
+
   return (
     <Dialog open={open} onClose={handleModalClose} fullScreen maxWidth="xl">
-      <DialogTitle className="dark:bg-tabel-row dark:text-textColor border-b border-b-dark-border">
+      <DialogTitle className="dark:bg-dark-container dark:text-textColor border-b border-b-dark-border">
         <div className="flex justify-between">
           <p>Device Details</p>
           <CloseSharpIcon
@@ -87,41 +116,33 @@ const DiscoveryContext = (props: any) => {
           />
         </div>
       </DialogTitle>
-      <DialogContent className="dark:bg-tabel-row w-full dark:text-textColor">
-        <div className="w-full bg-white py-4 text-center rounded-md dark:bg-tabel-row">
-          <div className="w-full flex mb-4">
-            <div className="flex flex-col justify-start w-[27%] ">
+      <DialogContent className="relative dark:bg-dark-container w-full h-full dark:text-textColor">
+        <div className="w-full h-full bg-white py-4 text-center rounded-md dark:bg-dark-container">
+          <div className="w-full flex mb-4 min-h-full">
+            <div className="flex flex-col justify-start w-[27%] border-r-[1px] border-dark-border ">
               <div className="flex items-center  mx-2">
-                <p className="flex text-lg  w-[11rem]">
-                  System Name
-                </p>
+                <p className="flex text-lg  w-[11rem]">System Name</p>
                 <p className="ml-2">:</p>
                 <p className="ml-4">
                   {data && data.system_name ? data.system_name : "-"}
                 </p>
               </div>
               <div className="flex items-center  mx-2">
-                <p className="flex text-lg  w-[11rem]">
-                  System OID
-                </p>
+                <p className="flex text-lg  w-[11rem]">System OID</p>
                 <p className="ml-2">:</p>
                 <p className="ml-4">
                   {data && data.system_oid ? data.system_oid : "-"}
                 </p>
               </div>
               <div className="flex items-center mx-2">
-                <p className="flex text-lg  w-[11rem]">
-                  System Location
-                </p>
+                <p className="flex text-lg  w-[11rem]">System Location</p>
                 <p className="ml-2">:</p>
                 <p className="ml-4">
                   {data && data.system_location ? data.system_location : "-"}
                 </p>
               </div>
               <div className="flex items-center mx-2">
-                <p className="flex text-lg  w-[11rem]">
-                  System Description
-                </p>
+                <p className="flex text-lg  w-[11rem]">System Description</p>
                 <p className="ml-2">:</p>
                 <Tooltip
                   placement="bottom"
@@ -169,7 +190,23 @@ const DiscoveryContext = (props: any) => {
                       replacePeriodsWithUnderscoresArrayOfObjects(valuesArray2);
                     return (
                       <CustomTabPanel value={value} index={index} key={index}>
-                        <DeviceDetailsObjectTable data={modifiedData} />
+                        <DeviceDetailsObjectTable
+                          data={modifiedData}
+                          //   visibleColumns={visibleColumns}
+                          //   setVisibleColumns={setVisibleColumns}
+                          //   columns={columns}
+                          page={page}
+                          rowsPerPage={rowsPerPage}
+                        />
+                        {/* <div className="absolute bottom-0">
+                          <CustomPagination
+                            totalCount={totalCount}
+                            rowsPerPage={rowsPerPage}
+                            currentPage={currentPage}
+                            onPageChange={handlePageChange}
+                            onRowsPerPageChange={handleRowsPerPageChange}
+                          />
+                        </div> */}
                       </CustomTabPanel>
                     );
                   })}

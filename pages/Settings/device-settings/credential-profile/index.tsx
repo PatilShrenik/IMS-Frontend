@@ -18,8 +18,9 @@ const CredentialProfile = () => {
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
-  useAppContext();
+    useAppContext();
   const handlePageChange = (newPage: any) => {
+    setPage(newPage - 1);
     setCurrentPage(newPage);
     // Fetch data for the new page if needed
   };
@@ -27,6 +28,7 @@ const CredentialProfile = () => {
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
 
@@ -109,7 +111,7 @@ const CredentialProfile = () => {
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="w-full">
         {/* <PageHeading heading="Credential Profile" /> */}
         <CredntialProfileTable

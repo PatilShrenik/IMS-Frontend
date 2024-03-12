@@ -225,8 +225,7 @@ const SidebarMenu = () => {
             },
             {
               subMenuDropdownname: "Profiles",
-              subMenuDropdownpathName:
-                "/Settings/device-settings/profiles",
+              subMenuDropdownpathName: "/Settings/device-settings/profiles",
             },
           ],
         },
@@ -284,7 +283,7 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative mt-12 flex flex-col  bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+            className={`relative mt-12 flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : "w-[15rem] border-r"
             }`}
           >
@@ -307,23 +306,13 @@ const SidebarMenu = () => {
                               >
                                 <Link
                                   href={submenuItem.subMenuPathName || "#"}
-                                  className={`w-full mx-1 py-2 flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] p-2 ${
+                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 ${
                                     openSubmenu == subIndex
                                     // "dark:bg-[#282828] bg-[#D8D8D8]"
                                   }`}
                                   onClick={() => handleSubmenuClick(subIndex)}
                                 >
-                                  <div className="flex">
-                                    {/* {submenuItem.subMenuDropdown && (
-                                      <ManageAccountsIcon
-                                        fontSize="small"
-                                        className={` ${
-                                          openSubmenu === subIndex
-                                            ? "text-primary2"
-                                            : ""
-                                        }`}
-                                      />
-                                    )} */}
+                                  <div className="flex ">
                                     {submenuItem.subMenuIcon &&
                                       React.cloneElement(
                                         submenuItem.subMenuIcon,
@@ -374,7 +363,7 @@ const SidebarMenu = () => {
                                           >
                                             <li
                                               key={dropdownIndex}
-                                              className={`relative mr-3 py-1 my-[2px] text-[14px] items-center text-black dark:text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
+                                              className={`relative mr-3 py-1 my-[2px] text-[14px] items-center !text-black dark:!text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
                                                 // selectedDropdown === dropdownIndex
                                                 selectedDropdown[
                                                   `submenu${subIndex}`

@@ -19,6 +19,7 @@ const Assets = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
 
   const handlePageChange = (newPage: any) => {
+    setPage(newPage - 1);
     setCurrentPage(newPage);
     // Fetch data for the new page if needed
   };
@@ -26,6 +27,7 @@ const Assets = () => {
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
 
@@ -35,102 +37,117 @@ const Assets = () => {
         let cols: any = [];
         let response = await getAllDevice();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        const indexOfObjectWithAvailabilityContext = modifiedData.findIndex(
-          (obj: any) => obj.availability_context !== undefined
-        );
-        console.log("modifidData", indexOfObjectWithAvailabilityContext);
-        const col = Object.keys(
-          modifiedData[indexOfObjectWithAvailabilityContext]
-        );
-        let filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        filteredCols = col.filter((key: any) => key !== "flow_enabled");
+        console.log("modified 1", modifiedData);
+        const indexOfObjectWithAvailabilityContext =
+          modifiedData &&
+          modifiedData.findIndex(
+            (obj: any) => obj.availability_context !== undefined
+          );
+        let col = [] as any;
+        console.log("index value", indexOfObjectWithAvailabilityContext);
+        if (
+          indexOfObjectWithAvailabilityContext == -1 &&
+          modifiedData.length != 0
+        ) {
+          console.log("modified 2", modifiedData);
+          col = Object.keys(modifiedData[0]);
+        } else {
+          col =
+            modifiedData.length != 0 &&
+            Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
+        }
+        let filteredCols =
+          col && col.filter((key: any) => !key.startsWith("_"));
+        filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
 
         console.log(filteredCols);
-        filteredCols.filter((key: any) => {
-          if (!key.startsWith("_")) {
-            if (key == "availability_context") {
-              cols.unshift({
-                field: "icmp_availability",
-                headerName: "icmp_Avl.",
-                minWidth: 120,
-              });
-              cols.unshift({
-                field: "plugin_availability",
-                headerName: "plugin_Avl.",
-                minWidth: 120,
-              });
-              cols.push({
-                field: "timestamp",
-                headerName: "timestamp",
-                minWidth: 120,
-              });
-            } else if (key == "hostname") {
-              cols.unshift({
-                field: key.replace(/\./g, "_"),
-                headerName: "Host Name",
-                minWidth: 150,
-              });
-            } else if (key == "ip_address") {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: "IP Address",
-                minWidth: 150,
-              });
-            } else if (key == "alias") {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: "Alias",
-                minWidth: 150,
-              });
-            } else if (key == "port") {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: key.replace(/\./g, " "),
-                minWidth: 80,
-              });
-            } else if (key == "credential_profiles") {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: key.replace(/\./g, " "),
-                minWidth: 200,
-              });
-            } else {
-              cols.push({
-                field: key.replace(/\./g, "_"),
-                headerName: key.replace(/\./g, " "),
-                minWidth: 150,
-              });
+        filteredCols &&
+          filteredCols.filter((key: any) => {
+            if (!key.startsWith("_")) {
+              if (key == "availability_context") {
+                // cols.unshift({
+                //   field: "icmp_availability",
+                //   headerName: "icmp_Avl.",
+                //   minWidth: 120,
+                // });
+                // cols.unshift({
+                //   field: "plugin_availability",
+                //   headerName: "plugin_Avl.",
+                //   minWidth: 120,
+                // });
+                cols.push({
+                  field: "timestamp",
+                  headerName: "timestamp",
+                  minWidth: 120,
+                });
+              } else if (key == "hostname") {
+                cols.unshift({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "Host Name",
+                  minWidth: 150,
+                });
+              } else if (key == "ip_address") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "IP Address",
+                  minWidth: 150,
+                });
+              } else if (key == "alias") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "Alias",
+                  minWidth: 150,
+                });
+              } else if (key == "port") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: key.replace(/\./g, " "),
+                  minWidth: 80,
+                });
+              } else if (key == "credential_profiles") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: key.replace(/\./g, " "),
+                  minWidth: 200,
+                });
+              } else {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: key.replace(/\./g, " "),
+                  minWidth: 150,
+                });
+              }
             }
-          }
-        });
-        const x = filteredCols.includes("availabilty_context");
-        if (x) {
-          cols.unshift({
-            field: "icmp_availability",
-            headerName: "icmp_Avl.",
-            minWidth: 120,
           });
-          cols.unshift({
-            field: "plugin_availability",
-            headerName: "plugin_Avl.",
-            minWidth: 120,
-          });
-          cols.push({
-            field: "timestamp",
-            headerName: "timestamp",
-            minWidth: 120,
-          });
-        }
         cols.push({
           field: "last_availability_on",
           headerName: "Last Available On",
-          minWidth: 120,
+          minWidth: 220,
         });
         cols.push({
           field: "last_availability_checked_on",
           headerName: "Last Availability checked On",
           minWidth: 250,
         });
+        // const x = filteredCols && filteredCols.includes("availabilty_context");
+        // if (x) {
+        cols.unshift({
+          field: "plugin_availability",
+          headerName: "plugin_Avl.",
+          minWidth: 120,
+        });
+        cols.unshift({
+          field: "icmp_availability",
+          headerName: "icmp_Avl.",
+          minWidth: 120,
+        });
+        cols.push({
+          field: "timestamp",
+          headerName: "timestamp",
+          minWidth: 120,
+        });
+        // }
+
         console.log("cols", cols);
         setColumns(cols);
         console.log("rows", modifiedData);

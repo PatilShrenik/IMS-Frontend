@@ -4,13 +4,12 @@ import TablePagination from "@mui/material/TablePagination";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
-import { useAppContext , } from "@/pages/Components/AppContext";
+import { useAppContext } from "@/pages/Components/AppContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DiscoverySchedularTable from "@/pages/Components/Tabels/DiscoverySchedularTable";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-const DiscoverySchedular
- = () => {
+const DiscoverySchedular = () => {
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [page, setPage] = React.useState(0);
@@ -19,21 +18,15 @@ const DiscoverySchedular
 
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
-  const { themeSwitch , getDisSchedApiState} =
-  useAppContext();
-
-
-
+  const { themeSwitch, getDisSchedApiState } = useAppContext();
 
   useEffect(() => {
     try {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllDiscoverySch();
-         console.log("discover Scheduler data response ", response.result);
-        const modifiedData = replacePeriodsWithUnderscores(
-          response.result
-        );
+        console.log("discover Scheduler data response ", response.result);
+        const modifiedData = replacePeriodsWithUnderscores(response.result);
 
         const newData = modifiedData.map((item: any) => {
           const entitiesArray = Object.values(item.entities);
@@ -53,16 +46,13 @@ const DiscoverySchedular
                 headerName: "Entity type",
                 minWidth: 150,
               });
-             
             } else if (key == "name") {
-             
               cols.unshift({
                 field: "name",
                 headerName: "Name",
                 minWidth: 80,
               });
-            }
-             else {
+            } else {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
@@ -91,9 +81,8 @@ const DiscoverySchedular
         );
 
         setData(modifiedData);
-       //setData(newData);
-       console.log('newData-----',newData);
-      
+        //setData(newData);
+        console.log("newData-----", newData);
       };
       getData();
     } catch (error) {
@@ -109,6 +98,7 @@ const DiscoverySchedular
   };
 
   const handlePageChange = (newPage: any) => {
+    setPage(newPage - 1);
     setCurrentPage(newPage);
     // Fetch data for the new page if needed
   };
@@ -116,6 +106,7 @@ const DiscoverySchedular
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
   const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
@@ -123,10 +114,9 @@ const DiscoverySchedular
     setPage(0);
   };
 
-
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="w-full">
         {/* <PageHeading heading="Credential Profile" /> */}
         <DiscoverySchedularTable
@@ -170,7 +160,7 @@ const DiscoverySchedular
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default DiscoverySchedular
+export default DiscoverySchedular;

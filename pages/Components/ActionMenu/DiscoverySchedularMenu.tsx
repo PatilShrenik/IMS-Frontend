@@ -11,6 +11,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { deleteDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import EditDiscoverySchDrawer from "../SideDrawers/EditDiscoverySchDrawer";
+import { CustomeCancelButton } from "../Buttons";
 
 const ITEM_HEIGHT = 48;
 
@@ -23,7 +24,7 @@ const DiscoverySchedularMenu = (props: any) => {
   const handleModalClose = () => setIsModalOpen(false);
   const { rowData } = props;
   //   console.log("asset menu props", rowData);
-  const { toggleDeviceTableState, togglegetDisSchedApiState  } = useAppContext();
+  const { toggleDeviceTableState, togglegetDisSchedApiState } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
@@ -45,7 +46,7 @@ const DiscoverySchedularMenu = (props: any) => {
   };
 
   const handleDeleteClick = async (rowId: number) => {
-     console.log("DeleteRowId", rowId);
+    console.log("DeleteRowId", rowId);
 
     try {
       const response = await deleteDiscoverySch(rowId);
@@ -127,14 +128,14 @@ const DiscoverySchedularMenu = (props: any) => {
         style={{ padding: "0" }}
       >
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
           onClick={() => handleEditClick(rowData && rowData._id)}
         >
           Edit
         </MenuItem>
 
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
           //  onClick={() => handleDeleteClick(id)}
           onClick={handleModalOpen}
         >
@@ -143,10 +144,10 @@ const DiscoverySchedularMenu = (props: any) => {
       </Menu>
 
       <Modal open={isModalopen} onClose={handleModalClose}>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md dark:bg-tabel-row">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md dark:bg-dark-container">
           <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " />
-          <div className="mb-5  border-b-2 py-4    dark:border-dark-border ">
-            <p className="text-xl font-semibold mb-2 dark:text-textColor">
+          <div className="mb-5  border-b-2 py-4  dark:border-dark-border ">
+            <p className="text-xl text-black font-semibold mb-2 dark:text-textColor">
               Are you sure ?{" "}
             </p>
             <p className="text-gray-400 text-sm">
@@ -154,19 +155,23 @@ const DiscoverySchedularMenu = (props: any) => {
               undone.
             </p>
           </div>
-
-          <button
-            onClick={() => handleDeleteClick(rowData && rowData._id)}
-            className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
-          >
-            Delete
-          </button>
-          <button
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleDeleteClick(rowData && rowData._id)}
+              className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
+            >
+              Delete
+            </button>
+            <div onClick={handleModalClose}>
+              <CustomeCancelButton title="Cancel" />
+            </div>
+          </div>
+          {/* <button
             onClick={handleModalClose}
-            className=" border border-light3 font-normal py-1 px-4 rounded mb-2  dark:text-textColor"
+            className=" border border-light3  font-normal py-1 px-4 rounded mb-2  dark:text-textColor"
           >
             Cancel
-          </button>
+          </button> */}
         </div>
         {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md">
           <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " />

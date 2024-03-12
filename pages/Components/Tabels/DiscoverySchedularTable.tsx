@@ -23,14 +23,16 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
 import { Bounce, toast } from "react-toastify";
-import { deleteBulkDiscoverySch, getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
+import {
+  deleteBulkDiscoverySch,
+  getAllDiscoverySch,
+} from "@/pages/api/api/DiscoveryScheduleAPI";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import DiscoverySchedularDrawer from "@/pages/Components/SideDrawers/DiscoverySchedularDrawer";
 import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
 import DeleteModal from "../Modals/DeleteModal";
 import { useAppContext } from "../AppContext";
 import DiscoverySchedularMenu from "../ActionMenu/DiscoverySchedularMenu";
-
 
 const DiscoverySchedularTable = (props: any) => {
   const {
@@ -97,7 +99,10 @@ const DiscoverySchedularTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data.map((row: any) => row._id);
+      const allRowIds = data
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .map((row: any) => row._id);
+
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -115,7 +120,6 @@ const DiscoverySchedularTable = (props: any) => {
       setSelected(false);
     }
   }, [selectedRows]);
-
 
   const stableSort = (array: any, comparator: any) => {
     const stabilizedThis = array.map((el: any, index: any) => [el, index]);
@@ -186,7 +190,7 @@ const DiscoverySchedularTable = (props: any) => {
       }
     });
   };
-  const deleteDiscoverySch = async () =>{
+  const deleteDiscoverySch = async () => {
     console.log("delete array", selectedRows);
     try {
       let response = await deleteBulkDiscoverySch(selectedRows);
@@ -194,7 +198,7 @@ const DiscoverySchedularTable = (props: any) => {
       if (response.status == "success") {
         handleModalClose();
 
-       togglegetDisSchedApiState();
+        togglegetDisSchedApiState();
 
         toast.success(response.message, {
           position: "bottom-right",
@@ -224,12 +228,12 @@ const DiscoverySchedularTable = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const processColumnData = (column: any, row: any) => {
     if (column.field === "entity_type") {
       const entity_type = row[column.field];
-     // console.log("ent_type", entity_type);
+      // console.log("ent_type", entity_type);
       // Find the corresponding object in groupValues array
       if (entity_type === "GROUP") {
         const groupId = row.entities;
@@ -239,15 +243,15 @@ const DiscoverySchedularTable = (props: any) => {
         // );
         // console.log("entities", matchingGroup.name);
         const matchingNames: string[] = groupId.map((id: any) => {
-          const matchingGroup: any = groupValues.find((group: any) => group.id === id);
+          const matchingGroup: any = groupValues.find(
+            (group: any) => group.id === id
+          );
           return matchingGroup ? matchingGroup.name : null;
         });
-       // console.log("entities", matchingNames);
- 
+        // console.log("entities", matchingNames);
       }
-      if (entity_type === "DEVICE"){
+      if (entity_type === "DEVICE") {
         const deviceId = row.entities;
-
       }
     }
     return row[column.field] == "" ? "-" : row[column.field];
@@ -287,7 +291,7 @@ const DiscoverySchedularTable = (props: any) => {
     <>
       {data && (
         <div className="">
-              <div className="">
+          <div className="">
             {/* <div>
               <p>All Credential Profiles</p>
             </div> */}
@@ -317,7 +321,7 @@ const DiscoverySchedularTable = (props: any) => {
               </div>
               <div className="flex">
                 <div className="flex items-center m-4 mr-0">
-                {selected ? (
+                  {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -443,7 +447,6 @@ const DiscoverySchedularTable = (props: any) => {
                       </MenuItem>
                     ))}
                   </Menu>
-               
                 </div>
 
                 {/* Add Device Menu and Model */}
@@ -465,8 +468,8 @@ const DiscoverySchedularTable = (props: any) => {
                     className="bg-primary3 capitalize items-center"
                     size="small"
                   >
-                    <AddIcon fontSize="small" className="mr-2" /> Add Discovery Schedular
-                    
+                    <AddIcon fontSize="small" className="mr-2" /> Add Discovery
+                    Schedular
                   </Button>
                   {/* <AddIcon
                     className=" dark:text-textColor"
@@ -490,217 +493,221 @@ const DiscoverySchedularTable = (props: any) => {
               {/* Global Downlad and delete button for table */}
             </div>
           </div>
-        <div className="">
-          <div
-            className=""
-            style={{
-              width: "100%",
-              overflow: "scroll",
-              borderRadius: "0",
-              marginTop: ".5rem",
-            }}
-          >
-            <div className="max-h-440">
-              <table className="w-full border-collapse overflow-x-scroll">
-                <thead>
-                  <tr>
-                    <th
-                      className="bg-textColor  dark:bg-tabel-header dark:text-textColor"
-                      style={{
-                        padding: "8px",
-                        fontSize: "11px",
-                        textAlign: "center",
-                        borderBottom: "0",
-                        fontWeight: "bolder",
-                        // backgroundColor:"#D8D8D8"
-                      }}
-                    >
-                      <Checkbox
-                        className=" dark:text-textColor"
-                        size="small"
-                        style={{ padding: "0" }}
-                        checked={selectAll}
-                        onChange={handleSelectAllCheckboxToggle}
-                      />
-                    </th>
-                    {columns
-                      .filter((column: any) =>
-                        visibleColumns.includes(column.field)
-                      )
-                      .map((column: any, colIndex: any) => {
-                        const iconDirection = column.field ? order : "asc";
-                        return (
-                          <th
-                            className="bg-textColor text-start text-tabel-header dark:text-textColor dark:bg-tabel-header "
-                            key={column.id}
-                            align={column.align}
-                            style={{
-                              padding: "0px 8px",
-                              minWidth: column.minWidth,
-                              fontSize: "14px",
-                              fontWeight: "600",
-                              borderBottom: "0",
-                              letterSpacing: ".7px",
-                              fontStyle: "normal",
-                              fontFamily: `"Poppins", sans-serif`,
-                              // backgroundColor:"#D8D8D8"
-                            }}
-                          >
-                            <TableSortLabel
-                              className={`flex  ${
-                                colIndex == 0 || colIndex == 1
-                                  ? "justify-start  "
-                                  : "justify-start"
-                              }`}
-                              //   style={{
-                              //     display: "flex",
-                              //     justifyContent: "center",
-                              //     paddingLeft: "2rem",
-                              //   }}
-                              active={orderBy === column.field}
-                              direction={
-                                iconDirection as "asc" | "desc" | undefined
-                              }
-                              onClick={() => handleRequestSort(column.field)}
+          <div className="">
+            <div
+              className=""
+              style={{
+                width: "100%",
+                overflow: "auto",
+                borderRadius: "0",
+                marginTop: ".5rem",
+              }}
+            >
+              <div className="max-h-440">
+                <table className="w-full border-collapse overflow-auto">
+                  <thead>
+                    <tr>
+                      <th
+                        className="bg-textColor  dark:bg-tabel-header dark:text-textColor"
+                        style={{
+                          padding: "8px",
+                          fontSize: "11px",
+                          textAlign: "center",
+                          borderBottom: "0",
+                          fontWeight: "bolder",
+                          // backgroundColor:"#D8D8D8"
+                        }}
+                      >
+                        <Checkbox
+                          className=" dark:text-textColor"
+                          size="small"
+                          style={{ padding: "0" }}
+                          checked={selectAll}
+                          onChange={handleSelectAllCheckboxToggle}
+                        />
+                      </th>
+                      {columns
+                        .filter((column: any) =>
+                          visibleColumns.includes(column.field)
+                        )
+                        .map((column: any, colIndex: any) => {
+                          const iconDirection = column.field ? order : "asc";
+                          return (
+                            <th
+                              className="bg-textColor text-start text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                              key={column.id}
+                              align={column.align}
                               style={{
-                                color: "inherit",
-                                textDecoration: "none",
+                                padding: "0px 8px",
+                                minWidth: column.minWidth,
+                                fontSize: "14px",
+                                fontWeight: "600",
+                                borderBottom: "0",
+                                letterSpacing: ".7px",
+                                fontStyle: "normal",
+                                fontFamily: `"Poppins", sans-serif`,
+                                // backgroundColor:"#D8D8D8"
                               }}
                             >
-                              {column.headerName
-                                .split(" ")
-                                .map((word: any) =>
-                                  word
-                                    .split("_")
-                                    .map(
-                                      (subWord: any) =>
-                                        subWord.charAt(0).toUpperCase() +
-                                        subWord.slice(1)
-                                    )
-                                    .join(" ")
-                                )
-                                .join(" ")}
-                            </TableSortLabel>
-                          </th>
-                        );
-                      })}
-                    <th
-                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
-                      style={{
-                        padding: "0px 8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        borderBottom: "0",
-                        letterSpacing: ".7px",
-                        textAlign: "start",
-                        fontStyle: "normal",
-                        fontFamily: `"Poppins", sans-serif`,
-                        // backgroundColor:"#D8D8D8"
-                      }}
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stableSort(filteredData, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: any, rowIndex: any) => {
-                      const isLastRow = rowIndex === data.length - 1;
-                      return (
-                        <tr
-                          className="bg-white dark:bg-dark-container dark:text-textColor"
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row._id}
-                        >
-                          <td
-                            style={{
-                              padding: "8px",
-                              textAlign: "center",
-                            }}
-                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
-                              isLastRow ? "border-b" : "border-b"
-                            }`}
+                              <TableSortLabel
+                                className={`flex  ${
+                                  colIndex == 0 || colIndex == 1
+                                    ? "justify-start  "
+                                    : "justify-start"
+                                }`}
+                                //   style={{
+                                //     display: "flex",
+                                //     justifyContent: "center",
+                                //     paddingLeft: "2rem",
+                                //   }}
+                                active={orderBy === column.field}
+                                direction={
+                                  iconDirection as "asc" | "desc" | undefined
+                                }
+                                onClick={() => handleRequestSort(column.field)}
+                                style={{
+                                  color: "inherit",
+                                  textDecoration: "none",
+                                }}
+                              >
+                                {column.headerName
+                                  .split(" ")
+                                  .map((word: any) =>
+                                    word
+                                      .split("_")
+                                      .map(
+                                        (subWord: any) =>
+                                          subWord.charAt(0).toUpperCase() +
+                                          subWord.slice(1)
+                                      )
+                                      .join(" ")
+                                  )
+                                  .join(" ")}
+                              </TableSortLabel>
+                            </th>
+                          );
+                        })}
+                      <th
+                        className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                        style={{
+                          padding: "0px 8px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          borderBottom: "0",
+                          letterSpacing: ".7px",
+                          textAlign: "start",
+                          fontStyle: "normal",
+                          fontFamily: `"Poppins", sans-serif`,
+                          // backgroundColor:"#D8D8D8"
+                        }}
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stableSort(filteredData, getComparator(order, orderBy))
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row: any, rowIndex: any) => {
+                        const isLastRow = rowIndex === data.length - 1;
+                        return (
+                          <tr
+                            className="bg-white dark:bg-dark-container dark:text-textColor"
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row._id}
                           >
-                            <Checkbox
-                              className=" dark:text-textColor"
+                            <td
                               style={{
-                                padding: "0",
+                                padding: "8px",
                                 textAlign: "center",
                               }}
-                              color="primary"
-                              size="small"
-                              checked={selectedRows.includes(row._id)}
-                              onChange={() => handleRowCheckboxToggle(row._id)}
-                            />
-                          </td>
-                          {columns
-                            .filter((column: any) =>
-                              visibleColumns.includes(column.field)
-                            )
-                            .map((column: any, colIndex: any) => {
-                              const value = row[column.field];
-                              const processedValue = processColumnData(
-                                column,
-                                row
-                              );
+                              className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
+                                isLastRow ? "border-b" : "border-b"
+                              }`}
+                            >
+                              <Checkbox
+                                className=" dark:text-textColor"
+                                style={{
+                                  padding: "0",
+                                  textAlign: "center",
+                                }}
+                                color="primary"
+                                size="small"
+                                checked={selectedRows.includes(row._id)}
+                                onChange={() =>
+                                  handleRowCheckboxToggle(row._id)
+                                }
+                              />
+                            </td>
+                            {columns
+                              .filter((column: any) =>
+                                visibleColumns.includes(column.field)
+                              )
+                              .map((column: any, colIndex: any) => {
+                                const value = row[column.field];
+                                const processedValue = processColumnData(
+                                  column,
+                                  row
+                                );
 
-                              return (
-                                <td
-                                  className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
-                                    isLastRow ? "border-b " : "border-b "
-                                  }`}
-                                  key={column.id}
-                                  align={column.align}
-                                  style={{
-                                    fontSize: "13px",
-                                    fontWeight: "normal",
-                                    padding: "8px",
-                                    textAlign: "center",
-                                    fontFamily: `"Poppins", sans-serif`,
-                                  }}
-                                >
-                                  <span
-                                    className={`flex ${
-                                      colIndex == 0 || colIndex == 1
-                                        ? "justify-start"
-                                        : "justify-start "
+                                return (
+                                  <td
+                                    className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
+                                      isLastRow ? "border-b " : "border-b "
                                     }`}
+                                    key={column.id}
+                                    align={column.align}
+                                    style={{
+                                      fontSize: "13px",
+                                      fontWeight: "normal",
+                                      padding: "8px",
+                                      textAlign: "center",
+                                      fontFamily: `"Poppins", sans-serif`,
+                                    }}
                                   >
-                                    {column.format &&
-                                    typeof processedValue === "number"
-                                      ? column.format(processedValue)
-                                      : processedValue}
-                                  </span>
-                                </td>
-
-                              );
-                            })}
+                                    <span
+                                      className={`flex ${
+                                        colIndex == 0 || colIndex == 1
+                                          ? "justify-start"
+                                          : "justify-start "
+                                      }`}
+                                    >
+                                      {column.format &&
+                                      typeof processedValue === "number"
+                                        ? column.format(processedValue)
+                                        : processedValue}
+                                    </span>
+                                  </td>
+                                );
+                              })}
                             <td
-                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
-                              isLastRow
-                                ? "border-b border-gray-300"
-                                : "border-b border-gray-300"
-                            }`}
-                            style={{
-                              // fontSize: "11px",
-                              fontWeight: "normal",
-                              // padding: "0",
-                              textAlign: "start",
-                              fontFamily: `"Poppins", sans-serif`,
-                            }}
-                          >
-                            {/* <CredentialProfileMenu id={row._id} /> */}
-                            <DiscoverySchedularMenu rowData={row} />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-            {/* <TablePagination
+                              className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border  ${
+                                isLastRow
+                                  ? "border-b border-gray-300"
+                                  : "border-b border-gray-300"
+                              }`}
+                              style={{
+                                // fontSize: "11px",
+                                fontWeight: "normal",
+                                // padding: "0",
+                                textAlign: "start",
+                                fontFamily: `"Poppins", sans-serif`,
+                              }}
+                            >
+                              {/* <CredentialProfileMenu id={row._id} /> */}
+                              <DiscoverySchedularMenu rowData={row} />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+              {/* <TablePagination
               className="bg-light-container dark:bg-dark-container dark:text-textColor pt-12"
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
@@ -710,8 +717,8 @@ const DiscoverySchedularTable = (props: any) => {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
+            </div>
           </div>
-        </div>
         </div>
       )}
     </>

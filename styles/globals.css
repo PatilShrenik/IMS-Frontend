@@ -3,6 +3,7 @@
 @import "https://code.highcharts.com/dashboards/css/dashboards.css";
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import "rsuite/dist/rsuite.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,10 +15,13 @@
 }
 
 /* width */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
+} */
+a {
+  color: none !important;
+  text-decoration: none !important;
 }
-
 /* @layer base {
   body {
     @apply font-normal text-base text-body bg-whiten relative z-1;
@@ -30,23 +34,29 @@ body {
 }
 
 /* ------------------------------ IMS CSS -----------------------------------------*/
-/* ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-  background-color: #f5f5f5;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar {
   height: 7px;
   width: 12px;
-  background-color: #f5f5f5;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #555;
-} */
+  background-color: rgba(216, 216, 216, 0.2); /* Adjust the alpha value (0.7) for transparency */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(216, 216, 216, 0.8); /* Adjust the alpha value (0.7) for transparency */
+}
 /* styles/globals.css */
 /* body {
   font-family: "Poppins", sans-serif;
@@ -114,7 +124,8 @@ main::before {
 
 /* Tooltip css */
 
-.MuiTooltip-popper[data-popper-placement*="left"] .css-ja5taz-MuiTooltip-tooltip {
+.MuiTooltip-popper[data-popper-placement*="left"]
+  .css-ja5taz-MuiTooltip-tooltip {
   transform-origin: right center;
   margin-right: 8px;
 }
@@ -164,7 +175,8 @@ main::before {
   box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active
+  .MuiTableSortLabel-icon {
   opacity: 1;
   color: "blue";
 }
@@ -221,19 +233,18 @@ main::before {
 }
 
 @layer components {
-
   /* .my-react-select-container {
   } */
   .my-react-select-container .my-react-select__control {
-    @apply py-[.4rem] rounded-lg bg-white dark:bg-[#1E1E1E] border-2 border-neutral-200 dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
+    @apply py-[.4rem] rounded-lg bg-white dark:bg-[#1E1E1E] border-[1px] border-[#cccccc] dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
   }
 
   .my-react-select-container .my-react-select__control--is-focused {
-    @apply border-neutral-500 hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
+    @apply hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
   }
 
   .my-react-select-container .my-react-select__menu {
-    @apply bg-white dark:bg-[#1E1E1E] border-2 border-neutral-200 dark:border-neutral-600;
+    @apply bg-white dark:bg-[#1E1E1E] border-[1px]  dark:border-neutral-600;
   }
 
   .my-react-select-container .my-react-select__option {

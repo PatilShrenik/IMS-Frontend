@@ -52,7 +52,7 @@ const AllDeviceTabel = (props: any) => {
   } = props;
 
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("");
+  const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");
   const [deviceIds, setDeviceIds] = useState() as any;
   const { toggleDeviceTableState } = useAppContext();
@@ -111,7 +111,7 @@ const AllDeviceTabel = (props: any) => {
       let response = await getAllDiscoverySch();
       // setAllDiscoverySch(response.result);
     };
-    getDiscoveryScheduler();
+    // getDiscoveryScheduler();
   }, []);
 
   const handleRequestSort = (property: any) => {
@@ -148,7 +148,10 @@ const AllDeviceTabel = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data.map((row: any) => row._id);
+      const allRowIds = data
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .map((row: any) => row._id);
+      console.log("allrow ids", allRowIds);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -386,7 +389,7 @@ const AllDeviceTabel = (props: any) => {
       return (
         <>
           <p
-            className="cursor-pointer underline"
+            className="cursor-pointer text-primary2 text-[16px]"
             onClick={() => handleContextModalOpen(row._id)}
           >
             {value}
@@ -535,226 +538,225 @@ const AllDeviceTabel = (props: any) => {
       console.log(error);
     }
   };
-
+  // console.log("======", data);
   return (
     <>
-      {data && (
-        <>
-          <div>
-            <div className="flex justify-between">
-              <div className="flex justify-between dark:text-white">
-                {/* Global Search for table */}
-                <div className="flex">
-                  <div className="border items-center rounded-lg h-[2.3rem] dark:border-dark-border border-textColor flex justify-end w-fit m-2 mt-3 dark:text-white">
-                    <IconButton>
-                      <SearchIcon
-                        className="dark:text-dark-border text-textColor "
-                        fontSize="small"
-                      />
-                    </IconButton>
-                    <InputBase
-                      className="dark:text-textColor"
-                      placeholder="Search"
-                      value={search}
-                      onChange={handleSearchChange}
-                    />
-                    {/* {search != "" && ( */}
-                    <ClearIcon
-                      onClick={() => {
-                        setSearch("");
-                      }}
-                      className="cursor-pointer rounded-2xl"
-                      fontSize="small"
-                      color={search == "" ? "disabled" : "warning"}
-                      sx={{ fontSize: "13px", marginRight: "8px" }}
-                    />
-                    {/* )} */}
-                  </div>
-
-                  <div className="flex items-center">
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="SNMP"
-                      />
-                    </div>
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="SSH"
-                      />
-                    </div>
-                    <div>
-                      <CustomeButtonGroupButton
-                        selectedButtons={selectedButtons}
-                        setSelectedButtons={setSelectedButtons}
-                        title="WinRm"
-                      />
-                    </div>
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="API"
-                    />
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="Cloud"
-                    />
-                    <CustomeButtonGroupButton
-                      selectedButtons={selectedButtons}
-                      setSelectedButtons={setSelectedButtons}
-                      title="ICMP"
-                    />
-                    <Tooltip
-                      TransitionComponent={Zoom}
-                      title="Reset Filter"
-                      placement="top"
-                    >
-                      <RestartAltIcon
-                        onClick={handleResetButtonClick}
-                        className="cursor-pointer mx-2"
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
+      <div>
+        <div className="flex justify-between">
+          <div className="flex justify-between dark:text-white">
+            {/* Global Search for table */}
+            <div className="flex">
+              <div className="border items-center rounded-lg h-[2.3rem] dark:border-dark-border border-textColor flex justify-end w-fit m-2 mt-3 dark:text-white">
+                <IconButton>
+                  <SearchIcon
+                    className="dark:text-dark-border text-textColor "
+                    fontSize="small"
+                  />
+                </IconButton>
+                <InputBase
+                  className="dark:text-textColor"
+                  placeholder="Search"
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+                {/* {search != "" && ( */}
+                <ClearIcon
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                  className="cursor-pointer rounded-2xl"
+                  fontSize="small"
+                  color={search == "" ? "disabled" : "warning"}
+                  sx={{ fontSize: "13px", marginRight: "8px" }}
+                />
+                {/* )} */}
               </div>
-              <div className="flex">
-                <div className="flex items-center m-4 mr-0">
-                  {selected ? (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected Assets"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          onClick={handleModalOpen}
-                          className="cursor-pointer dark:text-textColor"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <DeleteModal
-                        open={isModalopen}
-                        handleModalClose={handleModalClose}
-                        deleteRow={deleteDevice}
-                      />
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected Assets"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          onClick={downloadCSV}
-                          className="cursor-pointer dark:text-textColor"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  ) : (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected Assets (Disabled)"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          //   onClick={deleteDevice}
-                          color="disabled"
-                          className="cursor-pointer dark:text-gray-700"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected Assets (Disabled)"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          // onClick={downloadCSV}
-                          className="cursor-pointer dark:text-gray-700"
-                          color="disabled"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  )}
-                  {/* Hide and Show column */}
+
+              <div className="flex items-center">
+                <div>
+                  <CustomeButtonGroupButton
+                    selectedButtons={selectedButtons}
+                    setSelectedButtons={setSelectedButtons}
+                    title="SNMP"
+                  />
+                </div>
+                <div>
+                  <CustomeButtonGroupButton
+                    selectedButtons={selectedButtons}
+                    setSelectedButtons={setSelectedButtons}
+                    title="SSH"
+                  />
+                </div>
+                <div>
+                  <CustomeButtonGroupButton
+                    selectedButtons={selectedButtons}
+                    setSelectedButtons={setSelectedButtons}
+                    title="WinRm"
+                  />
+                </div>
+                <CustomeButtonGroupButton
+                  selectedButtons={selectedButtons}
+                  setSelectedButtons={setSelectedButtons}
+                  title="API"
+                />
+                <CustomeButtonGroupButton
+                  selectedButtons={selectedButtons}
+                  setSelectedButtons={setSelectedButtons}
+                  title="Cloud"
+                />
+                <CustomeButtonGroupButton
+                  selectedButtons={selectedButtons}
+                  setSelectedButtons={setSelectedButtons}
+                  title="ICMP"
+                />
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Reset Filter"
+                  placement="top"
+                >
+                  <RestartAltIcon
+                    onClick={handleResetButtonClick}
+                    className="cursor-pointer mx-2"
+                  />
+                </Tooltip>
+              </div>
+            </div>
+          </div>
+          <div className="flex">
+            <div className="flex items-center m-4 mr-0">
+              {selected ? (
+                <>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Hide/UnHide Columns"
+                    title="Delete selected Assets"
                     placement="top"
                   >
-                    <ViewColumnIcon
-                      className="text-dark-border dark:text-light-menu-color"
-                      style={{ margin: "0 10px 0 5px" }}
-                      onClick={handleMenuOpen}
+                    <DeleteForeverIcon
+                      onClick={handleModalOpen}
+                      className="cursor-pointer dark:text-textColor"
+                      style={{
+                        margin: "0 5px",
+                      }}
                     />
                   </Tooltip>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    style={{ padding: "0" }}
+                  <DeleteModal
+                    open={isModalopen}
+                    handleModalClose={handleModalClose}
+                    deleteRow={deleteDevice}
+                  />
+                  <Tooltip
+                    TransitionComponent={Zoom}
+                    title="Download selected Assets"
+                    placement="top"
                   >
-                    {columns.map((column: any) => (
-                      <MenuItem
-                        className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
+                    <FileDownloadIcon
+                      onClick={downloadCSV}
+                      className="cursor-pointer dark:text-textColor"
+                      style={{
+                        margin: "0 5px",
+                      }}
+                    />
+                  </Tooltip>
+                </>
+              ) : (
+                <>
+                  <Tooltip
+                    TransitionComponent={Zoom}
+                    title="Delete selected Assets (Disabled)"
+                    placement="top"
+                  >
+                    <DeleteForeverIcon
+                      //   onClick={deleteDevice}
+                      color="disabled"
+                      className="cursor-pointer dark:text-gray-700"
+                      style={{
+                        margin: "0 5px",
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    TransitionComponent={Zoom}
+                    title="Download selected Assets (Disabled)"
+                    placement="top"
+                  >
+                    <FileDownloadIcon
+                      // onClick={downloadCSV}
+                      className="cursor-pointer dark:text-gray-700"
+                      color="disabled"
+                      style={{
+                        margin: "0 5px",
+                      }}
+                    />
+                  </Tooltip>
+                </>
+              )}
+              {/* Hide and Show column */}
+              <Tooltip
+                TransitionComponent={Zoom}
+                title="Hide/UnHide Columns"
+                placement="top"
+              >
+                <ViewColumnIcon
+                  className="text-dark-border dark:text-light-menu-color"
+                  style={{ margin: "0 10px 0 5px" }}
+                  onClick={handleMenuOpen}
+                />
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                style={{ padding: "0" }}
+              >
+                {columns &&
+                  columns.map((column: any) => (
+                    <MenuItem
+                      className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
+                      style={{
+                        fontFamily: `"Poppins", sans-serif`,
+                      }}
+                      key={column.field}
+                      onClick={() => handleMenuItemClick(column.field)}
+                    >
+                      <Checkbox
+                        className=" dark:text-textColor"
                         style={{
-                          fontFamily: `"Poppins", sans-serif`,
+                          padding: "0 .5rem",
                         }}
-                        key={column.field}
-                        onClick={() => handleMenuItemClick(column.field)}
-                      >
-                        <Checkbox
-                          className=" dark:text-textColor"
-                          style={{
-                            padding: "0 .5rem",
-                          }}
-                          size="small"
-                          checked={visibleColumns.includes(column.field)}
-                          // onChange={() => handleMenuItemClick(column.field)}
-                        />
-                        {column.headerName
-                          .split(" ")
-                          .map((word: any) =>
-                            word
-                              .split("_")
-                              .map(
-                                (subWord: any) =>
-                                  subWord.charAt(0).toUpperCase() +
-                                  subWord.slice(1)
-                              )
-                              .join(" ")
-                          )
-                          .join(" ")}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </div>
+                        size="small"
+                        checked={visibleColumns.includes(column.field)}
+                        // onChange={() => handleMenuItemClick(column.field)}
+                      />
+                      {column.headerName
+                        .split(" ")
+                        .map((word: any) =>
+                          word
+                            .split("_")
+                            .map(
+                              (subWord: any) =>
+                                subWord.charAt(0).toUpperCase() +
+                                subWord.slice(1)
+                            )
+                            .join(" ")
+                        )
+                        .join(" ")}
+                    </MenuItem>
+                  ))}
+              </Menu>
+            </div>
 
-                {/* Add Device Menu and Model */}
+            {/* Add Device Menu and Model */}
 
-                <div className="flex m-4 mr-0 ml-2 h-fit">
-                  {/* <div>
+            <div className="flex m-4 mr-0 ml-2 h-fit">
+              {/* <div>
                     <Link href="/Assets/profiling">
                       <Button
                         // onClick={handleDrawerOpen}
@@ -766,71 +768,72 @@ const AllDeviceTabel = (props: any) => {
                       </Button>
                     </Link>
                   </div> */}
-                  <Button
-                    onClick={handleCSVDrawerOpen}
-                    variant="contained"
-                    className="bg-primary3 capitalize items-center"
-                    size="small"
-                    style={{ margin: "0 10px" }}
-                  >
-                    <FileUploadIcon fontSize="small" className="mr-2" /> Upload
-                    CSV
-                  </Button>
-                  <Button
-                    onClick={handleDrawerOpen}
-                    variant="contained"
-                    className="bg-primary3 capitalize items-center"
-                    size="small"
-                  >
-                    <AddIcon fontSize="small" className="mr-2" /> Asset
-                  </Button>
+              <Button
+                onClick={handleCSVDrawerOpen}
+                variant="contained"
+                className="bg-primary3 capitalize items-center"
+                size="small"
+                style={{ margin: "0 10px" }}
+              >
+                <FileUploadIcon fontSize="small" className="mr-2" /> Upload CSV
+              </Button>
+              <Button
+                onClick={handleDrawerOpen}
+                variant="contained"
+                className="bg-primary3 capitalize items-center"
+                size="small"
+              >
+                <AddIcon fontSize="small" className="mr-2" /> Asset
+              </Button>
 
-                  <AddSingleDeviceDrawer
-                    open={isDrawerOpen}
-                    handleDrawerClose={handleDrawerClose}
-                  />
-                  <UploadCSVDrawer
-                    open={isCSVDrawerOpen}
-                    handleDrawerClose={handleCSVDrawerClose}
-                  />
-                </div>
-              </div>
-              {/* Global Downlad and delete button for table */}
+              <AddSingleDeviceDrawer
+                open={isDrawerOpen}
+                handleDrawerClose={handleDrawerClose}
+              />
+              <UploadCSVDrawer
+                open={isCSVDrawerOpen}
+                handleDrawerClose={handleCSVDrawerClose}
+              />
             </div>
           </div>
-          <div
-            className=""
-            style={{
-              width: "100%",
-              overflow: "scroll",
-              borderRadius: "0",
-              marginTop: ".5rem",
-            }}
-          >
-            <div className="max-h-440 ">
-              <table className="w-full border-collapse overflow-x-auto">
-                <thead>
-                  <tr>
-                    <th
-                      className="bg-textColor  dark:bg-tabel-header dark:text-textColor"
-                      style={{
-                        padding: "8px",
-                        fontSize: "11px",
-                        textAlign: "center",
-                        borderBottom: "0",
-                        fontWeight: "bolder",
-                        // backgroundColor:"#D8D8D8"
-                      }}
-                    >
-                      <Checkbox
-                        className=" dark:text-textColor"
-                        size="small"
-                        style={{ padding: "0" }}
-                        checked={selectAll}
-                        onChange={handleSelectAllCheckboxToggle}
-                      />
-                    </th>
-                    {columns
+          {/* Global Downlad and delete button for table */}
+        </div>
+      </div>
+      {data && data.length != 0 ? (
+        <div
+          className=""
+          style={{
+            width: "100%",
+            overflow: "auto",
+            borderRadius: "0",
+            marginTop: ".5rem",
+          }}
+        >
+          <div className="max-h-440 ">
+            <table className="w-full border-collapse overflow-auto">
+              <thead>
+                <tr>
+                  <th
+                    className="bg-textColor  dark:bg-tabel-header dark:text-textColor"
+                    style={{
+                      padding: "8px",
+                      fontSize: "11px",
+                      textAlign: "center",
+                      borderBottom: "0",
+                      fontWeight: "bolder",
+                      // backgroundColor:"#D8D8D8"
+                    }}
+                  >
+                    <Checkbox
+                      className=" dark:text-textColor"
+                      size="small"
+                      style={{ padding: "0" }}
+                      checked={selectAll}
+                      onChange={handleSelectAllCheckboxToggle}
+                    />
+                  </th>
+                  {columns &&
+                    columns
                       .filter((column: any) =>
                         visibleColumns.includes(column.field)
                       )
@@ -891,153 +894,151 @@ const AllDeviceTabel = (props: any) => {
                           </th>
                         );
                       })}
-                    <th
-                      className=" bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
-                      style={{
-                        padding: "0px 8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        borderBottom: "0",
-                        letterSpacing: ".7px",
-                        textAlign: "start",
-                        fontStyle: "normal",
-                        fontFamily: `"Poppins", sans-serif`,
-                        // backgroundColor:"#D8D8D8"
-                      }}
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stableSort(filteredData, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: any, rowIndex: any) => {
-                      const isLastRow = rowIndex === data.length - 1;
-                      // console.log("---------------", row.device_status);
-                      return (
-                        <tr
-                          className="bg-white dark:bg-dark-container dark:text-textColor"
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row._id}
+                  <th
+                    className=" bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                    style={{
+                      padding: "0px 8px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      borderBottom: "0",
+                      letterSpacing: ".7px",
+                      textAlign: "start",
+                      fontStyle: "normal",
+                      fontFamily: `"Poppins", sans-serif`,
+                      // backgroundColor:"#D8D8D8"
+                    }}
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {stableSort(filteredData, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row: any, rowIndex: any) => {
+                    const isLastRow = rowIndex === data.length - 1;
+                    // console.log("---------------", row.device_status);
+                    return (
+                      <tr
+                        className="bg-white dark:bg-dark-container dark:text-textColor"
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row._id}
+                      >
+                        <td
+                          style={{
+                            //   padding: "8px",
+                            textAlign: "center",
+                          }}
+                          className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                            isLastRow ? "border-b" : "border-b"
+                          }`}
                         >
-                          <td
+                          <Checkbox
+                            className=" dark:text-textColor"
                             style={{
-                              //   padding: "8px",
+                              padding: "0",
                               textAlign: "center",
                             }}
-                            className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
-                              isLastRow ? "border-b" : "border-b"
-                            }`}
-                          >
-                            <Checkbox
-                              className=" dark:text-textColor"
-                              style={{
-                                padding: "0",
-                                textAlign: "center",
-                              }}
-                              color="primary"
-                              size="small"
-                              checked={selectedRows.includes(row._id)}
-                              onChange={() => handleRowCheckboxToggle(row._id)}
-                            />
-                          </td>
-                          {columns
-                            .filter((column: any) =>
-                              visibleColumns.includes(column.field)
-                            )
-                            .map((column: any, colIndex: any) => {
-                              const value = row[column.field];
-                              const processedValue = processColumnData(
-                                column,
-                                row
-                              );
+                            color="primary"
+                            size="small"
+                            checked={selectedRows.includes(row._id)}
+                            onChange={() => handleRowCheckboxToggle(row._id)}
+                          />
+                        </td>
+                        {columns
+                          .filter((column: any) =>
+                            visibleColumns.includes(column.field)
+                          )
+                          .map((column: any, colIndex: any) => {
+                            const value = row[column.field];
+                            const processedValue = processColumnData(
+                              column,
+                              row
+                            );
 
-                              return (
-                                <td
-                                  className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
-                                    isLastRow ? "border-b " : "border-b "
+                            return (
+                              <td
+                                className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                                  isLastRow ? "border-b " : "border-b "
+                                }`}
+                                key={column.id}
+                                align={column.align}
+                                style={{
+                                  fontSize: "13px",
+                                  fontWeight: "normal",
+                                  padding: "px",
+                                  textAlign: "center",
+                                  fontFamily: `"Poppins", sans-serif`,
+                                }}
+                              >
+                                <span
+                                  className={`flex ${
+                                    colIndex == 0 || colIndex == 1
+                                      ? "justify-start"
+                                      : "justify-start "
                                   }`}
-                                  key={column.id}
-                                  align={column.align}
-                                  style={{
-                                    fontSize: "13px",
-                                    fontWeight: "normal",
-                                    padding: "px",
-                                    textAlign: "center",
-                                    fontFamily: `"Poppins", sans-serif`,
-                                  }}
                                 >
-                                  <span
-                                    className={`flex ${
-                                      colIndex == 0 || colIndex == 1
-                                        ? "justify-start"
-                                        : "justify-start "
-                                    }`}
-                                  >
-                                    {column.format &&
-                                    typeof processedValue === "number"
-                                      ? column.format(processedValue)
-                                      : processedValue}
-                                  </span>
-                                </td>
-                              );
-                            })}
-                          <td
-                            className={` bg-white items-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
-                              isLastRow ? "border-b" : "border-b "
-                            }`}
-                            style={{
-                              // fontSize: "11px",
-                              fontWeight: "normal",
-                              padding: "0",
-                              textAlign: "start",
-                              fontFamily: `"Poppins", sans-serif`,
-                            }}
-                          >
-                            <div className="flex items-center">
-                              {row.device_status == "new" ? (
-                                <Tooltip
-                                  TransitionComponent={Zoom}
-                                  title="Run Discovery Now"
-                                  placement="top"
-                                >
-                                  <div onClick={() => runDeviceDiscovery(row)}>
-                                    <SlowMotionVideoIcon className="cursor-pointer" />
-                                  </div>
-                                </Tooltip>
-                              ) : (
-                                <Tooltip
-                                  TransitionComponent={Zoom}
-                                  title="Run Discovery Now"
-                                  placement="top"
-                                >
-                                  {/* <div onClick={() => runDeviceDiscovery(row)}> */}
-                                  <SlowMotionVideoIcon
-                                    color="disabled"
-                                    className="cursor-pointer dark:text-gray-700"
-                                  />
-                                  {/* </div> */}
-                                </Tooltip>
-                              )}
-                              <AssetsActionMenu rowData={row} />
-                            </div>
-                            {/* <CredentialProfileMenu rowData={row} /> */}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
+                                  {column.format &&
+                                  typeof processedValue === "number"
+                                    ? column.format(processedValue)
+                                    : processedValue}
+                                </span>
+                              </td>
+                            );
+                          })}
+                        <td
+                          className={` bg-white items-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                            isLastRow ? "border-b" : "border-b "
+                          }`}
+                          style={{
+                            // fontSize: "11px",
+                            fontWeight: "normal",
+                            padding: "0",
+                            textAlign: "start",
+                            fontFamily: `"Poppins", sans-serif`,
+                          }}
+                        >
+                          <div className="flex items-center">
+                            {row.device_status == "new" ? (
+                              <Tooltip
+                                TransitionComponent={Zoom}
+                                title="Run Discovery Now"
+                                placement="top"
+                              >
+                                <div onClick={() => runDeviceDiscovery(row)}>
+                                  <SlowMotionVideoIcon className="cursor-pointer" />
+                                </div>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                TransitionComponent={Zoom}
+                                title="Run Discovery Now"
+                                placement="top"
+                              >
+                                {/* <div onClick={() => runDeviceDiscovery(row)}> */}
+                                <SlowMotionVideoIcon
+                                  color="disabled"
+                                  className="cursor-pointer dark:text-gray-700"
+                                />
+                                {/* </div> */}
+                              </Tooltip>
+                            )}
+                            <AssetsActionMenu rowData={row} />
+                          </div>
+                          {/* <CredentialProfileMenu rowData={row} /> */}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
           </div>
-          {/* <DeleteModal
-            open={isContextModalopen}
-            handleModalClose={handleContextModalClose}
-            deviceIds={deviceIds}
-          /> */}
-        </>
+        </div>
+      ) : (
+        <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
       )}
     </>
   );

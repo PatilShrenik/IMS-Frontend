@@ -211,7 +211,9 @@ const Profiling = () => {
           "auto_provision",
           "location",
           "site",
-          "oem",
+          // "oem",
+          "os",
+          "alias",
           "os_version",
           "vendor",
           "check_without_save",
@@ -630,41 +632,40 @@ const Profiling = () => {
     <>
       {data && (
         <>
-          <div>
-            <div className="flex justify-between">
-              <div className="flex justify-between dark:text-white">
-                {/* Global Search for table */}
-                <div className="flex">
-                  <div className="border items-center rounded-lg h-[2.3rem] dark:border-dark-border border-textColor flex justify-end w-fit m-2 mt-3 dark:text-white">
-                    <IconButton>
-                      <SearchIcon
-                        className="dark:text-dark-border text-textColor "
-                        fontSize="small"
-                      />
-                    </IconButton>
-                    <InputBase
-                      className="dark:text-textColor"
-                      placeholder="Search"
-                      value={search}
-                      onChange={handleSearchChange}
-                    />
-                    {/* {search != "" && ( */}
-                    <ClearIcon
-                      onClick={() => {
-                        setSearch("");
-                      }}
-                      className="cursor-pointer rounded-2xl"
+          <div className="flex justify-between">
+            <div className="flex justify-between dark:text-white">
+              {/* Global Search for table */}
+              <div className="flex">
+                <div className="border items-center rounded-lg h-[2.3rem] dark:border-dark-border border-textColor flex justify-end w-fit m-2 mt-3 dark:text-white">
+                  <IconButton>
+                    <SearchIcon
+                      className="dark:text-dark-border text-textColor "
                       fontSize="small"
-                      color={search == "" ? "disabled" : "warning"}
-                      sx={{ fontSize: "13px", marginRight: "8px" }}
                     />
-                    {/* )} */}
-                  </div>
+                  </IconButton>
+                  <InputBase
+                    className="dark:text-textColor"
+                    placeholder="Search"
+                    value={search}
+                    onChange={handleSearchChange}
+                  />
+                  {/* {search != "" && ( */}
+                  <ClearIcon
+                    onClick={() => {
+                      setSearch("");
+                    }}
+                    className="cursor-pointer rounded-2xl"
+                    fontSize="small"
+                    color={search == "" ? "disabled" : "warning"}
+                    sx={{ fontSize: "13px", marginRight: "8px" }}
+                  />
+                  {/* )} */}
                 </div>
               </div>
-              <div className="flex">
-                <div className="flex items-center m-4 mr-0">
-                  {/* {selected ? (
+            </div>
+            <div className="flex">
+              <div className="flex items-center m-4 mr-0">
+                {/* {selected ? (
                     <>
                       <Tooltip
                         TransitionComponent={Zoom}
@@ -730,84 +731,84 @@ const Profiling = () => {
                       </Tooltip>
                     </>
                   )} */}
-                  {/* Hide and Show column */}
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Hide/UnHide Columns"
-                    placement="top"
-                  >
-                    <ViewColumnIcon
-                      className="text-dark-border dark:text-light-menu-color"
-                      style={{ margin: "0 10px 0 5px" }}
-                      onClick={handleMenuOpen}
-                    />
-                  </Tooltip>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    style={{ padding: "0" }}
-                  >
-                    {columns.map((column: any) => (
-                      <MenuItem
-                        className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
+                {/* Hide and Show column */}
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Hide/UnHide Columns"
+                  placement="top"
+                >
+                  <ViewColumnIcon
+                    className="text-dark-border dark:text-light-menu-color"
+                    style={{ margin: "0 10px 0 5px" }}
+                    onClick={handleMenuOpen}
+                  />
+                </Tooltip>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={isMenuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  style={{ padding: "0" }}
+                >
+                  {columns.map((column: any) => (
+                    <MenuItem
+                      className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
+                      style={{
+                        fontFamily: `"Poppins", sans-serif`,
+                      }}
+                      key={column.field}
+                      onClick={() => handleMenuItemClick(column.field)}
+                    >
+                      <Checkbox
+                        className=" dark:text-textColor"
                         style={{
-                          fontFamily: `"Poppins", sans-serif`,
+                          padding: "0 .5rem",
                         }}
-                        key={column.field}
-                        onClick={() => handleMenuItemClick(column.field)}
-                      >
-                        <Checkbox
-                          className=" dark:text-textColor"
-                          style={{
-                            padding: "0 .5rem",
-                          }}
-                          size="small"
-                          checked={visibleColumns.includes(column.field)}
-                          // onChange={() => handleMenuItemClick(column.field)}
-                        />
-                        {column.headerName
-                          .split(" ")
-                          .map((word: any) =>
-                            word
-                              .split("_")
-                              .map(
-                                (subWord: any) =>
-                                  subWord.charAt(0).toUpperCase() +
-                                  subWord.slice(1)
-                              )
-                              .join(" ")
-                          )
-                          .join(" ")}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                  <div>
-                    <Link href="/Assets/">
-                      <Button
-                        // onClick={handleDrawerOpen}
-                        variant="contained"
-                        className="bg-primary3 capitalize items-center ml-3"
                         size="small"
-                      >
-                        {/* <AddIcon fontSize="small" className="mr-2" />  */}
-                        Assets
-                      </Button>
-                    </Link>
-                  </div>
+                        checked={visibleColumns.includes(column.field)}
+                        // onChange={() => handleMenuItemClick(column.field)}
+                      />
+                      {column.headerName
+                        .split(" ")
+                        .map((word: any) =>
+                          word
+                            .split("_")
+                            .map(
+                              (subWord: any) =>
+                                subWord.charAt(0).toUpperCase() +
+                                subWord.slice(1)
+                            )
+                            .join(" ")
+                        )
+                        .join(" ")}
+                    </MenuItem>
+                  ))}
+                </Menu>
+                <div>
+                  <Link href="/Assets/">
+                    <Button
+                      // onClick={handleDrawerOpen}
+                      variant="contained"
+                      className="bg-primary3 capitalize items-center ml-3"
+                      size="small"
+                    >
+                      {/* <AddIcon fontSize="small" className="mr-2" />  */}
+                      Assets
+                    </Button>
+                  </Link>
                 </div>
+              </div>
 
-                {/* Add Device Menu and Model */}
+              {/* Add Device Menu and Model */}
 
-                {/* <div className="flex m-4 mr-0 ml-2 h-fit">
+              {/* <div className="flex m-4 mr-0 ml-2 h-fit">
                   <Button
                     onClick={handleCSVDrawerOpen}
                     variant="contained"
@@ -836,21 +837,21 @@ const Profiling = () => {
                     handleDrawerClose={handleCSVDrawerClose}
                   />
                 </div> */}
-              </div>
-              {/* Global Downlad and delete button for table */}
             </div>
+            {/* Global Downlad and delete button for table */}
           </div>
+
           <div
             className=""
             style={{
               width: "100%",
-              overflow: "scroll",
+              overflowX: "scroll",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
-            <div className="max-h-440 ">
-              <table className="w-full border-collapse overflow-x-scroll">
+            <div className="">
+              <table className="absolite w-fit border-collapse overflow-x-hidden">
                 <thead>
                   <tr>
                     <th

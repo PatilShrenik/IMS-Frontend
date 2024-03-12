@@ -80,7 +80,6 @@ const AddDeviceDrawer = (props: any) => {
   // }
   return (
     <Drawer
-      // hideBackdrop = {false}temporary
       anchor="right"
       open={open}
       variant="temporary"

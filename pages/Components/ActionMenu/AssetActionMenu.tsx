@@ -249,14 +249,14 @@ const AssetsActionMenu = (props: any) => {
         style={{ padding: "0" }}
       >
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
           onClick={() => handleEditClick(rowData && rowData._id)}
         >
           Edit
         </MenuItem>
 
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
           //  onClick={() => handleDeleteClick(id)}
           onClick={handleModalOpen}
         >
@@ -264,14 +264,14 @@ const AssetsActionMenu = (props: any) => {
         </MenuItem>
         {rowData && rowData.flow_enabled == "no" ? (
           <MenuItem
-            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
             onClick={enableFlow}
           >
             Enable Flow
           </MenuItem>
         ) : (
           <MenuItem
-            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
             onClick={disableFlow}
           >
             Disable Flow

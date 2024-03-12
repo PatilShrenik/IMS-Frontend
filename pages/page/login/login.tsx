@@ -168,7 +168,7 @@ const Login = () => {
                       <div className="relative">
                         <input
                           type="text"
-                          id="email"
+                          id="text"
                           name="email"
                           onChange={handleEmailChange}
                           value={email}

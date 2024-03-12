@@ -210,7 +210,9 @@ const CredntialProfileTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data.map((row: any) => row._id);
+      const allRowIds = data
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .map((row: any) => row._id);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -365,7 +367,7 @@ const CredntialProfileTable = (props: any) => {
   };
 
   const isMenuOpen = Boolean(anchorEl);
-console.log("com",columns);
+  console.log("com", columns);
   const processColumnData = (column: any, row: any) => {
     // Perform operations based on the column and row data
     // console.log("cols", column);
@@ -674,13 +676,13 @@ console.log("com",columns);
             className=""
             style={{
               width: "100%",
-              overflow: "scroll",
+              overflow: "auto",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
             <div className="max-h-440">
-              <table className="w-full border-collapse overflow-x-scroll">
+              <table className="w-full border-collapse overflow-auto">
                 <thead>
                   <tr>
                     <th
