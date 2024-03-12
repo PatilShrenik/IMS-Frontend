@@ -9,7 +9,7 @@ import {
 } from "../api/api/DashboardWidgetsAPI";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export function WidgetMenu(props: any) {
+export default function WidgetMenu(props: any) {
   const ITEM_HEIGHT = 62;
   const widgetOption = ["Edit", "Delete", "Add To Dashboard"];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -18,7 +18,7 @@ export function WidgetMenu(props: any) {
   const { getTableApiState, togglegetTableApiState } = useAppContext();
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   // const [layoutsWholeData, setLayoutsWholeData] = React.useState(null);
-console.log("props in widget",props)
+  console.log("props in widget", props);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

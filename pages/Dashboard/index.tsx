@@ -21,8 +21,7 @@ import {
   getAllWidget,
 } from "../api/api/DashboardWidgetsAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
-import { useAppContext } from "../Components/AppContext";
-import { WidgetMenu } from "./WidgetMenu";
+import WidgetMenu from "./WidgetMenu";
 import { ToastContainer } from "react-toastify";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import DashboardGaugeWidget from "./DashboardWidgets/GaugeWidget";
