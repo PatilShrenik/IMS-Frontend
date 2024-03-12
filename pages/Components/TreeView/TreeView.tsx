@@ -107,11 +107,13 @@ const renderTree = (
               <CheckIcon className="dark:text-textColor" />
             </IconButton>
           )}
-          {parentId != nodes._id && (
-            <IconButton onClick={() => handleDeleteClick(nodes._id)}>
-              <DeleteForeverIcon className="dark:text-textColor" />
-            </IconButton>
-          )}
+          {(!nodes.children || nodes.children.length === 0) && nodes.device_ids &&
+            !nodes.device_ids.length &&
+            nodes._id !== nodes.parent_id && (
+              <IconButton onClick={() => handleDeleteClick(nodes._id)}>
+                <DeleteForeverIcon className="dark:text-textColor" />
+              </IconButton>
+            )}
         </div>
       </div>
     }

@@ -20,12 +20,14 @@ const Assets = () => {
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
+    setPage(newPage - 1);
     // Fetch data for the new page if needed
   };
-
+  console.log("current page", currentPage);
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
 

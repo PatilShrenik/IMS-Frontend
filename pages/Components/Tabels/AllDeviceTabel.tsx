@@ -89,7 +89,11 @@ const AllDeviceTabel = (props: any) => {
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
   const { themeSwitch } = useAppContext();
-
+  console.log(
+    "props in device table-------- page, rowsPerPage",
+    page,
+    rowsPerPage
+  );
   const ITEM_HEIGHT = 48;
   const groupValues =
     allGroups &&

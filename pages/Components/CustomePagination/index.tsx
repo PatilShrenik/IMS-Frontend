@@ -6,6 +6,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
+
 const CustomPagination = ({
   totalCount,
   rowsPerPage,
@@ -25,6 +26,7 @@ const CustomPagination = ({
 
   const handlePageChange = (newPage: any) => {
     if (newPage >= 1 && newPage <= totalPages) {
+      console.log("in page change")
       onPageChange(newPage);
     }
   };
