@@ -1,0 +1,904 @@
+{
+  "result": [
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:40:00.000Z",
+      "event": {
+        "interface.sent.octets": 848030,
+        "device": "7250822258292",
+        "interface.out.packets": 5493
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:40:00.000Z",
+      "event": {
+        "interface.sent.octets": 865895,
+        "device": "8459995113972",
+        "interface.out.packets": 5690
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:41:00.000Z",
+      "event": {
+        "interface.sent.octets": 865499,
+        "device": "7250822258292",
+        "interface.out.packets": 5613
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:41:00.000Z",
+      "event": {
+        "interface.sent.octets": 883276,
+        "device": "8459995113972",
+        "interface.out.packets": 5809
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:42:00.000Z",
+      "event": {
+        "interface.sent.octets": 876939,
+        "device": "7250822258292",
+        "interface.out.packets": 5674
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:42:00.000Z",
+      "event": {
+        "interface.sent.octets": 894804,
+        "device": "8459995113972",
+        "interface.out.packets": 5871
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:43:00.000Z",
+      "event": {
+        "interface.sent.octets": 891192,
+        "device": "7250822258292",
+        "interface.out.packets": 5764
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:43:00.000Z",
+      "event": {
+        "interface.sent.octets": 909057,
+        "device": "8459995113972",
+        "interface.out.packets": 5961
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:44:00.000Z",
+      "event": {
+        "interface.sent.octets": 911226,
+        "device": "7250822258292",
+        "interface.out.packets": 5909
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:44:00.000Z",
+      "event": {
+        "interface.sent.octets": 927934,
+        "device": "8459995113972",
+        "interface.out.packets": 6093
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:45:00.000Z",
+      "event": {
+        "interface.sent.octets": 920101,
+        "device": "7250822258292",
+        "interface.out.packets": 5945
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:45:00.000Z",
+      "event": {
+        "interface.sent.octets": 938309,
+        "device": "8459995113972",
+        "interface.out.packets": 6142
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:46:00.000Z",
+      "event": {
+        "interface.sent.octets": 934697,
+        "device": "7250822258292",
+        "interface.out.packets": 6035
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:46:00.000Z",
+      "event": {
+        "interface.sent.octets": 952639,
+        "device": "8459995113972",
+        "interface.out.packets": 6233
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:47:00.000Z",
+      "event": {
+        "interface.sent.octets": 953663,
+        "device": "7250822258292",
+        "interface.out.packets": 6168
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:47:00.000Z",
+      "event": {
+        "interface.sent.octets": 967235,
+        "device": "8459995113972",
+        "interface.out.packets": 6323
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:50:00.000Z",
+      "event": {
+        "interface.sent.octets": 964778,
+        "device": "7250822258292",
+        "interface.out.packets": 6224
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:50:00.000Z",
+      "event": {
+        "interface.sent.octets": 982720,
+        "device": "8459995113972",
+        "interface.out.packets": 6422
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:51:00.000Z",
+      "event": {
+        "interface.sent.octets": 979091,
+        "device": "7250822258292",
+        "interface.out.packets": 6315
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:51:00.000Z",
+      "event": {
+        "interface.sent.octets": 997376,
+        "device": "8459995113972",
+        "interface.out.packets": 6513
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:52:00.000Z",
+      "event": {
+        "interface.sent.octets": 993687,
+        "device": "7250822258292",
+        "interface.out.packets": 6405
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:52:00.000Z",
+      "event": {
+        "interface.sent.octets": 1011629,
+        "device": "8459995113972",
+        "interface.out.packets": 6603
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:53:00.000Z",
+      "event": {
+        "interface.sent.octets": 1013442,
+        "device": "7250822258292",
+        "interface.out.packets": 6547
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:53:00.000Z",
+      "event": {
+        "interface.sent.octets": 1031574,
+        "device": "8459995113972",
+        "interface.out.packets": 6747
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:54:00.000Z",
+      "event": {
+        "interface.sent.octets": 1022673,
+        "device": "7250822258292",
+        "interface.out.packets": 6587
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:54:00.000Z",
+      "event": {
+        "interface.sent.octets": 1040538,
+        "device": "8459995113972",
+        "interface.out.packets": 6784
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:55:00.000Z",
+      "event": {
+        "interface.sent.octets": 1037269,
+        "device": "7250822258292",
+        "interface.out.packets": 6677
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:55:00.000Z",
+      "event": {
+        "interface.sent.octets": 1055134,
+        "device": "8459995113972",
+        "interface.out.packets": 6874
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:56:00.000Z",
+      "event": {
+        "interface.sent.octets": 1057139,
+        "device": "7250822258292",
+        "interface.out.packets": 6824
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:56:00.000Z",
+      "event": {
+        "interface.sent.octets": 1074825,
+        "device": "8459995113972",
+        "interface.out.packets": 7019
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:57:00.000Z",
+      "event": {
+        "interface.sent.octets": 1066178,
+        "device": "7250822258292",
+        "interface.out.packets": 6858
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:57:00.000Z",
+      "event": {
+        "interface.sent.octets": 1084043,
+        "device": "8459995113972",
+        "interface.out.packets": 7055
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:58:00.000Z",
+      "event": {
+        "interface.sent.octets": 1080431,
+        "device": "7250822258292",
+        "interface.out.packets": 6948
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:58:00.000Z",
+      "event": {
+        "interface.sent.octets": 1098296,
+        "device": "8459995113972",
+        "interface.out.packets": 7145
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:59:00.000Z",
+      "event": {
+        "interface.sent.octets": 1095027,
+        "device": "7250822258292",
+        "interface.out.packets": 7038
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T15:59:00.000Z",
+      "event": {
+        "interface.sent.octets": 1112892,
+        "device": "8459995113972",
+        "interface.out.packets": 7235
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:00:00.000Z",
+      "event": {
+        "interface.sent.octets": 1109340,
+        "device": "7250822258292",
+        "interface.out.packets": 7129
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:00:00.000Z",
+      "event": {
+        "interface.sent.octets": 1127548,
+        "device": "8459995113972",
+        "interface.out.packets": 7326
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:01:00.000Z",
+      "event": {
+        "interface.sent.octets": 1123936,
+        "device": "7250822258292",
+        "interface.out.packets": 7219
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:01:00.000Z",
+      "event": {
+        "interface.sent.octets": 1141878,
+        "device": "8459995113972",
+        "interface.out.packets": 7417
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:02:00.000Z",
+      "event": {
+        "interface.sent.octets": 1138189,
+        "device": "7250822258292",
+        "interface.out.packets": 7309
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:02:00.000Z",
+      "event": {
+        "interface.sent.octets": 1156474,
+        "device": "8459995113972",
+        "interface.out.packets": 7507
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:03:00.000Z",
+      "event": {
+        "interface.sent.octets": 1152845,
+        "device": "7250822258292",
+        "interface.out.packets": 7400
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:03:00.000Z",
+      "event": {
+        "interface.sent.octets": 1170785,
+        "device": "8459995113972",
+        "interface.out.packets": 7598
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:04:00.000Z",
+      "event": {
+        "interface.sent.octets": 1167441,
+        "device": "7250822258292",
+        "interface.out.packets": 7490
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:04:00.000Z",
+      "event": {
+        "interface.sent.octets": 1185381,
+        "device": "8459995113972",
+        "interface.out.packets": 7688
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:05:00.000Z",
+      "event": {
+        "interface.sent.octets": 1181694,
+        "device": "7250822258292",
+        "interface.out.packets": 7580
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:05:00.000Z",
+      "event": {
+        "interface.sent.octets": 1205251,
+        "device": "8459995113972",
+        "interface.out.packets": 7835
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:06:00.000Z",
+      "event": {
+        "interface.sent.octets": 1196350,
+        "device": "7250822258292",
+        "interface.out.packets": 7671
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:06:00.000Z",
+      "event": {
+        "interface.sent.octets": 1214290,
+        "device": "8459995113972",
+        "interface.out.packets": 7869
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:07:00.000Z",
+      "event": {
+        "interface.sent.octets": 1210603,
+        "device": "7250822258292",
+        "interface.out.packets": 7761
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:07:00.000Z",
+      "event": {
+        "interface.sent.octets": 1228543,
+        "device": "8459995113972",
+        "interface.out.packets": 7959
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:08:00.000Z",
+      "event": {
+        "interface.sent.octets": 1225199,
+        "device": "7250822258292",
+        "interface.out.packets": 7851
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:08:00.000Z",
+      "event": {
+        "interface.sent.octets": 1243139,
+        "device": "8459995113972",
+        "interface.out.packets": 8049
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:09:00.000Z",
+      "event": {
+        "interface.sent.octets": 1239512,
+        "device": "7250822258292",
+        "interface.out.packets": 7942
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:09:00.000Z",
+      "event": {
+        "interface.sent.octets": 1257795,
+        "device": "8459995113972",
+        "interface.out.packets": 8140
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:10:00.000Z",
+      "event": {
+        "interface.sent.octets": 1254108,
+        "device": "7250822258292",
+        "interface.out.packets": 8032
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:10:00.000Z",
+      "event": {
+        "interface.sent.octets": 1272048,
+        "device": "8459995113972",
+        "interface.out.packets": 8230
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:11:00.000Z",
+      "event": {
+        "interface.sent.octets": 1273697,
+        "device": "7250822258292",
+        "interface.out.packets": 8172
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:11:00.000Z",
+      "event": {
+        "interface.sent.octets": 1291459,
+        "device": "8459995113972",
+        "interface.out.packets": 8368
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:12:00.000Z",
+      "event": {
+        "interface.sent.octets": 1283017,
+        "device": "7250822258292",
+        "interface.out.packets": 8213
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:12:00.000Z",
+      "event": {
+        "interface.sent.octets": 1300957,
+        "device": "8459995113972",
+        "interface.out.packets": 8411
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:13:00.000Z",
+      "event": {
+        "interface.sent.octets": 1297690,
+        "device": "7250822258292",
+        "interface.out.packets": 8304
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:13:00.000Z",
+      "event": {
+        "interface.sent.octets": 1315553,
+        "device": "8459995113972",
+        "interface.out.packets": 8501
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:14:00.000Z",
+      "event": {
+        "interface.sent.octets": 1311943,
+        "device": "7250822258292",
+        "interface.out.packets": 8394
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:14:00.000Z",
+      "event": {
+        "interface.sent.octets": 1334799,
+        "device": "8459995113972",
+        "interface.out.packets": 8641
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:15:00.000Z",
+      "event": {
+        "interface.sent.octets": 1326599,
+        "device": "7250822258292",
+        "interface.out.packets": 8485
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:15:00.000Z",
+      "event": {
+        "interface.sent.octets": 1344462,
+        "device": "8459995113972",
+        "interface.out.packets": 8682
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:16:00.000Z",
+      "event": {
+        "interface.sent.octets": 1340852,
+        "device": "7250822258292",
+        "interface.out.packets": 8575
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:16:00.000Z",
+      "event": {
+        "interface.sent.octets": 1358715,
+        "device": "8459995113972",
+        "interface.out.packets": 8772
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:17:00.000Z",
+      "event": {
+        "interface.sent.octets": 1357784,
+        "device": "7250822258292",
+        "interface.out.packets": 8685
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:17:00.000Z",
+      "event": {
+        "interface.sent.octets": 1377224,
+        "device": "8459995113972",
+        "interface.out.packets": 8900
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:18:00.000Z",
+      "event": {
+        "interface.sent.octets": 1369761,
+        "device": "7250822258292",
+        "interface.out.packets": 8756
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:18:00.000Z",
+      "event": {
+        "interface.sent.octets": 1388044,
+        "device": "8459995113972",
+        "interface.out.packets": 8954
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:19:00.000Z",
+      "event": {
+        "interface.sent.octets": 1384357,
+        "device": "7250822258292",
+        "interface.out.packets": 8846
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:19:00.000Z",
+      "event": {
+        "interface.sent.octets": 1402297,
+        "device": "8459995113972",
+        "interface.out.packets": 9044
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:20:00.000Z",
+      "event": {
+        "interface.sent.octets": 1402698,
+        "device": "7250822258292",
+        "interface.out.packets": 8972
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:20:00.000Z",
+      "event": {
+        "interface.sent.octets": 1420549,
+        "device": "8459995113972",
+        "interface.out.packets": 9169
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:21:00.000Z",
+      "event": {
+        "interface.sent.octets": 1413266,
+        "device": "7250822258292",
+        "interface.out.packets": 9027
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:21:00.000Z",
+      "event": {
+        "interface.sent.octets": 1431206,
+        "device": "8459995113972",
+        "interface.out.packets": 9225
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:22:00.000Z",
+      "event": {
+        "interface.sent.octets": 1427862,
+        "device": "7250822258292",
+        "interface.out.packets": 9117
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:22:00.000Z",
+      "event": {
+        "interface.sent.octets": 1445802,
+        "device": "8459995113972",
+        "interface.out.packets": 9315
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:23:00.000Z",
+      "event": {
+        "interface.sent.octets": 1442115,
+        "device": "7250822258292",
+        "interface.out.packets": 9207
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:23:00.000Z",
+      "event": {
+        "interface.sent.octets": 1460055,
+        "device": "8459995113972",
+        "interface.out.packets": 9405
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:24:00.000Z",
+      "event": {
+        "interface.sent.octets": 1456771,
+        "device": "7250822258292",
+        "interface.out.packets": 9298
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:24:00.000Z",
+      "event": {
+        "interface.sent.octets": 1474711,
+        "device": "8459995113972",
+        "interface.out.packets": 9496
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:25:00.000Z",
+      "event": {
+        "interface.sent.octets": 1471024,
+        "device": "7250822258292",
+        "interface.out.packets": 9388
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:25:00.000Z",
+      "event": {
+        "interface.sent.octets": 1488964,
+        "device": "8459995113972",
+        "interface.out.packets": 9586
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:26:00.000Z",
+      "event": {
+        "interface.sent.octets": 1485620,
+        "device": "7250822258292",
+        "interface.out.packets": 9478
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:26:00.000Z",
+      "event": {
+        "interface.sent.octets": 1503560,
+        "device": "8459995113972",
+        "interface.out.packets": 9676
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:27:00.000Z",
+      "event": {
+        "interface.sent.octets": 1499933,
+        "device": "7250822258292",
+        "interface.out.packets": 9569
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-07T16:27:00.000Z",
+      "event": {
+        "interface.sent.octets": 1518216,
+        "device": "8459995113972",
+        "interface.out.packets": 9767
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:32:00.000Z",
+      "event": {
+        "interface.sent.octets": 1756504,
+        "device": "7250822258292",
+        "interface.out.packets": 11708
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:32:00.000Z",
+      "event": {
+        "interface.sent.octets": 1772934,
+        "device": "8459995113972",
+        "interface.out.packets": 11898
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:33:00.000Z",
+      "event": {
+        "interface.sent.octets": 1771100,
+        "device": "7250822258292",
+        "interface.out.packets": 11798
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:33:00.000Z",
+      "event": {
+        "interface.sent.octets": 1787530,
+        "device": "8459995113972",
+        "interface.out.packets": 11988
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:34:00.000Z",
+      "event": {
+        "interface.sent.octets": 1785353,
+        "device": "7250822258292",
+        "interface.out.packets": 11888
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:34:00.000Z",
+      "event": {
+        "interface.sent.octets": 1807119,
+        "device": "8459995113972",
+        "interface.out.packets": 12128
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:35:00.000Z",
+      "event": {
+        "interface.sent.octets": 1800009,
+        "device": "7250822258292",
+        "interface.out.packets": 11979
+      }
+    },
+    {
+      "version": "v1",
+      "timestamp": "2023-11-08T13:35:00.000Z",
+      "event": {
+        "interface.sent.octets": 1816439,
+        "device": "8459995113972",
+        "interface.out.packets": 12169
+      }
+    }
+  ]
+}

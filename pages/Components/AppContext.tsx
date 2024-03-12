@@ -27,6 +27,10 @@ const AppContext = createContext<{
   toggleGroupState: () => void;
   getDisSchedApiState: boolean;
   togglegetDisSchedApiState: () => void;
+  getWidgetApiState: boolean;
+  toggleWidgetApiState: () => void;
+  getTableApiState: boolean;
+  togglegetTableApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -54,7 +58,11 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
-  
+
+  getWidgetApiState: false,
+  toggleWidgetApiState: () => {},
+  getTableApiState: false,
+  togglegetTableApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -69,6 +77,13 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [themeSwitch, setThemeSwitch] = useState(false);
   const [deviceTabelState, setDevieTabelState] = useState(false);
   const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
+  const [getWidgetApiState, setGetWidgetApiState] = useState(false);
+  const [getTableApiState, setGetTableApiState] = useState(false);
+
+  const togglegetTableApiState = () => {
+    setGetTableApiState((prevState) => !prevState);
+  };
+
   const toggleSideBarClickState = () => {
     setSidebarClick((prevState) => !prevState);
   };
@@ -120,6 +135,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const toggleCloud = (cloud: any) => {
     setCloud(cloud);
   };
+  const toggleWidgetApiState = () => {
+    setGetWidgetApiState((prevState) => !prevState);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -133,7 +151,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleEstimateCalc,
         time,
         toggleTime,
-          getDisSchedApiState,
+        getDisSchedApiState,
         togglegetDisSchedApiState,
         timeEnd,
         toggleTimeEnd,
@@ -149,6 +167,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleDeviceTableState,
         groupState,
         toggleGroupState,
+        getWidgetApiState,
+        toggleWidgetApiState,
+        getTableApiState,
+        togglegetTableApiState,
       }}
     >
       {children}
