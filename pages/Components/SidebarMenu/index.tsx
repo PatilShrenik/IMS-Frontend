@@ -8,6 +8,7 @@ import BookIcon from "@mui/icons-material/Book";
 import { useAppContext } from "../AppContext";
 import { Divider } from "@mui/material";
 import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
+import ArticleIcon from '@mui/icons-material/Article';
 import PolicyIcon from "@mui/icons-material/Policy";
 import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydream";
 import ScheduleIcon from "@mui/icons-material/Schedule";
@@ -229,7 +230,6 @@ const SidebarMenu = () => {
             },
           ],
         },
-
         {
           subMenuName: "Catalog",
           subMenuIcon: <BookIcon />,
@@ -238,6 +238,17 @@ const SidebarMenu = () => {
             {
               subMenuDropdownname: "SNMP",
               subMenuDropdownpathName: "/Settings/catalog/snmp",
+            },
+          ],
+        },
+        {
+          subMenuName: "Template",
+          subMenuIcon: <ArticleIcon />,
+          // subMenuPathName: "/page/systemSetting",
+          subMenuDropdown: [
+            {
+              subMenuDropdownname: "SNMP",
+              subMenuDropdownpathName: "/Settings/template/snmp",
             },
           ],
         },
@@ -283,7 +294,7 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative mt-12 flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+            className={`relative mt-12 flex flex-col overflow-x-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : "w-[15rem] border-r"
             }`}
           >
@@ -306,7 +317,7 @@ const SidebarMenu = () => {
                               >
                                 <Link
                                   href={submenuItem.subMenuPathName || "#"}
-                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 ${
+                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 subMenuLink ${
                                     openSubmenu == subIndex
                                     // "dark:bg-[#282828] bg-[#D8D8D8]"
                                   }`}

@@ -31,6 +31,8 @@ const AppContext = createContext<{
   toggleWidgetApiState: () => void;
   getTableApiState: boolean;
   togglegetTableApiState: () => void;
+  getSNMPTempApiState: boolean;
+  togglegetSNMPTempApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -63,6 +65,8 @@ const AppContext = createContext<{
   toggleWidgetApiState: () => {},
   getTableApiState: false,
   togglegetTableApiState: () => {},
+  getSNMPTempApiState: false,
+  togglegetSNMPTempApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -79,6 +83,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
   const [getWidgetApiState, setGetWidgetApiState] = useState(false);
   const [getTableApiState, setGetTableApiState] = useState(false);
+  const [getSNMPTempApiState, setGetSNMPTempApiState] = useState(false);
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -138,6 +143,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const toggleWidgetApiState = () => {
     setGetWidgetApiState((prevState) => !prevState);
   };
+  const togglegetSNMPTempApiState = () => {
+    setGetSNMPTempApiState((prevState) => !prevState);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -171,6 +179,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleWidgetApiState,
         getTableApiState,
         togglegetTableApiState,
+        getSNMPTempApiState,
+        togglegetSNMPTempApiState,
       }}
     >
       {children}

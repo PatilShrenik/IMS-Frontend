@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Box, Drawer } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { Bounce, toast } from "react-toastify";
@@ -7,33 +7,39 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import CustomeInput, { DateInput } from "../Inputs";
 import { ButtonGroup } from "@mui/material";
 import { CustomeCancelButton } from "../Buttons";
-import { useAppContext } from '../AppContext';
-import { getDiscoverySchById, updateDiscSch } from '@/pages/api/api/DiscoveryScheduleAPI';
-import { replaceDotsWithUnderscores, replaceUnderscoresWithDotsNested } from '@/functions/genericFunctions';
-import { getAllGropus } from '@/pages/api/api/GroupsAPI';
-import { getAllDevice } from '@/pages/api/api/DeviceManagementAPI';
-import SingleSelect from '../Selects';
+import { useAppContext } from "../AppContext";
+import {
+  getDiscoverySchById,
+  updateDiscSch,
+} from "@/pages/api/api/DiscoveryScheduleAPI";
+import {
+  replaceDotsWithUnderscores,
+  replaceUnderscoresWithDotsNested,
+} from "@/functions/genericFunctions";
+import { getAllGropus } from "@/pages/api/api/GroupsAPI";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
+import SingleSelect from "../Selects";
 const useStyles = makeStyles(() => ({
-    drawer: {
-      width: "60%",
-    },
-  }));
+  drawer: {
+    width: "60%",
+  },
+}));
 const EditDiscoverySchDrawer = (props: any) => {
-    const {open, handleDrawerClose ,id} = props;
-    const classes = useStyles();
-    const [selection, setSelection] = React.useState("");
+  const { open, handleDrawerClose, id } = props;
+  const classes = useStyles();
+  const [selection, setSelection] = React.useState("");
   const [frequency, setFrequency] = React.useState("");
   const [timeArray, setTimeArray] = React.useState<any>([]);
-  const [selectedGroupValue,setSelectedGroupValue] = React.useState<any>([]);
-   const [selectedDeviceValue,setSelectedDeviceValue] = React.useState<any>([]);
-  const [selectedTimeValue,setSelectedTimeValue] = React.useState<any>([]);
+  const [selectedGroupValue, setSelectedGroupValue] = React.useState<any>([]);
+  const [selectedDeviceValue, setSelectedDeviceValue] = React.useState<any>([]);
+  const [selectedTimeValue, setSelectedTimeValue] = React.useState<any>([]);
   const { getDisSchedApiState, togglegetDisSchedApiState } = useAppContext();
   const [data, setData] = React.useState<any>({
     entities: [""],
     entity_type: "",
     name: "",
     email: [],
-   // message: "",
+    // message: "",
     scheduler_context_updated: "no",
     scheduler_context: {
       scheduled_times: [""],
@@ -63,25 +69,22 @@ const EditDiscoverySchDrawer = (props: any) => {
   React.useEffect(() => {
     try {
       const getDiscoveryShById = async () => {
-        console.log("edit id----",id);
+        console.log("edit id----", id);
         let response = await getDiscoverySchById(id);
         console.log("-----", response.result);
-        const modifiedData = replaceDotsWithUnderscores(
-          response.result
-        );
+        const modifiedData = replaceDotsWithUnderscores(response.result);
 
         const entitiesArray =
           modifiedData && Object.values(modifiedData.entities || {});
         modifiedData.entities = entitiesArray;
-    
+
         const emailArray =
           modifiedData && Object.values(modifiedData.email || {});
         modifiedData.email = emailArray;
 
-
         setData(modifiedData);
         // setUpdatedData(modifiedData);
-        console.log("edit data--",data);
+        console.log("edit data--", data);
         setActiveButton(modifiedData.entity_type);
         setFrequencyButton(modifiedData.scheduler_context?.frequency);
         setFrequency(modifiedData.scheduler_context?.frequency);
@@ -91,7 +94,7 @@ const EditDiscoverySchDrawer = (props: any) => {
       console.log(error);
     }
   }, [id]);
- // console.log("dataaa", data);
+  // console.log("dataaa", data);
 
   const generateTimeArray = () => {
     const times = [];
@@ -107,7 +110,7 @@ const EditDiscoverySchDrawer = (props: any) => {
 
     return times;
   };
-  
+
   const datesOfMonth = Array.from({ length: 31 }, (_, index) => ({
     id: index + 1,
     name: (index + 1).toString(),
@@ -119,7 +122,7 @@ const EditDiscoverySchDrawer = (props: any) => {
       label: time,
     }));
     setTimeArray(transformedArray);
-    console.log("timearray", timeArray)
+    console.log("timearray", timeArray);
     const getGroups = async () => {
       let response = await getAllGropus();
       setAllGroups(response.result);
@@ -160,26 +163,25 @@ const EditDiscoverySchDrawer = (props: any) => {
 
   useEffect(() => {
     if (data && data.entity_type === "DEVICE") {
-      setSelectedDeviceValue(data.entities);     
+      setSelectedDeviceValue(data.entities);
     }
     if (data && data.entity_type === "GROUP") {
-      setSelectedGroupValue(data.entities);     
+      setSelectedGroupValue(data.entities);
     }
-    if (data && data.scheduler_context){
+    if (data && data.scheduler_context) {
       setSelectedTimeValue(data.scheduler_context.scheduled_times);
-     // console.log("selectedTimeValue",data.scheduler_context.scheduled_times)
+      // console.log("selectedTimeValue",data.scheduler_context.scheduled_times)
     }
   }, [data]);
 
-
   const handleFrequency = (values: any) => {
-      setData((prevSnmpObject: any) => ({
-        ...prevSnmpObject,
-        scheduler_context: {
-          ...prevSnmpObject.scheduler_context,
-          scheduled_times: values,
-        },
-      }));
+    setData((prevSnmpObject: any) => ({
+      ...prevSnmpObject,
+      scheduler_context: {
+        ...prevSnmpObject.scheduler_context,
+        scheduled_times: values,
+      },
+    }));
   };
   const handleWeeklyFrequency = (values: any) => {
     setData((prevSnmpObject: any) => ({
@@ -280,39 +282,37 @@ const EditDiscoverySchDrawer = (props: any) => {
     const modifiedData = replaceUnderscoresWithDotsNested(data);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
-     console.log("======", modifiedData);
-     let response = await updateDiscSch(modifiedData,id);
-     // console.log("updated", response);
-     if (response.status == "success") {
+    console.log("======", modifiedData);
+    let response = await updateDiscSch(modifiedData, id);
+    // console.log("updated", response);
+    if (response.status == "success") {
       togglegetDisSchedApiState();
-       handleDrawerClose();
-       toast.success(response.status, {
-         position: "bottom-right",
-         autoClose: 1000,
-         hideProgressBar: true,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-         theme: "colored",
-         transition: Bounce,
-       });
-     } else {
-       toast.error(response.message, {
-         position: "bottom-right",
-         autoClose: 2000,
-         hideProgressBar: true,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-         theme: "colored",
-         transition: Bounce,
-       });
-     }
+      handleDrawerClose();
+      toast.success(response.status, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    } else {
+      toast.error(response.message, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
   };
-
-
 
   return (
     <Drawer
@@ -377,19 +377,23 @@ const EditDiscoverySchDrawer = (props: any) => {
                 <SingleSelect
                   label="Select Devices"
                   isMulti={true}
-                  value={deviceValues.filter(option => selectedDeviceValue.includes(option.value))}
+                  value={deviceValues.filter((option) =>
+                    selectedDeviceValue.includes(option.value)
+                  )}
                   selectData={deviceValues}
                   onChange={handleEntities}
                 />
               ) : (
                 <SingleSelect
-                label="Select Groups"
-                isMulti={true}
+                  label="Select Groups"
+                  isMulti={true}
                   // value={groupValues.find(
                   //   (option) => option.value === selectedValue
                   // )}
 
-                  value={groupValues.filter(option => selectedGroupValue.includes(option.value))}
+                  value={groupValues.filter((option) =>
+                    selectedGroupValue.includes(option.value)
+                  )}
                   selectData={groupValues}
                   onChange={handleEntities}
                 />
@@ -406,9 +410,7 @@ const EditDiscoverySchDrawer = (props: any) => {
             />
 
             <div>
-              <h5 className="m-4 font-normal dark:text-textColor">
-                Notify To
-              </h5>
+              <h5 className="m-4 font-normal dark:text-textColor">Notify To</h5>
               <CustomeInput
                 className="w-[36rem]"
                 label="Email"
@@ -432,13 +434,11 @@ const EditDiscoverySchDrawer = (props: any) => {
               /> */}
             {/* </div> */}
             <div className="mx-4 py-2">
-              <h5 className="mb-4 font-normal dark:text-textColor">
-                Schedule
-              </h5>
+              <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
               <DateInput label="Start Date" onChange={handleDate} />
             </div>
             <div className="flex">
-            <Box>
+              <Box>
                 <ButtonGroup
                   variant="outlined"
                   aria-label="Basic button group"
@@ -500,7 +500,9 @@ const EditDiscoverySchDrawer = (props: any) => {
                   label="Select Hours"
                   isMulti={true}
                   width={150}
-                   value={timeValues.filter((option: { value: any; }) => selectedTimeValue[option.value])}
+                  value={timeValues.filter(
+                    (option: { value: any }) => selectedTimeValue[option.value]
+                  )}
                   selectData={timeArray}
                   apiData={[""]}
                   onChange={handleFrequency}
@@ -555,7 +557,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                 className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 type="submit"
               >
-                Save
+                Update
               </button>
             </div>
             <div onClick={handleDrawerClose}>
@@ -566,6 +568,6 @@ const EditDiscoverySchDrawer = (props: any) => {
       </div>
     </Drawer>
   );
-}
+};
 
-export default EditDiscoverySchDrawer
+export default EditDiscoverySchDrawer;

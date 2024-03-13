@@ -494,8 +494,8 @@ export const getDeviceDetailsByID = async (props: any) => {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(
-      baseURL + `/api/v1/settings/device/discovery-context/13768359119604`,
-      // baseURL + `/api/v1/settings/device/discovery-context/${props}`,
+      // baseURL + `/api/v1/settings/device/discovery-context/13768359119604`,
+      baseURL + `/api/v1/settings/device/discovery-context/${props}`,
       {
         method: "GET",
         // body: JSON.stringify(props),

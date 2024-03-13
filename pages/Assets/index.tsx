@@ -84,7 +84,7 @@ const Assets = () => {
               } else if (key == "hostname") {
                 cols.unshift({
                   field: key.replace(/\./g, "_"),
-                  headerName: "Host Name",
+                  headerName: "HostName",
                   minWidth: 150,
                 });
               } else if (key == "ip_address") {

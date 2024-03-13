@@ -29,7 +29,7 @@ const AddWidgetDrawer = (props: any) => {
     <Drawer
       anchor="right"
       open={open}
-      variant="permanent"
+      variant="temporary"
       classes={{ paper: classes.drawer }}
       className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:bg-dark-menu-color"
     >
@@ -37,7 +37,7 @@ const AddWidgetDrawer = (props: any) => {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-              <p className="text-primary2 font-semibold">Add Wdiget</p>
+              <p className="text-primary2 font-semibold">Add Widget</p>
               <div className="flex justify-between">
                 <TabList
                   className="mr-16"
