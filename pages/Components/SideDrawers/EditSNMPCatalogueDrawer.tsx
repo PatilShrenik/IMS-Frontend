@@ -20,7 +20,7 @@ import {
   getSNMPCatalogById,
   updateSNMPCatalog,
 } from "@/pages/api/api/SNMPCatalogueAPI";
-import { getSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
+import { getAllSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
 const useStyles = makeStyles(() => ({
   drawer: {
     width: "65%",
@@ -41,14 +41,16 @@ const EditSNMPCatalogueDrawer = (props: any) => {
     system_oid: "",
     snmp_template: null,
   });
-  const tempValues = tempData && tempData.map((item: any) => ({
-    label: item._id,
-    value: item._id,
-  }));
+  const tempValues =
+    tempData &&
+    tempData.map((item: any) => ({
+      label: item._id,
+      value: item._id,
+    }));
   React.useEffect(() => {
     try {
       const gettemp = async () => {
-        let response = await getSNMPTemp();
+        let response = await getAllSNMPTemp();
         console.log("temp", response.result);
         setTempData(response.result);
       };
@@ -76,9 +78,8 @@ const EditSNMPCatalogueDrawer = (props: any) => {
 
   useEffect(() => {
     if (data && data.snmp_template) {
-       setSelectedValue(data.snmp_template);
+      setSelectedValue(data.snmp_template);
     }
-   
   }, [data]);
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;

@@ -112,7 +112,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setActiveButton("DEVICE");
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
-      setFrequency("CUSTOME")
+      setFrequency("CUSTOME");
     }
   }, [open]);
 
@@ -206,8 +206,7 @@ const DiscoverySchedularDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-      
-    } 
+    }
 
     console.log("=====", data);
     setFrequencyButton(value);
@@ -278,8 +277,8 @@ const DiscoverySchedularDrawer = (props: any) => {
 
   const handleDate = (values: any) => {
     const date = new Date(values);
-    const epochTime = date.getTime() / 1000; 
-    console.log("date------------",epochTime);
+    const epochTime = date.getTime() / 1000;
+    console.log("date------------", epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -295,11 +294,11 @@ const DiscoverySchedularDrawer = (props: any) => {
     const modifiedData = replaceUnderscoresWithDots(data);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
-    
+
     const emailArray = Object.values(modifiedData.email);
     modifiedData.email = emailArray;
     console.log("======  mod", modifiedData);
-   
+
     const createDiscovery = async () => {
       let response = await createDiscoverySch(modifiedData);
       console.log(response);
@@ -357,7 +356,7 @@ const DiscoverySchedularDrawer = (props: any) => {
             onClick={handleDrawerClose}
           />
         </div>
-        <form onSubmit={handleSave} >
+        <form onSubmit={handleSave}>
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
@@ -381,7 +380,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <Button
                     className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
                       activeButton == "DEVICE" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "discButtonGroup bg-primary2 hover:bg-primary2 text-white"
                     }`}
                     onClick={() => {
                       handleButtonClick("DEVICE");
@@ -399,7 +398,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <Button
                     className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
                       activeButton == "GROUP" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "bg-primary2 hover:bg-primary2 text-white discButtonGroup "
                     }`}
                     onClick={() => {
                       handleButtonClick("GROUP");
@@ -469,8 +468,8 @@ const DiscoverySchedularDrawer = (props: any) => {
             <div className="mx-4 py-2">
               <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
               <CustomProvider theme="dark">
-                <DatePicker 
-                onChange={handleDate}
+                <DatePicker
+                  onChange={handleDate}
                   // showOneCalendar
                   appearance="subtle"
                   style={{
@@ -484,7 +483,6 @@ const DiscoverySchedularDrawer = (props: any) => {
                     padding: ".4rem",
                   }}
                   placeholder="Select Date Range"
-                  
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
               </CustomProvider>
@@ -498,9 +496,9 @@ const DiscoverySchedularDrawer = (props: any) => {
                   className="my-5 ml-4 mr-7"
                 >
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    className={`dark:text-textColor border-primary2 discPadding rounded-lg ${
                       frequencyButton == "CUSTOME" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "bg-primary2 hover:bg-primary2 text-white discButtonGroup "
                     }`}
                     onClick={() => handleFrequencyClick("CUSTOME")}
                     // style={{
@@ -512,27 +510,27 @@ const DiscoverySchedularDrawer = (props: any) => {
                     Custom
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    className={`dark:text-textColor border-primary2 discPadding rounded-lg ${
                       frequencyButton == "DAILY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "bg-primary2 hover:bg-primary2 text-white discButtonGroup "
                     }`}
                     onClick={() => handleFrequencyClick("DAILY")}
                   >
                     Daily
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    className={`dark:text-textColor border-primary2 discPadding rounded-lg ${
                       frequencyButton == "WEEKLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "bg-primary2 hover:bg-primary2 text-white discButtonGroup "
                     }`}
                     onClick={() => handleFrequencyClick("WEEKLY")}
                   >
                     Weekly
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    className={`dark:text-textColor border-primary2 discPadding rounded-lg ${
                       frequencyButton == "MONTHLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
+                      "bg-primary2 hover:bg-primary2 text-white discButtonGroup "
                     }`}
                     onClick={() => handleFrequencyClick("MONTHLY")}
                   >

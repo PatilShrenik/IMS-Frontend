@@ -347,3 +347,13 @@ main::before {
   @apply text-black dark:text-textColor dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:!text-black dark:hover:!text-textColor;
 }
 
+.discButtonGroup {
+  @apply !bg-primary2 hover:!bg-primary2 !text-white;
+}
+.discPadding {
+  @apply !px-[5px] !py-2.5;
+}
+/* .css-79xub {
+  padding: 12px 44px !important;
+  border-radius: 8px !important;
+} */

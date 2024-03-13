@@ -14,7 +14,7 @@ import SingleSelect from "../Selects";
 import "rsuite/dist/rsuite.min.css";
 import { useAppContext } from "../AppContext";
 import { addSNMPCatalog } from "@/pages/api/api/SNMPCatalogueAPI";
-import { getSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
+import { getAllSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: "65%",
@@ -42,7 +42,7 @@ const SNMPCatalogueDrawer = (props: any) => {
   React.useEffect(() => {
     try {
       const gettemp = async () => {
-        let response = await getSNMPTemp();
+        let response = await getAllSNMPTemp();
         console.log("temp", response.result);
         setTempData(response.result);
       };
