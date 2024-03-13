@@ -158,7 +158,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     if (data && data.entity_type === "GROUP") {
       setSelectedGroupValue(data.entities);
     }
-    if (data && data.scheduler_context  ) {
+    if (data && data.scheduler_context) {
       data.scheduler_context.days_of_week && setSelectedDaysValue(data.scheduler_context.days_of_week);
       data.scheduler_context.days_of_month &&  setSelectedDatesValue(data.scheduler_context.days_of_month);
       data.scheduler_context.scheduled_times &&  setSelectedTimeValue(data.scheduler_context.scheduled_times)
@@ -410,6 +410,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                 onChange={handleInputChange}
                 type="text"
                 disable={false}
+                require={true}
               />
             </div>
             <div className="grid grid-flow-row-dense grid-cols-3 ">

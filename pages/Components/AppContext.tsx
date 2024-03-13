@@ -27,6 +27,8 @@ const AppContext = createContext<{
   toggleGroupState: () => void;
   getDisSchedApiState: boolean;
   togglegetDisSchedApiState: () => void;
+  getSNMPCatApiState: boolean;
+  toggleGetSNMPCatApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -54,6 +56,8 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
+  getSNMPCatApiState: false,
+  toggleGetSNMPCatApiState: () => {},
   
 });
 
@@ -64,6 +68,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [estimateCalc, setEstimateCalc] = useState(false);
   const [cloud, setCloud] = useState("AWS");
   const [getDisSchedApiState, setGetDisSchedApiState] = useState(false);
+  const [getSNMPCatApiState, setGetSNMPCatApiState] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarClick, setSidebarClick] = useState(false);
   const [themeSwitch, setThemeSwitch] = useState(false);
@@ -102,6 +107,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const togglegetCredProfileApiState = () => {
     setGetCredProfileApiState((prevState) => !prevState);
   };
+  const toggleGetSNMPCatApiState = () => {
+    setGetSNMPCatApiState((prevState) => !prevState);
+  };
 
   const [time, setTime] = useState(
     moment().subtract(90, "day").format("YYYY-MM-DD")
@@ -139,6 +147,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleTimeEnd,
         authenticated,
         toggleAuthenticated,
+        getSNMPCatApiState,
+        toggleGetSNMPCatApiState,
         cloud,
         toggleCloud,
         themeSwitch,

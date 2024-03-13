@@ -12,7 +12,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import EditDiscoverySchDrawer from "../SideDrawers/EditDiscoverySchDrawer";
 
-const ITEM_HEIGHT = 48;
+
 
 const DiscoverySchedularMenu = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
@@ -168,29 +168,7 @@ const DiscoverySchedularMenu = (props: any) => {
             Cancel
           </button>
         </div>
-        {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md">
-          <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " />
-          <div className="mb-5  border-b-2 py-4 ">
-            <p className="text-xl font-semibold mb-2">Are you sure ? </p>
-            <p className="text-gray-400 text-sm">
-              Do you really want to delete these records? This process cannot be
-              undone.
-            </p>
-          </div>
 
-          <button
-            onClick={() => handleDeleteClick(id)}
-            className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4"
-          >
-            Delete
-          </button>
-          <button
-            onClick={handleModalClose}
-            className="bg-light3 hover:bg-light3 text-white font-normal py-1 px-4 rounded mb-2"
-          >
-            Cancel
-          </button>
-        </div> */}
       </Modal>
 
       <EditDiscoverySchDrawer

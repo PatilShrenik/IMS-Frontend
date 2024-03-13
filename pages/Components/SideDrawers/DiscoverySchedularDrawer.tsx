@@ -112,6 +112,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setActiveButton("DEVICE");
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
+      setFrequency("CUSTOME")
     }
   }, [open]);
 
@@ -205,7 +206,9 @@ const DiscoverySchedularDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-    }
+      
+    } 
+
     console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
@@ -267,7 +270,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       scheduler_context: {
         ...prevData.scheduler_context,
         cron: value,
-        frequency: "CUSTOME",
+        //frequency: "CUSTOME",
       },
     }));
     console.log("date", data);
@@ -275,7 +278,7 @@ const DiscoverySchedularDrawer = (props: any) => {
 
   const handleDate = (values: any) => {
     const date = new Date(values);
-const epochTime = date.getTime() / 1000; 
+    const epochTime = date.getTime() / 1000; 
     console.log("date------------",epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
@@ -354,7 +357,7 @@ const epochTime = date.getTime() / 1000;
             onClick={handleDrawerClose}
           />
         </div>
-        <form onSubmit={handleSave} method="POST">
+        <form onSubmit={handleSave} >
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
@@ -364,6 +367,7 @@ const epochTime = date.getTime() / 1000;
                 onChange={handleInputChange}
                 type="text"
                 disable={false}
+                require={true}
               />
             </div>
 
@@ -420,6 +424,7 @@ const epochTime = date.getTime() / 1000;
                     title="Select Devices"
                     selectData={deviceValues}
                     onChange={handleDeviceEntities}
+                    require={true}
                   />
                 ) : (
                   <SingleSelect
@@ -429,6 +434,7 @@ const epochTime = date.getTime() / 1000;
                     title="Select Groups"
                     selectData={groupValues}
                     onChange={handleGroupEntities}
+                    require={true}
                   />
                 )}
               </div>
@@ -478,7 +484,7 @@ const epochTime = date.getTime() / 1000;
                     padding: ".4rem",
                   }}
                   placeholder="Select Date Range"
-                  // format="yyyy-MM-dd"
+                  
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
               </CustomProvider>
