@@ -19,24 +19,16 @@ const CredentialProfile = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
   useAppContext();
-  const handlePageChange = (newPage: any) => {
-    setCurrentPage(newPage);
-    // Fetch data for the new page if needed
-  };
 
-  const handleRowsPerPageChange = (newRowsPerPage: any) => {
-    setRowsPerPage(newRowsPerPage);
-    setCurrentPage(1); // Reset to the first page when changing rows per page
-    // Fetch data for the new rowsPerPage if needed
-  };
 
   useEffect(() => {
     try {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllCredsProfile();
+        console.log("modifidData old------", response);
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        console.log("modifidData", modifiedData);
+        console.log("modifidData------", modifiedData);
         const col = Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         console.log("filtered cols", filteredCols);
@@ -102,10 +94,23 @@ const CredentialProfile = () => {
     setPage(newPage);
   };
 
+  const handlePageChange = (newPage: any) => {
+    setCurrentPage(newPage);
+    setPage(newPage-1);
+    // Fetch data for the new page if needed
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: any) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); 
+    setPage(0);// Reset to the first page when changing rows per page
+    // Fetch data for the new rowsPerPage if needed
+  };
   const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
 
   return (
     <>

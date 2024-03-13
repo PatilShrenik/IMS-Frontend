@@ -20,8 +20,8 @@ const CredentialProfileMenu = (props: any) => {
     // handleClose();
   };
   const handleModalClose = () => setIsModalOpen(false);
-  const { id } = props;
-  const { themeSwitch, getCredProfileApiState, togglegetCredProfileApiState } =
+  const {  rowData  } = props;
+  const { togglegetCredProfileApiState } =
     useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -97,7 +97,7 @@ const CredentialProfileMenu = (props: any) => {
     }
     handleClose();
   };
-
+  console.log("rdata",rowData);
   return (
     <div className="ml-4">
       <IconButton
@@ -115,11 +115,6 @@ const CredentialProfileMenu = (props: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            backgroundColor: "transparent",
-          },
-        }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -132,7 +127,7 @@ const CredentialProfileMenu = (props: any) => {
       >
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-          onClick={() => handleEditClick(id)}
+          onClick={() => handleEditClick(rowData && rowData._id)}
         >
           Edit
         </MenuItem>
@@ -160,7 +155,7 @@ const CredentialProfileMenu = (props: any) => {
           </div>
 
           <button
-            onClick={() => handleDeleteClick(id)}
+            onClick={() =>handleDeleteClick(rowData && rowData._id)}
             className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
           >
             Delete
@@ -175,7 +170,7 @@ const CredentialProfileMenu = (props: any) => {
       </Modal>
 
       <EditCredentialProfileDrawer
-        rowId={id}
+        rowId={rowData && rowData._id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
       />

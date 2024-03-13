@@ -98,7 +98,7 @@ const DiscoverySchedularMenu = (props: any) => {
     }
     handleClose();
   };
-
+  console.log("rdata",rowData);
   return (
     <div className="ml-4">
       <IconButton
@@ -193,11 +193,11 @@ const DiscoverySchedularMenu = (props: any) => {
         </div> */}
       </Modal>
 
-      {/* <EditDiscoverySchDrawer
+      <EditDiscoverySchDrawer
         id={rowData && rowData._id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
-      /> */}
+      />
     </div>
   );
 };

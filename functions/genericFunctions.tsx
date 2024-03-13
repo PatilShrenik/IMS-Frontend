@@ -92,7 +92,7 @@ export function convertEpochToDateMonthYear(epochTimeInSeconds: any) {
 }
 
 export function replaceDotsWithUnderscores(obj: any) {
-  const newObj: any = {};
+  const newObj: any = [];
 
   for (const key in obj) {
     if (typeof obj[key] === "object" && obj[key] !== null) {

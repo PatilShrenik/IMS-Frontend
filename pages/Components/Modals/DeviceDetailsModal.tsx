@@ -29,7 +29,7 @@ const DeviceDetailsModal = (props: any) => {
         name: filteredDevice.hostname,
         ip_address: filteredDevice["ip.address"],
       }));
-  console.log("devdejasds", deviceValues);
+ // console.log("devdejasds", deviceValues);
   return (
     <Drawer
       anchor="right"
