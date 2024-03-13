@@ -38,17 +38,17 @@ const CredentialProfileDrawer = (props: any) => {
   const [errors, setErrors] = React.useState<any>({});
   const [snmpObject, setSnmpObject] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV1",
     credential_context: {
-      snmp_version: "V1",
+      // snmp_version: "V1",
       snmp_community: "",
     },
   });
   const [snmpv3Object, setSnmpv3Object] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV3",
     credential_context: {
-      snmp_version: "V3",
+      // snmp_version: "V3",
       snmp_security: msg_flag,
       username: "",
       authentication_password: "",
@@ -74,7 +74,7 @@ const CredentialProfileDrawer = (props: any) => {
         name: "",
         protocol: "SNMP",
         credential_context: {
-          snmp_version: "",
+         // snmp_version: "",
           snmp_community: "",
         },
       });
@@ -82,7 +82,7 @@ const CredentialProfileDrawer = (props: any) => {
         name: "",
         protocol: "SNMP",
         credential_context: {
-          snmp_version: "V3",
+         // snmp_version: "V3",
           snmp_security: "no.auth.no.priv",
           username: "",
           authentication_password: "",

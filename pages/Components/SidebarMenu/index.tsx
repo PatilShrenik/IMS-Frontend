@@ -231,13 +231,13 @@ const SidebarMenu = () => {
           ],
         },
         {
-          subMenuName: "Catalog",
+          subMenuName: "Catalogue",
           subMenuIcon: <BookIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
               subMenuDropdownname: "SNMP",
-              subMenuDropdownpathName: "/Settings/catalog/snmp",
+              subMenuDropdownpathName: "/Settings/catalogue/snmp",
             },
           ],
         },

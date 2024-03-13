@@ -904,7 +904,7 @@ const CredntialProfileTable = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <CredentialProfileMenu id={row._id} />
+                            <CredentialProfileMenu rowData={row} />
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </td>
                         </tr>
