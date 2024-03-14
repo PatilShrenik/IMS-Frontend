@@ -39,7 +39,7 @@ const SidebarMenu = () => {
   const pathname = usePathname();
   // console.log("--", sidebarOpen);
   const path = pathname;
-  // console.log("path", path);
+  console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
   const [selectedDropdown, setSelectedDropdown] = useState<SelectedDropdown>(
     {}
@@ -370,7 +370,14 @@ const SidebarMenu = () => {
                                                 ] === dropdownIndex
                                                   ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
                                                   : ""
-                                              }`}
+                                              }
+                                              ${
+                                                path.includes(
+                                                  dropdownItem.subMenuDropdownpathName
+                                                ) &&
+                                                "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]"
+                                              }
+                                              `}
                                               onClick={() => {
                                                 handleDropdownClick(
                                                   subIndex,

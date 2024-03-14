@@ -61,7 +61,7 @@ const DiscoverySchedularTable = (props: any) => {
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
 
-  // console.log("data", data);
+  console.log("data-----", data);
   // console.log("col", columns);
   // console.log("vis col", visibleColumns);
 
@@ -99,10 +99,7 @@ const DiscoverySchedularTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((row: any) => row._id);
-
+      const allRowIds = data.map((row: any) => row._id);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -289,131 +286,131 @@ const DiscoverySchedularTable = (props: any) => {
 
   return (
     <>
-      {data && (
+      <div className="">
         <div className="">
-          <div className="">
-            {/* <div>
+          {/* <div>
               <p>All Credential Profiles</p>
             </div> */}
-            <div className="flex justify-between dark:text-white">
-              {/* Global Search for table */}
+          <div className="flex justify-between dark:text-white">
+            {/* Global Search for table */}
 
-              <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
-                <IconButton>
-                  <SearchIcon
-                    className="dark:text-[#3C3C3C] text-[#CCCFD9] "
-                    fontSize="small"
-                  />
-                </IconButton>
-                <InputBase
-                  className="dark:text-textColor"
-                  placeholder="Search"
-                  value={search}
-                  onChange={handleSearchChange}
+            <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
+              <IconButton>
+                <SearchIcon
+                  className="dark:text-[#3C3C3C] text-[#CCCFD9] "
+                  fontSize="small"
                 />
-                {search != "" && (
-                  <ClearIcon
-                    className="dark:text-white border rounded-2xl"
-                    fontSize="small"
-                    sx={{ fontSize: "13px", marginRight: "3px" }}
-                  />
-                )}
-              </div>
-              <div className="flex">
-                <div className="flex items-center m-4 mr-0">
-                  {selected ? (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected credentials"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          onClick={handleModalOpen}
-                          className="cursor-pointer dark:text-textColor"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <DeleteModal
-                        open={isModalopen}
-                        handleModalClose={handleModalClose}
-                        deleteRow={deleteDiscoverySch}
+              </IconButton>
+              <InputBase
+                className="dark:text-textColor"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
+              {search != "" && (
+                <ClearIcon
+                  className="dark:text-white border rounded-2xl"
+                  fontSize="small"
+                  sx={{ fontSize: "13px", marginRight: "3px" }}
+                />
+              )}
+            </div>
+            <div className="flex">
+              <div className="flex items-center m-4 mr-0">
+                {selected ? (
+                  <>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Delete selected credentials"
+                      placement="top"
+                    >
+                      <DeleteForeverIcon
+                        onClick={handleModalOpen}
+                        className="cursor-pointer dark:text-textColor"
+                        style={{
+                          margin: "0 5px",
+                        }}
                       />
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected credentials"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          onClick={downloadCSV}
-                          className="cursor-pointer dark:text-textColor"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  ) : (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected credentials (Disabled)"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          //   onClick={deleteDiscoverySch}
-                          color="disabled"
-                          className="cursor-pointer dark:text-gray-700"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected credentials (Disabled)"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          // onClick={downloadCSV}
-                          className="cursor-pointer dark:text-gray-700"
-                          color="disabled"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  )}
-                  {/* Hide and Show column */}
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Hide/UnHide Columns"
-                    placement="top"
-                  >
-                    <ViewColumnIcon
-                      className="text-dark-border dark:text-light-menu-color"
-                      style={{ margin: "0 10px 0 5px" }}
-                      onClick={handleMenuOpen}
+                    </Tooltip>
+                    <DeleteModal
+                      open={isModalopen}
+                      handleModalClose={handleModalClose}
+                      deleteRow={deleteDiscoverySch}
                     />
-                  </Tooltip>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    style={{ padding: "0" }}
-                  >
-                    {columns.map((column: any) => (
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Download selected credentials"
+                      placement="top"
+                    >
+                      <FileDownloadIcon
+                        onClick={downloadCSV}
+                        className="cursor-pointer dark:text-textColor"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </>
+                ) : (
+                  <>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Delete selected credentials (Disabled)"
+                      placement="top"
+                    >
+                      <DeleteForeverIcon
+                        //   onClick={deleteDiscoverySch}
+                        color="disabled"
+                        className="cursor-pointer dark:text-gray-700"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Download selected credentials (Disabled)"
+                      placement="top"
+                    >
+                      <FileDownloadIcon
+                        // onClick={downloadCSV}
+                        className="cursor-pointer dark:text-gray-700"
+                        color="disabled"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </>
+                )}
+                {/* Hide and Show column */}
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Hide/UnHide Columns"
+                  placement="top"
+                >
+                  <ViewColumnIcon
+                    className="text-dark-border dark:text-light-menu-color"
+                    style={{ margin: "0 10px 0 5px" }}
+                    onClick={handleMenuOpen}
+                  />
+                </Tooltip>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={isMenuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  style={{ padding: "0" }}
+                >
+                  {columns &&
+                    columns.map((column: any) => (
                       <MenuItem
                         className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                         style={{
@@ -446,13 +443,13 @@ const DiscoverySchedularTable = (props: any) => {
                           .join(" ")}
                       </MenuItem>
                     ))}
-                  </Menu>
-                </div>
+                </Menu>
+              </div>
 
-                {/* Add Device Menu and Model */}
+              {/* Add Device Menu and Model */}
 
-                <div className="m-4 mr-0 ml-2 h-fit">
-                  {/* <Button
+              <div className="m-4 mr-0 ml-2 h-fit">
+                {/* <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
                     className="bg-primary3 capitalize items-center"
@@ -462,16 +459,16 @@ const DiscoverySchedularTable = (props: any) => {
                     <FileUploadIcon fontSize="small" className="mr-2" /> Upload
                     CSV
                   </Button> */}
-                  <Button
-                    onClick={handleDrawerOpen}
-                    variant="contained"
-                    className="bg-primary3 capitalize items-center"
-                    size="small"
-                  >
-                    <AddIcon fontSize="small" className="mr-2" /> Add Discovery
-                    Schedular
-                  </Button>
-                  {/* <AddIcon
+                <Button
+                  onClick={handleDrawerOpen}
+                  variant="contained"
+                  className="bg-primary3 capitalize items-center"
+                  size="small"
+                >
+                  <AddIcon fontSize="small" className="mr-2" /> Add Discovery
+                  Schedular
+                </Button>
+                {/* <AddIcon
                     className=" dark:text-textColor"
                     onClick={handleDrawerOpen}
                     fontSize="medium"
@@ -479,32 +476,33 @@ const DiscoverySchedularTable = (props: any) => {
                       cursor: "pointer",
                     }}
                   /> */}
-                  <DiscoverySchedularDrawer
-                    open={isDrawerOpen}
-                    handleDrawerClose={handleDrawerClose}
-                  />
-                  {/* <AddCredentialProfile
+                <DiscoverySchedularDrawer
+                  open={isDrawerOpen}
+                  handleDrawerClose={handleDrawerClose}
+                />
+                {/* <AddCredentialProfile
                   themeSwitch={themeSwitch}
                   open={isAddSingleDialogOpen}
                   handleClose={handleAddSingleCloseDialog}
                 /> */}
-                </div>
               </div>
-              {/* Global Downlad and delete button for table */}
             </div>
+            {/* Global Downlad and delete button for table */}
           </div>
+        </div>
+        {data && (
           <div className="">
             <div
               className=""
               style={{
                 width: "100%",
-                overflow: "auto",
+                overflow: "scroll",
                 borderRadius: "0",
                 marginTop: ".5rem",
               }}
             >
               <div className="max-h-440">
-                <table className="w-full border-collapse overflow-auto">
+                <table className="w-full border-collapse overflow-x-scroll">
                   <thead>
                     <tr>
                       <th
@@ -719,8 +717,8 @@ const DiscoverySchedularTable = (props: any) => {
             /> */}
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };

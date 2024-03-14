@@ -19,7 +19,10 @@ import CustomeInput, { CustomeTextArea } from "../Inputs";
 import Typography from "@mui/material/Typography";
 import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
-import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
+import {
+  isValidIpAddress,
+  replaceUnderscoresWithDots,
+} from "@/functions/genericFunctions";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import CustomeButton, { CustomeCancelButton, SubmitButton } from "../Buttons";
 import SingleSelect from "../Selects";
@@ -280,7 +283,9 @@ const IPAddress = (props: any) => {
   const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
   const [allGroups, setAllGroups] = React.useState([]);
   const [errorKeys, setErrorKeys] = React.useState<any>([]);
+  const [validationErrorKeys, setvalidationErrorKeys] = React.useState<any>([]);
   const [errors, setErrors] = React.useState<any>({});
+  const [validationError, setvalidationError] = React.useState<any>({});
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
 
   // Add your dialog content and functionality here
@@ -326,8 +331,21 @@ const IPAddress = (props: any) => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
+    if (name === "ip_address") {
+      if (!isValidIpAddress(value)) {
+        setvalidationError({ ...validationError, [name]: "invalid" });
+      } else {
+        setvalidationError({ ...validationError, [name]: "" });
+      }
+    }
   };
 
+  // const validateIp = (event: any) => {
+  //   // const { name, value } = event.target;
+  //   console.log("event", event);
+  // };
+
+  console.log("validation error", validationError);
   const handleChange = (event: any) => {
     const proto: any = event.target.value as string;
     console.log(proto);
@@ -392,6 +410,8 @@ const IPAddress = (props: any) => {
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
+    // const validError = validationError && Object.keys(validationError);
+    // setvalidationErrorKeys(validError);
   }, [errors]);
 
   const handleSave = async (event: any) => {
@@ -467,12 +487,18 @@ const IPAddress = (props: any) => {
                 name="ip_address"
                 value={data.ip_address}
                 onChange={handleInputChange}
+                // onBlur={validateIp}
                 type="text"
                 require={true}
               />
               {errorKeys && errorKeys.includes("ip.address") && (
                 <p className="text-danger text-sm ml-2">
                   IP Address is {errors["ip.address"]} *
+                </p>
+              )}
+              {validationError && validationError.ip_address && (
+                <p className="text-danger text-sm ml-2">
+                  IP Address is invalid
                 </p>
               )}
             </div>
@@ -679,6 +705,7 @@ const IPRange = (props: any) => {
   const [errorKeys, setErrorKeys] = React.useState<any>([]);
   const [errors, setErrors] = React.useState<any>({});
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
+  const [validationError, setvalidationError] = React.useState<any>({});
 
   const countryNames = countries.getNames();
   const tzCodes = timezones.map((timezone) => timezone.tzCode);
@@ -719,8 +746,15 @@ const IPRange = (props: any) => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
+    if (name === "start_ip" || name === "end_ip") {
+      if (!isValidIpAddress(value)) {
+        setvalidationError({ ...validationError, [name]: "invalid" });
+      } else {
+        setvalidationError({ ...validationError, [name]: "" });
+      }
+    }
   };
-
+  console.log("ips", validationError);
   const handleChange = (event: any) => {
     const proto: any = event.target.value as string;
     console.log(proto);
@@ -857,6 +891,11 @@ const IPRange = (props: any) => {
                   Start IP is {errors["start.ip"]}*
                 </p>
               )}
+              {validationError && validationError.start_ip && (
+                <p className="text-danger text-sm ml-2">
+                  Start IP Address is invalid
+                </p>
+              )}
             </div>
             <div className="flex flex-col">
               <CustomeInput
@@ -870,6 +909,11 @@ const IPRange = (props: any) => {
               {errorKeys && errorKeys.includes("end.ip") && (
                 <p className="text-danger text-sm ml-2">
                   End IP is {errors["end.ip"]}*
+                </p>
+              )}
+              {validationError && validationError.end_ip && (
+                <p className="text-danger text-sm ml-2">
+                  End IP Address is invalid
                 </p>
               )}
             </div>

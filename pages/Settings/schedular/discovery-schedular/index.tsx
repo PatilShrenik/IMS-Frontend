@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PageHeading from "@/pages/Components/PageHeading";
 import TablePagination from "@mui/material/TablePagination";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
-import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
+import { replaceDotsWithUnderscores, replacePeriodsWithUnderscores, replacePeriodsWithUnderscoresnested, replaceUnderscoresWithDotsNested } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { useAppContext } from "@/pages/Components/AppContext";
 import { ToastContainer } from "react-toastify";
@@ -26,14 +26,14 @@ const DiscoverySchedular = () => {
         let cols: any = [];
         let response = await getAllDiscoverySch();
         console.log("discover Scheduler data response ", response.result);
-        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        const modifiedData = replaceDotsWithUnderscores(response.result);
+        console.log("modifified data", modifiedData);
+        // const newData = modifiedData && modifiedData.map((item: any) => {
+        //   const entitiesArray = Object.values(item.entities);
+        //   const emailArray = Object.values(item.email || {});
 
-        const newData = modifiedData.map((item: any) => {
-          const entitiesArray = Object.values(item.entities);
-          const emailArray = Object.values(item.email || {});
-
-          return { ...item, entities: entitiesArray, email: emailArray };
-        });
+        //   return { ...item, entities: entitiesArray, email: emailArray };
+        // });
         const col = Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         console.log("filtered cols----------------", filteredCols);
@@ -72,6 +72,8 @@ const DiscoverySchedular = () => {
           "created_on",
           "device_ids",
           "updated_on",
+          "updated_by",
+          "scheduler_context",
         ];
 
         setVisibleColumns(
@@ -82,7 +84,7 @@ const DiscoverySchedular = () => {
 
         setData(modifiedData);
         //setData(newData);
-        console.log("newData-----", newData);
+        // console.log("newData-----", data);
       };
       getData();
     } catch (error) {
@@ -98,15 +100,15 @@ const DiscoverySchedular = () => {
   };
 
   const handlePageChange = (newPage: any) => {
-    setPage(newPage - 1);
     setCurrentPage(newPage);
+    setPage(newPage - 1);
     // Fetch data for the new page if needed
   };
 
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
-    setCurrentPage(1); // Reset to the first page when changing rows per page
-    setPage(0);
+    setCurrentPage(1);
+    setPage(0); // Reset to the first page when changing rows per page
     // Fetch data for the new rowsPerPage if needed
   };
   const handleChangeRowsPerPage = (event: { target: { value: string } }) => {

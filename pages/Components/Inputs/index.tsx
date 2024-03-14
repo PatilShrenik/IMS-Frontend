@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const CustomeInput = (props: any) => {
-  const { type, require, disable, name, onChange } = props;
+  const { type, require, disable, name, onChange, onBlur } = props;
   // console.log("value.length", value && value.length);
   const [inputFocused, setInputFocused] = useState(false);
+
+  // useEffect(() => {
+  //   if (!inputFocused && onBlur) {
+  //     console.log("---------------in effect");
+  //     onBlur();
+  //   }
+  // }, [inputFocused]);
+
   return (
     <div className="items-center mx-4 my-4">
       <div className="relative">
@@ -15,7 +23,9 @@ const CustomeInput = (props: any) => {
             inputFocused ? "input-focused" : ""
           }`}
           type={type ? type : "text"}
-          placeholder={!inputFocused ? `${props.label}${require ? " *" : ""}` : ""}
+          placeholder={
+            !inputFocused ? `${props.label}${require ? " *" : ""}` : ""
+          }
           required={require ? true : false}
           disabled={disable ? true : false}
           value={props.value ? props.value : ""}
@@ -30,7 +40,8 @@ const CustomeInput = (props: any) => {
               inputFocused || props.value ? "label-focused" : ""
             }`}
           >
-            {props.label} {require == true && <span className="text-red-400">*</span>}
+            {props.label}{" "}
+            {require == true && <span className="text-red-400">*</span>}
           </label>
         )}
         <style jsx>{`
@@ -134,7 +145,6 @@ export const CustomeTextArea = (props: any) => {
     </>
   );
 };
-
 
 export function DateInput(props: any) {
   const [epochTime, setEpochTime] = React.useState(0);

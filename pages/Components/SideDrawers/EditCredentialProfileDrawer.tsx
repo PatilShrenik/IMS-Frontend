@@ -6,6 +6,7 @@ import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
 import replacePeriodsWithUnderscoresSingleObject, {
   replaceDotsWithUnderscores,
+  replaceDotsWithUnderscoresSEC,
   replaceUnderscoresWithDots,
   replaceUnderscoresWithDotsNested,
 } from "@/functions/genericFunctions";
@@ -35,24 +36,25 @@ const EditCredentialProfileDrawer = (props: any) => {
   const { rowId, open, handleDrawerClose } = props;
   const [data, setData] = useState<any>({});
   const [protocol, setProtocol] = React.useState<any>("");
+  const [protocolValue, setProtocolValue] = React.useState<any>("");
   const classes = useStyles();
   const { togglegetCredProfileApiState } = useAppContext();
   const [authType, setAuthType] = React.useState("");
+  // const [authPWD, setAuthPWD] = React.useState("");
   const [encryptType, setEncryptType] = React.useState("");
   const [msg_flag, setMsgFlag] = React.useState("");
+  const [msg_flagValue, setMsgFlagValue] = React.useState("");
   const [snmpObject, setSnmpObject] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV1",
     credential_context: {
-      snmp_version: "",
       snmp_community: "",
     },
   });
   const [snmpv3Object, setSnmpv3Object] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV3",
     credential_context: {
-      snmp_version: "v3",
       snmp_msg_flag: msg_flag,
       username: "",
       authentication_password: "",
@@ -88,64 +90,107 @@ const EditCredentialProfileDrawer = (props: any) => {
   ];
 
   useEffect(() => {
-    // console.log(id);
-    const getById = async () => {
-      let response = await getCredsProfileById(rowId);
-      // console.log("rowid", rowId);
-      const modifiedData = replaceDotsWithUnderscores(response.result);
-      //console.log("data-----------------", modifiedData);
-      setData(modifiedData);
-    };
-    getById();
-
-    const savedProtocolValue =
-      data && data.credential_context && data.credential_context.snmp_version
-        ? `${data.protocol}${data.credential_context.snmp_version}`
-        : `${data.protocol}`;
-    setProtocol(savedProtocolValue);
-  }, [open]);
-  console.log("data---------", data);
-  console.log("protocol---------", protocol);
-  useEffect(() => {
-    if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
-      setSnmpObject({
-        name: data.name,
-        protocol: "SNMP",
-        credential_context: {
-          snmp_version: data.credential_context.snmp_version,
-          snmp_community: data.credential_context.snmp_community,
-        },
-      });
-    } else if (protocol == "SNMPV3") {
-      setSnmpv3Object({
-        name: data.name,
-        protocol: "SNMP",
-        credential_context: {
-          snmp_version: "v3",
-          snmp_msg_flag: msg_flag,
-          username: data.credential_context.username,
-          authentication_password: data.credential_context.password,
-          authentication_protocol: authType,
-          privacy_protocol: encryptType,
-          privacy_password: data.credential_context.privacy_password,
-        },
-      });
-    } else if (protocol == "SSH") {
-      setSSHObject({
-        name: data.name,
-        protocol: "SSH",
-        credential_context: {
-          username: data.credential_context.username,
-          password: data.credential_context.password,
-        },
-        public_key: data.public_key,
-        paraphase: data.paraphase,
-      });
+    if (open) {
+      const getById = async () => {
+        let response = await getCredsProfileById(rowId);
+        const modifiedData = replaceDotsWithUnderscoresSEC(response.result);
+        console.log("OG data------", response.result);
+        console.log("modi data------", modifiedData);
+        setData(modifiedData);
+      };
+      getById();
     }
-  }, [protocol]);
+  }, [open]);
 
+  useEffect(() => {
+    if (data && data.protocol == "SNMPV1") {
+      setProtocolValue("SNMP v1");
+      setProtocol("SNMPV1");
+    } else if (data && data.protocol == "SNMPV2C") {
+      setProtocolValue("SNMP v2c");
+      setProtocol("SNMPV2C");
+    } else if (data && data.protocol == "SNMPV3") {
+      setProtocolValue("SNMP v3");
+      setProtocol("SNMPV3");
+      data &&
+        data.credential_context &&
+        data.credential_context.authentication_protocol &&
+        setAuthType(data.credential_context.authentication_protocol);
+      data &&
+        data.credential_context &&
+        data.credential_context.privacy_protocol &&
+        setEncryptType(data.credential_context.privacy_protocol);
+      if (
+        data &&
+        data.credential_context &&
+        data.credential_context.snmp_security
+      ) {
+        setMsgFlag(data.credential_context.snmp_security);
+        if (data.credential_context.snmp_security == "no.auth.no.priv") {
+          setMsgFlagValue("No Auth No Privacy");
+        } else if (data.credential_context.snmp_security == "auth.no.priv") {
+          setMsgFlagValue("Auth No Privacy");
+        } else if (data.credential_context.snmp_security == "auth.priv") {
+          setMsgFlagValue("Auth Privacy");
+        }
+      }
+    } else if (data && data.protocol == "SSH") {
+      setProtocolValue("SSH");
+      setProtocol("SSH");
+    }
+    console.log("data-------------", data);
+  }, [data]);
+
+  useEffect(() => {
+    if (data && protocol) {
+      if (protocol == "SNMPV1") {
+        setSnmpObject({
+          name: data.name,
+          protocol: "SNMPV1",
+          credential_context: {
+            snmp_community: data.credential_context.snmp_community,
+          },
+        });
+      } else if (protocol == "SNMPV2C") {
+        setSnmpObject({
+          name: data.name,
+          protocol: "SNMPV2C",
+          credential_context: {
+            snmp_community: data.credential_context.snmp_community,
+          },
+        });
+      } else if (protocol == "SNMPV3") {
+        setSnmpv3Object({
+          name: data.name,
+          protocol: "SNMPV3",
+          credential_context: {
+            snmp_msg_flag: msg_flag,
+            username: data.credential_context.username,
+            authentication_password:
+              data.credential_context.authentication_password,
+            authentication_protocol: authType,
+            privacy_protocol: encryptType,
+            privacy_password: data.credential_context.privacy_password,
+          },
+        });
+      } else if (protocol == "SSH") {
+        setSSHObject({
+          name: data.name,
+          protocol: "SSH",
+          credential_context: {
+            username: data.credential_context.username,
+            password: data.credential_context.password,
+          },
+          public_key: data.public_key,
+          paraphase: data.paraphase,
+        });
+      }
+    }
+  }, [protocol, data]);
+  console.log("snmp 3", snmpv3Object);
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
+    console.log("community", value);
     setSnmpObject((prevSnmpObject) => ({
       ...prevSnmpObject,
       credential_context: {
@@ -154,7 +199,6 @@ const EditCredentialProfileDrawer = (props: any) => {
       },
     }));
   };
-
   const handleNameChange = (event: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
@@ -165,12 +209,22 @@ const EditCredentialProfileDrawer = (props: any) => {
     setSSHObject({ ...sshObject, [name]: value });
   };
 
+  const handleNameChangeSNMP = (event: any) => {
+    const { name, value } = event.target;
+    setSnmpObject({ ...snmpObject, [name]: value });
+  };
+
+  const handleNameChangeSNMPV3 = (event: any) => {
+    const { name, value } = event.target;
+    setSnmpv3Object({ ...snmpv3Object, [name]: value });
+  };
+
   const handlesnmpSave = async () => {
     // console.log("snmp object", snmpObject);
-    const modifiedData = replaceUnderscoresWithDotsNested(data);
+    const modifiedData = replaceUnderscoresWithDotsNested(snmpObject);
     // console.log("snmp object", modifiedData);
 
-    let response = await updateCredsProfile(modifiedData, modifiedData._id);
+    let response = await updateCredsProfile(modifiedData, data._id);
     // console.log("updated", response);
     if (response.status == "success") {
       togglegetCredProfileApiState();
@@ -203,10 +257,10 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const handleSSHSave = async () => {
     // console.log("snmp object", snmpObject);
-    const modifiedData = replaceUnderscoresWithDotsNested(data);
+    const modifiedData = replaceUnderscoresWithDotsNested(sshObject);
     // console.log("ssh object", modifiedData);
 
-    let response = await updateCredsProfile(modifiedData, modifiedData._id);
+    let response = await updateCredsProfile(modifiedData, data._id);
     // console.log("updated", response);
     if (response.status == "success") {
       togglegetCredProfileApiState();
@@ -239,11 +293,11 @@ const EditCredentialProfileDrawer = (props: any) => {
 
   const handleSNMPv3Save = () => {
     // console.log("snmp object", snmpObject);
-    const modifiedData = replaceUnderscoresWithDots(data);
-    // console.log("snmpv3 Object ", modifiedData);
+    const modifiedData = replaceUnderscoresWithDots(snmpv3Object);
+    console.log("snmpv3 Object ", modifiedData);
     try {
       const createprofile = async () => {
-        let response = await createCredsProfile(modifiedData);
+        let response = await updateCredsProfile(modifiedData, data._id);
         // console.log(response);
         if (response.status == "success") {
           togglegetCredProfileApiState();
@@ -287,51 +341,63 @@ const EditCredentialProfileDrawer = (props: any) => {
     }
     handleDrawerClose();
   };
+  console.log("protocol", protocol);
 
   const handleChange = (values: any) => {
     setMsgFlag("no.auth.no.priv");
-    setProtocol(values);
+    setMsgFlagValue("No Auth No Privacy");
+    if (values == "SNMP v1") {
+      setProtocol("SNMPV1");
+    } else if (values == "SNMP v2c") {
+      setProtocol("SNMPV2C");
+    } else if (values == "SNMP v3") {
+      setProtocol("SNMPV3");
+    } else if (values == "SSH") {
+      setProtocol("SSH");
+    }
+    setProtocolValue(values);
+
     console.log("protocol------------------", values);
-    let value = "";
+    // let value = "";
     if (values == "SNMPV1") {
-      value = "V1";
+      // value = "V1";
       setData((prevSnmpObject: any) => ({
         ...prevSnmpObject,
-        protocol: "SNMP",
+        protocol: "SNMPV1",
       }));
-      setData((prevSnmpObject: any) => ({
-        ...prevSnmpObject,
-        credential_context: {
-          ...prevSnmpObject.credential_context,
-          snmp_version: value,
-        },
-      }));
+      // setData((prevSnmpObject: any) => ({
+      //   ...prevSnmpObject,
+      //   credential_context: {
+      //     ...prevSnmpObject.credential_context,
+      //     snmp_version: value,
+      //   },
+      // }));
     } else if (values == "SNMPV2C") {
-      value = "V2C";
+      // value = "V2C";
       setData((prevSnmpObject: any) => ({
         ...prevSnmpObject,
-        protocol: "SNMP",
+        protocol: "SNMPV2C",
       }));
-      setData((prevSnmpObject: any) => ({
-        ...prevSnmpObject,
-        credential_context: {
-          ...prevSnmpObject.credential_context,
-          snmp_version: value,
-        },
-      }));
+      // setData((prevSnmpObject: any) => ({
+      //   ...prevSnmpObject,
+      //   credential_context: {
+      //     ...prevSnmpObject.credential_context,
+      //     snmp_version: value,
+      //   },
+      // }));
     } else if (values == "SNMPV3") {
-      value = "V3";
+      // value = "V3";
       setData((prevSnmpObject: any) => ({
         ...prevSnmpObject,
-        protocol: "SNMP",
+        protocol: "SNMPV3",
       }));
-      setData((prevSnmpObject: any) => ({
-        ...prevSnmpObject,
-        credential_context: {
-          ...prevSnmpObject.credential_context,
-          snmp_version: value,
-        },
-      }));
+      // setData((prevSnmpObject: any) => ({
+      //   ...prevSnmpObject,
+      //   credential_context: {
+      //     ...prevSnmpObject.credential_context,
+      //     snmp_version: value,
+      //   },
+      // }));
     } else if (values == "SSH") {
       setSSHObject((prevSnmpObject: any) => ({
         ...prevSnmpObject,
@@ -340,14 +406,59 @@ const EditCredentialProfileDrawer = (props: any) => {
     }
   };
 
-  const handleAuthChange = (values: any) => {
-    setAuthType(values);
+  const handleAuthChange = (value: any) => {
+    console.log("authtype in fucntion", value);
+    setAuthType(value);
+    setSnmpv3Object((prevSnmpv3Object) => ({
+      ...prevSnmpv3Object,
+      credential_context: {
+        ...prevSnmpv3Object.credential_context,
+        authentication_protocol: value,
+      },
+    }));
   };
+  console.log("authtype in commoj", authType);
   const handleFlagChange = (values: any) => {
-    setMsgFlag(values);
+    console.log("flag values", values);
+    if (values == "No Auth No Privacy") {
+      setSnmpv3Object((prevSnmpv3Object) => ({
+        ...prevSnmpv3Object,
+        credential_context: {
+          ...prevSnmpv3Object.credential_context,
+          snmp_msg_flag: "no.auth.no.priv",
+        },
+      }));
+      setMsgFlag("no.auth.no.priv");
+    } else if (values == "Auth No Privacy") {
+      setSnmpv3Object((prevSnmpv3Object) => ({
+        ...prevSnmpv3Object,
+        credential_context: {
+          ...prevSnmpv3Object.credential_context,
+          snmp_msg_flag: "auth.no.priv",
+        },
+      }));
+      setMsgFlag("auth.no.priv");
+    } else if (values == "Auth Privacy") {
+      setSnmpv3Object((prevSnmpv3Object) => ({
+        ...prevSnmpv3Object,
+        credential_context: {
+          ...prevSnmpv3Object.credential_context,
+          snmp_msg_flag: "auth.priv",
+        },
+      }));
+      setMsgFlag("auth.priv");
+    }
+    setMsgFlagValue(values);
   };
   const handleEncryptChange = (values: any) => {
     setEncryptType(values);
+    setSnmpv3Object((prevSnmpv3Object) => ({
+      ...prevSnmpv3Object,
+      credential_context: {
+        ...prevSnmpv3Object.credential_context,
+        privacy_protocol: values,
+      },
+    }));
   };
 
   const handleInputSSHChange = (event: any) => {
@@ -382,10 +493,13 @@ const EditCredentialProfileDrawer = (props: any) => {
     // Choose the appropriate onSubmit method based on the protocol
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       handlesnmpSave();
+      // console.log("snmp object", snmpObject);
     } else if (protocol === "SNMPV3") {
       handleSNMPv3Save();
+      // console.log("snmpv3 object", snmpv3Object);
     } else if (protocol === "SSH") {
       handleSSHSave();
+      // console.log("ssh object", sshObject);
     }
   };
   return (
@@ -409,7 +523,7 @@ const EditCredentialProfileDrawer = (props: any) => {
         <div className="py-8 px-6">
           <form onSubmit={handleSave}>
             <div className="flex">
-            {protocol == "SSH" ? (
+              {protocol == "SSH" && (
                 <CustomeInput
                   label="Profile Name"
                   name="name"
@@ -419,23 +533,44 @@ const EditCredentialProfileDrawer = (props: any) => {
                   disable={false}
                   require={true}
                 />
-              ) : (
+              )}{" "}
+              {protocol == "SNMPV1" && (
                 <CustomeInput
                   label="Profile Name"
                   name="name"
-                  value={data.name}
-                  onChange={handleNameChange}
+                  value={snmpObject.name}
+                  onChange={handleNameChangeSNMP}
                   type="text"
                   disable={false}
                   require={true}
                 />
               )}
-            
-
+              {protocol == "SNMPV2C" && (
+                <CustomeInput
+                  label="Profile Name"
+                  name="name"
+                  value={snmpObject.name}
+                  onChange={handleNameChangeSNMP}
+                  type="text"
+                  disable={false}
+                  require={true}
+                />
+              )}
+              {protocol == "SNMPV3" && (
+                <CustomeInput
+                  label="Profile Name"
+                  name="name"
+                  value={snmpv3Object.name}
+                  onChange={handleNameChangeSNMPV3}
+                  type="text"
+                  disable={false}
+                  require={true}
+                />
+              )}
               <SecSingleSelect
                 label="Protocol"
-                value={protocol}
-                selectData={["SNMPV1", "SNMPV2C", "SNMPV3", "SSH"]}
+                value={protocolValue}
+                selectData={["SNMP v1", "SNMP v2c", "SNMP v3", "SSH"]}
                 onChange={handleChange}
                 require={false}
               />
@@ -471,8 +606,13 @@ const EditCredentialProfileDrawer = (props: any) => {
                     {/* <div className="flex flex-col items-start mx-2"> */}
                     <SecSingleSelect
                       label="Security"
-                      selectData={msg_flag_values}
+                      selectData={[
+                        "No Auth No Privacy",
+                        "Auth No Privacy",
+                        "Auth Privacy",
+                      ]}
                       onChange={handleFlagChange}
+                      value={msg_flagValue}
                       // require={true}
                     />
                     {/* </div> */}
@@ -483,16 +623,19 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SecSingleSelect
                           label="Authentication Protocol"
-                          selectData={[  
-                            { value: "no.auth", label: "None" },
-                          { value: "MD5", label: "MD5" },
-                          { value: "SHA", label: "SHA" },
-                          { value: "SHA224", label: "SHA224" },
-                          { value: "SHA256", label: "SHA256" },
-                          { value: "SHA384", label: "SHA384" },
-                          { value: "SHA512", label: "SHA512" },]}
+                          name="authentication_protocol"
+                          selectData={[
+                            { id: "no.auth", name: "None" },
+                            { id: "MD5", name: "MD5" },
+                            { id: "SHA224", name: "SHA224" },
+                            { id: "SHA", name: "SHA" },
+                            { id: "SHA256", name: "SHA256" },
+                            { id: "SHA384", name: "SHA384" },
+                            { id: "SHA512", name: "SHA512" },
+                          ]}
                           onChange={handleAuthChange}
                           require={false}
+                          value={authType}
                         />
                         {/* </div>
                         <div className="flex flex-col items-start mx-2"> */}
@@ -514,16 +657,18 @@ const EditCredentialProfileDrawer = (props: any) => {
                         {/* <div className="flex flex-col items-start mx-2"> */}
                         <SecSingleSelect
                           label="Privacy Protocol"
-                          selectData={[{ value: "no.priv", label: "None" },
-                            
-                          { value: "DES", label: "DES" },
-                          { value: "AES", label: "AES" },
-                          { value: "AES192", label: "AES192" },
-                          { value: "AES256", label: "AES256" },
-                          { value: "AES192C", label: "AES192C" },
-                          { value: "AES256C", label: "AES265C" }]}
+                          selectData={[
+                            { id: "no.priv", name: "None" },
+                            { id: "DES", name: "DES" },
+                            { id: "AES", name: "AES" },
+                            { id: "AES192", name: "AES192" },
+                            { id: "AES256", name: "AES256" },
+                            { id: "AES192C", name: "AES192C" },
+                            { id: "AES256C", name: "AES265C" },
+                          ]}
                           onChange={handleEncryptChange}
                           require={false}
+                          value={encryptType}
                         />
                         {/* </div>
                         <div className="flex flex-col items-start mx-2"> */}
@@ -546,15 +691,18 @@ const EditCredentialProfileDrawer = (props: any) => {
                       {/* <div className="flex flex-col items-start mx-2"> */}
                       <SecSingleSelect
                         label="Authentication Protocol"
-                        selectData={[ { value: "no.auth", label: "None" },
-                        { value: "MD5", label: "MD5" },
-                        { value: "SHA", label: "SHA" },
-                        { value: "SHA224", label: "SHA224" },
-                        { value: "SHA256", label: "SHA256" },
-                        { value: "SHA384", label: "SHA384" },
-                        { value: "SHA512", label: "SHA512" }]}
+                        selectData={[
+                          { id: "no.auth", name: "None" },
+                          { id: "MD5", name: "MD5" },
+                          { id: "SHA", name: "SHA" },
+                          { id: "SHA224", name: "SHA224" },
+                          { id: "SHA256", name: "SHA256" },
+                          { id: "SHA384", name: "SHA384" },
+                          { id: "SHA512", name: "SHA512" },
+                        ]}
                         onChange={handleAuthChange}
                         require={false}
+                        value={authType}
                       />
                       {/* </div>
                       <div className="flex flex-col items-start mx-2"> */}

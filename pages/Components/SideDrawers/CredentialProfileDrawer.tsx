@@ -29,7 +29,7 @@ const CredentialProfileDrawer = (props: any) => {
   const { open, handleDrawerClose } = props;
   const classes = useStyles();
 
-  const [protocol, setProtocol] = React.useState<any>("");
+  const [protocol, setProtocol] = React.useState<any>("SNMPV1");
   const [authType, setAuthType] = React.useState("");
   const { togglegetCredProfileApiState } = useAppContext();
   const [encryptType, setEncryptType] = React.useState("");
@@ -38,17 +38,15 @@ const CredentialProfileDrawer = (props: any) => {
   const [errors, setErrors] = React.useState<any>({});
   const [snmpObject, setSnmpObject] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV1",
     credential_context: {
-      snmp_version: "V1",
       snmp_community: "",
     },
   });
   const [snmpv3Object, setSnmpv3Object] = React.useState({
     name: "",
-    protocol: "SNMP",
+    protocol: "SNMPV3",
     credential_context: {
-      snmp_version: "V3",
       snmp_security: msg_flag,
       username: "",
       authentication_password: "",
@@ -72,17 +70,15 @@ const CredentialProfileDrawer = (props: any) => {
     if (open == false) {
       setSnmpObject({
         name: "",
-        protocol: "SNMP",
+        protocol: "SNMPV1",
         credential_context: {
-          snmp_version: "",
           snmp_community: "",
         },
       });
       setSnmpv3Object({
         name: "",
-        protocol: "SNMP",
+        protocol: "SNMPV3",
         credential_context: {
-          snmp_version: "V3",
           snmp_security: "no.auth.no.priv",
           username: "",
           authentication_password: "",
@@ -102,6 +98,8 @@ const CredentialProfileDrawer = (props: any) => {
         paraphase: "",
       });
       setProtocol("SNMPV1");
+      setMsgFlag("no.auth.no.priv");
+
     }
   }, [open]);
 
@@ -134,25 +132,25 @@ const CredentialProfileDrawer = (props: any) => {
 
   const handleChange = (values: any) => {
     setProtocol(values);
-   // setMsgFlag("no.auth.no.priv");
+    // setMsgFlag("no.auth.no.priv");
     console.log("values-----------", values);
-    let value = "";
-    if (values == "SNMPV1") {
-      value = "V1";
+    // let value = "";
+    if (values == "SNMPV1" || values == "SNMPV2C") {
+      setMsgFlag("no.auth.no.priv");
+      setSnmpObject((prevSnmpObject) => ({
+        ...prevSnmpObject,
+        protocol: values,
+      }));
     } else {
-      value = "V2C";
+      setSnmpv3Object((prevSnmpObject) => ({
+        ...prevSnmpObject,
+        protocol: values,
+      }));
     }
-    setSnmpObject((prevSnmpObject) => ({
-      ...prevSnmpObject,
-      credential_context: {
-        ...prevSnmpObject.credential_context,
-        snmp_version: value,
-      },
-    }));
   };
   const handleAuthChange = (values: any) => {
     setAuthType(values);
-    console.log("val",values);
+    console.log("val", values);
     setSnmpv3Object((prevSnmpv3Object) => ({
       ...prevSnmpv3Object,
       credential_context: {
@@ -163,7 +161,7 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleFlagChange = (values: any) => {
     setMsgFlag(values);
-   console.log("value1",values);
+    console.log("value1", values);
     setSnmpv3Object((prevSnmpv3Object) => ({
       ...prevSnmpv3Object,
       credential_context: {
@@ -223,14 +221,13 @@ const CredentialProfileDrawer = (props: any) => {
   };
 
   const handleNameChange = (event: any) => {
-    
     const { name, value } = event.target;
-    
+
     setSSHObject({ ...sshObject, [name]: value });
     setSnmpObject({ ...snmpObject, [name]: value });
     setSnmpv3Object({ ...snmpv3Object, [name]: value });
     const trimmedValue = value.trim();
-    console.log('Value to send to backend:', trimmedValue);
+    console.log("Value to send to backend:", trimmedValue);
   };
 
   const handleSSHSave = () => {
@@ -420,7 +417,7 @@ const CredentialProfileDrawer = (props: any) => {
       className={`shadow-sm shadow-dark-container dark:border-l-0 ${classes.drawer}`}
     >
       <div className="h-full bg-white dark:bg-dark-menu-color  ">
-        <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
+        <div className="flex justify-between py-3 px-5 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">Add Credential Profile</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
@@ -440,10 +437,10 @@ const CredentialProfileDrawer = (props: any) => {
                 require={true}
               />
               {errorKeys && errorKeys.includes("name") && (
-                  <p className="text-danger text-sm ml-2">
-                    Name should be {errors["name"]}*
-                  </p>
-                )}
+                <p className="text-danger text-sm ml-2">
+                  Name should be {errors["name"]}*
+                </p>
+              )}
 
               {/* <Select options={options} className="p-4 bg-red-900"/> */}
               <SingleSelect
@@ -451,9 +448,9 @@ const CredentialProfileDrawer = (props: any) => {
                 label="Protocol"
                 // selectData={["SNMPV1", "SNMPV2C", "SNMPv3", "SSH"]}
                 selectData={[
-                  { value: "SNMPV1", label: "SNMPV1" },
-                  { value: "SNMPV2C", label: "SNMPV2C" },
-                  { value: "SNMPV3", label: "SNMPV3" },
+                  { value: "SNMPV1", label: "SNMP v1" },
+                  { value: "SNMPV2C", label: "SNMP v2c" },
+                  { value: "SNMPV3", label: "SNMP v3" },
                   { value: "SSH", label: "SSH" },
                 ]}
                 onChange={handleChange}
@@ -473,7 +470,7 @@ const CredentialProfileDrawer = (props: any) => {
                   name="snmp_community"
                   value={snmpObject.credential_context.snmp_community}
                   onChange={handleInputChange}
-                  type="text"
+                  type="password"
                   disable={false}
                   require={true}
                 />
@@ -501,18 +498,20 @@ const CredentialProfileDrawer = (props: any) => {
                     <div className="flex flex-col items-start mx-2"> */}
                     <SingleSelect
                       label="Security"
-                      selectData={[ {
-                        value: "no.auth.no.priv",
-                        label: "No Auth No Privacy",
-                      },
-                      {
-                        value: "auth.no.priv",
-                        label: "Auth No Privacy",
-                      },
-                      {
-                        value: "auth.priv",
-                        label: "Auth Privacy",
-                      }]}
+                      selectData={[
+                        {
+                          value: "no.auth.no.priv",
+                          label: "No Auth No Privacy",
+                        },
+                        {
+                          value: "auth.no.priv",
+                          label: "Auth No Privacy",
+                        },
+                        {
+                          value: "auth.priv",
+                          label: "Auth Privacy",
+                        },
+                      ]}
                       onChange={handleFlagChange}
                       // require={true}
                     />
@@ -537,7 +536,7 @@ const CredentialProfileDrawer = (props: any) => {
                             // { value: "SSH", label: "SSH" },
                           ]}
                           onChange={handleAuthChange}
-                          require={false}
+                          require={true}
                         />
                         {/* </div>
                         <div className="flex flex-col items-start mx-2"> */}
@@ -562,7 +561,7 @@ const CredentialProfileDrawer = (props: any) => {
                           // selectData={["Select", "AES", "DES"]}
                           selectData={[
                             { value: "no.priv", label: "None" },
-                            
+
                             { value: "DES", label: "DES" },
                             { value: "AES", label: "AES" },
                             { value: "AES192", label: "AES192" },
@@ -573,7 +572,7 @@ const CredentialProfileDrawer = (props: any) => {
                             // { value: "SSH", label: "SSH" },
                           ]}
                           onChange={handleEncryptChange}
-                          require={false}
+                          require={true}
                         />
                         {/* </div>
                         <div className="flex flex-col items-start mx-2"> */}
@@ -586,7 +585,7 @@ const CredentialProfileDrawer = (props: any) => {
                           onChange={handleInputSNMPv3Change}
                           type="password"
                           disable={false}
-                          require={false}
+                          require={true}
                         />
 
                         {/* </div> */}
@@ -599,12 +598,12 @@ const CredentialProfileDrawer = (props: any) => {
                         label="Authentication Protocol"
                         selectData={[
                           { value: "no.auth", label: "None" },
-                            { value: "MD5", label: "MD5" },
-                            { value: "SHA", label: "SHA" },
-                            { value: "SHA224", label: "SHA224" },
-                            { value: "SHA256", label: "SHA256" },
-                            { value: "SHA384", label: "SHA384" },
-                            { value: "SHA512", label: "SHA512" },
+                          { value: "MD5", label: "MD5" },
+                          { value: "SHA", label: "SHA" },
+                          { value: "SHA224", label: "SHA224" },
+                          { value: "SHA256", label: "SHA256" },
+                          { value: "SHA384", label: "SHA384" },
+                          { value: "SHA512", label: "SHA512" },
                         ]}
                         onChange={handleAuthChange}
                         require={true}
@@ -621,7 +620,7 @@ const CredentialProfileDrawer = (props: any) => {
                         onChange={handleInputSNMPv3Change}
                         type="password"
                         disable={false}
-                        require={false}
+                        require={true}
                       />
                       {/* </div> */}
                     </div>
