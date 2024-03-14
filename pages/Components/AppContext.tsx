@@ -19,6 +19,22 @@ const AppContext = createContext<{
   toggleCloud: (cloud: any) => void;
   themeSwitch: boolean;
   toggleThemeSwitch: () => void;
+  getCredProfileApiState: boolean;
+  togglegetCredProfileApiState: () => void;
+  deviceTabelState: Boolean;
+  toggleDeviceTableState: () => void;
+  groupState: boolean;
+  toggleGroupState: () => void;
+  getDisSchedApiState: boolean;
+  togglegetDisSchedApiState: () => void;
+  getWidgetApiState: boolean;
+  toggleWidgetApiState: () => void;
+  getTableApiState: boolean;
+  togglegetTableApiState: () => void;
+  getSNMPTempApiState: boolean;
+  togglegetSNMPTempApiState: () => void;
+  getSNMPCatApiState: boolean;
+  toggleGetSNMPCatApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -38,16 +54,47 @@ const AppContext = createContext<{
   toggleCloud: (cloud: any) => {},
   themeSwitch: false,
   toggleThemeSwitch: () => {},
+  getCredProfileApiState: false,
+  togglegetCredProfileApiState: () => {},
+  deviceTabelState: false,
+  toggleDeviceTableState: () => {},
+  groupState: false,
+  toggleGroupState: () => {},
+  getDisSchedApiState: false,
+  togglegetDisSchedApiState: () => {},
+
+  getWidgetApiState: false,
+  toggleWidgetApiState: () => {},
+  getTableApiState: false,
+  togglegetTableApiState: () => {},
+  getSNMPTempApiState: false,
+  togglegetSNMPTempApiState: () => {},
+  getSNMPCatApiState: false,
+  toggleGetSNMPCatApiState: () => {},
+  
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [state, setState] = useState(false);
+  const [groupState, setgroupState] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [estimateCalc, setEstimateCalc] = useState(false);
   const [cloud, setCloud] = useState("AWS");
+  const [getDisSchedApiState, setGetDisSchedApiState] = useState(false);
+  const [getSNMPCatApiState, setGetSNMPCatApiState] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarClick, setSidebarClick] = useState(false);
   const [themeSwitch, setThemeSwitch] = useState(false);
+  const [deviceTabelState, setDevieTabelState] = useState(false);
+  const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
+  const [getWidgetApiState, setGetWidgetApiState] = useState(false);
+  const [getTableApiState, setGetTableApiState] = useState(false);
+  const [getSNMPTempApiState, setGetSNMPTempApiState] = useState(false);
+
+  const togglegetTableApiState = () => {
+    setGetTableApiState((prevState) => !prevState);
+  };
+
   const toggleSideBarClickState = () => {
     setSidebarClick((prevState) => !prevState);
   };
@@ -57,8 +104,18 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const toggleThemeSwitch = () => {
     setThemeSwitch((prevState) => !prevState);
   };
+
+  const toggleDeviceTableState = () => {
+    setDevieTabelState((prevState) => !prevState);
+  };
   const toggleState = () => {
     setState(!state);
+  };
+  const togglegetDisSchedApiState = () => {
+    setGetDisSchedApiState((prevState) => !prevState);
+  };
+  const toggleGroupState = () => {
+    setgroupState(!groupState);
   };
   const toggleAuthenticated = (isAuth: any) => {
     // console.log('dskjjk')
@@ -67,6 +124,12 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   // console.log("jhejfehjh")
   const toggleEstimateCalc = () => {
     setEstimateCalc((prevState) => !prevState);
+  };
+  const togglegetCredProfileApiState = () => {
+    setGetCredProfileApiState((prevState) => !prevState);
+  };
+  const toggleGetSNMPCatApiState = () => {
+    setGetSNMPCatApiState((prevState) => !prevState);
   };
 
   const [time, setTime] = useState(
@@ -86,6 +149,12 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const toggleCloud = (cloud: any) => {
     setCloud(cloud);
   };
+  const toggleWidgetApiState = () => {
+    setGetWidgetApiState((prevState) => !prevState);
+  };
+  const togglegetSNMPTempApiState = () => {
+    setGetSNMPTempApiState((prevState) => !prevState);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -99,14 +168,30 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleEstimateCalc,
         time,
         toggleTime,
+        getDisSchedApiState,
+        togglegetDisSchedApiState,
         timeEnd,
         toggleTimeEnd,
         authenticated,
         toggleAuthenticated,
+        getSNMPCatApiState,
+        toggleGetSNMPCatApiState,
         cloud,
         toggleCloud,
         themeSwitch,
         toggleThemeSwitch,
+        getCredProfileApiState,
+        togglegetCredProfileApiState,
+        deviceTabelState,
+        toggleDeviceTableState,
+        groupState,
+        toggleGroupState,
+        getWidgetApiState,
+        toggleWidgetApiState,
+        getTableApiState,
+        togglegetTableApiState,
+        getSNMPTempApiState,
+        togglegetSNMPTempApiState,
       }}
     >
       {children}

@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { usePathname } from "next/navigation";
 import Collapse from "@mui/material/Collapse";
-// import ExpandMore from "@mui/icons-material/ExpandMore";
-// import ExpandLess from "@mui/icons-material/ExpandLess";
+import BookIcon from "@mui/icons-material/Book";
+import { useAppContext } from "../AppContext";
+import { Divider } from "@mui/material";
+import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
+import ArticleIcon from '@mui/icons-material/Article';
+import PolicyIcon from "@mui/icons-material/Policy";
+import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydream";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import TrafficIcon from "@mui/icons-material/Traffic";
+
 interface DropdownItem {
   subMenuDropdownname: string;
   subMenuDropdownpathName: string;
@@ -12,6 +21,7 @@ interface DropdownItem {
 interface SubMenuItem {
   subMenuName: string;
   subMenuPathName?: string;
+  subMenuIcon?: any;
   subMenuDropdown?: DropdownItem[];
 }
 
@@ -21,210 +31,255 @@ interface MenuItem {
   subMenu?: SubMenuItem[];
 }
 
-const SidebarMenu = () => {
-  const pathname = usePathname();
+interface SelectedDropdown {
+  [key: string]: number | null;
+}
 
+const SidebarMenu = () => {
+  const { sidebarOpen } = useAppContext();
+  const pathname = usePathname();
+  // console.log("--", sidebarOpen);
   const path = pathname;
   // console.log("path", path);
-  const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
+  const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
+  const [selectedDropdown, setSelectedDropdown] = useState<SelectedDropdown>(
+    {}
+  );
 
   const handleSubmenuClick = (index: any) => {
     setOpenSubmenu((prevOpen) => (prevOpen === index ? null : index));
+    console.log(openSubmenu);
+    setSelectedDropdown({});
+  };
+
+  const handleDropdownClick = (submenuIndex: number, dropdownIndex: number) => {
+    const key = `submenu${submenuIndex}`;
+    console.log(key);
+    console.log(dropdownIndex);
+    setSelectedDropdown({
+      ...selectedDropdown,
+      [key]: dropdownIndex,
+    });
   };
 
   const menuItems: MenuItem[] = [
     {
       name: "Dashboard",
-      pathName: "/Dashboard",
+      pathName: "/dashboard",
     },
 
     {
       name: "Assets",
-      pathName: "/Assets",
+      pathName: "/assets",
     },
 
     {
       name: "Alerts",
-      pathName: "/Alerts",
+      pathName: "/alerts",
     },
 
     {
       name: "Topology",
-      pathName: "/Topology",
+      pathName: "/topology",
     },
     {
       name: "Explorer",
-      pathName: "/Explorer",
+      pathName: "/explorer",
       subMenu: [
         {
           subMenuName: "Metric",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Explorer/metric",
         },
         {
           subMenuName: "Flow",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Explorer/flow",
         },
       ],
     },
     {
       name: "Reports",
-      pathName: "/Reports",
+      pathName: "/reports",
     },
 
     {
       name: "Diagnostics",
-      pathName: "/Diagnostics",
+      pathName: "/diagnostics",
       subMenu: [
         {
           subMenuName: "Ping",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/ping",
         },
         {
           subMenuName: "SNMP",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/snmp",
         },
         {
           subMenuName: "SSH",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/ssh",
         },
         {
           subMenuName: "TCPDUMP",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/tcpdump",
         },
         {
           subMenuName: "API",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/api",
         },
         {
           subMenuName: "Traceroute",
-          subMenuPathName: "/page/changeSetting",
+          subMenuPathName: "/Diagnostics/traceroute",
         },
       ],
     },
     {
       name: "NCM",
-      pathName: "/NCM",
+      pathName: "/ncm",
     },
     {
       name: "Audit",
-      pathName: "/Audit",
+      pathName: "/audit",
     },
 
     {
       name: "Settings",
-      pathName: "/Settings",
+      pathName: "/settings",
       subMenu: [
         {
           subMenuName: "User Settings",
+          subMenuIcon: <ManageAccountsIcon />,
           // subMenuPathName: "/page/changeSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- User",
-              subMenuDropdownpathName: "/page/user",
+              subMenuDropdownname: "User",
+              subMenuDropdownpathName: "/Settings/user-settings/user",
             },
             {
-              subMenuDropdownname: "- Role",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "Role",
+              subMenuDropdownpathName: "/Settings/user-settings/role",
             },
             {
-              subMenuDropdownname: "- Group",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "Group",
+              subMenuDropdownpathName: "/Settings/user-settings/group",
             },
             {
-              subMenuDropdownname: "- Password Settings",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "Password Settings",
+              subMenuDropdownpathName: "/Settings/user-settings/password",
             },
             {
-              subMenuDropdownname: "- LDPA",
-              subMenuDropdownpathName: "/page/role",
+              subMenuDropdownname: "LDAP",
+              subMenuDropdownpathName: "/Settings/user-settings/ldap",
             },
           ],
         },
 
         {
           subMenuName: "System Settings",
+          subMenuIcon: <SettingsSystemDaydreamIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- Global Settings",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Global Settings",
+              subMenuDropdownpathName:
+                "/Settings/system-settings/global-settings",
             },
             {
-              subMenuDropdownname: "- Mail Server",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Mail Server",
+              subMenuDropdownpathName: "/Settings/system-settings/mail-server",
             },
             {
-              subMenuDropdownname: "- SMS Server",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "SMS Server",
+              subMenuDropdownpathName: "/Settings/system-settings/sms-server",
             },
           ],
         },
 
         {
           subMenuName: "Policy",
+          subMenuIcon: <PolicyIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- Alarm",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Alarm",
+              subMenuDropdownpathName: "/Settings/policy/alarm",
             },
             {
-              subMenuDropdownname: "- Policy",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Policy",
+              subMenuDropdownpathName: "/Settings/policy/policy",
             },
           ],
         },
 
         {
-          subMenuName: "Device Settingd",
+          subMenuName: "Device Settings",
+          subMenuIcon: <AppSettingsAltIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- Credential Profile",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Credential Profile",
+              subMenuDropdownpathName:
+                "/Settings/device-settings/credential-profile",
             },
             {
-              subMenuDropdownname: "- Site Management",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Site Management",
+              subMenuDropdownpathName:
+                "/Settings/device-settings/site-management",
+            },
+            {
+              subMenuDropdownname: "Profiles",
+              subMenuDropdownpathName: "/Settings/device-settings/profiles",
             },
           ],
         },
-
         {
-          subMenuName: "Catalog",
+          subMenuName: "Catalogue",
+          subMenuIcon: <BookIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- SNMP",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "SNMP",
+              subMenuDropdownpathName: "/Settings/catalogue/snmp",
+            },
+          ],
+        },
+        {
+          subMenuName: "Template",
+          subMenuIcon: <ArticleIcon />,
+          // subMenuPathName: "/page/systemSetting",
+          subMenuDropdown: [
+            {
+              subMenuDropdownname: "SNMP",
+              subMenuDropdownpathName: "/Settings/template/snmp",
             },
           ],
         },
         {
           subMenuName: "Traffic",
+          subMenuIcon: <TrafficIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- Flow",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Flow",
+              subMenuDropdownpathName: "/Settings/traffic/flow",
             },
             {
-              subMenuDropdownname: "- Trap",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Trap",
+              subMenuDropdownpathName: "/Settings/traffic/trap",
             },
           ],
         },
         {
           subMenuName: "Schedular",
+          subMenuIcon: <ScheduleIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "- Discovery Schedular",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Discovery Schedular",
+              subMenuDropdownpathName:
+                "/Settings/schedular/discovery-schedular",
             },
             {
-              subMenuDropdownname: "- Report Schedular",
-              subMenuDropdownpathName: "/page/flow",
+              subMenuDropdownname: "Report Schedular",
+              subMenuDropdownpathName: "/Settings/schedular/report-schedular",
             },
           ],
         },
@@ -232,73 +287,138 @@ const SidebarMenu = () => {
     },
   ];
 
+  // console.log("idejbd", sidebarOpen);
   return (
     <>
       {menuItems.map((menuItem, index) =>
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className="left-0 top-0 w-[17.5rem] ml-[1px] flex  flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark lg:translate-x-0"
+            className={`relative mt-12 flex flex-col overflow-x-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+              sidebarOpen ? "w-0 " : "w-[15rem] border-r"
+            }`}
           >
-            <div className="flex h-[2.5rem] px-3 items-center text-white   pt-1.3 border-b-2">
+            {/* <div className="flex justify-between h-[3rem] px-3 items-center text-black dark:text-textColor pt-1.3 shadow-lg shadow-white dark:shadow-black">
               <p>{menuItem.name}</p>
-              {/* {menuItems.map((menuItem, index) => {
-                return (
-                  <span key={index}> */}
-              {/* {pathname.includes(menuItem.pathName) && menuItem.name} */}
-              {/* </span> */}
-              {/* );
-              })} */}
-            </div>
+            </div> */}
 
             <ul>
               {menuItems.map((menuItem, index) =>
                 pathname.includes(menuItem.name) ? (
                   <li className="w-full" key={index}>
-                    <div className="group relative flex items-center rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ">
+                    <div className="group relative flex items-center rounded-sm py-1 font-medium text-bodydark1 duration-300 ease-in-out  text-textColor  dark:hover:bg-meta-4 hover:text-primary2 dark:hover:text-primary2">
                       {menuItem.subMenu?.length && (
-                        <ul className="w-full ml-3 p-0 py-[5px]">
+                        <ul className="w-full p-0 py-[2px]">
                           {menuItem.subMenu.map((submenuItem, subIndex) => (
-                            <li
-                              key={subIndex}
-                              className="w-full py-2.5 px-2 items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
-                            >
-                              <div
-                                className="w-full flex justify-between cursor-pointer transition duration-300 ease-in-out"
-                                onClick={() => handleSubmenuClick(subIndex)}
+                            <>
+                              <li
+                                key={subIndex}
+                                className="relative w-full py-2 items-center text-black dark:text-textColor font-light"
                               >
-                                <p>{submenuItem.subMenuName}</p>
-                                {submenuItem.subMenuDropdown && (
-                                  <KeyboardArrowDownIcon
-                                    className={`transform ${
-                                      openSubmenu === subIndex
-                                        ? "-rotate-180"
-                                        : ""
-                                    }`}
-                                  />
-                                )}
-                              </div>
-                              <Collapse
-                                in={openSubmenu === subIndex}
-                                timeout="auto"
-                                unmountOnExit
-                              >
-                                {submenuItem.subMenuDropdown && (
-                                  <ul className="ml-3 p-0 mt-2 py-[5px] transition-opacity ">
-                                    {submenuItem.subMenuDropdown.map(
-                                      (dropdownItem, dropdownIndex) => (
-                                        <li
-                                          key={dropdownIndex}
-                                          className="mr-3 py-1 items-center  text-[#DEE4EE] hover:text-[#DEE4EE] font-light"
-                                        >
-                                          {dropdownItem.subMenuDropdownname}
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                )}
-                              </Collapse>
-                            </li>
+                                <Link
+                                  href={submenuItem.subMenuPathName || "#"}
+                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 subMenuLink ${
+                                    openSubmenu == subIndex
+                                    // "dark:bg-[#282828] bg-[#D8D8D8]"
+                                  }`}
+                                  onClick={() => handleSubmenuClick(subIndex)}
+                                >
+                                  <div className="flex ">
+                                    {submenuItem.subMenuIcon &&
+                                      React.cloneElement(
+                                        submenuItem.subMenuIcon,
+                                        {
+                                          fontSize: "small",
+                                          className: `${
+                                            openSubmenu === subIndex ? "" : ""
+                                          }`,
+                                        }
+                                      )}
+                                    <p
+                                      className={`mx-2 text-[14px]  ${
+                                        openSubmenu === subIndex ? "" : ""
+                                      }`}
+                                    >
+                                      {submenuItem.subMenuName}
+                                    </p>
+                                  </div>
+                                  {submenuItem.subMenuDropdown && (
+                                    <KeyboardArrowRightIcon
+                                      fontSize="small"
+                                      sx={{ fontSize: "15px" }}
+                                      className={`mr-2 transform ${
+                                        openSubmenu === subIndex
+                                          ? "rotate-90 "
+                                          : ""
+                                      }`}
+                                    />
+                                  )}
+                                </Link>
+
+                                <Collapse
+                                  in={openSubmenu === subIndex}
+                                  timeout="auto"
+                                  unmountOnExit
+                                  style={{
+                                    margin: "0",
+                                  }}
+                                >
+                                  {submenuItem.subMenuDropdown && (
+                                    <ul className="ml-[1.3rem] pY-[5px] transition-opacity ">
+                                      {submenuItem.subMenuDropdown.map(
+                                        (dropdownItem, dropdownIndex) => (
+                                          <Link
+                                            href={
+                                              dropdownItem.subMenuDropdownpathName
+                                            }
+                                          >
+                                            <li
+                                              key={dropdownIndex}
+                                              className={`relative mr-3 py-1 my-[2px] text-[14px] items-center !text-black dark:!text-textColor hover:bg-[#D8D8D8] dark:hover:bg-[#282828] cursor-pointer font-light rounded ${
+                                                // selectedDropdown === dropdownIndex
+                                                selectedDropdown[
+                                                  `submenu${subIndex}`
+                                                ] === dropdownIndex
+                                                  ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
+                                                  : ""
+                                              }`}
+                                              onClick={() => {
+                                                handleDropdownClick(
+                                                  subIndex,
+                                                  dropdownIndex
+                                                );
+                                              }}
+                                            >
+                                              <div
+                                                className={` ${
+                                                  // selectedDropdown === dropdownIndex
+                                                  selectedDropdown[
+                                                    `submenu${subIndex}`
+                                                  ] === dropdownIndex
+                                                    ? "pl-[.75rem]"
+                                                    : "pl-[1.3rem]"
+                                                }`}
+                                              >
+                                                {
+                                                  dropdownItem.subMenuDropdownname
+                                                }
+                                              </div>
+                                              {/* {dropdownIndex !==
+                                              dropdownItem.subMenuDropdownname
+                                                .length -
+                                                1 && (
+                                              <div className="absolute top-0 bottom-0 left-0 bg-[#B9B9B9] dark:bg-[#464646] w-[1px]" />
+                                            )} */}
+                                            </li>
+                                          </Link>
+                                        )
+                                      )}
+                                    </ul>
+                                  )}
+                                </Collapse>
+                              </li>
+                              <Divider className="mx-2 bg-[#B9B9B9] dark:bg-[#464646]" />
+                            </>
                           ))}
                         </ul>
                       )}
@@ -309,6 +429,8 @@ const SidebarMenu = () => {
                 )
               )}
             </ul>
+            {/* <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" /> */}
+            <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
           </div>
         ) : (
           ""

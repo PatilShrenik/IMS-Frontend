@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 /* @import url("https://fonts.cdnfonts.com/css/satoshi"); */
 @import "https://code.highcharts.com/dashboards/css/dashboards.css";
+@import "rsuite/dist/rsuite.min.css";
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import "rsuite/dist/rsuite.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,10 +16,13 @@
 }
 
 /* width */
-::-webkit-scrollbar {
-  width: 0px;
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+a {
+  color: none !important;
+  text-decoration: none !important;
 }
-
 /* @layer base {
   body {
     @apply font-normal text-base text-body bg-whiten relative z-1;
@@ -25,73 +30,79 @@
 } */
 body {
   color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
+
   font-family: "Poppins", sans-serif !important;
 }
 
 /* ------------------------------ IMS CSS -----------------------------------------*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: transparent;
+}
 
+::-webkit-scrollbar {
+  height: 7px;
+  width: 12px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(
+    216,
+    216,
+    216,
+    0.2
+  ); /* Adjust the alpha value (0.7) for transparency */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(
+    216,
+    216,
+    216,
+    0.8
+  ); /* Adjust the alpha value (0.7) for transparency */
+}
 /* styles/globals.css */
 /* body {
   font-family: "Poppins", sans-serif;
 } */
 
 /* width */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+
+/* Add this CSS to your stylesheet */
+/* main{
+  position: relative;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #f1f1f1;
-}
-
-@layer utilities {
-
-  /* Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
-  }
-
-
-}
+main::before {
+  content: '';
+  position: absolute;
+  width: 10px; 
+  height: 100px;
+  background: rgba(0, 0, 0, 1); 
+  border: solid 2px;
+  border-top-left-radius: 10px; 
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 1); 
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 80%);
+  
+} */
 
 /* third-party libraries CSS */
 
-
-
 .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
   margin-left: 85px;
-  background-color: #171A22;
+  background-color: #171a22;
   color: white;
   -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   display: -webkit-box;
   display: -webkit-flex;
@@ -114,18 +125,235 @@ body {
 }
 
 .css-h4y409-MuiList-root {
-
   list-style: none;
   margin: 0;
   padding: 10px;
   position: relative;
   padding-top: 3px;
   padding-bottom: 3px;
-
 }
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
-  z-index: -120;
+/* Tooltip css */
 
+.MuiTooltip-popper[data-popper-placement*="left"]
+  .css-ja5taz-MuiTooltip-tooltip {
+  transform-origin: right center;
+  margin-right: 8px;
 }
-/* New Side Bar */
+
+.css-ja5taz-MuiTooltip-tooltip {
+  font-size: 0.7875rem;
+}
+
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  box-shadow: 0px 2.5px 2.5px -1.5px rgba(0, 0, 0, 0.1),
+    0px 4px 5px 0.5px rgba(0, 0, 0, 0.07), 0px 1.5px 7px 1px rgba(0, 0, 0, 0.06);
+}
+
+.css-uyijx3-MuiPaper-root {
+  /* background-color: "transparent"; */
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.css-y8ay40-MuiTableCell-root {
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.css-1rxtwhz-MuiPaper-root {
+  box-shadow: none;
+}
+
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  background-color: none;
+}
+
+.css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
+  border-left: 0;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active
+  .MuiTableSortLabel-icon {
+  opacity: 1;
+  color: "blue";
+}
+
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  /* Adjust the position as needed */
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: #000 transparent transparent transparent;
+  /* Adjust the color as needed */
+  pointer-events: none;
+  /* Allow clicks to pass through to the select element */
+}
+
+.css-r8u8y9 {
+  list-style: none;
+  margin: 0px;
+  padding: 0px 0px !important;
+  position: relative;
+  outline: 0px;
+}
+
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  background-color: none;
+}
+
+.css-18sg6k4-MuiPaper-root-MuiDrawer-paper {
+  border-left: 0;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.css-1betqn-MuiAccordionSummary-content {
+  display: flex;
+  justify-content: space-between;
+  /* -webkit-box-flex: 1;   
+    -ms-flex-positive: 1; */
+  flex-grow: 1;
+  margin: 12px 0;
+}
+
+.css-79xub {
+  background-color: none !important;
+  color: none !important;
+}
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: none;
+}
+
+@layer components {
+  /* .my-react-select-container {
+  } */
+  .my-react-select-container .my-react-select__control {
+    @apply py-[.4rem] rounded-lg bg-white dark:bg-[#1E1E1E] border-[1px] border-[#cccccc] dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-white dark:bg-[#1E1E1E] border-[1px]  dark:border-neutral-600;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply text-neutral-600 dark:text-[#D8D8D8] bg-white hover:bg-neutral-200 dark:bg-[#1E1E1E] dark:hover:bg-neutral-800;
+  }
+
+  /* .my-react-select-container .my-react-select__option--is-focused {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  } */
+
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply !bg-transparent;
+  }
+
+  .my-react-select-container .my-react-select__multi-value {
+    @apply dark:bg-[#1E1E1E] dark:text-[#D8D8D8];
+  }
+
+  .my-react-select-container .my-react-select__multi-value__label {
+    @apply dark:text-[#D8D8D8] dark:bg-gray-600;
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__placeholder,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-neutral-600 dark:text-[#D8D8D8];
+  }
+
+  .tree-view .css-1bcfi89-MuiTreeItem-content {
+    @apply dark:bg-[#1E1E1E] rounded-md bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-1bcfi89-MuiTreeItem-content.Mui-selected {
+    @apply dark:bg-[#1E1E1E] rounded-md bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-tc4u2w.Mui-selected {
+    @apply dark:bg-[#1E1E1E] rounded-md  bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+
+  .tree-view .css-tc4u2w {
+    @apply dark:bg-[#1E1E1E] rounded-md  bg-[#E8E8E8] border   dark:border-[#282828] border-gray-300;
+  }
+  .tree-view .css-j02aiz {
+    @apply pt-2;
+  }
+}
+.css-12a83d4-MultiValueRemove {
+  background-color: #4b5563;
+  color: white;
+}
+
+.css-12a83d4-MultiValueRemove:hover {
+  background-color: #4b5563;
+  color: white;
+}
+
+.css-1betqn-MuiAccordionSummary-content {
+  display: flex;
+  justify-content: space-between;
+  /* -webkit-box-flex: 1;   
+    -ms-flex-positive: 1; */
+  flex-grow: 1;
+  margin: 12px 0;
+}
+
+.rs-picker-menu {
+  z-index: 9999 !important;
+}
+
+.rs-picker-toggle:hover {
+  background-color: none !important;
+  background-color: none !important;
+  color: #575757;
+  color: var(--rs-btn-subtle-hover-text);
+}
+
+.rs-picker-toggle:hover {
+  background-color: none !important;
+  background-color: none !important;
+  color: #575757;
+  color: var(--rs-btn-subtle-hover-text);
+}
+.css-1km1ehz {
+  @apply !bg-textColor dark:!bg-tabel-header dark:!text-textColor hover:dark:!bg-tabel-header hover:!bg-textColor
+  /* background-color: none !important; */;
+}
+.subMenuLink {
+  @apply text-black dark:text-textColor dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:!text-black dark:hover:!text-textColor;
+}
+
+.discButtonGroup {
+  @apply !bg-primary2 hover:!bg-primary2 !text-white;
+}
+.discPadding {
+  @apply !px-[5px] !py-2.5;
+}
+/* .css-79xub {
+  padding: 12px 44px !important;
+  border-radius: 8px !important;
+} */

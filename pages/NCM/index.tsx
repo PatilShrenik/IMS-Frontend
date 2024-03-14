@@ -2,8 +2,8 @@ import React from 'react'
 
 const NCM = () => {
   return (
-    <div>NCM</div>
+    <div className="dark:text-textColor">NCM</div>
   )
 }
 
-export default NCM
+export default NCM;

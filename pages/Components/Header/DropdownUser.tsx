@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Divider, Modal } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import { logout } from "@/app/api/AuthAPI";
 import { useRouter } from "next/navigation";
@@ -9,11 +10,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userName, setUserName] = useState(null) as any;
-  const [isSignOutModalOpen, setSignOutModalOpen] = useState(false);
+ // const [isSignOutModalOpen, setSignOutModalOpen] = useState(false);
   const { themeSwitch } = useAppContext();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
   const router = useRouter();
+  const [isModalopen, setIsModalOpen] = useState(false);
+ 
   // close on click outside
   // const userName = sessionStorage.getItem("userName");
   useEffect(() => {
@@ -43,56 +46,50 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
-
-  const handleSignOutClick = async () => {
-    setSignOutModalOpen(true);
-
-    // try {
-    //   await instance.logoutPopup();
-    //   router.push("/");
-    //   sessionStorage.clear();
-    //   localStorage.clear();
-    // } catch (error) {
-    //   console.log("Logout error", error);
-    // }
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    // handleClose();
   };
+  const handleModalClose = () => setIsModalOpen(false);
+
 
   const handleSignOutConfirm = () => {
     // Perform sign-out logic here
+    router.push("/");
     localStorage.clear();
     sessionStorage.clear();
-    setSignOutModalOpen(false);
+    // setSignOutModalOpen(false);
   };
-  const handleSignOutCancel = () => {
-    setSignOutModalOpen(false);
-  };
+ 
   return (
-    <div className="relative">
+    <div className="">
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-2"
+        className="flex justify-around items-center"
         href="#"
       >
-        <span className="text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {userName}
-          </span>
-        </span>
+        <div className="flex justify-evenly items-center">
+          {/* <span className="text-right lg:block">
+            <span className="block text-sm font-medium text-black dark:text-white">
+              {userName}
+            </span>
+          </span> */}
 
-        <span className="h-9 mt-1 w-10 rounded-full p-1">
-          {/* <img
+          <span className="h-9 w-10 rounded-full">
+            {/* <img
             style={{ borderRadius: "50%", width: 30, height: 30 }}
             src={"/avatar3.jpg"}
             alt="User"
           /> */}
-          <AccountCircleIcon
-            sx={{ width: "30", height: "30" }}
-            className="text-black dark:text-white"
-          />
-        </span>
+            <AccountCircleIcon
+              sx={{ fontSize: "35px" }}
+              className="text-dark-border dark:text-white"
+            />
+          </span>
+        </div>
 
-        <KeyboardArrowDownIcon className="text-black dark:text-white" />
+        {/* <KeyboardArrowDownIcon className="text-black dark:text-white" /> */}
       </Link>
 
       {/* <!-- Dropdown Start --> */}
@@ -100,15 +97,21 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0  p-3 flex w-[15.625rem] flex-col rounded-sm border border-[#E2E8F0] bg-white shadow-default dark:border-[#2E3A47] dark:bg-[#24303F] ${
+        className={`absolute right-0 mr-1 mt-[4.5px] p-2 flex w-[13rem] flex-col rounded-b-xl  bg-light-menu-color shadow-sm shadow-black dark:bg-dark-menu-color ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-[#E2E8F0] px-6 py-7.5 dark:border-[#2E3A47]">
+        <ul className="flex flex-col gap-4 border-b border-[#E2E8F0] px-2 dark:border-[#2E3A47]">
+          <li className="flex justify-center">
+            {" "}
+            <span className="block text-sm font-medium text-black dark:text-white">
+              {userName}
+            </span>
+          </li>
           <li>
             <Link
               href=""
-              className="flex cursor-not-allowed items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex cursor-not-allowed items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -130,10 +133,10 @@ const DropdownUser = () => {
               My Profile
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               href=""
-              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -150,11 +153,11 @@ const DropdownUser = () => {
               </svg>
               My Contacts
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               href=""
-              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-[#DEE4EE]"
+              className="flex items-center cursor-not-allowed gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 lg:text-base dark:text-textColor"
             >
               <svg
                 className="fill-current"
@@ -176,43 +179,77 @@ const DropdownUser = () => {
               Account Settings
             </Link>
           </li>
-          <li></li>
+          <li>
+            {" "}
+            <Divider />
+          </li>
         </ul>
-        <button
-          className="flex items-center cursor-not-allowed gap-3.5 py-2 px-6 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-[#DEE4EE]  lg:text-base"
-          // onClick={handleSignOutClick}
-        >
-          <svg
-            className="fill-current"
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        <p>
+          <button
+            className="flex items-center gap-3.5 py-2 px-2 text-sm font-medium duration-300 ease-in-out hover:text-blue-400 dark:text-textColor  lg:text-base"
+            onClick={handleModalOpen}
           >
-            <path
-              d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
-              fill=""
-            />
-            <path
-              d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
-              fill=""
-            />
-          </svg>
-          Log Out
-        </button>
+            <svg
+              className="fill-current"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+                fill=""
+              />
+              <path
+                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+                fill=""
+              />
+            </svg>
+            Log Out
+          </button>
+        </p>
       </div>
       {/* <!-- Dropdown End --> */}
+      <Modal open={isModalopen} onClose={handleModalClose}>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 min-w-[23.75rem] rounded-md dark:bg-tabel-row">
+          {/* <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " /> */}
+          <div className="ml-4 mb-5 ">
+            <p className=" text-xl font-normal  border-b-2 py-3   text-justify  dark:text-textColor  dark:border-dark-border ">
+              {" "}
+              Confirm logout{" "}
+            </p>
+            <p className="text-gray-500 text-sm mt-5 mb-5">
+              Are you sure you want to log out ?
+            </p>
+          </div>
+          <div className="flex justify-end p-4">
+           
+            <button
+              onClick={handleModalClose}
+              className=" border border-light3 font-normal py-1 px-3 rounded-xl mr-4 dark:text-textColor"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSignOutConfirm}
+              className="bg-primary2 hover:bg-primary2 text-white font-normal py-1 px-3 rounded-xl  dark:text-textColor"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </Modal>
 
-      {isSignOutModalOpen && (
-        <div className="fixed top-1/5 left-1/3 transform-translate-x-1/2  flex items-center justify-center z-50">
-          <div className="bg-white border-2 border-gray-600 px-7 py-4 rounded-lg shadow-xl dark:text-[#DEE4EE]">
+      {/* {isSignOutModalOpen && (
+        <div className="fixed top-[50%] left-1/3 transform-translate-x-1/2  flex items-center justify-center z-50">
+          <div className="bg-white border-2 border-gray-600 px-7 py-4 rounded-lg shadow-xl dark:text-textColor">
             <p className="text-lg">Are you sure you want to sign out?</p>
 
             <div className="mt-4 flex justify-end">
               <Link href="/">
                 <button
-                  className="mr-4 px-4 py-1 bg-red-800 text-white rounded-md dark:text-[#DEE4EE]"
+                  className="mr-4 px-4 py-1 bg-red-800 text-white rounded-md dark:text-textColor"
                   onClick={handleSignOutConfirm}
                 >
                   Yes
@@ -220,7 +257,7 @@ const DropdownUser = () => {
               </Link>
 
               <button
-                className="px-4 py-1 bg-gray-300 text-gray-700 rounded-lg dark:text-[#DEE4EE]"
+                className="px-4 py-1 border-gray-300 text-white rounded-lg dark:text-textColor"
                 onClick={handleSignOutCancel}
               >
                 Cancel
@@ -228,7 +265,7 @@ const DropdownUser = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

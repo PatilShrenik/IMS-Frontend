@@ -2,18 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import DataSaverOffIcon from "@mui/icons-material/DataSaverOff";
 import Person2Icon from "@mui/icons-material/Person2";
 import DynamicFormIcon from "@mui/icons-material/DynamicForm";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import CameraRoundedIcon from "@mui/icons-material/CameraRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useAppContext } from "../AppContext";
+import Zoom from "@mui/material/Zoom";
 
 import { Box } from "@mui/system";
+import { Tooltip, TooltipProps, styled, tooltipClasses } from "@mui/material";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -36,189 +39,237 @@ const Sidebar = () => {
       name: "Dashboard",
       path: "/Dashboard",
       icon: (
-        <DashboardIcon
+        <DashboardOutlinedIcon
           className={` ${
-            pathname.includes("/Dashboard") && "dark:bg-meta-4 text-blue-700"
-          }`}
-          sx={{ color: "white", margin: "0 1.5rem" }}
+            pathname.includes("dashboard") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
         />
       ),
     },
     {
       name: "Assets",
       path: "/Assets",
-      icon: <EqualizerIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <EqualizerIcon
+          className={` ${
+            pathname.includes("Assets") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Alerts",
       path: "/Alerts",
       icon: (
-        <NotificationsActiveIcon sx={{ color: "white", margin: "0 1.5rem" }} />
+        <NotificationsActiveIcon
+          className={` ${
+            pathname.includes("alerts") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
       ),
     },
     {
       name: "Topology",
       path: "/Topology",
-      icon: <CameraRoundedIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <CameraRoundedIcon
+          className={` ${
+            pathname.includes("Topology") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Explorer",
       path: "/Explorer",
-      icon: <DataSaverOffIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <DataSaverOffIcon
+          className={` ${
+            pathname.includes("explorer") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Reports",
       path: "/Reports",
-      icon: <AssignmentIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <AssignmentIcon
+          className={` ${
+            pathname.includes("Reports") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Diagnostics",
       path: "/Diagnostics",
-      icon: <EqualizerIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <ConstructionIcon
+          className={` ${
+            pathname.includes("diagnostics") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "NCM",
       path: "/NCM",
-      icon: <Person2Icon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <Person2Icon
+          className={` ${
+            pathname.includes("NCM") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Audit",
       path: "/Audit",
-      icon: <DynamicFormIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <DynamicFormIcon
+          className={` ${
+            pathname.includes("Audit") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
     {
       name: "Settings",
       path: "/Settings",
-      icon: <SettingsIcon sx={{ color: "white", margin: "0 1.5rem" }} />,
+      icon: (
+        <SettingsIcon
+          className={` ${
+            pathname.includes("Settings") && ""
+          } text-dark-menu-color dark:text-light-menu-color`}
+          sx={{ color: "black", margin: "0 1.5rem" }}
+        />
+      ),
     },
   ];
-
+  const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#3C3C3C",
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#3C3C3C",
+      fontSize: "14px",
+    },
+  }));
   return (
     <aside
       ref={sidebar}
-      className="left-0 top-0 w-[5.5rem] flex h-screen flex-col overflow-y-hidden bg-[#171A22] duration-300 ease-linear dark:bg-boxdark  lg:translate-x-0 shadow-2xl"
+      className={`left-0 top-0 w-[4rem] flex  flex-col overflow-y-hidden bg-light-menu-color shadow-sm shadow-[#B3B6B7] dark:shadow-black ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 ${
+        sidebarOpen && ""
+      } `}
+      // className="left-0 z-[100] top-0 w-[3.3rem] flex h-screen flex-col overflow-y-hidden bg-light-menu-color   ease-linear dark:bg-dark-menu-color duration-300  dark:bg-boxdark  lg:translate-x-0 "
     >
-      <div className="flex h-[2.5rem] items-center justify-between px-4 py-1 pt-1.3 border-b-2">
+      <div className="flex h-[3rem] items-center justify-between px-4 pt-1.">
         <Link href="" className="flex cursor-default">
-          <Image
-            width={32}
-            height={32}
-            src={"/logo-icon.svg"}
-            alt="Logo"
-            className={`${!sidebarOpen && "my-6"}`}
-          />
+          <Image width={32} height={32} src={"/logo-icon.svg"} alt="Logo" />
+          <div className="flex">
+            {/* <p
+              className="mx-4 my-6 font-semibold text-2xl text-white"
+              style={{
+                // background: "#0BBCB2",
+                background:
+                  "linear-gradient(to right, #0BBCB2 0%, #BCFB40 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              IMS
+            </p> */}
+
+            {/* <div className=" my-6 justify-end">
+                <MenuIcon />
+              </div> */}
+          </div>
         </Link>
       </div>
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear ">
         <nav className="pb-4">
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {links.map((link, index) => (
+                // <BootstrapTooltip
+                //   TransitionComponent={Zoom}
+                //   title={link.name}
+                //   arrow
+                //   placement="right"
+                //   slotProps={{
+                //     popper: {
+                //       sx: {
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginTop: "0px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginBottom: "0px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginLeft: "4px",
+                //           },
+                //         [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                //           {
+                //             marginRight: "0px",
+                //           },
+                //       },
+                //     },
+                //   }}
+                // >
                 <li key={index}>
+                  {/* <Link
+                      href={link.path}
+                      className={`group relative flex items-center rounded-sm py-2 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
+                        pathname.includes(link.path) &&
+                        "border-l-4 px-2 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                      }`}
+                    >
+                      <div className="w-full px-2">
+                        <div className="flex justify-around">{link.icon}</div>
+                      </div>
+                    </Link> */}
                   <Link
                     href={link.path}
-                    className={`group relative flex items-center rounded-sm py-1 mt-1 font-medium text-bodydark1 duration-300 ease-in-out text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ${
-                      pathname.includes(link.path) && "dark:bg-meta-4"
+                    className={`flex items-center rounded-sm py-1 mr-1 mt-1 font-medium text-bodydark1 duration-300 text-textColor hover:text-black dark:hover:bg-meta-4 hover:bg-[#D8D8D8]  hover:dark:bg-[#282828] ${
+                      pathname.includes(link.path)
+                        ? "border-l-4 bg-[#D8D8D8] border-[#0078D4] dark:bg-[#282828]"
+                        : "pl-1"
                     }`}
                   >
-                    <div className="w-full">
+                    <div className="w-full px-2">
                       <div className="flex justify-around">{link.icon}</div>
-                      <p className="text-xs flex justify-evenly">{link.name}</p>
+                      <p
+                        className={`${
+                          pathname.includes(link.name)
+                            ? "text-black dark:text-textColor text-[9px] flex mx-2 justify-evenly"
+                            : "dark:text-textColor text-black text-[9px] flex mx-2 justify-evenly"
+                        } " text-black"`}
+                      >
+                        {link.name}
+                      </p>
                     </div>
                   </Link>
                 </li>
+                // {/* </BootstrapTooltip> */}
               ))}
             </ul>
           </div>
         </nav>
-
-        {/* <nav className="pb-4">
-          <div>
-            <ul className="mb-6 flex flex-col ju gap-1.5">
-              {links.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.path}
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ${
-                      pathname.includes(link.path) && " dark:bg-meta-4 "
-                    }`}
-                  >
-                    <Box>
-                      <div className="flex flex-col">
-                        {link.icon}
-                        <span className="mr-3 text-xs font-light ml-[-12px]">
-                          {link.name}
-                        </span>
-                      </div>
-                    </Box>
-                  </Link>
-                </li>
-                // <li>
-                //   <Link
-                //     href="/page/FinOps/reports"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  text-[#DEE4EE] hover:text-[#DEE4EE] dark:hover:bg-meta-4 ${
-                //       pathname.includes("page/FinOps/reports") &&
-                //       " dark:bg-meta-4 "
-                //     }`}
-                //   >
-                //    <Box>
-                //     <DashboardIcon
-                //       sx={{ color: "white" }}
-                // className={` ${
-                //   pathname.includes("page/FinOps/reports") &&
-                //   "dark:bg-meta-4 text-blue-700"
-                // }`}
-                //     />
-                //  <span className="mr-3 text-xs font-light ml-[-12px]">Dashboard</span>
-                //       </Box>
-                //   </Link>
-                // </li>
-                // <li>
-                //   <Link
-                //     href="/page/FinOps/Settings"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  dark:hover:bg-meta-4 text-[#DEE4EE] hover:text-[#DEE4EE] ${
-                //       pathname.includes("/page/FinOps/Settings") &&
-                //       " dark:bg-meta-4"
-                //     }`}
-                //   >
-                //     <Box>
-                //     <EqualizerIcon
-                //       sx={{ color: "white" }}
-                //       className={`${
-                //         pathname.includes("/page/FinOps/Settings") &&
-                //         "dark:bg-meta-4 text-blue-700"
-                //       }`}
-                //     />
-                //      <span className="mr-3 text-xs font-light ml-[-5px]">Assets</span>
-                //     </Box>
-
-                //   </Link>
-                // </li>
-                // <li>
-                //   <Link
-                //     href="/page/Topology"
-                //     className={`group relative flex items-center gap-2.5 rounded-sm py-2 font-medium text-bodydark1 duration-300 ease-in-out  dark:hover:bg-meta-4 text-[#DEE4EE] hover:text-[#DEE4EE] ${
-                //       pathname.includes("/page/Topology") &&
-                //       " dark:bg-meta-4"
-                //     }`}
-                //   >
-                //     <Box>
-                //     <EqualizerIcon
-                //       sx={{ color: "white" }}
-                //       className={`${
-                //         pathname.includes("/page/Topology") &&
-                //         "dark:bg-meta-4 text-blue-700"
-                //       }`}
-                //     />
-                //      <span className="mr-3 text-xs font-light ml-[-5px]">Topology</span>
-                //     </Box>
-
-                //   </Link>
-                // </li>
-              ))}
-            </ul>
-          </div>
-        </nav> */}
       </div>
     </aside>
   );
