@@ -31,7 +31,7 @@ export default function WidgetMenu(props: any) {
   const cancelDelete = () => {
     setIsPopupOpen(false);
   };
-  const deleteDevice = async () => {
+  const deleteWidget = async () => {
     try {
       let response = await deleteWidgt(props.id);
       console.log(response);
@@ -182,7 +182,7 @@ export default function WidgetMenu(props: any) {
             <div className="flex justify-end">
               <button
                 className="mr-4 px-4 py-1 bg-red-800 text-sm text-white rounded-md focus:outline-none focus:shadow-outline-purple"
-                onClick={deleteDevice}
+                onClick={deleteWidget}
               >
                 Yes, Delete
               </button>

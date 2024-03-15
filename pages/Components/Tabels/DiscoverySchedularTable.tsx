@@ -61,7 +61,7 @@ const DiscoverySchedularTable = (props: any) => {
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
 
-  console.log("data-----", data);
+  //console.log("data-----", data);
   // console.log("col", columns);
   // console.log("vis col", visibleColumns);
 
@@ -99,10 +99,7 @@ const DiscoverySchedularTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((row: any) => row._id);
-
+      const allRowIds = data.map((row: any) => row._id);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -431,19 +428,20 @@ const DiscoverySchedularTable = (props: any) => {
                           checked={visibleColumns.includes(column.field)}
                           // onChange={() => handleMenuItemClick(column.field)}
                         />
-                        {column.headerName
-                          .split(" ")
-                          .map((word: any) =>
-                            word
-                              .split("_")
-                              .map(
-                                (subWord: any) =>
-                                  subWord.charAt(0).toUpperCase() +
-                                  subWord.slice(1)
-                              )
-                              .join(" ")
-                          )
-                          .join(" ")}
+                        {column &&
+                          column.headerName
+                            .split(" ")
+                            .map((word: any) =>
+                              word
+                                .split("_")
+                                .map(
+                                  (subWord: any) =>
+                                    subWord.charAt(0).toUpperCase() +
+                                    subWord.slice(1)
+                                )
+                                .join(" ")
+                            )
+                            .join(" ")}
                       </MenuItem>
                     ))}
                 </Menu>
@@ -499,13 +497,13 @@ const DiscoverySchedularTable = (props: any) => {
               className=""
               style={{
                 width: "100%",
-                overflow: "auto",
+                overflow: "scroll",
                 borderRadius: "0",
                 marginTop: ".5rem",
               }}
             >
               <div className="max-h-440">
-                <table className="w-full border-collapse overflow-auto">
+                <table className="w-full border-collapse overflow-x-scroll">
                   <thead>
                     <tr>
                       <th

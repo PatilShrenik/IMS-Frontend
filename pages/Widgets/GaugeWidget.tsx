@@ -25,75 +25,10 @@ import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 
-const ChartWidget = (props: any) => {
+const GaugeWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-  const granuality_time = [
-    {
-      name: "All",
-      id: "all",
-    },
-    {
-      name: "None",
-      id: "none",
-    },
-    {
-      name: "Second",
-      id: "second",
-    },
-    {
-      name: "Minute",
-      id: "minute",
-    },
-    {
-      name: "Five Minute",
-      id: "five_minute",
-    },
-    {
-      name: "Tem Minute",
-      id: "ten_minute",
-    },
-    {
-      name: "Fifteen Minute",
-      id: "fifteen_minute",
-    },
-    {
-      name: "Thirty Minute",
-      id: "thirty_minute",
-    },
-    {
-      name: "Hour",
-      id: "hour",
-    },
-    {
-      name: "Six Hour",
-      id: "six_hour",
-    },
-    {
-      name: "Eight Hour",
-      id: "eight_hour",
-    },
-    {
-      name: "Day",
-      id: "day",
-    },
-    {
-      name: "Week",
-      id: "week",
-    },
-    {
-      name: "Month",
-      id: "month",
-    },
-    {
-      name: "Quarter",
-      id: "quarter",
-    },
-    {
-      name: "Year",
-      id: "year",
-    },
-  ];
+
   const options = ["Metric"];
 
   const [timePeriod, setTimePeriod] = useState({
@@ -123,12 +58,10 @@ const ChartWidget = (props: any) => {
   const initialState = {
     name: "",
     description: "",
-    widget_type: "chart",
-    granularity: "",
+    widget_type: "gauge",
     datasource: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
-    group_by: "",
     time_range: "custome",
     start_timestamp: "",
     end_timestamp: "",
@@ -454,7 +387,7 @@ const ChartWidget = (props: any) => {
   };
 
   useEffect(() => {
-    // console.log("time", timePeriod);
+    console.log("time", timePeriod);
     setData({
       ...data,
       start_timestamp: timePeriod.start_timestamp,
@@ -474,7 +407,7 @@ const ChartWidget = (props: any) => {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
         console.log("chart widget data", modifiedData);
-        // const entities = Object.values(modifiedData.entities);
+        // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 
         // const indicators = Object.values(modifiedData.indicators);
@@ -482,7 +415,7 @@ const ChartWidget = (props: any) => {
         // modifiedData["query.id"] = 124453455;
         // modifiedData.userName = "admin";
 
-        // console.log("chart data", modifiedData);
+        // // console.log("chart data", modifiedData);
         let response = await addChartWidget(modifiedData);
         if (response.status === "success") {
           toast.success(response.status, {
@@ -523,13 +456,13 @@ const ChartWidget = (props: any) => {
           require={true}
           // rows={1}
         />
-        <SecSingleSelect
+        {/* <SecSingleSelect
           label="Granuality"
           value={data.granularity}
           selectData={granuality_time}
           onChange={handleGranTimeChange}
           require={true}
-        />
+        /> */}
         <CustomProvider theme="dark">
           <DateRangePicker
             placement="bottomStart"
@@ -681,13 +614,13 @@ const ChartWidget = (props: any) => {
             </div>
           </div>
           <div className="flex">
-            <SecSingleSelect
+            {/* <SecSingleSelect
               label="Group By"
               value={data.group_by}
               selectData={groupByArray}
               onChange={handleTypeChange}
               require={true}
-            />
+            /> */}
             {/* <SingleSelect
               label="Sites"
               value={data.group_by}
@@ -762,4 +695,4 @@ const ChartWidget = (props: any) => {
   );
 };
 
-export default ChartWidget;
+export default GaugeWidget;

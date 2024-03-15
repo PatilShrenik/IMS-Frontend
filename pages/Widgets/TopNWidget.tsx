@@ -18,14 +18,17 @@ import MenuItem from "@mui/material/MenuItem";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 
-const ChartWidget = (props: any) => {
+const TOPNWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
   const granuality_time = [
@@ -95,7 +98,10 @@ const ChartWidget = (props: any) => {
     },
   ];
   const options = ["Metric"];
-
+  // const [timePeriod, setTimePeriod] = React.useState<any>([
+  //   new Date(time),
+  //   new Date(timeEnd),
+  // ]);
   const [timePeriod, setTimePeriod] = useState({
     start_timestamp: null,
     end_timestamp: null,
@@ -119,16 +125,21 @@ const ChartWidget = (props: any) => {
   const [filteredData, setFilteredData] = React.useState([]);
   const [indicatorType, setIndicatorType] = React.useState("");
   const [indicatorsArray, setIndicatorsArray] = React.useState([]);
+  const [indicatorValues, setIndicatorValues] = React.useState([]) as any;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const initialState = {
+  const [data, setData] = React.useState<any>({
     name: "",
     description: "",
-    widget_type: "chart",
-    granularity: "",
+    widget_type: "topN",
     datasource: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
     group_by: "",
+    order_by: {
+      indicator: "",
+      indicator_type: "",
+      direction: "",
+    },
     time_range: "custome",
     start_timestamp: "",
     end_timestamp: "",
@@ -138,8 +149,7 @@ const ChartWidget = (props: any) => {
         entities: [],
       },
     },
-  };
-  const [data, setData] = React.useState<any>(initialState);
+  });
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -278,7 +288,7 @@ const ChartWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );
@@ -315,10 +325,10 @@ const ChartWidget = (props: any) => {
     // }
   };
 
-  const handleGranTimeChange = (value: any) => {
-    // const { value } = event.target;
-    setData({ ...data, granularity: value });
-  };
+  // const handleGranTimeChange = (value: any) => {
+  //   // const { value } = event.target;
+  //   setData({ ...data, granuality: value });
+  // };
 
   const handleIndiGroupChange = (value: any) => {
     // const { value } = event.target;
@@ -358,6 +368,43 @@ const ChartWidget = (props: any) => {
     setDropdowns(updatedDropdowns);
   };
 
+  const IndicatorType = (value: any) => {
+    const matchingObject = mapperdData.find(
+      (item: any) => item.indicator === value
+    );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+      console.log("indicator type in order bgy", indicator_type);
+      setData({
+        ...data,
+        order_by: {
+          ...data.order_by,
+          indicator_type: indicator_type,
+        },
+      });
+    }
+  };
+
+  const handleOrderByChange = (value: any) => {
+    console.log("orderby value", value);
+    let tempindicator = value;
+    const matchingObject = mapperdData.find(
+      (item: any) => item.indicator === value
+    );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+      setData({
+        ...data,
+        order_by: {
+          ...data.order_by,
+          indicator: tempindicator,
+          indicator_type: indicator_type,
+        },
+      });
+    }
+
+    // IndicatorType(value);
+  };
   const handleEntities = (values: any) => {
     console.log("entities", values);
     setData({
@@ -399,10 +446,10 @@ const ChartWidget = (props: any) => {
       }
     }
     updatedDropdowns[index][field] = value;
-    const indicatorValues = updatedDropdowns.map(
+    const indicatorValue = updatedDropdowns.map(
       (dropdown: any) => dropdown.indicator
     );
-    // setIndicatorValues(indicatorValues);
+    setIndicatorValues(indicatorValue);
     if (index == 0 && field == "indicator") {
       // Check if a matching object is found
       if (matchingObject) {
@@ -419,8 +466,6 @@ const ChartWidget = (props: any) => {
         setData({
           ...data,
           datasource: datasource,
-          // plugin_type: plugin_type,
-          // object_type: object_type,
         });
 
         filtered = mapperdData.filter(
@@ -452,20 +497,28 @@ const ChartWidget = (props: any) => {
       end_timestamp: end,
     });
   };
-
   useEffect(() => {
-    // console.log("time", timePeriod);
+    console.log("time", timePeriod);
     setData({
       ...data,
       start_timestamp: timePeriod.start_timestamp,
       end_timestamp: timePeriod.end_timestamp,
     });
   }, [timePeriod]);
-
   const handleTypeChange = (value: any) => {
     // const { value } = event.target;
     console.log(value);
     setData({ ...data, group_by: value });
+  };
+
+  const handleOrderDirection = (value: any) => {
+    setData({
+      ...data,
+      order_by: {
+        ...data.order_by,
+        direction: value,
+      },
+    });
   };
 
   const handleSave = () => {
@@ -474,7 +527,7 @@ const ChartWidget = (props: any) => {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
         console.log("chart widget data", modifiedData);
-        // const entities = Object.values(modifiedData.entities);
+        // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 
         // const indicators = Object.values(modifiedData.indicators);
@@ -482,7 +535,7 @@ const ChartWidget = (props: any) => {
         // modifiedData["query.id"] = 124453455;
         // modifiedData.userName = "admin";
 
-        // console.log("chart data", modifiedData);
+        // // console.log("chart data", modifiedData);
         let response = await addChartWidget(modifiedData);
         if (response.status === "success") {
           toast.success(response.status, {
@@ -523,13 +576,13 @@ const ChartWidget = (props: any) => {
           require={true}
           // rows={1}
         />
-        <SecSingleSelect
+        {/* <SecSingleSelect
           label="Granuality"
-          value={data.granularity}
+          value={data.granuality}
           selectData={granuality_time}
           onChange={handleGranTimeChange}
           require={true}
-        />
+        /> */}
         <CustomProvider theme="dark">
           <DateRangePicker
             placement="bottomStart"
@@ -688,18 +741,22 @@ const ChartWidget = (props: any) => {
               onChange={handleTypeChange}
               require={true}
             />
-            {/* <SingleSelect
-              label="Sites"
-              value={data.group_by}
-              selectData={[
-                { label: "Pune", value: "Pune" },
-                { label: "Mumbai", value: "Mumbai" },
-                { label: "Banglore", value: "Banglore" },
-                { label: "Chennai", value: "Chennai" },
-                { label: "Hyderabad", value: "Hyderabad" },
-              ]}
-              onChange={handleTypeChange}
-            /> */}
+          </div>
+          <div className="flex">
+            <SecSingleSelect
+              label="Order By"
+              value={data.order_by.indicator}
+              selectData={indicatorValues}
+              onChange={handleOrderByChange}
+              require={true}
+            />
+            <SecSingleSelect
+              label="Order Direction"
+              value={data.order_by.direction}
+              selectData={["Ascending", "Descending"]}
+              onChange={handleOrderDirection}
+              require={true}
+            />
           </div>
 
           {/* <div className="flex flex-col justify-start  ml-4 py-3">
@@ -748,13 +805,7 @@ const ChartWidget = (props: any) => {
             <div onClick={handleAddDrawerClose}>
               <CustomeCancelButton title="Cancel" />
             </div>
-            <div
-              onClick={() => {
-                setData(initialState);
-              }}
-            >
-              <CustomeCancelButton title="Reset" />
-            </div>
+            <CustomeCancelButton title="Reset" />
           </div>
         </div>
       </div>
@@ -762,4 +813,4 @@ const ChartWidget = (props: any) => {
   );
 };
 
-export default ChartWidget;
+export default TOPNWidget;

@@ -31,18 +31,16 @@ const SecSingleSelect = (props: any) => {
           }`}
           // placeholder={label}
           onChange={handleSelectChange}
-          value={value && value}
+          value={value ? value : label}
           multiple={false}
           onFocus={() => setSelectFocused(true)}
           onBlur={() => setSelectFocused(false)}
         >
-          {/* {selectFocused ? (
-            <option hidden disabled>
-              {label && label}
-            </option>
+          {selectFocused ? (
+            <option>{label && label}</option>
           ) : (
             <option>{label && label}</option>
-          )} */}
+          )}
 
           {selectData &&
             selectData.map((item: any, index: any) => (

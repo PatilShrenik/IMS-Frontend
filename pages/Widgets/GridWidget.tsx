@@ -12,10 +12,6 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
 import { getIndicatorMapper } from "../api/api/MiscAPI";
@@ -25,7 +21,7 @@ import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 
-const ChartWidget = (props: any) => {
+const GridWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
   const granuality_time = [
@@ -120,11 +116,10 @@ const ChartWidget = (props: any) => {
   const [indicatorType, setIndicatorType] = React.useState("");
   const [indicatorsArray, setIndicatorsArray] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const initialState = {
+  const [data, setData] = React.useState<any>({
     name: "",
     description: "",
-    widget_type: "chart",
-    granularity: "",
+    widget_type: "grid",
     datasource: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
@@ -138,8 +133,7 @@ const ChartWidget = (props: any) => {
         entities: [],
       },
     },
-  };
-  const [data, setData] = React.useState<any>(initialState);
+  });
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -248,7 +242,6 @@ const ChartWidget = (props: any) => {
       placement: "left",
     },
   ];
-  const { afterToday }: any = DateRangePicker;
 
   const isBrowser = typeof window !== "undefined";
 
@@ -313,11 +306,6 @@ const ChartWidget = (props: any) => {
     // } else {
     setData({ ...data, [name]: value });
     // }
-  };
-
-  const handleGranTimeChange = (value: any) => {
-    // const { value } = event.target;
-    setData({ ...data, granularity: value });
   };
 
   const handleIndiGroupChange = (value: any) => {
@@ -419,8 +407,8 @@ const ChartWidget = (props: any) => {
         setData({
           ...data,
           datasource: datasource,
-          // plugin_type: plugin_type,
-          // object_type: object_type,
+          //   plugin_type: plugin_type,
+          //   object_type: object_type,
         });
 
         filtered = mapperdData.filter(
@@ -454,14 +442,13 @@ const ChartWidget = (props: any) => {
   };
 
   useEffect(() => {
-    // console.log("time", timePeriod);
+    console.log("time", timePeriod);
     setData({
       ...data,
       start_timestamp: timePeriod.start_timestamp,
       end_timestamp: timePeriod.end_timestamp,
     });
   }, [timePeriod]);
-
   const handleTypeChange = (value: any) => {
     // const { value } = event.target;
     console.log(value);
@@ -474,7 +461,7 @@ const ChartWidget = (props: any) => {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
         console.log("chart widget data", modifiedData);
-        // const entities = Object.values(modifiedData.entities);
+        // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 
         // const indicators = Object.values(modifiedData.indicators);
@@ -482,7 +469,7 @@ const ChartWidget = (props: any) => {
         // modifiedData["query.id"] = 124453455;
         // modifiedData.userName = "admin";
 
-        // console.log("chart data", modifiedData);
+        // // console.log("chart data", modifiedData);
         let response = await addChartWidget(modifiedData);
         if (response.status === "success") {
           toast.success(response.status, {
@@ -523,13 +510,13 @@ const ChartWidget = (props: any) => {
           require={true}
           // rows={1}
         />
-        <SecSingleSelect
+        {/* <SecSingleSelect
           label="Granuality"
-          value={data.granularity}
+          value={data.granuality}
           selectData={granuality_time}
           onChange={handleGranTimeChange}
           require={true}
-        />
+        /> */}
         <CustomProvider theme="dark">
           <DateRangePicker
             placement="bottomStart"
@@ -748,13 +735,7 @@ const ChartWidget = (props: any) => {
             <div onClick={handleAddDrawerClose}>
               <CustomeCancelButton title="Cancel" />
             </div>
-            <div
-              onClick={() => {
-                setData(initialState);
-              }}
-            >
-              <CustomeCancelButton title="Reset" />
-            </div>
+            <CustomeCancelButton title="Reset" />
           </div>
         </div>
       </div>
@@ -762,4 +743,4 @@ const ChartWidget = (props: any) => {
   );
 };
 
-export default ChartWidget;
+export default GridWidget;

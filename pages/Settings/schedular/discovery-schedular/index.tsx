@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PageHeading from "@/pages/Components/PageHeading";
-import TablePagination from "@mui/material/TablePagination";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+
 import {
   replaceDotsWithUnderscores,
   replacePeriodsWithUnderscores,
@@ -105,7 +103,6 @@ const DiscoverySchedular = () => {
   };
 
   const handlePageChange = (newPage: any) => {
-    setPage(newPage - 1);
     setCurrentPage(newPage);
     setPage(newPage - 1);
     // Fetch data for the new page if needed

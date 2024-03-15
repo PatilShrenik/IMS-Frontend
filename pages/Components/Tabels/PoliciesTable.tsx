@@ -28,18 +28,7 @@ import AddIcon from "@mui/icons-material/Add";
 // import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
 import { useAppContext } from "../AppContext";
-import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
-import { getAllGropus } from "@/pages/api/api/GroupsAPI";
-import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import {
-  bulkActionCredsProfileDelete,
-  deleteCredsProfile,
-  getAllCredsProfile,
-} from "@/pages/api/api/CredentialProfileAPI";
-import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
-import CredentialProfileDrawer from "../SideDrawers/CredentialProfileDrawer";
-import CredentialProfileMenu from "../ActionMenu/CredentialProfileMenu";
-import CustomeButton, { CustomeCancelButton } from "../Buttons";
+
 import Chips from "../Chips";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -47,7 +36,11 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import DeleteModal from "../Modals/DeleteModal";
 import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
-const CredntialProfileTable = (props: any) => {
+import PolicyDrawer from "../SideDrawers/PolicyDrawer";
+import PolicyActionMenu from "../ActionMenu/PolicyActionMenu";
+import { deleteBulkPolicy } from "@/pages/api/api/PolicyApi";
+
+const PoliciesTable = (props: any) => {
   const {
     data,
     visibleColumns,
@@ -56,7 +49,7 @@ const CredntialProfileTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  console.log("pageination", page, rowsPerPage);
+  // console.log("pageination", page, rowsPerPage);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
@@ -78,7 +71,7 @@ const CredntialProfileTable = (props: any) => {
 
   const [isAddMultipleDialogOpen, setIsAddMultipleDialogOpen] = useState(false);
   const open = Boolean(anchorE2);
-  const { togglegetCredProfileApiState } = useAppContext();
+  const { togglegetPolicyApiState } = useAppContext();
   const ITEM_HEIGHT = 48;
   const groupValues =
     allGroups &&
@@ -92,24 +85,6 @@ const CredntialProfileTable = (props: any) => {
       name: item.hostname,
       id: item._id,
     }));
-
-  React.useEffect(() => {
-    const getCredsProfile = async () => {
-      let response = await getAllDevice();
-      setAllDevices(response.result);
-    };
-    getCredsProfile();
-    const getGroups = async () => {
-      let response = await getAllGropus();
-      setAllGroups(response.result);
-    };
-    getGroups();
-    const getDiscoveryScheduler = async () => {
-      let response = await getAllDiscoverySch();
-      // setAllDiscoverySch(response.result);
-    };
-    getDiscoveryScheduler();
-  }, []);
 
   //   useEffect(() => {
   //     try {
@@ -227,14 +202,14 @@ const CredntialProfileTable = (props: any) => {
   }, [selectedRows]);
 
   const deleteDevice = async () => {
-    console.log("delete array", selectedRows);
+    // console.log("delete array", selectedRows);
     try {
-      let response = await bulkActionCredsProfileDelete(selectedRows);
+      let response = await deleteBulkPolicy(selectedRows);
 
       if (response.status == "success") {
         handleModalClose();
 
-        togglegetCredProfileApiState();
+        togglegetPolicyApiState();
 
         toast.success(response.message, {
           position: "bottom-right",
@@ -367,60 +342,97 @@ const CredntialProfileTable = (props: any) => {
   };
 
   const isMenuOpen = Boolean(anchorEl);
-  console.log("com", columns);
+  //   console.log("com", columns);
   const processColumnData = (column: any, row: any) => {
-    // Perform operations based on the column and row data
-    // console.log("cols", column);
-    if (column.field === "groups") {
-      const groupId = row[column.field];
-      // Find the corresponding object in groupValues array
-      const matchingGroup: any = groupValues.find(
-        (group: any) => group.id === groupId[0]
-      );
+    // console.log("--col", row);
+    if (column.field === "entities") {
+      const entity_type = row.entity_type;
+      //   console.log("entitytype", entity_type);
+      if (entity_type === "GROUP") {
+        const groupId = row.entities;
+        // Find the corresponding object in groupValues array
+        // const matchingGroup: any = groupValues.find(
+        //   (group: any) => group.id === groupId[0]
+        // );
+        // console.log("entities", matchingGroup.name);
+        const matchingNames: string[] = groupId.map((id: any) => {
+          const matchingGroup: any =
+            groupValues && groupValues.find((group: any) => group.id === id);
+          //   return matchingGroup ? matchingGroup.name : null;
+        });
+        // console.log("groups", matchingNames);
+        return <Chips value={row.entities?.length} />;
+        //     <>
+        //     <div
+        //       className={`${row.entities?.length > 0 ? "cursor-pointer" : ""}`}
+        //       onClick={
+        //         row.entities?.length > 0
+        //           ? () => handleClickOpen(deviceIds)
+        //           : undefined
+        //       }
+        //     >
+        //       <Chips value={deviceIds.length} />
+        //     </div>
+        //     <DeviceDetailsModal
+        //       open={dialogOpen === deviceIds}
+        //       handleDialogClose={handleDialogClose}
+        //       device_ids={deviceIds}
+        //     />
+        //   </>
 
-      // If a matching group is found, return its name, otherwise return null or a default value
-      return matchingGroup ? matchingGroup.name : row[column.field];
-    } else if (column.field === "device_ids") {
-      const deviceIds = row[column.field];
+        // console.log("entities", matchingNames);
+      } else if (entity_type === "DEVICE") {
+        return row.entities ? <Chips value={row.entities?.length} /> : "-";
+      }
+    } else if (column.field == "threshold") {
+      const { critical, major, warning } = row.threshold;
       return (
-        <>
-          <div
-            className={`${deviceIds.length > 0 ? "cursor-pointer" : ""}`}
-            onClick={
-              deviceIds.length > 0
-                ? () => handleClickOpen(deviceIds)
-                : undefined
-            }
-          >
-            <Chips value={deviceIds.length} />
-          </div>
-          <DeviceDetailsModal
-            open={dialogOpen === deviceIds}
-            handleDialogClose={handleDialogClose}
-            device_ids={deviceIds}
-          />
-        </>
+        <div className="space-x-1 flex">
+          <div className="border-r px-2 text-yellow-400">{warning}</div>
+          <div className="border-r px-2 text-orange-400">{major}</div>
+          <div className=" px-1 text-red-600">{critical}</div>
+        </div>
       );
-      //   const numericDeviceIds = deviceIds.map((id: any) => parseInt(id, 10));
+    } else if (column.field == "occurrence") {
+      //   console.log("row", row.alert_context.occurrence);
+      return row.alert_context.occurrence;
+    } else if (column.field === "operator") {
+      const operatorValue = [
+        {
+          name: "GREATER THAN",
+          value: ">",
+        },
+        {
+          name: "LESS THAN",
+          value: "<",
+        },
+        {
+          name: "EQUAL TO",
+          value: "=",
+        },
+        {
+          name: "GREATER THAN EQUAL TO",
+          value: ">=",
+        },
+        {
+          name: "LESS THAN EQUAL TO",
+          value: "<=",
+        },
+        {
+          name: "NOT EQUAL TO",
+          value: "!=",
+        },
+      ];
 
-      //   const matchingDevices = numericDeviceIds.map((numericId: number) => {
-      //     const matchingDevice = deviceValues.find(
-      //       (device: any) => device.id === numericId
-      //     );
-      //     return matchingDevice ? matchingDevice.name : "-";
-      //   });
+      const operatorName = operatorValue.find(
+        (op) => op.value === row.policy_context.operator
+      )?.name;
 
-      //   const namesInCommaSeparatedFormat = matchingDevices.join(", ");
-
-      //   return namesInCommaSeparatedFormat ? namesInCommaSeparatedFormat : "-";
-    } else if (column.field === "snmp_community") {
-      return row.credential_context["snmp.community"] == ""
-        ? "-"
-        : row.credential_context["snmp.community"];
-    } else if (column.field === "snmp_version") {
-      return row.credential_context["snmp.version"] == ""
-        ? "-"
-        : row.credential_context["snmp.version"];
+      return operatorName || null;
+    } else if (column.field == "indicator") {
+      return row.policy_context.indicator;
+    } else if (column.field == "tags") {
+      return row.tags ? <Chips value={row.tags.length} /> : "-";
     }
 
     // If no specific processing needed, return the original value
@@ -647,8 +659,8 @@ const CredntialProfileTable = (props: any) => {
                   className="bg-primary3 capitalize items-center"
                   size="small"
                 >
-                  <AddIcon fontSize="small" className="mr-2" /> Credential
-                  Profile
+                  <AddIcon fontSize="small" className="mr-2" />
+                  Add Policy
                 </Button>
                 {/* <AddIcon
                     className=" dark:text-textColor"
@@ -658,7 +670,7 @@ const CredntialProfileTable = (props: any) => {
                       cursor: "pointer",
                     }}
                   /> */}
-                <CredentialProfileDrawer
+                <PolicyDrawer
                   open={isDrawerOpen}
                   handleDrawerClose={handleDrawerClose}
                 />
@@ -683,7 +695,7 @@ const CredntialProfileTable = (props: any) => {
             }}
           >
             <div className="max-h-440">
-              <table className="w-full border-collapse overflow-auto">
+              <table className="w-full border-collapse overflow-x-auto">
                 <thead>
                   <tr>
                     <th
@@ -905,7 +917,7 @@ const CredntialProfileTable = (props: any) => {
                               fontFamily: `"Poppins", sans-serif`,
                             }}
                           >
-                            <CredentialProfileMenu rowData={row} />
+                            <PolicyActionMenu id={row._id} />
                             {/* <CredentialProfileMenu rowData={row} /> */}
                           </td>
                         </tr>
@@ -926,8 +938,8 @@ const CredntialProfileTable = (props: any) => {
             /> */}
           </div>
         ) : (
-          <div className="w-full flex justify-center">
-            <p className="dark:text-textColor">No Data</p>
+          <div className="w-full justify-center dark:text-textColor">
+            No Data
           </div>
         )}
       </div>
@@ -935,4 +947,4 @@ const CredntialProfileTable = (props: any) => {
   );
 };
 
-export default CredntialProfileTable;
+export default PoliciesTable;

@@ -36,22 +36,21 @@ const Footer = memo(() => (
 ));
 Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
-  const { sidebarOpen, toggleSideBarState } = useAppContext();
+  const { sidebarOpen, toggleSideBarState, toggleSideBarStateWithArgu } =
+    useAppContext();
   // const [uEmail, setEmail] = useState<any>(false);
   const router = useRouter();
   // const currentUrl = router.asPath;
   // const isPageIncluded = currentUrl.includes('/page');
   const { authenticated, toggleAuthenticated } = useAppContext();
-  // console.log(authenticated, isPageIncluded)
-  // useEffect(() => {
-  //   const isPageIncluded = router.asPath.includes("/page");
-  //   const uEmail = sessionStorage.getItem("userEmail");
-  //   if (!authenticated && isPageIncluded && !uEmail) {
-  //     router.push("/");
-  //   }
-  // }, [router.asPath]);
+
   const pathname = usePathname();
   const path = pathname.substring(1);
+  useEffect(() => {
+    if (path == "Dashboard" || path == "Assets") {
+      toggleSideBarStateWithArgu(true);
+    }
+  }, [path]);
   const transformedString = path
     .replace(/\//g, " > ")
     .replace(/-/g, " ")
@@ -78,8 +77,16 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
       >
         <Header />
         <main className="flex min-h-[calc(100vh)] bg-white dark:bg-dark-container">
-          <SidebarMenu />
-          <div className="w-full p-2">
+          <div
+            className={
+              sidebarOpen
+                ? ""
+                : " transition duration-300 border-r ease-linear translate-x-0 border-textColor dark:border-dark-border min-w-[15%]"
+            }
+          >
+            <SidebarMenu />
+          </div>
+          <div className={`${sidebarOpen ? "w-full" : "w-[85%]"} p-2`}>
             <div className="flex">
               {/* {pathname.includes("Explorer") ||
                 pathname.includes("Diagnostics") ||
@@ -104,7 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
                 <Breadcrumb />
               </div> */}
             </div>
-            <div className="mt-12 ">{children}</div>
+            <div className="mt-12">{children}</div>
           </div>
         </main>
         {/* <Footer /> */}

@@ -31,55 +31,6 @@ const Login = () => {
 
   //----------------------SSO LOGIN CODE ------------------------------------------------
 
-  // const request = {
-  //   scopes: ["user.read", "user.readbasic.all"],
-  // };
-
-  // const handleSignIn = () => {
-  //   instance
-  //     .loginPopup(request)
-  //     .then((response: any) => {
-  //       // getEmployeesImages(response.accessToken);
-  //       // //console.log(response.accessToken);
-  //       sessionStorage.setItem("accessTokenMSAL", response.accessToken);
-  //     })
-  //     .catch((error: any) => {
-  //       console.log("Error:", error);
-  //     });
-  // };
-  // useEffect(() => {
-  //   if (isAuthenticated && authenticated) {
-  //     router.push("/page/Dashboard");
-  //   }
-  // }, [isAuthenticated, authenticated]);
-  // console.log("isauthenticated", isAuthenticated, authenticated);
-  // useEffect(() => {
-  //   if (account?.idTokenClaims) {
-  //     let reshead: any;
-  //     const email: string = account.idTokenClaims.preferred_username;
-  //     const name: string = account.idTokenClaims.name;
-  //     // console.log("------------------",account.idTokenClaims);
-  //     // sessionStorage.setItem("userEmail", email);
-  //     // sessionStorage.setItem("userName", name);
-  //     const getData = async () => {
-  //       const fetchedData = await getUserRole(email);
-  //       // setUserData(fetchedData);
-  //       // console.log("response data--------------", fetchedData.data.role);
-  //       if (fetchedData && fetchedData.data) {
-  //         toggleAuthenticated(true);
-  //         sessionStorage.setItem("userRole", fetchedData.data.role);
-  //         sessionStorage.setItem("userName", fetchedData.data.userName);
-  //         sessionStorage.setItem("userEmail", fetchedData.data.adId);
-  //         sessionStorage.setItem("businessLogo", fetchedData.data.businessLogo);
-  //         // router.push("/page/Dashboard");
-  //       } else {
-  //         window.alert("User Not Found!!");
-  //       }
-  //     };
-  //     getData();
-  //   }
-  // }, [account]);
-
   //----------------------SSO LOGIN CODE ENDS------------------------------------------------
 
   console.log("------------", email, password);
@@ -107,39 +58,13 @@ const Login = () => {
 
     dataFetch();
   };
-  // const handleSubmit = (e: any) => {
-  //   const LoginData = {
-  //     username: email,
-  //     password: password,
-  //   };
-  //   e.preventDefault();
-  //   async function dataFetch() {
-  //     const data = await login(LoginData);
-  //     console.log("------------------", data);
-  //     if (data?.data[0]) {
-  //       toggleAuthenticated(true);
-  //       sessionStorage.setItem("userRole", data.data[0].role);
-  //       sessionStorage.setItem("userName", data.data[0].name);
-  //       sessionStorage.setItem("userEmail", data.data[0].email);
-  //       // sessionStorage.setItem(
-  //       //   "businessLogo",
-  //       //   fetchedData.data.businessLogo
-  //       // );
-  //       router.push("/Dashboard");
-  //       if (data.data[0].role != "ADMIN") {
-  //         sessionStorage.setItem("bu_id", data.data[0].id);
-  //       }
-  //       // }else {
-  //     } else {
-  //       window.alert(
-  //         "Login failed. Please check your email and password and try again."
-  //       );
-  //     }
-  //   }
 
-  //   dataFetch();
-  // };
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/Dashboard");
+    }
+  }, []);
   return (
     <>
       <div className="bg-white rounded-l h-[100vh]">

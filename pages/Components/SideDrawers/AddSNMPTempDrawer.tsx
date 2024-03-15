@@ -2,6 +2,7 @@ import {
   Button,
   ButtonGroup,
   Checkbox,
+  Divider,
   Drawer,
   FormControlLabel,
   Grid,
@@ -199,10 +200,13 @@ const AddSNMPTempDrawer = (props: any) => {
                     }
                   />
                 </div>
-                <p className="mx-5 my-4 dark:text-textColor">Scaler OID</p>
+                {/* <div className="border-b-[1px]"> */}
+                <p className="mx-5 mt-4 dark:text-textColor">Scaler OID</p>
+                <Divider className="my-2 dark:bg-dark-border"/>
+                {/* </div> */}
                 <div>
                   {formData.map((field: any, index: any) => (
-                    <div className="flex">
+                    <div className="flex items-center">
                       <div>
                         <CustomeInput
                           label="Enter OID"
@@ -223,12 +227,15 @@ const AddSNMPTempDrawer = (props: any) => {
                           require={true}
                         />
                       </div>
-                      <div>
+                      <div className="flex">
                         <div onClick={() => handleAddFields()}>
                           <ControlPointIcon className="dark:text-textColor" />
                         </div>
                         {formData && formData.length > 1 && (
-                          <div onClick={() => handleRemoveFields(index)}>
+                          <div
+                            onClick={() => handleRemoveFields(index)}
+                            className="ml-2"
+                          >
                             <RemoveCircleOutlineIcon className="dark:text-textColor" />
                           </div>
                         )}
@@ -237,10 +244,11 @@ const AddSNMPTempDrawer = (props: any) => {
                   ))}
                 </div>
                 <p className="mx-5 my-4 dark:text-textColor">Objects</p>
+                <Divider className="my-2 dark:bg-dark-border"/>
                 <div className="">
                   {nestedFormData.map((item, keyIndex) => (
                     <div key={keyIndex} className="">
-                      <div className="flex">
+                      <div className="flex items-center">
                         <div className="flex">
                           <CustomeInput
                             label="Object Type"
@@ -265,7 +273,7 @@ const AddSNMPTempDrawer = (props: any) => {
                         </div>
                       </div>
                       {item.values.map((field, fieldIndex) => (
-                        <div className="flex">
+                        <div className="flex items-center">
                           <div>
                             <CustomeInput
                               name="key"
@@ -309,7 +317,7 @@ const AddSNMPTempDrawer = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className="w-full absolute bottom-0 left-0 flex justify-end">
+            <div className="w-full sticky bottom-0 left-0 flex justify-end">
               <div className=" flex m-3">
                 {/* <div onClick={handleSave}> */}
                 <SubmitButton title="Save" />

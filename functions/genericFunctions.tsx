@@ -104,6 +104,56 @@ export function replaceDotsWithUnderscores(obj: any) {
 
   return newObj;
 }
+export function replaceDotsWithUnderscoresSEC(obj: any) {
+  const newObj: any = {};
+
+  for (const key in obj) {
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      newObj[key.replace(/\./g, "_")] = replaceDotsWithUnderscoresSEC(obj[key]);
+    } else {
+      newObj[key.replace(/\./g, "_")] = obj[key];
+    }
+  }
+
+  return newObj;
+}
+
+export function replaceDotWithUnderscore2(obj: any) {
+  if (typeof obj !== "object" || Array.isArray(obj)) {
+    return obj;
+  }
+
+  const newObj: any = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const newKey = key.replace(/\./g, "_");
+      newObj[newKey] = replaceDotWithUnderscore2(obj[key]);
+
+      // Check if the value is an array of objects
+      if (Array.isArray(newObj[newKey])) {
+        newObj[newKey] = newObj[newKey].map((item: any) =>
+          replaceDotWithUnderscore2(item)
+        );
+      }
+    }
+  }
+
+  return newObj;
+}
+
+export function replaceDotsWithUnderscoresSec(obj: any) {
+  const newObj: any = {};
+
+  for (const key in obj) {
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      newObj[key.replace(/\./g, "_")] = replaceDotsWithUnderscoresSec(obj[key]);
+    } else {
+      newObj[key.replace(/\./g, "_")] = obj[key];
+    }
+  }
+
+  return newObj;
+}
 
 export function replaceUnderscoresWithDotsNested(obj: any) {
   const newObj: any = {};
@@ -118,20 +168,24 @@ export function replaceUnderscoresWithDotsNested(obj: any) {
 
   return newObj;
 }
-
+export function isValidIpAddress(ipAddress: any) {
+  const ipRegex =
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  return ipRegex.test(ipAddress);
+}
 export function getAllKeys(obj: any) {
   let keysArray: any[] = [];
- 
+
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       keysArray.push(key);
- 
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
+
+      if (typeof obj[key] === "object" && obj[key] !== null) {
         // Recursively call the function for nested objects
         keysArray = keysArray.concat(getAllKeys(obj[key]));
       }
     }
   }
- 
+
   return keysArray;
 }

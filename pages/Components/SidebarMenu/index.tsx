@@ -294,8 +294,8 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative mt-12 flex flex-col overflow-x-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
-              sidebarOpen ? "w-0 " : "w-[15rem] border-r"
+            className={`relative mt-12 flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+              sidebarOpen ? "w-0 " : ""
             }`}
           >
             {/* <div className="flex justify-between h-[3rem] px-3 items-center text-black dark:text-textColor pt-1.3 shadow-lg shadow-white dark:shadow-black">
@@ -381,7 +381,14 @@ const SidebarMenu = () => {
                                                 ] === dropdownIndex
                                                   ? "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]" // Add your selected background color
                                                   : ""
-                                              }`}
+                                              }
+                                              ${
+                                                path.includes(
+                                                  dropdownItem.subMenuDropdownpathName
+                                                ) &&
+                                                "border-l-4 px-1 bg-[#D8D8D8] border-primary3 dark:bg-[#282828]"
+                                              }
+                                              `}
                                               onClick={() => {
                                                 handleDropdownClick(
                                                   subIndex,

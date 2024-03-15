@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import moment from "moment";
 const AppContext = createContext<{
+  toggleSideBarStateWithArgu: (state: any) => void;
   sidebarOpen: boolean;
   toggleSideBarState: () => void;
   sidebarClick: boolean;
@@ -35,7 +36,14 @@ const AppContext = createContext<{
   togglegetSNMPTempApiState: () => void;
   getSNMPCatApiState: boolean;
   toggleGetSNMPCatApiState: () => void;
+  getPolicyApiState: boolean;
+  togglegetPolicyApiState: () => void;
+  getRoleApiState: boolean;
+  toggleGetRoleApiState: () => void;
+  getUserApiState: boolean;
+  toggleGetUserApiState: () => void;
 }>({
+  toggleSideBarStateWithArgu: (state) => {},
   sidebarOpen: false,
   toggleSideBarState: () => {},
   sidebarClick: false,
@@ -62,7 +70,8 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
-
+  getRoleApiState: false,
+  toggleGetRoleApiState: () => {},
   getWidgetApiState: false,
   toggleWidgetApiState: () => {},
   getTableApiState: false,
@@ -71,7 +80,10 @@ const AppContext = createContext<{
   togglegetSNMPTempApiState: () => {},
   getSNMPCatApiState: false,
   toggleGetSNMPCatApiState: () => {},
-  
+  getPolicyApiState: false,
+  togglegetPolicyApiState: () => {},
+  getUserApiState: false,
+  toggleGetUserApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -90,9 +102,22 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getWidgetApiState, setGetWidgetApiState] = useState(false);
   const [getTableApiState, setGetTableApiState] = useState(false);
   const [getSNMPTempApiState, setGetSNMPTempApiState] = useState(false);
+  const [getPolicyApiState, setGetPolicyApiState] = useState(false);
+  const [getRoleApiState, setRoleApiState] = useState(false);
+  const [getUserApiState, setUserApiState] = useState(false);
+
+  const toggleSideBarStateWithArgu = (state: any) => {
+    setSidebarOpen(state);
+  };
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
+  };
+  const toggleGetRoleApiState = () => {
+    setRoleApiState((prevState) => !prevState);
+  };
+  const toggleGetUserApiState = () => {
+    setUserApiState((prevState) => !prevState);
   };
 
   const toggleSideBarClickState = () => {
@@ -130,6 +155,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleGetSNMPCatApiState = () => {
     setGetSNMPCatApiState((prevState) => !prevState);
+  };
+
+  const togglegetPolicyApiState = () => {
+    setGetPolicyApiState((prevState) => !prevState);
   };
 
   const [time, setTime] = useState(
@@ -176,6 +205,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleAuthenticated,
         getSNMPCatApiState,
         toggleGetSNMPCatApiState,
+        getRoleApiState,
+        toggleGetRoleApiState,
+        getUserApiState,
+        toggleGetUserApiState,
         cloud,
         toggleCloud,
         themeSwitch,
@@ -192,6 +225,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetTableApiState,
         getSNMPTempApiState,
         togglegetSNMPTempApiState,
+        togglegetPolicyApiState,
+        getPolicyApiState,
+        toggleSideBarStateWithArgu,
       }}
     >
       {children}
