@@ -34,7 +34,7 @@ export const UpdateWidgetsData = async (id: any, body: any) => {
       },
     });
     const data = await res.json();
-    console.log("API data", data);
+    // console.log("API data", data);
     return data;
   } catch (error) {
     console.error(error);

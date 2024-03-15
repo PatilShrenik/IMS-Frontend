@@ -35,6 +35,8 @@ const AppContext = createContext<{
   togglegetSNMPTempApiState: () => void;
   getSNMPCatApiState: boolean;
   toggleGetSNMPCatApiState: () => void;
+  getPolicyApiState: boolean;
+  togglegetPolicyApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -70,6 +72,8 @@ const AppContext = createContext<{
   togglegetSNMPTempApiState: () => {},
   getSNMPCatApiState: false,
   toggleGetSNMPCatApiState: () => {},
+  getPolicyApiState: false,
+  togglegetPolicyApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -88,6 +92,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getWidgetApiState, setGetWidgetApiState] = useState(false);
   const [getTableApiState, setGetTableApiState] = useState(false);
   const [getSNMPTempApiState, setGetSNMPTempApiState] = useState(false);
+  const [getPolicyApiState, setGetPolicyApiState] = useState(false);
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -128,6 +133,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleGetSNMPCatApiState = () => {
     setGetSNMPCatApiState((prevState) => !prevState);
+  };
+
+  const togglegetPolicyApiState = () => {
+    setGetPolicyApiState((prevState) => !prevState);
   };
 
   const [time, setTime] = useState(
@@ -190,6 +199,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetTableApiState,
         getSNMPTempApiState,
         togglegetSNMPTempApiState,
+        togglegetPolicyApiState,
+        getPolicyApiState,
       }}
     >
       {children}

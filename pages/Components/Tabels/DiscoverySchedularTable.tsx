@@ -99,10 +99,7 @@ const DiscoverySchedularTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((row: any) => row._id);
-
+      const allRowIds = data.map((row: any) => row._id);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -494,19 +491,19 @@ const DiscoverySchedularTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data ? (
+        {data && (
           <div className="">
             <div
               className=""
               style={{
                 width: "100%",
-                overflow: "auto",
+                overflow: "scroll",
                 borderRadius: "0",
                 marginTop: ".5rem",
               }}
             >
               <div className="max-h-440">
-                <table className="w-full border-collapse overflow-auto">
+                <table className="w-full border-collapse overflow-x-scroll">
                   <thead>
                     <tr>
                       <th
@@ -720,10 +717,6 @@ const DiscoverySchedularTable = (props: any) => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
             </div>
-          </div>
-        ) : (
-          <div className="w-full flex justify-center">
-            <p className="dark:text-textColor">No Data</p>
           </div>
         )}
       </div>

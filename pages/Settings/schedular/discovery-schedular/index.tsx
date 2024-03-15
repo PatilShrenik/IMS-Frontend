@@ -105,7 +105,6 @@ const DiscoverySchedular = () => {
   };
 
   const handlePageChange = (newPage: any) => {
-    setPage(newPage - 1);
     setCurrentPage(newPage);
     setPage(newPage - 1);
     // Fetch data for the new page if needed

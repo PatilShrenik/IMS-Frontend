@@ -3,27 +3,27 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { deleteCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { Bounce, toast } from "react-toastify";
+import EditCredentialProfileDrawer from "../SideDrawers/EditCredentialProfileDrawer";
 import { useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { deletePolicy } from "@/pages/api/api/PolicyApi";
+import EditPolicyDrawer from "../SideDrawers/EditPolicyDrawer";
 
-import { deleteDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import EditDiscoverySchDrawer from "../SideDrawers/EditDiscoverySchDrawer";
+const ITEM_HEIGHT = 48;
 
-
-
-const DiscoverySchedularMenu = (props: any) => {
+const PolicyActionMenu = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(true);
     // handleClose();
   };
   const handleModalClose = () => setIsModalOpen(false);
-  const { rowData } = props;
-  //   console.log("asset menu props", rowData);
-  const { toggleDeviceTableState, togglegetDisSchedApiState  } = useAppContext();
+  const { id } = props;
+  const { togglegetPolicyApiState } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
@@ -31,6 +31,7 @@ const DiscoverySchedularMenu = (props: any) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -39,19 +40,19 @@ const DiscoverySchedularMenu = (props: any) => {
     setIsEditDrawerOpen(false);
   };
   const handleEditClick = (rowId: number) => {
-    console.log("EditRowId", rowId);
+    //console.log("EditRowId", rowId);
     setIsEditDrawerOpen(true);
     handleClose();
   };
 
   const handleDeleteClick = async (rowId: number) => {
-     console.log("DeleteRowId", rowId);
+    // console.log("DeleteRowId", rowId);
 
     try {
-      const response = await deleteDiscoverySch(rowId);
+      const response = await deletePolicy(rowId);
 
       if (response.status == "success") {
-        togglegetDisSchedApiState();
+        togglegetPolicyApiState();
         toast.success(response.message, {
           position: "bottom-right",
           autoClose: 1000,
@@ -98,7 +99,7 @@ const DiscoverySchedularMenu = (props: any) => {
     }
     handleClose();
   };
-  console.log("rdata",rowData);
+
   return (
     <div className="ml-4">
       <IconButton
@@ -116,6 +117,11 @@ const DiscoverySchedularMenu = (props: any) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            backgroundColor: "transparent",
+          },
+        }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -127,14 +133,14 @@ const DiscoverySchedularMenu = (props: any) => {
         style={{ padding: "0" }}
       >
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-          onClick={() => handleEditClick(rowData && rowData._id)}
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
+          onClick={() => handleEditClick(id)}
         >
           Edit
         </MenuItem>
 
         <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
           //  onClick={() => handleDeleteClick(id)}
           onClick={handleModalOpen}
         >
@@ -156,7 +162,7 @@ const DiscoverySchedularMenu = (props: any) => {
           </div>
 
           <button
-            onClick={() => handleDeleteClick(rowData && rowData._id)}
+            onClick={() => handleDeleteClick(id)}
             className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4 dark:text-textColor"
           >
             Delete
@@ -168,15 +174,14 @@ const DiscoverySchedularMenu = (props: any) => {
             Cancel
           </button>
         </div>
-
       </Modal>
 
-      <EditDiscoverySchDrawer
-        id={rowData && rowData._id}
+      <EditPolicyDrawer
+        rowId={id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
       />
     </div>
   );
 };
-export default DiscoverySchedularMenu;
+export default PolicyActionMenu;

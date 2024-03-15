@@ -91,7 +91,7 @@ const EditIPAddress = (props: any) => {
         response.result
       );
       setData(modifiedData);
-      console.log("single device data", modifiedData);
+      // console.log("single device data", modifiedData);
     };
     getDataById();
   }, [device_id]);
@@ -107,7 +107,7 @@ const EditIPAddress = (props: any) => {
       label: item.name,
       value: item._id,
     }));
-  console.log("groups", groupValues);
+  // console.log("groups", groupValues);
 
   //Functions to set value into the state
 
@@ -118,7 +118,7 @@ const EditIPAddress = (props: any) => {
 
   const handleChange = (event: any) => {
     const proto: any = event.target.value as string;
-    console.log(proto);
+    // console.log(proto);
     // setFormValue(true);
     setProtocol(proto);
     // setData({ ...data, port: proto == "10" ? "161" : "22" });
@@ -200,9 +200,9 @@ const EditIPAddress = (props: any) => {
     //   setErrors({})
     // }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("ip address save data", modifiedData);
+    // console.log("ip address save data", modifiedData);
     response = await updateSingleDevice(modifiedData, device_id);
-    response && console.log(response);
+    // response && console.log(response);
     if (response) {
       if (response.status == "success") {
         toast.success(response && response.message, {

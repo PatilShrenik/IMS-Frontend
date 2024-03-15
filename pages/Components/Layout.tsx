@@ -78,8 +78,16 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
       >
         <Header />
         <main className="flex min-h-[calc(100vh)] bg-white dark:bg-dark-container">
-          <SidebarMenu />
-          <div className="w-full p-2">
+          <div
+            className={
+              sidebarOpen
+                ? ""
+                : " transition duration-300 border-r ease-linear translate-x-0 border-textColor dark:border-dark-border min-w-[15%]"
+            }
+          >
+            <SidebarMenu />
+          </div>
+          <div className={`${sidebarOpen ? "w-full" : "w-[85%]"} p-2`}>
             <div className="flex">
               {/* {pathname.includes("Explorer") ||
                 pathname.includes("Diagnostics") ||
@@ -104,7 +112,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
                 <Breadcrumb />
               </div> */}
             </div>
-            <div className="mt-12 ">{children}</div>
+            <div className="mt-12">{children}</div>
           </div>
         </main>
         {/* <Footer /> */}
