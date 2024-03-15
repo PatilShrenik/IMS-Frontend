@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { createDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { CustomProvider, DatePicker, DateRangePicker } from "rsuite";
-import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
+import { replaceUnderscoresWithDots, replaceUnderscoresWithDotsNested } from "@/functions/genericFunctions";
 import CustomeInput, { DateInput } from "../Inputs";
 import { ButtonGroup } from "@mui/material";
 import { CustomeCancelButton, SubmitButton } from "../Buttons";
@@ -68,9 +68,7 @@ const DiscoverySchedularDrawer = (props: any) => {
   ];
   useEffect(() => {
     // const handleStorageChange = () => {
-    console.log("Storage change detected");
     const newColorTheme = localStorage.getItem("color-theme");
-    console.log("New color theme:", newColorTheme);
     setColorTheme(newColorTheme);
     // };
     // handleStorageChange();
@@ -273,13 +271,13 @@ const DiscoverySchedularDrawer = (props: any) => {
         //frequency: "CUSTOME",
       },
     }));
-    console.log("date", data);
+   // console.log("date", data);
   };
 
   const handleDate = (values: any) => {
     const date = new Date(values);
-    const epochTime = date.getTime() / 1000; 
-    console.log("date------------",epochTime);
+    const epochTime = date.getTime() / 1000;
+   // console.log("date------------", epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -293,13 +291,13 @@ const DiscoverySchedularDrawer = (props: any) => {
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    const entitiesArray = Object.values(modifiedData.entities);
-    modifiedData.entities = entitiesArray;
-    
-    const emailArray = Object.values(modifiedData.email);
-    modifiedData.email = emailArray;
-    console.log("======  mod", modifiedData);
-   
+    // const entitiesArray = Object.values(modifiedData.entities);
+    // modifiedData.entities = entitiesArray;
+
+    // const emailArray = Object.values(modifiedData.email);
+    // modifiedData.email = emailArray;
+    console.log("======mod", modifiedData);
+    try {
     const createDiscovery = async () => {
       let response = await createDiscoverySch(modifiedData);
       console.log(response);
@@ -332,7 +330,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       }
     };
     createDiscovery();
-    try {
+    
     } catch (error) {
       console.log(error);
     }

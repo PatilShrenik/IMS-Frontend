@@ -37,6 +37,11 @@ const AppContext = createContext<{
   toggleGetSNMPCatApiState: () => void;
   getPolicyApiState: boolean;
   togglegetPolicyApiState: () => void;
+  getRoleApiState: boolean;
+  toggleGetRoleApiState: () => void;
+  getUserApiState: boolean;
+  toggleGetUserApiState: () => void;
+
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -64,6 +69,8 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
+  getRoleApiState: false,
+  toggleGetRoleApiState: () => {},
   getWidgetApiState: false,
   toggleWidgetApiState: () => {},
   getTableApiState: false,
@@ -74,6 +81,9 @@ const AppContext = createContext<{
   toggleGetSNMPCatApiState: () => {},
   getPolicyApiState: false,
   togglegetPolicyApiState: () => {},
+  getUserApiState: false,
+  toggleGetUserApiState: () => {},
+  
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -93,9 +103,17 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getTableApiState, setGetTableApiState] = useState(false);
   const [getSNMPTempApiState, setGetSNMPTempApiState] = useState(false);
   const [getPolicyApiState, setGetPolicyApiState] = useState(false);
+  const [getRoleApiState, setRoleApiState] = useState(false);
+  const [getUserApiState, setUserApiState] = useState(false);
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
+  };
+  const toggleGetRoleApiState = () => {
+    setRoleApiState((prevState) => !prevState);
+  };
+  const toggleGetUserApiState = () => {
+    setUserApiState((prevState) => !prevState);
   };
 
   const toggleSideBarClickState = () => {
@@ -183,6 +201,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleAuthenticated,
         getSNMPCatApiState,
         toggleGetSNMPCatApiState,
+        getRoleApiState,
+        toggleGetRoleApiState,
+        getUserApiState,
+        toggleGetUserApiState,
         cloud,
         toggleCloud,
         themeSwitch,
