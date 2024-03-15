@@ -24,7 +24,7 @@ const Assets = () => {
     setPage(newPage - 1);
     // Fetch data for the new page if needed
   };
-  console.log("current page", currentPage);
+  // console.log("current page", currentPage);
   const handleRowsPerPageChange = (newRowsPerPage: any) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1); // Reset to the first page when changing rows per page
@@ -38,19 +38,19 @@ const Assets = () => {
         let cols: any = [];
         let response = await getAllDevice();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        console.log("modified 1", modifiedData);
+        // console.log("modified 1", modifiedData);
         const indexOfObjectWithAvailabilityContext =
           modifiedData &&
           modifiedData.findIndex(
             (obj: any) => obj.availability_context !== undefined
           );
         let col = [] as any;
-        console.log("index value", indexOfObjectWithAvailabilityContext);
+        // console.log("index value", indexOfObjectWithAvailabilityContext);
         if (
           indexOfObjectWithAvailabilityContext == -1 &&
           modifiedData.length != 0
         ) {
-          console.log("modified 2", modifiedData);
+          // console.log("modified 2", modifiedData);
           col = Object.keys(modifiedData[0]);
         } else {
           col =
@@ -61,7 +61,7 @@ const Assets = () => {
           col && col.filter((key: any) => !key.startsWith("_"));
         filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
 
-        console.log(filteredCols);
+        // console.log(filteredCols);
         filteredCols &&
           filteredCols.filter((key: any) => {
             if (!key.startsWith("_")) {
@@ -149,9 +149,9 @@ const Assets = () => {
         });
         // }
 
-        console.log("cols", cols);
+        // console.log("cols", cols);
         setColumns(cols);
-        console.log("rows", modifiedData);
+        // console.log("rows", modifiedData);
         const hiddenColumnsValues = [
           // "alias",
           "discovery_schedulers",

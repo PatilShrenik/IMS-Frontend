@@ -31,6 +31,8 @@ const AppContext = createContext<{
   toggleWidgetApiState: () => void;
   getTableApiState: boolean;
   togglegetTableApiState: () => void;
+  getPolicyApiState: boolean;
+  togglegetPolicyApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -58,11 +60,12 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
-
   getWidgetApiState: false,
   toggleWidgetApiState: () => {},
   getTableApiState: false,
   togglegetTableApiState: () => {},
+  getPolicyApiState: false,
+  togglegetPolicyApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -79,6 +82,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getCredProfileApiState, setGetCredProfileApiState] = useState(false);
   const [getWidgetApiState, setGetWidgetApiState] = useState(false);
   const [getTableApiState, setGetTableApiState] = useState(false);
+  const [getPolicyApiState, setGetPolicyApiState] = useState(false);
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -116,6 +120,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const togglegetCredProfileApiState = () => {
     setGetCredProfileApiState((prevState) => !prevState);
+  };
+
+  const togglegetPolicyApiState = () => {
+    setGetPolicyApiState((prevState) => !prevState);
   };
 
   const [time, setTime] = useState(
@@ -171,6 +179,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleWidgetApiState,
         getTableApiState,
         togglegetTableApiState,
+        togglegetPolicyApiState,
+        getPolicyApiState,
       }}
     >
       {children}

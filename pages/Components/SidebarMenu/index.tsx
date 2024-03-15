@@ -284,7 +284,7 @@ const SidebarMenu = () => {
           <div
             key={index}
             className={`relative mt-12 flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
-              sidebarOpen ? "w-0 " : "w-[15rem] border-r"
+              sidebarOpen ? "w-0 " : ""
             }`}
           >
             {/* <div className="flex justify-between h-[3rem] px-3 items-center text-black dark:text-textColor pt-1.3 shadow-lg shadow-white dark:shadow-black">

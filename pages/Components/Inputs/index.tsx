@@ -4,10 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const CustomeInput = (props: any) => {
-  const { type, require, disable, name, onChange, onBlur } = props;
+  const { type, require, disable, name, onChange, onBlur, color } = props;
   // console.log("value.length", value && value.length);
   const [inputFocused, setInputFocused] = useState(false);
-
+  // console.log("color", color);
   // useEffect(() => {
   //   if (!inputFocused && onBlur) {
   //     console.log("---------------in effect");
@@ -19,7 +19,9 @@ const CustomeInput = (props: any) => {
     <div className="items-center mx-4 my-4">
       <div className="relative">
         <input
-          className={`w-[18rem]  text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent py-3 px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+          className={`w-[18rem]  text-gray-400 ${
+            color ? `border-${color}` : ""
+          } border-[1px] rounded-lg dark:border-dark-border bg-transparent py-3 px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
             inputFocused ? "input-focused" : ""
           }`}
           type={type ? type : "text"}
