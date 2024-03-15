@@ -79,7 +79,7 @@ const EditSNMPTempDrawer = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-  }, [props.id]);
+  }, [rowId]);
 
   const handleAddFields = () => {
     setFormData([...formData, { key: "", value: "" }]);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   replacePeriodsWithUnderscoresArrayOfObjects,
   replaceUnderscoresWithDots,
-  replaceUnderscoresWithDotsNested,
 } from "@/functions/genericFunctions";
 import { Button, ButtonGroup, InputLabel, Zoom } from "@mui/material";
 import CustomeButton, { CustomeCancelButton } from "../Components/Buttons";
@@ -12,10 +11,6 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
 import { getIndicatorMapper } from "../api/api/MiscAPI";
@@ -25,75 +20,10 @@ import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 
-const ChartWidget = (props: any) => {
-  const { handleAddDrawerClose } = props;
+const EditGaugeWidget = (props: any) => {
+  const { widgetData, handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-  const granuality_time = [
-    {
-      name: "All",
-      id: "all",
-    },
-    {
-      name: "None",
-      id: "none",
-    },
-    {
-      name: "Second",
-      id: "second",
-    },
-    {
-      name: "Minute",
-      id: "minute",
-    },
-    {
-      name: "Five Minute",
-      id: "five_minute",
-    },
-    {
-      name: "Tem Minute",
-      id: "ten_minute",
-    },
-    {
-      name: "Fifteen Minute",
-      id: "fifteen_minute",
-    },
-    {
-      name: "Thirty Minute",
-      id: "thirty_minute",
-    },
-    {
-      name: "Hour",
-      id: "hour",
-    },
-    {
-      name: "Six Hour",
-      id: "six_hour",
-    },
-    {
-      name: "Eight Hour",
-      id: "eight_hour",
-    },
-    {
-      name: "Day",
-      id: "day",
-    },
-    {
-      name: "Week",
-      id: "week",
-    },
-    {
-      name: "Month",
-      id: "month",
-    },
-    {
-      name: "Quarter",
-      id: "quarter",
-    },
-    {
-      name: "Year",
-      id: "year",
-    },
-  ];
+
   const options = ["Metric"];
 
   const [timePeriod, setTimePeriod] = useState({
@@ -105,41 +35,29 @@ const ChartWidget = (props: any) => {
   ]);
   const [allGroups, setAllGroups] = React.useState([]);
   const [allDevices, setAllDevices] = React.useState([]);
-  const [selection, setSelection] = React.useState("device");
-  const [activeButton, setActiveButton] = React.useState<string | null>(
-    "device"
+  const [selection, setSelection] = React.useState(
+    widgetData &&
+      widgetData.filters &&
+      widgetData.filters.device_filters &&
+      widgetData.filters.device_filters.entity_type
   );
-  const [resultByactiveButton, setResultByActiveButton] = React.useState<
-    string | null
-  >("device");
+  const [activeButton, setActiveButton] = React.useState<string | null>(
+    widgetData &&
+      widgetData.filters &&
+      widgetData.filters.device_filters &&
+      widgetData.filters.device_filters.entity_type
+  );
   const [groupByArray, setGroupByArray] = React.useState(
-    [] as { label: string; value: string }[]
+    [] as { name: string; id: string }[]
   );
   const [mapperdData, setMappersData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [indicatorType, setIndicatorType] = React.useState("");
   const [indicatorsArray, setIndicatorsArray] = React.useState([]);
+  const [selectedGroups, setSelectedGroups] = React.useState([]) as any;
+  const [selectedDevices, setSelectedDevices] = React.useState([]) as any;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const initialState = {
-    name: "",
-    description: "",
-    widget_type: "chart",
-    granularity: "",
-    datasource: "",
-    indicator_group: "",
-    indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
-    group_by: "",
-    time_range: "custome",
-    start_timestamp: "",
-    end_timestamp: "",
-    filters: {
-      device_filters: {
-        entity_type: activeButton,
-        entities: [],
-      },
-    },
-  };
-  const [data, setData] = React.useState<any>(initialState);
+  const [data, setData] = React.useState<any>(widgetData);
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -288,6 +206,46 @@ const ChartWidget = (props: any) => {
     getMapper();
   }, []);
 
+  useEffect(() => {
+    setActiveButton(
+      data &&
+        data.filters &&
+        data.filters.device_filters &&
+        data.filters.device_filters.entity_type
+    );
+    setSelection(
+      data &&
+        data.filters &&
+        data.filters.device_filters &&
+        data.filters.device_filters.entity_type
+    );
+    setDropdowns(data && data.indicators);
+    // setGroupByArray([{ name: data.group_by, id: data.group_by }]);
+  }, [widgetData]);
+
+  useEffect(() => {
+    if (
+      data &&
+      data.filters &&
+      data.filters.device_filters &&
+      data.filters.device_filters.entity_type == "device"
+    ) {
+      setSelectedDevices(
+        data &&
+          data.filters &&
+          data.filters.device_filters &&
+          data.filters.device_filters.entities
+      );
+    } else {
+      setSelectedGroups(
+        data &&
+          data.filters &&
+          data.filters.device_filters &&
+          data.filters.device_filters.entities
+      );
+    }
+  }, [data]);
+
   const groupValues = allGroups.map((item: any) => ({
     label: item.name,
     value: item._id,
@@ -296,14 +254,6 @@ const ChartWidget = (props: any) => {
     label: item.hostname,
     value: item._id,
   }));
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -315,10 +265,10 @@ const ChartWidget = (props: any) => {
     // }
   };
 
-  const handleGranTimeChange = (value: any) => {
-    // const { value } = event.target;
-    setData({ ...data, granularity: value });
-  };
+  //   const handleGranTimeChange = (value: any) => {
+  //     // const { value } = event.target;
+  //     setData({ ...data, granularity: value });
+  //   };
 
   const handleIndiGroupChange = (value: any) => {
     // const { value } = event.target;
@@ -338,11 +288,6 @@ const ChartWidget = (props: any) => {
         },
       },
     });
-  };
-  const handleresultByButtonClick = (value: any) => {
-    // setSelection(value);
-    setResultByActiveButton(value);
-    setData({ ...data, result_by: value });
   };
 
   const handleAddDropdown = () => {
@@ -408,12 +353,10 @@ const ChartWidget = (props: any) => {
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
 
-        if (!groupByArray.some((item) => item.value === object_type)) {
-          setGroupByArray((prevGroupByArray: any) => {
-            const newArray = [...prevGroupByArray];
-            newArray[1] = { name: object_type, id: object_type };
-            return newArray;
-          });
+        if (!groupByArray.some((item) => item.id === object_type)) {
+          console.log("inkjdhdsuihs", object_type);
+          //   setGroupByArray([{ name: object_type, id: object_type }]);
+          //   setData({ ...data, group_by: object_type });
         }
 
         setData({
@@ -440,7 +383,6 @@ const ChartWidget = (props: any) => {
     // updatedDropdowns[index][field] = value;
     setDropdowns(updatedDropdowns);
   };
-
   const handleDateRangeChange = (value: any) => {
     console.log("Selected Date Range:", value);
     const start = value[0].getTime() / 1000;
@@ -462,11 +404,12 @@ const ChartWidget = (props: any) => {
     });
   }, [timePeriod]);
 
-  const handleTypeChange = (value: any) => {
-    // const { value } = event.target;
-    console.log(value);
-    setData({ ...data, group_by: value });
-  };
+  //   const handleTypeChange = (value: any) => {
+  //     // const { value } = event.target;
+  //     console.log("------------", value);
+  //     console.log(value);
+  //     setData({ ...data, group_by: value });
+  //   };
 
   const handleSave = () => {
     // console.log("chart data", data);
@@ -483,20 +426,20 @@ const ChartWidget = (props: any) => {
         // modifiedData.userName = "admin";
 
         // console.log("chart data", modifiedData);
-        let response = await addChartWidget(modifiedData);
-        if (response.status === "success") {
-          toast.success(response.status, {
-            position: "bottom-right",
-            autoClose: 1000,
-          });
-          handleAddDrawerClose();
-        } else {
-          toast.error(response.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-          });
-        }
-        toggleWidgetApiState();
+        // let response = await addChartWidget(modifiedData);
+        // if (response.status === "success") {
+        //   toast.success(response.status, {
+        //     position: "bottom-right",
+        //     autoClose: 1000,
+        //   });
+        //   handleAddDrawerClose();
+        // } else {
+        //   toast.error(response.message, {
+        //     position: "bottom-right",
+        //     autoClose: 2000,
+        //   });
+        // }
+        // toggleWidgetApiState();
       };
       addWidget();
     } catch (error) {
@@ -509,7 +452,7 @@ const ChartWidget = (props: any) => {
         <CustomeInput
           label="Name"
           name="name"
-          value={data.name}
+          value={data && data.name}
           onChange={handleInputChange}
           type="text"
           require={true}
@@ -517,19 +460,19 @@ const ChartWidget = (props: any) => {
         <CustomeInput
           label="Description"
           name="description"
-          value={data.description}
+          value={data && data.description}
           onChange={handleInputChange}
           type="text"
           require={true}
           // rows={1}
         />
-        <SecSingleSelect
+        {/* <SecSingleSelect
           label="Granuality"
           value={data.granularity}
           selectData={granuality_time}
           onChange={handleGranTimeChange}
           require={true}
-        />
+        /> */}
         <CustomProvider theme="dark">
           <DateRangePicker
             placement="bottomStart"
@@ -557,7 +500,7 @@ const ChartWidget = (props: any) => {
         <div>
           <SecSingleSelect
             label="Indicator Group"
-            value={data.indicator_group}
+            value={data && data.indicator_group}
             selectData={options}
             onChange={handleIndiGroupChange}
             require={true}
@@ -570,72 +513,73 @@ const ChartWidget = (props: any) => {
         </div>
         <div className="w-[42%] ml-3">
           <div>
-            {dropdowns.map((dropdown, index) => (
-              <div key={index}>
-                <div className="flex">
-                  <SecSingleSelect
-                    label="Select Indicator"
-                    value={dropdown.indicator}
-                    selectData={index == 0 ? indicatorsArray : filteredData}
-                    // onChange={(e: any) =>
-                    //   handleDropdownChange(index, "indicator", e.target.value)
-                    // }
-                    onChange={handleDropdownChange}
-                    index={index}
-                    type="indicator"
-                  />
-                  {indicatorType == "METRIC" ||
-                  indicatorType == "Metric" ||
-                  indicatorType == "metric" ? (
+            {dropdowns &&
+              dropdowns.map((dropdown, index) => (
+                <div key={index}>
+                  <div className="flex">
                     <SecSingleSelect
-                      label="Select Aggregation"
-                      value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                      label="Select Indicator"
+                      value={dropdown.indicator}
+                      selectData={index == 0 ? indicatorsArray : filteredData}
                       // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
+                      //   handleDropdownChange(index, "indicator", e.target.value)
                       // }
                       onChange={handleDropdownChange}
                       index={index}
-                      type="aggregation"
+                      type="indicator"
                     />
-                  ) : (
-                    <SecSingleSelect
-                      label="Select Aggregation"
-                      value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
-                      onChange={handleDropdownChange}
-                      index={index}
-                      type="aggregation"
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
-                    />
-                  )}
-                  <div
-                    className="text-primary2 flex items-center"
-                    onClick={handleAddDropdown}
-                  >
-                    <ControlPointIcon />
-                  </div>
-                  {dropdowns.length > 1 && (
+                    {indicatorType == "METRIC" ||
+                    indicatorType == "Metric" ||
+                    indicatorType == "metric" ? (
+                      <SecSingleSelect
+                        label="Select Aggregation"
+                        value={dropdown.aggregation}
+                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                        // onChange={(e: any) =>
+                        //   handleDropdownChange(
+                        //     index,
+                        //     "aggregation",
+                        //     e.target.value
+                        //   )
+                        // }
+                        onChange={handleDropdownChange}
+                        index={index}
+                        type="aggregation"
+                      />
+                    ) : (
+                      <SecSingleSelect
+                        label="Select Aggregation"
+                        value={dropdown.aggregation}
+                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                        onChange={handleDropdownChange}
+                        index={index}
+                        type="aggregation"
+                        // onChange={(e: any) =>
+                        //   handleDropdownChange(
+                        //     index,
+                        //     "aggregation",
+                        //     e.target.value
+                        //   )
+                        // }
+                      />
+                    )}
                     <div
-                      className="text-primary2 flex items-center ml-[3px]"
-                      onClick={() => handleRemoveDropdown(index)}
+                      className="text-primary2 flex items-center"
+                      onClick={handleAddDropdown}
                     >
-                      <RemoveCircleOutlineIcon />
+                      <ControlPointIcon />
                     </div>
-                  )}
+                    {dropdowns.length > 1 && (
+                      <div
+                        className="text-primary2 flex items-center ml-[3px]"
+                        onClick={() => handleRemoveDropdown(index)}
+                      >
+                        <RemoveCircleOutlineIcon />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
           <div className="flex flex-col ml-4">
             {/* <InputLabel className="dark:text-textColor">Filters</InputLabel> */}
@@ -663,7 +607,10 @@ const ChartWidget = (props: any) => {
               {selection == "device" ? (
                 <SingleSelect
                   label="Select Devices"
-                  // value={data.entities}
+                  value={deviceValues.filter(
+                    (option) =>
+                      selectedDevices && selectedDevices.includes(option.value)
+                  )}
                   selectData={deviceValues}
                   // apiData={[""]}
                   onChange={handleEntities}
@@ -672,6 +619,10 @@ const ChartWidget = (props: any) => {
               ) : (
                 <SingleSelect
                   label="Select Groups"
+                  value={groupValues.filter(
+                    (option) =>
+                      selectedGroups && selectedGroups.includes(option.value)
+                  )}
                   selectData={groupValues}
                   apiData={[""]}
                   onChange={handleEntities}
@@ -680,7 +631,7 @@ const ChartWidget = (props: any) => {
               )}
             </div>
           </div>
-          <div className="flex">
+          {/* <div className="flex">
             <SecSingleSelect
               label="Group By"
               value={data.group_by}
@@ -688,57 +639,6 @@ const ChartWidget = (props: any) => {
               onChange={handleTypeChange}
               require={true}
             />
-            {/* <SingleSelect
-              label="Sites"
-              value={data.group_by}
-              selectData={[
-                { label: "Pune", value: "Pune" },
-                { label: "Mumbai", value: "Mumbai" },
-                { label: "Banglore", value: "Banglore" },
-                { label: "Chennai", value: "Chennai" },
-                { label: "Hyderabad", value: "Hyderabad" },
-              ]}
-              onChange={handleTypeChange}
-            /> */}
-          </div>
-
-          {/* <div className="flex flex-col justify-start  ml-4 py-3">
-            <InputLabel className="dark:text-textColor mr-4">
-              Result By :{" "}
-            </InputLabel>
-            <ButtonGroup className="mr-36 my-4">
-              <Button
-                className={`dark:text-textColor border-primary2 py-[.65rem] px-[1.38rem] rounded-lg ${
-                  resultByactiveButton == "device" &&
-                  "bg-primary2 hover:bg-primary2 text-white"
-                }`}
-                onClick={() => handleresultByButtonClick("device")}
-              >
-                Device
-              </Button>
-              <Button
-                className={`dark:text-textColor border-primary2 py-[.65rem] px-[1.38rem] rounded-lg ${
-                  resultByactiveButton == "group" &&
-                  "bg-primary2 hover:bg-primary2 text-white"
-                }`}
-                onClick={() => handleresultByButtonClick("group")}
-              >
-                Group
-              </Button>
-              <Button
-                className={`dark:text-textColor border-primary2 py-[.65rem] px-[1.38rem] rounded-lg ${
-                  resultByactiveButton == "sites" &&
-                  "bg-primary2 hover:bg-primary2 text-white"
-                }`}
-                onClick={() => handleresultByButtonClick("sites")}
-              >
-                Sites
-              </Button>
-            </ButtonGroup>
-          </div>
-          <div className="mx-4">
-            <p className="dark:text-textColor pb-8">Pre Filters :</p>
-            <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
             {/* <CustomeButton title="Create & Add" /> */}
@@ -750,7 +650,7 @@ const ChartWidget = (props: any) => {
             </div>
             <div
               onClick={() => {
-                setData(initialState);
+                setData([]);
               }}
             >
               <CustomeCancelButton title="Reset" />
@@ -762,4 +662,4 @@ const ChartWidget = (props: any) => {
   );
 };
 
-export default ChartWidget;
+export default EditGaugeWidget;

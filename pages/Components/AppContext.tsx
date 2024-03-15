@@ -62,7 +62,6 @@ const AppContext = createContext<{
   toggleGroupState: () => {},
   getDisSchedApiState: false,
   togglegetDisSchedApiState: () => {},
-
   getWidgetApiState: false,
   toggleWidgetApiState: () => {},
   getTableApiState: false,
@@ -71,7 +70,6 @@ const AppContext = createContext<{
   togglegetSNMPTempApiState: () => {},
   getSNMPCatApiState: false,
   toggleGetSNMPCatApiState: () => {},
-  
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {

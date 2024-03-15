@@ -11,6 +11,16 @@ import ChartWidget from "@/pages/Widgets/ChartWidget";
 import GridWidget from "@/pages/Widgets/GridWidget";
 import TOPNWidget from "@/pages/Widgets/TopNWidget";
 import GaugeWidget from "@/pages/Widgets/GaugeWidget";
+import { getWidgetById } from "@/pages/api/api/ReportsAPI";
+import replacePeriodsWithUnderscoresSingleObject, {
+  replaceDotWithUnderscore2,
+  replacePeriodsWithUnderscoresnested,
+} from "@/functions/genericFunctions";
+import EditChartWidget from "@/pages/Widgets/EditChartWidget";
+import EditGridWidget from "@/pages/Widgets/EditGridWidget";
+import EditGaugeWidget from "@/pages/Widgets/EditGaugeWidget";
+import EditTopnWidget from "@/pages/Widgets/EditTOPNWidget";
+import { useAppContext } from "../AppContext";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -18,15 +28,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddWidgetDrawer = (props: any) => {
-  const { open, handleAddDrawerClose } = props;
+const EditWidgetDrawer = (props: any) => {
+  const { rowId, open, handleDrawerClose } = props;
   const classes = useStyles();
-
+  const { getWidgetApiState } = useAppContext();
   const [value, setValue] = React.useState("chart");
+  const [data, setData] = React.useState({});
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    try {
+      const getById = async () => {
+        let response = await getWidgetById(rowId);
+        const modifiedData = replaceDotWithUnderscore2(response.result);
+        console.log("Final Data:", modifiedData);
+        setData(modifiedData);
+        setValue(modifiedData.widget_type);
+        // const transformedArray: any = Object.entries(
+        //   modifiedData && modifiedData.scalar_oid
+        // ).map(([key, value]) => ({ key, value }));
+        // setFormData(transformedArray);
+        // modifiedData.name ? setName(modifiedData.name) : setName("");
+        // modifiedData.description
+        //   ? setDescription(modifiedData.description)
+        //   : setDescription("");
+        // const resultArray: any = Object.keys(modifiedData.objects).map(
+        //   (key) => {
+        //     const innerObject = modifiedData.objects[key];
+        //     const innerArray = Object.keys(innerObject).map((innerKey) => {
+        //       return { key: innerKey, value: innerObject[innerKey] };
+        //     });
+
+        //     return { key, values: innerArray };
+        //   }
+        // );
+        // setNestedFormData(resultArray);
+      };
+      getById();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [rowId, getWidgetApiState]);
 
   return (
     <Drawer
@@ -40,7 +85,7 @@ const AddWidgetDrawer = (props: any) => {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-              <p className="text-primary2 font-semibold">Add Widget</p>
+              <p className="text-primary2 font-semibold">Edit Widget</p>
               <div className="flex justify-between">
                 <TabList
                   className="mr-16"
@@ -51,21 +96,25 @@ const AddWidgetDrawer = (props: any) => {
                     label="Chart"
                     value="chart"
                     className="dark:text-textColor"
+                    disabled={value == "chart" ? false : true}
                   />
                   <Tab
                     label="Grid"
                     value="grid"
                     className="dark:text-textColor"
+                    disabled={value == "grid" ? false : true}
                   />
                   <Tab
                     label="TopN"
-                    value="topn"
+                    value="topN"
                     className="dark:text-textColor"
+                    disabled={value == "topN" ? false : true}
                   />
                   <Tab
                     label="Gauge"
                     value="gauge"
                     className="dark:text-textColor"
+                    disabled={value == "gauge" ? false : true}
                   />
                   {/* <Tab
                     label="Sankey"
@@ -80,7 +129,7 @@ const AddWidgetDrawer = (props: any) => {
                 </TabList>
                 <CloseSharpIcon
                   className="cursor-pointer mr-3 dark:text-textColor"
-                  onClick={handleAddDrawerClose}
+                  onClick={handleDrawerClose}
                 />
               </div>
             </div>
@@ -123,16 +172,28 @@ const AddWidgetDrawer = (props: any) => {
                 </TabList> */}
               </Box>
               <TabPanel style={{ padding: "0", height: "100%" }} value="chart">
-                <ChartWidget handleAddDrawerClose={handleAddDrawerClose} />
+                <EditChartWidget
+                  handleAddDrawerClose={handleDrawerClose}
+                  widgetData={data}
+                />
               </TabPanel>
               <TabPanel style={{ padding: "0", height: "100%" }} value="grid">
-                <GridWidget handleAddDrawerClose={handleAddDrawerClose} />
+                <EditGridWidget
+                  handleAddDrawerClose={handleDrawerClose}
+                  widgetData={data}
+                />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" }} value="topn">
-                <TOPNWidget handleAddDrawerClose={handleAddDrawerClose} />
+              <TabPanel style={{ padding: "0", height: "100%" }} value="topN">
+                <EditTopnWidget
+                  handleAddDrawerClose={handleDrawerClose}
+                  widgetData={data}
+                />
               </TabPanel>
               <TabPanel style={{ padding: "0", height: "100%" }} value="gauge">
-                <GaugeWidget handleAddDrawerClose={handleAddDrawerClose} />
+                <EditGaugeWidget
+                  handleAddDrawerClose={handleDrawerClose}
+                  widgetData={data}
+                />
               </TabPanel>
               <TabPanel value="sankey">Sankey</TabPanel>
               <TabPanel value="histogram">TopN</TabPanel>
@@ -144,4 +205,4 @@ const AddWidgetDrawer = (props: any) => {
   );
 };
 
-export default AddWidgetDrawer;
+export default EditWidgetDrawer;

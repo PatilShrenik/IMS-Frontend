@@ -21,7 +21,6 @@ import {
   getAllWidget,
 } from "../api/api/DashboardWidgetsAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
-import WidgetMenu from "./WidgetMenu";
 import { ToastContainer } from "react-toastify";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import DashboardGaugeWidget from "./DashboardWidgets/GaugeWidget";
@@ -30,7 +29,8 @@ import LineChartDashboardComponent from "./DashboardWidgets/LineChart";
 import PieChartDashboardComponent from "./DashboardWidgets/PieChart";
 import "../../node_modules/react-resizable/css/styles.css";
 import "../../node_modules/react-grid-layout/css/styles.css";
-
+import "react-toastify/dist/ReactToastify.css";
+import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -101,55 +101,6 @@ const index = () => {
       // setLayoutsWholeData(res.result);
     });
   }, [addToDashboard]);
-  // const widgets: Widget[] = [
-  //   {
-  //     widget_name: "Apple MacBook Pro 17",
-
-  //     widget_type: "Laptop",
-  //   },
-  //   {
-  //     widget_name: "Microsoft Surface Pro",
-
-  //     widget_type: "Laptop PC",
-  //   },
-  //   {
-  //     widget_name: "Mag",
-  //     widget_type: "ds",
-  //   },
-  //   {
-  //     widget_name: "Google ",
-  //     widget_type: "ds",
-  //   },
-
-  //   {
-  //     widget_name: "A",
-  //     widget_type: "hdf",
-  //   },
-  //   {
-  //     widget_name: "Afd",
-  //     widget_type: "hdf",
-  //   },
-  //   {
-  //     widget_name: "Adfgg",
-  //     widget_type: "hdf",
-  //   },
-  //   {
-  //     widget_name: " Pro 17",
-  //     widget_type: "Bag",
-  //   },
-  //   {
-  //     widget_name: "Surface Pro",
-  //     widget_type: "chair",
-  //   },
-  //   {
-  //     widget_name: "Mag",
-  //     widget_type: "ds",
-  //   },
-  //   {
-  //     widget_name: "Afd",
-  //     widget_type: "hdf",
-  //   },
-  // ];
 
   console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
@@ -407,44 +358,39 @@ const index = () => {
                   <table className="w-full border-collapse overflow-x-scroll">
                     <thead>
                       <tr className="bg-textColor  dark:bg-tabel-header dark:text-textColor">
-                        <th scope="col" className="px-6 py-2 w-1/2">
+                        <th scope="col" className="px-2 py-2 ">
                           Widget Name
                         </th>
 
-                        <th scope="col" className="px-6 py-2 w-3/10">
+                        <th scope="col" className="px-2 py-2 0">
                           Widget Type
                         </th>
 
-                        <th scope="col" className="px-6 py-2 w-1/5">
+                        <th scope="col" className="px-2 py-2 ">
                           Action
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {paginatedWidgets &&
-                        paginatedWidgets.map((Widget: any, index: any) => (
+                        paginatedWidgets.map((row: any, index: any) => (
                           <tr
                             key={index}
                             className="bg-white dark:bg-dark-container dark:text-textColor"
                           >
                             <td
                               scope="row"
-                              className="bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border "
+                              className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border "
                             >
-                              {Widget.name}
+                              {row.name}
                             </td>
 
-                            <td className="bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
-                              {Widget.widget_type}
+                            <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
+                              {row.widget_type}
                             </td>
 
                             <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
-                              {/* <WidgetMenu
-                                setAddToDashboard={setAddToDashboard}
-                                id={Widget._id}
-                                widgetType={Widget.widget_type || ""}
-                              /> */}
-                              hi
+                              <WidgetMenu id={row._id} />
                             </td>
                           </tr>
                         ))}

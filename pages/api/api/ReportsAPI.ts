@@ -57,7 +57,7 @@ export const addChartWidget = async (props: any) => {
   }
 };
 
-export const deleteReport = async (props: any) => {
+export const widgetDelete = async (props: any) => {
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(baseURL + `/api/v1/visualization/widget/${props}`, {

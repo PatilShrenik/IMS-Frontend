@@ -278,7 +278,6 @@ const DiscoverySchedularDrawer = (props: any) => {
   const handleDate = (values: any) => {
     const date = new Date(values);
     const epochTime = date.getTime() / 1000;
-    console.log("date------------", epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -286,7 +285,6 @@ const DiscoverySchedularDrawer = (props: any) => {
         start_date: epochTime,
       },
     }));
-    // console.log("date",data);
   };
 
   const handleSave = (event: any) => {

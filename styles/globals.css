@@ -348,7 +348,7 @@ main::before {
 }
 
 .discButtonGroup {
-  @apply !bg-primary2 hover:!bg-primary2 !text-white;
+  @apply !bg-primary2 hover:!bg-primary2 !text-white px-[2.75rem];
 }
 .discPadding {
   @apply !px-[5px] !py-2.5;

@@ -431,19 +431,20 @@ const DiscoverySchedularTable = (props: any) => {
                           checked={visibleColumns.includes(column.field)}
                           // onChange={() => handleMenuItemClick(column.field)}
                         />
-                        {column.headerName
-                          .split(" ")
-                          .map((word: any) =>
-                            word
-                              .split("_")
-                              .map(
-                                (subWord: any) =>
-                                  subWord.charAt(0).toUpperCase() +
-                                  subWord.slice(1)
-                              )
-                              .join(" ")
-                          )
-                          .join(" ")}
+                        {column &&
+                          column.headerName
+                            .split(" ")
+                            .map((word: any) =>
+                              word
+                                .split("_")
+                                .map(
+                                  (subWord: any) =>
+                                    subWord.charAt(0).toUpperCase() +
+                                    subWord.slice(1)
+                                )
+                                .join(" ")
+                            )
+                            .join(" ")}
                       </MenuItem>
                     ))}
                 </Menu>
@@ -493,7 +494,7 @@ const DiscoverySchedularTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data && (
+        {data ? (
           <div className="">
             <div
               className=""
@@ -719,6 +720,10 @@ const DiscoverySchedularTable = (props: any) => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
             </div>
+          </div>
+        ) : (
+          <div className="w-full flex justify-center">
+            <p className="dark:text-textColor">No Data</p>
           </div>
         )}
       </div>
