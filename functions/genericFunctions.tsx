@@ -105,6 +105,20 @@ export function replaceDotsWithUnderscores(obj: any) {
   return newObj;
 }
 
+export function replaceDotsWithUnderscoresSec(obj: any) {
+  const newObj: any = {};
+
+  for (const key in obj) {
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      newObj[key.replace(/\./g, "_")] = replaceDotsWithUnderscoresSec(obj[key]);
+    } else {
+      newObj[key.replace(/\./g, "_")] = obj[key];
+    }
+  }
+
+  return newObj;
+}
+
 export function replaceUnderscoresWithDotsNested(obj: any) {
   const newObj: any = {};
 

@@ -34,7 +34,7 @@ const SNMPCatalogueDrawer = (props: any) => {
   });
 
   const tempValues = tempData && tempData.map((item: any) => ({
-    label: item._id,
+    label: item.name,
     value: item._id,
   }));
 
@@ -110,11 +110,7 @@ const SNMPCatalogueDrawer = (props: any) => {
         });
       }
     };
-    createSNMPC();
-    try {
-    } catch (error) {
-      console.log(error);
-    }
+    createSNMPC(); 
     handleDrawerClose();
   };
   return (
@@ -142,6 +138,7 @@ const SNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <CustomeInput
               label="Enter Model"
@@ -150,6 +147,7 @@ const SNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <CustomeInput
               label="Enter OS"
@@ -158,6 +156,7 @@ const SNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
           </div>
           <div className="flex">
@@ -168,12 +167,14 @@ const SNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <SingleSelect
               label="Select SNMP Template"
             //   value ={ data.snmp_template && data.snmp_template}
               selectData={tempValues}
               onChange={handleTemp}
+              require={true}
             />
           </div>
           <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">

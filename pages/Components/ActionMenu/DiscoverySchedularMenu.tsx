@@ -99,7 +99,7 @@ const DiscoverySchedularMenu = (props: any) => {
     }
     handleClose();
   };
-  console.log("rdata",rowData);
+ // console.log("rdata",rowData);
   return (
     <div className="ml-4">
       <IconButton

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PageHeading from "@/pages/Components/PageHeading";
-import TablePagination from "@mui/material/TablePagination";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
+
 import {
   replaceDotsWithUnderscores,
   replacePeriodsWithUnderscores,

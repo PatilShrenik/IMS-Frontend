@@ -13,6 +13,7 @@ import "rsuite/dist/rsuite.min.css";
 
 import {
   replaceDotsWithUnderscores,
+  replaceUnderscoresWithDots,
   replaceUnderscoresWithDotsNested,
 } from "@/functions/genericFunctions";
 import SingleSelect from "../Selects";
@@ -44,7 +45,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
   const tempValues =
     tempData &&
     tempData.map((item: any) => ({
-      label: item._id,
+      label: item.name,
       value: item._id,
     }));
   React.useEffect(() => {
@@ -100,7 +101,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
     // console.log("updated", response);
     if (response.status == "success") {
       toggleGetSNMPCatApiState();
-      handleDrawerClose();
+    
       toast.success(response.status, {
         position: "bottom-right",
         autoClose: 1000,
@@ -125,6 +126,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
         transition: Bounce,
       });
     }
+    handleDrawerClose();
   };
 
   return (
@@ -155,6 +157,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <CustomeInput
               label="Enter Model"
@@ -163,6 +166,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <CustomeInput
               label="Enter OS"
@@ -171,6 +175,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
           </div>
           <div className="flex">
@@ -181,6 +186,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               onChange={handleInputChange}
               type="text"
               disable={false}
+              require={true}
             />
             <SingleSelect
               label="Select SNMP Template"
@@ -189,6 +195,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               )}
               selectData={tempValues}
               onChange={handleTemp}
+              require={true}
             />
           </div>
           <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
