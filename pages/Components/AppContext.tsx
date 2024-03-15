@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import moment from "moment";
 const AppContext = createContext<{
+  toggleSideBarStateWithArgu: (state: any) => void;
   sidebarOpen: boolean;
   toggleSideBarState: () => void;
   sidebarClick: boolean;
@@ -41,8 +42,8 @@ const AppContext = createContext<{
   toggleGetRoleApiState: () => void;
   getUserApiState: boolean;
   toggleGetUserApiState: () => void;
-
 }>({
+  toggleSideBarStateWithArgu: (state) => {},
   sidebarOpen: false,
   toggleSideBarState: () => {},
   sidebarClick: false,
@@ -83,7 +84,6 @@ const AppContext = createContext<{
   togglegetPolicyApiState: () => {},
   getUserApiState: false,
   toggleGetUserApiState: () => {},
-  
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -105,6 +105,10 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getPolicyApiState, setGetPolicyApiState] = useState(false);
   const [getRoleApiState, setRoleApiState] = useState(false);
   const [getUserApiState, setUserApiState] = useState(false);
+
+  const toggleSideBarStateWithArgu = (state: any) => {
+    setSidebarOpen(state);
+  };
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -223,6 +227,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetSNMPTempApiState,
         togglegetPolicyApiState,
         getPolicyApiState,
+        toggleSideBarStateWithArgu,
       }}
     >
       {children}

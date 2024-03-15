@@ -40,7 +40,7 @@ const SidebarMenu = () => {
   const pathname = usePathname();
   // console.log("--", sidebarOpen);
   const path = pathname;
-  console.log("path", path);
+  // console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
   const [selectedDropdown, setSelectedDropdown] = useState<SelectedDropdown>(
     {}
