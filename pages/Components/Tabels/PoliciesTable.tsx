@@ -477,131 +477,131 @@ const PoliciesTable = (props: any) => {
 
   return (
     <>
-      {data && (
+      <div className="">
         <div className="">
-          <div className="">
-            {/* <div>
+          {/* <div>
               <p>All Credential Profiles</p>
             </div> */}
-            <div className="flex justify-between dark:text-white">
-              {/* Global Search for table */}
+          <div className="flex justify-between dark:text-white">
+            {/* Global Search for table */}
 
-              <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
-                <IconButton>
-                  <SearchIcon
-                    className="dark:text-[#3C3C3C] text-[#CCCFD9] "
-                    fontSize="small"
-                  />
-                </IconButton>
-                <InputBase
-                  className="dark:text-textColor"
-                  placeholder="Search"
-                  value={search}
-                  onChange={handleSearchChange}
+            <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
+              <IconButton>
+                <SearchIcon
+                  className="dark:text-[#3C3C3C] text-[#CCCFD9] "
+                  fontSize="small"
                 />
-                {search != "" && (
-                  <ClearIcon
-                    className="dark:text-white border rounded-2xl"
-                    fontSize="small"
-                    sx={{ fontSize: "13px", marginRight: "3px" }}
-                  />
-                )}
-              </div>
-              <div className="flex">
-                <div className="flex items-center m-4 mr-0">
-                  {selected ? (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected credentials"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          onClick={handleModalOpen}
-                          className="cursor-pointer"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <DeleteModal
-                        open={isModalopen}
-                        handleModalClose={handleModalClose}
-                        deleteRow={deleteDevice}
+              </IconButton>
+              <InputBase
+                className="dark:text-textColor"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
+              {search != "" && (
+                <ClearIcon
+                  className="dark:text-white border rounded-2xl"
+                  fontSize="small"
+                  sx={{ fontSize: "13px", marginRight: "3px" }}
+                />
+              )}
+            </div>
+            <div className="flex">
+              <div className="flex items-center m-4 mr-0">
+                {selected ? (
+                  <>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Delete selected credentials"
+                      placement="top"
+                    >
+                      <DeleteForeverIcon
+                        onClick={handleModalOpen}
+                        className="cursor-pointer"
+                        style={{
+                          margin: "0 5px",
+                        }}
                       />
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected credentials"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          onClick={downloadCSV}
-                          className="cursor-pointer"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  ) : (
-                    <>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Delete selected credentials (Disabled)"
-                        placement="top"
-                      >
-                        <DeleteForeverIcon
-                          //   onClick={deleteDevice}
-                          color="disabled"
-                          className="cursor-pointer"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip
-                        TransitionComponent={Zoom}
-                        title="Download selected credentials (Disabled)"
-                        placement="top"
-                      >
-                        <FileDownloadIcon
-                          // onClick={downloadCSV}
-                          className="cursor-pointer"
-                          color="disabled"
-                          style={{
-                            margin: "0 5px",
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  )}
-                  {/* Hide and Show column */}
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Hide/UnHide Columns"
-                    placement="top"
-                  >
-                    <ViewColumnIcon
-                      className="text-dark-border dark:text-light-menu-color"
-                      style={{ margin: "0 10px 0 5px" }}
-                      onClick={handleMenuOpen}
+                    </Tooltip>
+                    <DeleteModal
+                      open={isModalopen}
+                      handleModalClose={handleModalClose}
+                      deleteRow={deleteDevice}
                     />
-                  </Tooltip>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={isMenuOpen}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    style={{ padding: "0" }}
-                  >
-                    {columns.map((column: any) => (
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Download selected credentials"
+                      placement="top"
+                    >
+                      <FileDownloadIcon
+                        onClick={downloadCSV}
+                        className="cursor-pointer"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </>
+                ) : (
+                  <>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Delete selected credentials (Disabled)"
+                      placement="top"
+                    >
+                      <DeleteForeverIcon
+                        //   onClick={deleteDevice}
+                        color="disabled"
+                        className="cursor-pointer"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      title="Download selected credentials (Disabled)"
+                      placement="top"
+                    >
+                      <FileDownloadIcon
+                        // onClick={downloadCSV}
+                        className="cursor-pointer"
+                        color="disabled"
+                        style={{
+                          margin: "0 5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </>
+                )}
+                {/* Hide and Show column */}
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Hide/UnHide Columns"
+                  placement="top"
+                >
+                  <ViewColumnIcon
+                    className="text-dark-border dark:text-light-menu-color"
+                    style={{ margin: "0 10px 0 5px" }}
+                    onClick={handleMenuOpen}
+                  />
+                </Tooltip>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={isMenuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  style={{ padding: "0" }}
+                >
+                  {columns &&
+                    columns.map((column: any) => (
                       <MenuItem
                         className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                         style={{
@@ -637,13 +637,13 @@ const PoliciesTable = (props: any) => {
                           .join(" ")}
                       </MenuItem>
                     ))}
-                  </Menu>
-                </div>
+                </Menu>
+              </div>
 
-                {/* Add Device Menu and Model */}
+              {/* Add Device Menu and Model */}
 
-                <div className="m-4 mr-0 ml-2 h-fit">
-                  {/* <Button
+              <div className="m-4 mr-0 ml-2 h-fit">
+                {/* <Button
                     onClick={handleDrawerOpen}
                     variant="contained"
                     className="bg-primary3 capitalize items-center"
@@ -653,16 +653,16 @@ const PoliciesTable = (props: any) => {
                     <FileUploadIcon fontSize="small" className="mr-2" /> Upload
                     CSV
                   </Button> */}
-                  <Button
-                    onClick={handleDrawerOpen}
-                    variant="contained"
-                    className="bg-primary3 capitalize items-center"
-                    size="small"
-                  >
-                    <AddIcon fontSize="small" className="mr-2" />
-                    Add Policy
-                  </Button>
-                  {/* <AddIcon
+                <Button
+                  onClick={handleDrawerOpen}
+                  variant="contained"
+                  className="bg-primary3 capitalize items-center"
+                  size="small"
+                >
+                  <AddIcon fontSize="small" className="mr-2" />
+                  Add Policy
+                </Button>
+                {/* <AddIcon
                     className=" dark:text-textColor"
                     onClick={handleDrawerOpen}
                     fontSize="medium"
@@ -670,20 +670,21 @@ const PoliciesTable = (props: any) => {
                       cursor: "pointer",
                     }}
                   /> */}
-                  <PolicyDrawer
-                    open={isDrawerOpen}
-                    handleDrawerClose={handleDrawerClose}
-                  />
-                  {/* <AddCredentialProfile
+                <PolicyDrawer
+                  open={isDrawerOpen}
+                  handleDrawerClose={handleDrawerClose}
+                />
+                {/* <AddCredentialProfile
                   themeSwitch={themeSwitch}
                   open={isAddSingleDialogOpen}
                   handleClose={handleAddSingleCloseDialog}
                 /> */}
-                </div>
               </div>
-              {/* Global Downlad and delete button for table */}
             </div>
+            {/* Global Downlad and delete button for table */}
           </div>
+        </div>
+        {data ? (
           <div
             className=""
             style={{
@@ -936,8 +937,12 @@ const PoliciesTable = (props: any) => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="w-full justify-center dark:text-textColor">
+            No Data
+          </div>
+        )}
+      </div>
     </>
   );
 };

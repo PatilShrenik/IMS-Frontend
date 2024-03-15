@@ -62,6 +62,8 @@ const PolicyDrawer = (props: any) => {
   const [activeButton, setActiveButton] = React.useState<string | null>(
     "DEVICE"
   );
+  const { rowId, open, handleDrawerClose } = props;
+
   const [change, setChange] = React.useState(true);
   const { togglegetPolicyApiState } = useAppContext();
   React.useEffect(() => {
