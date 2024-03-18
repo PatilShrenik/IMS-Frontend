@@ -8,6 +8,7 @@ import BookIcon from "@mui/icons-material/Book";
 import { useAppContext } from "../AppContext";
 import { Divider } from "@mui/material";
 import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
+import ArticleIcon from '@mui/icons-material/Article';
 import PolicyIcon from "@mui/icons-material/Policy";
 import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydream";
 import ScheduleIcon from "@mui/icons-material/Schedule";
@@ -39,7 +40,7 @@ const SidebarMenu = () => {
   const pathname = usePathname();
   // console.log("--", sidebarOpen);
   const path = pathname;
-  console.log("path", path);
+  // console.log("path", path);
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(0);
   const [selectedDropdown, setSelectedDropdown] = useState<SelectedDropdown>(
     {}
@@ -229,15 +230,25 @@ const SidebarMenu = () => {
             },
           ],
         },
-
         {
-          subMenuName: "Catalog",
+          subMenuName: "Catalogue",
           subMenuIcon: <BookIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
               subMenuDropdownname: "SNMP",
-              subMenuDropdownpathName: "/Settings/catalog/snmp",
+              subMenuDropdownpathName: "/Settings/catalogue/snmp",
+            },
+          ],
+        },
+        {
+          subMenuName: "Template",
+          subMenuIcon: <ArticleIcon />,
+          // subMenuPathName: "/page/systemSetting",
+          subMenuDropdown: [
+            {
+              subMenuDropdownname: "SNMP",
+              subMenuDropdownpathName: "/Settings/template/snmp",
             },
           ],
         },
@@ -306,7 +317,7 @@ const SidebarMenu = () => {
                               >
                                 <Link
                                   href={submenuItem.subMenuPathName || "#"}
-                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 ${
+                                  className={`w-full mx-1 py-2 text-decoration-none flex justify-between cursor-pointer transition duration-300 ease-in-out rounded-lg dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:text-textColor p-2 subMenuLink ${
                                     openSubmenu == subIndex
                                     // "dark:bg-[#282828] bg-[#D8D8D8]"
                                   }`}

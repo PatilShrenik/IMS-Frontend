@@ -38,28 +38,20 @@ Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   const { sidebarOpen, toggleSideBarState, toggleSideBarStateWithArgu } =
     useAppContext();
+
   // const [uEmail, setEmail] = useState<any>(false);
   const router = useRouter();
   // const currentUrl = router.asPath;
   // const isPageIncluded = currentUrl.includes('/page');
   const { authenticated, toggleAuthenticated } = useAppContext();
-  // console.log(authenticated, isPageIncluded)
-  // useEffect(() => {
-  //   const isPageIncluded = router.asPath.includes("/page");
-  //   const uEmail = sessionStorage.getItem("userEmail");
-  //   if (!authenticated && isPageIncluded && !uEmail) {
-  //     router.push("/");
-  //   }
-  // }, [router.asPath]);
+
   const pathname = usePathname();
   const path = pathname.substring(1);
-  console.log("path-------", path);
   useEffect(() => {
     if (path == "Dashboard" || path == "Assets") {
       toggleSideBarStateWithArgu(true);
     }
   }, [path]);
-  // console.log("sidebaropen", sidebarOpen);
   const transformedString = path
     .replace(/\//g, " > ")
     .replace(/-/g, " ")

@@ -294,7 +294,6 @@ const UploadCSVDrawer = (props: any) => {
                           {keys.map((key: any) => (
                             <td
                               style={{
-                                //   padding: "8px",
                                 textAlign: "center",
                               }}
                               className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border ${

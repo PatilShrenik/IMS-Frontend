@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PageHeading from "@/pages/Components/PageHeading";
-import TablePagination from "@mui/material/TablePagination";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
-import { replaceDotsWithUnderscores, replacePeriodsWithUnderscores, replacePeriodsWithUnderscoresnested, replaceUnderscoresWithDotsNested } from "@/functions/genericFunctions";
+
+import {
+  replaceDotsWithUnderscores,
+  replacePeriodsWithUnderscores,
+  replacePeriodsWithUnderscoresnested,
+  replaceUnderscoresWithDotsNested,
+} from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { useAppContext } from "@/pages/Components/AppContext";
 import { ToastContainer } from "react-toastify";

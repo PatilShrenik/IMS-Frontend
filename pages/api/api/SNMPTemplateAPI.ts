@@ -1,6 +1,6 @@
 import { baseURL } from "@/constants";
 
-export const getSNMPTemp = async () => {
+export const getAllSNMPTemp = async () => {
   const token = localStorage.getItem("token");
   const res = await fetch(baseURL + "/api/v1/settings/snmp-template", {
     method: "GET",

@@ -1000,7 +1000,7 @@ const AllDeviceTabel = (props: any) => {
                           }}
                         >
                           <div className="flex items-center">
-                            {row.device_status == "new" ? (
+                            {row.device_status != "disabled" ? (
                               <Tooltip
                                 TransitionComponent={Zoom}
                                 title="Run Discovery Now"
@@ -1013,7 +1013,7 @@ const AllDeviceTabel = (props: any) => {
                             ) : (
                               <Tooltip
                                 TransitionComponent={Zoom}
-                                title="Run Discovery Now"
+                                title="Run Discovery Now (Disabled)"
                                 placement="top"
                               >
                                 {/* <div onClick={() => runDeviceDiscovery(row)}> */}

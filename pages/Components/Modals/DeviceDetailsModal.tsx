@@ -29,7 +29,7 @@ const DeviceDetailsModal = (props: any) => {
         name: filteredDevice.hostname,
         ip_address: filteredDevice["ip.address"],
       }));
-  console.log("devdejasds", deviceValues);
+ // console.log("devdejasds", deviceValues);
   return (
     <Drawer
       anchor="right"
@@ -40,7 +40,7 @@ const DeviceDetailsModal = (props: any) => {
       //   }}
       className="shadow-sm shadow-dark-container dark:border-l-0 h-full"
     >
-      <div className="bg-white h-full text-center dark:bg-tabel-row">
+      <div className="bg-white h-full text-center dark:bg-dark-container">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">Device List</p>
           <CloseSharpIcon

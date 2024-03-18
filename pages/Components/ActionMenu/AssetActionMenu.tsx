@@ -12,13 +12,16 @@ import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   deleteSingleDevice,
+  disableDeviceSingle,
   disableFlowSingle,
   disableMonitoring,
+  enableDeviceSingle,
   enableFlowSingle,
   enableMonitoring,
   runDiscovery,
 } from "@/pages/api/api/DeviceManagementAPI";
 import EditDeviceDrawer from "../SideDrawers/EditDeviceDrawer";
+import MonitoringSettingsDrawer from "../SideDrawers/MonitoringSettingsDrawer";
 
 const ITEM_HEIGHT = 48;
 
@@ -35,6 +38,7 @@ const AssetsActionMenu = (props: any) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = React.useState(false);
+  const [isMOnitoringOpen, setIsMonitoringOpen] = React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -46,9 +50,16 @@ const AssetsActionMenu = (props: any) => {
   const handleEditDrawerClose = () => {
     setIsEditDrawerOpen(false);
   };
-  const handleEditClick = (rowId: number) => {
-    //console.log("EditRowId", rowId);
+  const handleEditDrawerOpen = () => {
     setIsEditDrawerOpen(true);
+    handleClose();
+  };
+
+  const handleMonitoringDrawerClose = () => {
+    setIsMonitoringOpen(false);
+  };
+  const handleMonitoringDrawerOpen = () => {
+    setIsMonitoringOpen(true);
     handleClose();
   };
 
@@ -116,12 +127,97 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const enableDevice = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await enableDeviceSingle(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const disableDevice = async () => {
+    try {
+      const bodyData = [rowData._id];
+      let response = await disableDeviceSingle(bodyData);
+      // console.log(response);
+      if (response.status == "success") {
+        toggleDeviceTableState();
+        toast.success(response.status, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      } else {
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     } catch (error) {
@@ -250,7 +346,7 @@ const AssetsActionMenu = (props: any) => {
       >
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
-          onClick={() => handleEditClick(rowData && rowData._id)}
+          onClick={() => handleEditDrawerOpen()}
         >
           Edit
         </MenuItem>
@@ -285,7 +381,7 @@ const AssetsActionMenu = (props: any) => {
             Run Discovery Now
           </MenuItem>
         )} */}
-        {rowData && rowData.device_status == "discovery" && (
+        {rowData && rowData.device_status == "discovered" && (
           <MenuItem
             className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
             onClick={enableMonitoringSingleDevice}
@@ -294,20 +390,37 @@ const AssetsActionMenu = (props: any) => {
           </MenuItem>
         )}
         {rowData && rowData.device_status == "monitoring" && (
+          <>
+            <MenuItem
+              className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+              onClick={disableMonitoringSingleDevice}
+            >
+              Disable Monitoring
+            </MenuItem>
+            <MenuItem
+              className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+              onClick={() => handleMonitoringDrawerOpen()}
+            >
+              Monitoring Settings
+            </MenuItem>
+          </>
+        )}
+        {rowData && rowData.device_status == "disabled" ? (
           <MenuItem
             className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-            onClick={disableMonitoringSingleDevice}
+            onClick={enableDevice}
           >
-            Disable Monitoring
+            Enable Device
+          </MenuItem>
+        ) : (
+          <MenuItem
+            className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
+            onClick={disableDevice}
+          >
+            Disable Device
           </MenuItem>
         )}
         {/* <MenuItem onClick={handleOpenEditDialog}>Enable Device</MenuItem> */}
-        {/* <MenuItem
-          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header"
-          onClick={() => setMonitorOpen(true)}
-        >
-          Monitoring Settings
-        </MenuItem> */}
       </Menu>
 
       <Modal open={isModalopen} onClose={handleModalClose}>
@@ -336,35 +449,17 @@ const AssetsActionMenu = (props: any) => {
             Cancel
           </button>
         </div>
-        {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md">
-          <DeleteForeverIcon className="text-red-400 h-[3.5rem] w-[3.5rem] " />
-          <div className="mb-5  border-b-2 py-4 ">
-            <p className="text-xl font-semibold mb-2">Are you sure ? </p>
-            <p className="text-gray-400 text-sm">
-              Do you really want to delete these records? This process cannot be
-              undone.
-            </p>
-          </div>
-
-          <button
-            onClick={() => handleDeleteClick(id)}
-            className="bg-red-400 hover:bg-red-400 text-white font-normal py-1 px-4 rounded mr-4"
-          >
-            Delete
-          </button>
-          <button
-            onClick={handleModalClose}
-            className="bg-light3 hover:bg-light3 text-white font-normal py-1 px-4 rounded mb-2"
-          >
-            Cancel
-          </button>
-        </div> */}
       </Modal>
 
       <EditDeviceDrawer
         rowId={rowData && rowData._id}
         open={isEditDrawerOpen}
         handleDrawerClose={handleEditDrawerClose}
+      />
+      <MonitoringSettingsDrawer
+        rowId={rowData && rowData._id}
+        open={isMOnitoringOpen}
+        handleDrawerClose={handleMonitoringDrawerClose}
       />
     </div>
   );

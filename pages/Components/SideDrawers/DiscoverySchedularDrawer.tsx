@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { createDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { CustomProvider, DatePicker, DateRangePicker } from "rsuite";
-import { replaceUnderscoresWithDots } from "@/functions/genericFunctions";
+import { replaceUnderscoresWithDots, replaceUnderscoresWithDotsNested } from "@/functions/genericFunctions";
 import CustomeInput, { DateInput } from "../Inputs";
 import { ButtonGroup } from "@mui/material";
 import { CustomeCancelButton, SubmitButton } from "../Buttons";
@@ -68,9 +68,7 @@ const DiscoverySchedularDrawer = (props: any) => {
   ];
   useEffect(() => {
     // const handleStorageChange = () => {
-    console.log("Storage change detected");
     const newColorTheme = localStorage.getItem("color-theme");
-    console.log("New color theme:", newColorTheme);
     setColorTheme(newColorTheme);
     // };
     // handleStorageChange();
@@ -112,6 +110,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setActiveButton("DEVICE");
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
+      setFrequency("CUSTOME")
     }
   }, [open]);
 
@@ -205,7 +204,9 @@ const DiscoverySchedularDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-    }
+      
+    } 
+
     console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
@@ -267,16 +268,16 @@ const DiscoverySchedularDrawer = (props: any) => {
       scheduler_context: {
         ...prevData.scheduler_context,
         cron: value,
-        frequency: "CUSTOME",
+        //frequency: "CUSTOME",
       },
     }));
-    console.log("date", data);
+   // console.log("date", data);
   };
 
   const handleDate = (values: any) => {
     const date = new Date(values);
-const epochTime = date.getTime() / 1000; 
-    console.log("date------------",epochTime);
+    const epochTime = date.getTime() / 1000;
+   // console.log("date------------", epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -290,13 +291,13 @@ const epochTime = date.getTime() / 1000;
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    const entitiesArray = Object.values(modifiedData.entities);
-    modifiedData.entities = entitiesArray;
-    
-    const emailArray = Object.values(modifiedData.email);
-    modifiedData.email = emailArray;
-    console.log("======  mod", modifiedData);
-   
+    // const entitiesArray = Object.values(modifiedData.entities);
+    // modifiedData.entities = entitiesArray;
+
+    // const emailArray = Object.values(modifiedData.email);
+    // modifiedData.email = emailArray;
+    console.log("======mod", modifiedData);
+    try {
     const createDiscovery = async () => {
       let response = await createDiscoverySch(modifiedData);
       console.log(response);
@@ -329,7 +330,7 @@ const epochTime = date.getTime() / 1000;
       }
     };
     createDiscovery();
-    try {
+    
     } catch (error) {
       console.log(error);
     }
@@ -354,7 +355,7 @@ const epochTime = date.getTime() / 1000;
             onClick={handleDrawerClose}
           />
         </div>
-        <form onSubmit={handleSave} method="POST">
+        <form onSubmit={handleSave} >
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
@@ -364,6 +365,7 @@ const epochTime = date.getTime() / 1000;
                 onChange={handleInputChange}
                 type="text"
                 disable={false}
+                require={true}
               />
             </div>
 
@@ -420,6 +422,7 @@ const epochTime = date.getTime() / 1000;
                     title="Select Devices"
                     selectData={deviceValues}
                     onChange={handleDeviceEntities}
+                    require={true}
                   />
                 ) : (
                   <SingleSelect
@@ -429,6 +432,7 @@ const epochTime = date.getTime() / 1000;
                     title="Select Groups"
                     selectData={groupValues}
                     onChange={handleGroupEntities}
+                    require={true}
                   />
                 )}
               </div>
@@ -478,7 +482,7 @@ const epochTime = date.getTime() / 1000;
                     padding: ".4rem",
                   }}
                   placeholder="Select Date Range"
-                  // format="yyyy-MM-dd"
+                  
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
               </CustomProvider>

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 /* @import url("https://fonts.cdnfonts.com/css/satoshi"); */
 @import "https://code.highcharts.com/dashboards/css/dashboards.css";
+@import "rsuite/dist/rsuite.min.css";
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
 @import "rsuite/dist/rsuite.min.css";
@@ -49,13 +50,23 @@ body {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: rgba(216, 216, 216, 0.2); /* Adjust the alpha value (0.7) for transparency */
+  background-color: rgba(
+    216,
+    216,
+    216,
+    0.2
+  ); /* Adjust the alpha value (0.7) for transparency */
 }
 
 ::-webkit-scrollbar-thumb:hover {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: rgba(216, 216, 216, 0.8); /* Adjust the alpha value (0.7) for transparency */
+  background-color: rgba(
+    216,
+    216,
+    216,
+    0.8
+  ); /* Adjust the alpha value (0.7) for transparency */
 }
 /* styles/globals.css */
 /* body {
@@ -328,3 +339,21 @@ main::before {
   color: #575757;
   color: var(--rs-btn-subtle-hover-text);
 }
+.css-1km1ehz {
+  @apply !bg-textColor dark:!bg-tabel-header dark:!text-textColor hover:dark:!bg-tabel-header hover:!bg-textColor
+  /* background-color: none !important; */;
+}
+.subMenuLink {
+  @apply text-black dark:text-textColor dark:hover:bg-[#282828] hover:bg-[#F0F0F0] hover:!text-black dark:hover:!text-textColor;
+}
+
+.discButtonGroup {
+  @apply !bg-primary2 hover:!bg-primary2 !text-white px-[2.75rem];
+}
+.discPadding {
+  @apply !px-[5px] !py-2.5;
+}
+/* .css-79xub {
+  padding: 12px 44px !important;
+  border-radius: 8px !important;
+} */

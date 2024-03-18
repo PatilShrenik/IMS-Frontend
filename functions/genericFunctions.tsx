@@ -118,6 +118,43 @@ export function replaceDotsWithUnderscoresSEC(obj: any) {
   return newObj;
 }
 
+export function replaceDotWithUnderscore2(obj: any) {
+  if (typeof obj !== "object" || Array.isArray(obj)) {
+    return obj;
+  }
+
+  const newObj: any = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const newKey = key.replace(/\./g, "_");
+      newObj[newKey] = replaceDotWithUnderscore2(obj[key]);
+
+      // Check if the value is an array of objects
+      if (Array.isArray(newObj[newKey])) {
+        newObj[newKey] = newObj[newKey].map((item: any) =>
+          replaceDotWithUnderscore2(item)
+        );
+      }
+    }
+  }
+
+  return newObj;
+}
+
+export function replaceDotsWithUnderscoresSec(obj: any) {
+  const newObj: any = {};
+
+  for (const key in obj) {
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      newObj[key.replace(/\./g, "_")] = replaceDotsWithUnderscoresSec(obj[key]);
+    } else {
+      newObj[key.replace(/\./g, "_")] = obj[key];
+    }
+  }
+
+  return newObj;
+}
+
 export function replaceUnderscoresWithDotsNested(obj: any) {
   const newObj: any = {};
 

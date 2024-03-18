@@ -8,6 +8,9 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import ChartWidget from "@/pages/Widgets/ChartWidget";
+import GridWidget from "@/pages/Widgets/GridWidget";
+import TOPNWidget from "@/pages/Widgets/TopNWidget";
+import GaugeWidget from "@/pages/Widgets/GaugeWidget";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -29,7 +32,7 @@ const AddWidgetDrawer = (props: any) => {
     <Drawer
       anchor="right"
       open={open}
-      variant="permanent"
+      variant="temporary"
       classes={{ paper: classes.drawer }}
       className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:bg-dark-menu-color"
     >
@@ -37,7 +40,7 @@ const AddWidgetDrawer = (props: any) => {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-              <p className="text-primary2 font-semibold">Add Wdiget</p>
+              <p className="text-primary2 font-semibold">Add Widget</p>
               <div className="flex justify-between">
                 <TabList
                   className="mr-16"
@@ -122,9 +125,15 @@ const AddWidgetDrawer = (props: any) => {
               <TabPanel style={{ padding: "0", height: "100%" }} value="chart">
                 <ChartWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel value="grid">Grid</TabPanel>
-              <TabPanel value="topn">TopN</TabPanel>
-              <TabPanel value="gauge">Gauge</TabPanel>
+              <TabPanel style={{ padding: "0", height: "100%" }} value="grid">
+                <GridWidget handleAddDrawerClose={handleAddDrawerClose} />
+              </TabPanel>
+              <TabPanel style={{ padding: "0", height: "100%" }} value="topn">
+                <TOPNWidget handleAddDrawerClose={handleAddDrawerClose} />
+              </TabPanel>
+              <TabPanel style={{ padding: "0", height: "100%" }} value="gauge">
+                <GaugeWidget handleAddDrawerClose={handleAddDrawerClose} />
+              </TabPanel>
               <TabPanel value="sankey">Sankey</TabPanel>
               <TabPanel value="histogram">TopN</TabPanel>
             </div>

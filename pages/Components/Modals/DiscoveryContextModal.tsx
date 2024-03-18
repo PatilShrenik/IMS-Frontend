@@ -67,13 +67,15 @@ const DiscoveryContext = (props: any) => {
     );
   }
   useEffect(() => {
-    const getContext = async () => {
-      let response = await getDeviceDetailsByID(deviceIds);
-      const modifiedData = replaceDotsWithUnderscores(response.result);
-      //   console.log("context data", response.result);
-      setData(modifiedData);
-    };
-    getContext();
+    if (open) {
+      const getContext = async () => {
+        let response = await getDeviceDetailsByID(deviceIds);
+        const modifiedData = replaceDotsWithUnderscores(response.result);
+        //   console.log("context data", response.result);
+        setData(modifiedData);
+      };
+      getContext();
+    }
   }, [deviceIds, open]);
 
   const valuesArray = Object.values((data && data.objects) || {});

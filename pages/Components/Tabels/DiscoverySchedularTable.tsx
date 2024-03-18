@@ -61,7 +61,7 @@ const DiscoverySchedularTable = (props: any) => {
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
 
-  console.log("data-----", data);
+  //console.log("data-----", data);
   // console.log("col", columns);
   // console.log("vis col", visibleColumns);
 
@@ -428,19 +428,20 @@ const DiscoverySchedularTable = (props: any) => {
                           checked={visibleColumns.includes(column.field)}
                           // onChange={() => handleMenuItemClick(column.field)}
                         />
-                        {column.headerName
-                          .split(" ")
-                          .map((word: any) =>
-                            word
-                              .split("_")
-                              .map(
-                                (subWord: any) =>
-                                  subWord.charAt(0).toUpperCase() +
-                                  subWord.slice(1)
-                              )
-                              .join(" ")
-                          )
-                          .join(" ")}
+                        {column &&
+                          column.headerName
+                            .split(" ")
+                            .map((word: any) =>
+                              word
+                                .split("_")
+                                .map(
+                                  (subWord: any) =>
+                                    subWord.charAt(0).toUpperCase() +
+                                    subWord.slice(1)
+                                )
+                                .join(" ")
+                            )
+                            .join(" ")}
                       </MenuItem>
                     ))}
                 </Menu>
