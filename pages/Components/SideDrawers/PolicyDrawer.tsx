@@ -26,6 +26,7 @@ import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getIndicatorMapper } from "@/pages/api/api/MiscAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { addPolicies } from "@/pages/api/api/PolicyApi";
+import CustomInputWithChips from "../InputChip";
 
 const useStyles = makeStyles(() => ({
   drawer: {
@@ -381,6 +382,15 @@ const PolicyDrawer = (props: any) => {
                     disable={false}
                     require={true}
                   />
+                  {/* <CustomInputWithChips
+                    label="Tags"
+                    name="tags"
+                    value={tags}
+                    onChange={(e: any) => setTags(e.target.value)}
+                    type="text"
+                    disable={false}
+                    require={true}
+                  /> */}
                   <SingleSelect
                     label="Indicators"
                     selectData={indicatorsData}

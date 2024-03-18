@@ -36,7 +36,8 @@ const Footer = memo(() => (
 ));
 Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
-  const { sidebarOpen, toggleSideBarState } = useAppContext();
+  const { sidebarOpen, toggleSideBarState, toggleSideBarStateWithArgu } =
+    useAppContext();
   // const [uEmail, setEmail] = useState<any>(false);
   const router = useRouter();
   // const currentUrl = router.asPath;
@@ -52,6 +53,13 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   // }, [router.asPath]);
   const pathname = usePathname();
   const path = pathname.substring(1);
+  console.log("path-------", path);
+  useEffect(() => {
+    if (path == "Dashboard" || path == "Assets") {
+      toggleSideBarStateWithArgu(true);
+    }
+  }, [path]);
+  // console.log("sidebaropen", sidebarOpen);
   const transformedString = path
     .replace(/\//g, " > ")
     .replace(/-/g, " ")

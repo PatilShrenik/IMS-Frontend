@@ -382,7 +382,20 @@ const PoliciesTable = (props: any) => {
 
         // console.log("entities", matchingNames);
       } else if (entity_type === "DEVICE") {
-        return row.entities ? <Chips value={row.entities?.length} /> : "-";
+        const deviceIds = row.entities;
+        console.log("-------deviceids", deviceIds);
+        return row.entities ? (
+          <>
+            <Chips value={row.entities?.length} />
+            <DeviceDetailsModal
+              open={dialogOpen === deviceIds}
+              handleDialogClose={handleDialogClose}
+              device_ids={deviceIds}
+            />
+          </>
+        ) : (
+          "-"
+        );
       }
     } else if (column.field == "threshold") {
       const { critical, major, warning } = row.threshold;

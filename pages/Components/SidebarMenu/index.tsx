@@ -283,7 +283,7 @@ const SidebarMenu = () => {
         pathname.includes(menuItem.name) && menuItem.subMenu ? (
           <div
             key={index}
-            className={`relative mt-12 flex flex-col overflow-y-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container duration-300 ease-linear translate-x-0 ${
+            className={`relative mt-12 flex flex-col overflow-x-hidden bg-white border-textColor dark:border-dark-border dark:bg-dark-container transition duration-300 ease-linear translate-x-0 ${
               sidebarOpen ? "w-0 " : ""
             }`}
           >

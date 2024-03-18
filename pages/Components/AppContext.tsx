@@ -3,6 +3,7 @@ import moment from "moment";
 const AppContext = createContext<{
   sidebarOpen: boolean;
   toggleSideBarState: () => void;
+  toggleSideBarStateWithArgu: (state: any) => void;
   sidebarClick: boolean;
   toggleSideBarClickState: () => void;
   state: boolean;
@@ -36,6 +37,7 @@ const AppContext = createContext<{
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
+  toggleSideBarStateWithArgu: (state) => {},
   sidebarClick: false,
   toggleSideBarClickState: () => {},
   state: false,
@@ -93,6 +95,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleSideBarState = () => {
     setSidebarOpen((prevState) => !prevState);
+  };
+  const toggleSideBarStateWithArgu = (state: any) => {
+    setSidebarOpen(state);
   };
   const toggleThemeSwitch = () => {
     setThemeSwitch((prevState) => !prevState);
@@ -181,6 +186,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetTableApiState,
         togglegetPolicyApiState,
         getPolicyApiState,
+        toggleSideBarStateWithArgu,
       }}
     >
       {children}
