@@ -48,7 +48,15 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   const pathname = usePathname();
   const path = pathname.substring(1);
   useEffect(() => {
-    if (path == "Dashboard" || path == "Assets") {
+    if (
+      path == "Dashboard" ||
+      path == "Assets" ||
+      path == "Reports" ||
+      path == "NCM" ||
+      path == "Audit" ||
+      path == "Alerts" ||
+      path == "Topology"
+    ) {
       toggleSideBarStateWithArgu(true);
     }
   }, [path]);

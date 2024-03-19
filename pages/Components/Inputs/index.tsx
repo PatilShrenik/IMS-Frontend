@@ -21,7 +21,7 @@ const CustomeInput = (props: any) => {
         <input
           className={`w-[18rem]  text-gray-400 ${
             color ? `border-${color}` : ""
-          } border-[1px] rounded-lg dark:border-dark-border bg-transparent py-3 px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+          } border-[1px] rounded-lg dark:border-dark-border bg-transparent py-[0.9rem] px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
             inputFocused ? "input-focused" : ""
           }`}
           type={type ? type : "text"}
@@ -160,6 +160,7 @@ export function DateInput(props: any) {
     props.onChange(epochTime);
   }, [epochTime, props]);
   const dateObject = new Date(props.value * 1000);
+  
   return (
     <>
       {/* <lable>Select Date</lable> */}

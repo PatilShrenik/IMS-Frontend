@@ -327,9 +327,9 @@ const PolicyDrawer = (props: any) => {
                       className="my-4 mx-4"
                     >
                       <Button
-                        className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
+                        className={`dark:text-textColor border-primary2 !px-[2.75rem] !py-[0.7rem] rounded-lg   ${
                           activeButton == "DEVICE" &&
-                          "bg-primary2 hover:bg-primary2 text-white"
+                          "bg-primary2 hover:bg-primary2 text-white discButtonGroup"
                         }`}
                         onClick={() => {
                           handleButtonClick("DEVICE");
@@ -338,9 +338,9 @@ const PolicyDrawer = (props: any) => {
                         Device
                       </Button>
                       <Button
-                        className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                        className={`dark:text-textColor border-primary2 !px-[2.75rem] !py-[0.7rem] rounded-lg   ${
                           activeButton == "GROUP" &&
-                          "bg-primary2 hover:bg-primary2 text-white"
+                          "bg-primary2 hover:bg-primary2 text-white discButtonGroup"
                         }`}
                         onClick={() => {
                           handleButtonClick("GROUP");
