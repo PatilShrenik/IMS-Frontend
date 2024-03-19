@@ -53,8 +53,8 @@ import "rsuite/dist/rsuite.min.css";
 
 import moment from "moment";
 import { getAllPolicy } from "@/pages/api/api/PolicyApi";
-import TimeRangePicker from "../Timerangepicker";
 import { useWebSocketContext } from "../WebSocketContext";
+import TimeRangePicker from "../TimeRnangePicker";
 const AlertTable = (props: any) => {
   const {
     data,

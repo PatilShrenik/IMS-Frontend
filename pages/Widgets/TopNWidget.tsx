@@ -26,7 +26,7 @@ import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import PieChartComponent from "../Components/Charts/PieChart";
-import TimeRangePicker from "../Components/Timerangepicker";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 
 const TOPNWidget = (props: any) => {
   const { handleAddDrawerClose } = props;

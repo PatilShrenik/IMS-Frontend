@@ -23,7 +23,7 @@ import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
-import TimeRangePicker from "../Components/Timerangepicker";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 
 const GaugeWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
