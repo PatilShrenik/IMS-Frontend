@@ -41,10 +41,10 @@ const Policy = () => {
         let response = await getAllPolicy();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
         // console.log("modifidData", modifiedData);
-        const col = Object.keys(modifiedData[0]);
+        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         // const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         // console.log("col in table", col);
-        col.filter((key: any) => {
+       col && col.filter((key: any) => {
           if (key != "_type") {
             if (key == "alert_context") {
               cols.push({
@@ -91,7 +91,7 @@ const Policy = () => {
           "updated_on",
         ];
 
-        setVisibleColumns(
+       cols && setVisibleColumns(
           cols
             .map((column: any) => column.field)
             .filter((field: any) => !hiddenColumnsValues.includes(field))

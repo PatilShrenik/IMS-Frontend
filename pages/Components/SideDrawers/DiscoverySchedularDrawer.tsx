@@ -29,7 +29,7 @@ const initialState = {
 
   scheduler_context: {
     scheduled_times: [""],
-    cron: "",
+   // cron: "",
     start_date: "",
     frequency: "CUSTOME",
   },
@@ -102,7 +102,7 @@ const DiscoverySchedularDrawer = (props: any) => {
         // message: "",
         scheduler_context: {
           scheduled_times: [""],
-          cron: "",
+       //   cron: "",
           start_date: "",
           frequency: "CUSTOME",
         },
@@ -167,11 +167,13 @@ const DiscoverySchedularDrawer = (props: any) => {
     });
   }, [change]);
   const handleButtonClick = (value: any) => {
-    setChange(!change);
+    // setChange(!change);
+    console.log("ent type ",value)
     setSelection(value);
     setActiveButton(value);
     setData({ ...data, entity_type: value, entities: [] });
   };
+
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
     if (value === "WEEKLY") {
@@ -214,22 +216,41 @@ const DiscoverySchedularDrawer = (props: any) => {
       scheduler_context: {
         ...prevSnmpObject.scheduler_context,
         frequency: value,
+        //cron:""
       },
     }));
   };
 
-  const handleDeviceEntities = (values: any) => {
-    setData({
-      ...data,
-      entities: values,
-    });
-  };
-  const handleGroupEntities = (values: any) => {
-    setData({
-      ...data,
-      entities: values,
-    });
-  };
+  // const handleFrequencyClick = (value: any) => {
+  //   setFrequency(value);
+  //   let updatedSchedulerContext: any = {};
+  //   switch (value) {
+  //     case "WEEKLY":
+  //       updatedSchedulerContext = { days_of_week: "" };
+  //       break;
+  //     case "MONTHLY":
+  //       updatedSchedulerContext = { days_of_month: "" };
+  //       break;
+  //     case "DAILY":
+  //       updatedSchedulerContext = { days_of_week: "", days_of_month: "" };
+  //       break;
+  //     default:
+  //       // For "CUSTOME" or any other case, no changes to scheduler_context
+  //       break;
+  //   }
+  //   setFrequencyButton(value);
+  // setData((prevSnmpObject: any) => ({
+  //   ...prevSnmpObject,
+  //   scheduler_context: {
+  //     frequency: value,
+  //     ...(value === "CUSTOME" ? { cron: "" } : {}),
+  //     ...(value === "DAILY" ? { days_of_week: "" } : {}),
+  //     ...(value === "WEEKLY" ? {  days_of_week: "" } : {}),
+  //   },
+  // }));
+
+  // };
+  
 
   const handleFrequency = (values: any) => {
     setData((prevSnmpObject: any) => ({
@@ -287,16 +308,25 @@ const DiscoverySchedularDrawer = (props: any) => {
     }));
     // console.log("date",data);
   };
+  const handleDeviceEntities = (values: any) => {
+    //setChange(!change);
+    setData({
+      ...data,
+      entities: values,
+    });
+  };
+  const handleGroupEntities = (values: any) => {
+   // setChange(!change);
+    setData({
+      ...data,
+      entities: values,
+    });
+  };
 
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    // const entitiesArray = Object.values(modifiedData.entities);
-    // modifiedData.entities = entitiesArray;
-
-    // const emailArray = Object.values(modifiedData.email);
-    // modifiedData.email = emailArray;
-    console.log("======mod", modifiedData);
+    console.log("created", modifiedData);
     try {
     const createDiscovery = async () => {
       let response = await createDiscoverySch(modifiedData);
@@ -374,51 +404,51 @@ const DiscoverySchedularDrawer = (props: any) => {
                 <ButtonGroup
                   variant="outlined"
                   aria-label="Basic button group"
-                  className="my-4 mx-4"
+                  className="my-4 mx-4 items-center"
                 >
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
-                      activeButton == "DEVICE" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+        // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                    //   activeButton == "GROUP" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}                      
                     onClick={() => {
                       handleButtonClick("DEVICE");
                     }}
-                    // style={{
-                    //   width: "120px",
-                    //   backgroundColor:
-                    //     activeButton === "DEVICE" ? "#0078d4" : "",
+                    style={{
+                      width: "145px",
+                      backgroundColor:
+                        activeButton === "DEVICE" ? "#0078d4" : "",
 
-                    //   color: activeButton === "DEVICE" ? "white" : "",
-                    // }}
+                      color: activeButton === "DEVICE" ? "white" : "",
+                    }}
                   >
                     Device
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
-                      activeButton == "GROUP" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                    //   activeButton == "GROUP" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => {
                       handleButtonClick("GROUP");
                     }}
-                    // style={{
-                    //   width: "120px",
-                    //   backgroundColor:
-                    //     activeButton === "GROUP" ? "#0078d4" : "",
-                    //   color: activeButton === "GROUP" ? "white" : "",
-                    // }}
+                    style={{
+                      width: "145px",
+                      backgroundColor:
+                        activeButton === "GROUP" ? "#0078d4" : "",
+                      color: activeButton === "GROUP" ? "white" : "",
+                    }}
                   >
                     Group
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="">
+              <div className="px-8">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
                     isMulti={true}
-                    change={change}
+                   // change={change}
                     title="Select Devices"
                     selectData={deviceValues}
                     onChange={handleDeviceEntities}
@@ -428,7 +458,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Groups"
                     isMulti={true}
-                    change={change}
+                   // change={change}
                     title="Select Groups"
                     selectData={groupValues}
                     onChange={handleGroupEntities}
@@ -465,7 +495,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               /> */}
             {/* </div> */}
             <div className="mx-4 py-2">
-              <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
+              <h5 className="mb- font-normal dark:text-textColor">Schedule</h5>
               <CustomProvider theme="dark">
                 <DatePicker 
                 onChange={handleDate}
@@ -482,7 +512,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                     padding: ".4rem",
                   }}
                   placeholder="Select Date Range"
-                  
+                  format="yyyy-MM-dd"
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
               </CustomProvider>
@@ -496,42 +526,61 @@ const DiscoverySchedularDrawer = (props: any) => {
                   className="my-5 ml-4 mr-7"
                 >
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "CUSTOME" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "CUSTOME" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => handleFrequencyClick("CUSTOME")}
-                    // style={{
-                    //   backgroundColor:
-                    //     frequencyButton === "CUSTOME" ? "#0078d4" : "",
-                    //   color: frequencyButton === "CUSTOME" ? "white" : "",
-                    // }}
+                    style={{
+                      width: "75px",
+                      backgroundColor:
+                        frequencyButton === "CUSTOME" ? "#0078d4" : "",
+                      color: frequencyButton === "CUSTOME" ? "white" : "",
+                    }}
                   >
                     Custom
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "DAILY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "DAILY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
+                    style={{
+                      width: "65px",
+                      backgroundColor:
+                        frequencyButton === "DAILY" ? "#0078d4" : "",
+                      color: frequencyButton === "DAILY" ? "white" : "",
+                    }}
                     onClick={() => handleFrequencyClick("DAILY")}
                   >
                     Daily
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "WEEKLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "WEEKLY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
+                    style={{
+                      width: "75px",
+                      backgroundColor:
+                        frequencyButton === "WEEKLY" ? "#0078d4" : "",
+                      color: frequencyButton === "WEEKLY" ? "white" : "",
+                    }}
                     onClick={() => handleFrequencyClick("WEEKLY")}
                   >
                     Weekly
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "MONTHLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    style={{
+                      width: "80px",
+                      backgroundColor:
+                        frequencyButton === "MONTHLY" ? "#0078d4" : "",
+                      color: frequencyButton === "MONTHLY" ? "white" : "",
+                    }}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "MONTHLY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => handleFrequencyClick("MONTHLY")}
                   >
                     Monthly

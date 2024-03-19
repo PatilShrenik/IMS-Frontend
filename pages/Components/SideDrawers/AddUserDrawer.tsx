@@ -79,7 +79,7 @@ const AddUserDrawer = (props: any) => {
   const [isAuthEnabled, setIsAuthEnabled] = useState(true);
   const [selectedValue, setSelectedValue] = React.useState<any>([]);
 
-      const groupValues = [{value:"1000000000001",label:"Group 1"}]
+ const groupValues = [{value:"1000000000001",label:"Group 1"}]
   const roleValues =
   allRoles &&
   allRoles.map((item: any) => ({

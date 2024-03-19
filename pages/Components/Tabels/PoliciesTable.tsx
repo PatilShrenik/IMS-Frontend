@@ -85,7 +85,7 @@ const PoliciesTable = (props: any) => {
       name: item.hostname,
       id: item._id,
     }));
-
+  console.log("------------data", data);
   //   useEffect(() => {
   //     try {
   //       const getData = async () => {
@@ -684,7 +684,7 @@ const PoliciesTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data ? (
+        {data && data.length > 0 ? (
           <div
             className=""
             style={{

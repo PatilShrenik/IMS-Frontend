@@ -29,6 +29,7 @@ import { useAppContext } from "../AppContext";
 import AddUserDrawer from "../SideDrawers/AddUserDrawer";
 import UserMenu from "../ActionMenu/UserMenu";
 import { deleteBulkUser } from "@/pages/api/api/UserManagementAPI";
+import { getAllRole } from "@/pages/api/api/RoleManagementAPI";
 const UserTable = (props: any) => {
     const {
         data,
@@ -54,7 +55,12 @@ const UserTable = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
-
+  const groupValues =
+    allGroups &&
+    allGroups.map((item: any) => ({
+      name: item.name,
+      id: item._id,
+    }));
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
@@ -74,6 +80,13 @@ const UserTable = (props: any) => {
     }
     setSelectAll(!selectAll);
   };
+  React.useEffect(() => {
+    const getRoles = async () => {
+      let response = await getAllRole();
+      setAllGroups(response.result);
+    };
+    getRoles();
+  },[]);
 
   const handleRequestSort = (property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -160,7 +173,16 @@ const UserTable = (props: any) => {
   };
 
   const processColumnData = (column: any, row: any) => {
-   
+    if (column.field === "role") {
+      const groupId = row[column.field] && row[column.field];
+      // Find the corresponding object in groupValues array
+      console.log("math",groupId);
+      const matchingGroup: any = groupValues.find(
+        (group: any) => group.id === groupId
+      );
+      // If a matching group is found, return its name, otherwise return null or a default value
+      return matchingGroup ? matchingGroup.name : "-";
+    }
     return row[column.field] == "" ? "-" : row[column.field];
   };
   const handleSearchChange = (event: any) => {
@@ -212,12 +234,9 @@ const UserTable = (props: any) => {
     <>
     <div className="">
       <div className="">
-        {/* <div>
-            <p>All Credential Profiles</p>
-          </div> */}
+       
         <div className="flex justify-between dark:text-white">
-          {/* Global Search for table */}
-
+        
           <div className="border items-center rounded-lg h-[2.3rem] dark:border-[#3C3C3C] border-[#CCCFD9] flex justify-end w-fit m-2 mt-3 dark:text-white">
             <IconButton>
               <SearchIcon
@@ -402,7 +421,7 @@ const UserTable = (props: any) => {
           {/* Global Downlad and delete button for table */}
         </div>
       </div>
-      {data && (
+      {data && data.length > 0 ? (
         <div className="">
           <div
             className=""
@@ -620,6 +639,10 @@ const UserTable = (props: any) => {
            
           </div>
         </div>
+      ) : (
+        <div className="w-full justify-center dark:text-textColor">
+            No Data
+          </div>
       )}
     </div>
   </>
