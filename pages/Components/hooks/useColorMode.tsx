@@ -9,7 +9,6 @@ const useColorMode = () => {
     const darkClassName = "dark";
     const rsThemeDarkClassName = "rs-theme-dark";
     const bodyClass = window.document.body.classList;
- 
     if (colorMode === "dark") {
       bodyClass.add(darkClassName);
       bodyClass.add(rsThemeDarkClassName);

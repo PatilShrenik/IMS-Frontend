@@ -38,6 +38,7 @@ Footer.displayName = "Footer";
 const Layout: React.FC<LayoutProps> = ({ children }: any) => {
   const { sidebarOpen, toggleSideBarState, toggleSideBarStateWithArgu } =
     useAppContext();
+
   // const [uEmail, setEmail] = useState<any>(false);
   const router = useRouter();
   // const currentUrl = router.asPath;
@@ -50,11 +51,11 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
     if (
       path == "Dashboard" ||
       path == "Assets" ||
-      path == "Alerts" ||
-      path == "Topology" ||
       path == "Reports" ||
       path == "NCM" ||
-      path == "Audit"
+      path == "Audit" ||
+      path == "Alerts" ||
+      path == "Topology"
     ) {
       toggleSideBarStateWithArgu(true);
     }

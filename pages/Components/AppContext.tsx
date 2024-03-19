@@ -1,9 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
 import moment from "moment";
 const AppContext = createContext<{
-  toggleSideBarStateWithArgu: (state: any) => void;
   sidebarOpen: boolean;
   toggleSideBarState: () => void;
+  toggleSideBarStateWithArgu: (state: any) => void;
   sidebarClick: boolean;
   toggleSideBarClickState: () => void;
   state: boolean;
@@ -43,9 +43,9 @@ const AppContext = createContext<{
   getUserApiState: boolean;
   toggleGetUserApiState: () => void;
 }>({
-  toggleSideBarStateWithArgu: (state) => {},
   sidebarOpen: false,
   toggleSideBarState: () => {},
+  toggleSideBarStateWithArgu: (state) => {},
   sidebarClick: false,
   toggleSideBarClickState: () => {},
   state: false,
@@ -106,9 +106,6 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getRoleApiState, setRoleApiState] = useState(false);
   const [getUserApiState, setUserApiState] = useState(false);
 
-  const toggleSideBarStateWithArgu = (state: any) => {
-    setSidebarOpen(state);
-  };
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -125,6 +122,9 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   };
   const toggleSideBarState = () => {
     setSidebarOpen((prevState) => !prevState);
+  };
+  const toggleSideBarStateWithArgu = (state: any) => {
+    setSidebarOpen(state);
   };
   const toggleThemeSwitch = () => {
     setThemeSwitch((prevState) => !prevState);

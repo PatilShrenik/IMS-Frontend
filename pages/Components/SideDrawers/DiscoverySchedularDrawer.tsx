@@ -466,7 +466,7 @@ const DiscoverySchedularDrawer = (props: any) => {
             {/* </div> */}
             <div className="mx-4 py-2">
               <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
-              <CustomProvider theme="dark">
+              {/* <CustomProvider theme="dark"> */}
                 <DatePicker 
                 onChange={handleDate}
                   // showOneCalendar
@@ -485,7 +485,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
-              </CustomProvider>
+              {/* </CustomProvider> */}
               {/* <DateInput label="Start Date" onChange={handleDate} /> */}
             </div>
             <div className="flex items-center">

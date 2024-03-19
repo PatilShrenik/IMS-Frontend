@@ -110,7 +110,7 @@ const EditPolicyDrawer = (props: any) => {
       getById();
     }
   }, [open]);
-//   console.log("data------", data);
+  //   console.log("data------", data);
 
   useEffect(() => {
     if (data) {
@@ -143,12 +143,12 @@ const EditPolicyDrawer = (props: any) => {
     }
   }, [dataToModify]);
 
-//   console.log(
-//     "dropdown items",
-//     selectedDeviceValue,
-//     selectedGroupValue,
-//     selectedIndicator
-//   );
+  //   console.log(
+  //     "dropdown items",
+  //     selectedDeviceValue,
+  //     selectedGroupValue,
+  //     selectedIndicator
+  //   );
   React.useEffect(() => {
     const getGroups = async () => {
       let response = await getAllGropus();
@@ -179,13 +179,13 @@ const EditPolicyDrawer = (props: any) => {
           label: item.name,
           value: item._id,
         }));
-    //   console.log("----", groupValues);
+      //   console.log("----", groupValues);
     };
     getGroups();
     const getIndicators = async () => {
       let response = await getIndicatorMapper();
       const modifiedData = replaceDotsWithUnderscores(response.result);
-    //   console.log("mod data--------", modifiedData);
+      //   console.log("mod data--------", modifiedData);
       const groupValues =
         modifiedData &&
         modifiedData.map((item: any) => ({
@@ -194,7 +194,7 @@ const EditPolicyDrawer = (props: any) => {
         }));
       setIndicatorsData(groupValues);
       setAllindicatorData(modifiedData);
-    //   console.log("----indicators", response);
+      //   console.log("----indicators", response);
     };
     getIndicators();
     const getDevices = async () => {
@@ -281,7 +281,7 @@ const EditPolicyDrawer = (props: any) => {
     console.log("modifiifed payload", modifiedData);
     const editPolicy = async () => {
       let response = await updatePolicy(modifiedData, data._id);
-    //   console.log(response);
+      //   console.log(response);
       if (response.status === "success") {
         props.handleDrawerClose();
         togglegetPolicyApiState();
@@ -480,7 +480,7 @@ const EditPolicyDrawer = (props: any) => {
     >
       <div className="h-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-5 border-b border-b-textColor dark:border-b-dark-border">
-          <p className="text-primary2 font-semibold">Add Policy</p>
+          <p className="text-primary2 font-semibold">Edit Policy</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
             onClick={props.handleDrawerClose}
