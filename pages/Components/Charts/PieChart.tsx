@@ -18,7 +18,7 @@ const PieChartComponent = (props: any) => {
   }, []);
   const morphData = (data: any) => {
     const initialData = data?.result || [];
-    const groupBy = "interface";
+    const groupBy = data["group.by"];
     const totalGroupsKeys: any = {};
     if (groupBy != "device") {
       initialData.filter((item: any) => {

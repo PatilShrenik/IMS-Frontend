@@ -84,7 +84,7 @@ const AddWidgetDrawer = (props: any) => {
                 />
               </div>
             </div>
-            <div className="py-6 px-6">
+            <div className="py-6 px-6 dark:bg-dark-menu-color">
               <Box>
                 {/* <TabList
                   onChange={handleChange}

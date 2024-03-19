@@ -196,7 +196,7 @@ const EditGridWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );

@@ -78,63 +78,63 @@ const SidebarMenu = () => {
       pathName: "/alerts",
     },
 
-    {
-      name: "Topology",
-      pathName: "/topology",
-    },
-    {
-      name: "Explorer",
-      pathName: "/explorer",
-      subMenu: [
-        {
-          subMenuName: "Metric",
-          subMenuPathName: "/Explorer/metric",
-        },
-        {
-          subMenuName: "Flow",
-          subMenuPathName: "/Explorer/flow",
-        },
-      ],
-    },
-    {
-      name: "Reports",
-      pathName: "/reports",
-    },
+    // {
+    //   name: "Topology",
+    //   pathName: "/topology",
+    // },
+    // {
+    //   name: "Explorer",
+    //   pathName: "/explorer",
+    //   subMenu: [
+    //     {
+    //       subMenuName: "Metric",
+    //       subMenuPathName: "/Explorer/metric",
+    //     },
+    //     {
+    //       subMenuName: "Flow",
+    //       subMenuPathName: "/Explorer/flow",
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: "Reports",
+    //   pathName: "/reports",
+    // },
 
-    {
-      name: "Diagnostics",
-      pathName: "/diagnostics",
-      subMenu: [
-        {
-          subMenuName: "Ping",
-          subMenuPathName: "/Diagnostics/ping",
-        },
-        {
-          subMenuName: "SNMP",
-          subMenuPathName: "/Diagnostics/snmp",
-        },
-        {
-          subMenuName: "SSH",
-          subMenuPathName: "/Diagnostics/ssh",
-        },
-        {
-          subMenuName: "TCPDUMP",
-          subMenuPathName: "/Diagnostics/tcpdump",
-        },
-        {
-          subMenuName: "API",
-          subMenuPathName: "/Diagnostics/api",
-        },
-        {
-          subMenuName: "Traceroute",
-          subMenuPathName: "/Diagnostics/traceroute",
-        },
-      ],
-    },
-    {
-      name: "NCM",
-      pathName: "/ncm",
-    },
+    // {
+    //   name: "Diagnostics",
+    //   pathName: "/diagnostics",
+    //   subMenu: [
+    //     {
+    //       subMenuName: "Ping",
+    //       subMenuPathName: "/Diagnostics/ping",
+    //     },
+    //     {
+    //       subMenuName: "SNMP",
+    //       subMenuPathName: "/Diagnostics/snmp",
+    //     },
+    //     {
+    //       subMenuName: "SSH",
+    //       subMenuPathName: "/Diagnostics/ssh",
+    //     },
+    //     {
+    //       subMenuName: "TCPDUMP",
+    //       subMenuPathName: "/Diagnostics/tcpdump",
+    //     },
+    //     {
+    //       subMenuName: "API",
+    //       subMenuPathName: "/Diagnostics/api",
+    //     },
+    //     {
+    //       subMenuName: "Traceroute",
+    //       subMenuPathName: "/Diagnostics/traceroute",
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: "NCM",
+    //   pathName: "/ncm",
+    // },
     {
       name: "Audit",
       pathName: "/audit",
@@ -165,10 +165,10 @@ const SidebarMenu = () => {
               subMenuDropdownname: "Password Settings",
               subMenuDropdownpathName: "/Settings/user-settings/password",
             },
-            {
-              subMenuDropdownname: "LDAP",
-              subMenuDropdownpathName: "/Settings/user-settings/ldap",
-            },
+            // {
+            //   subMenuDropdownname: "LDAP",
+            //   subMenuDropdownpathName: "/Settings/user-settings/ldap",
+            // },
           ],
         },
 
@@ -177,19 +177,19 @@ const SidebarMenu = () => {
           subMenuIcon: <SettingsSystemDaydreamIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-            {
-              subMenuDropdownname: "Global Settings",
-              subMenuDropdownpathName:
-                "/Settings/system-settings/global-settings",
-            },
+            // {
+            //   subMenuDropdownname: "Global Settings",
+            //   subMenuDropdownpathName:
+            //     "/Settings/system-settings/global-settings",
+            // },
             {
               subMenuDropdownname: "Mail Server",
               subMenuDropdownpathName: "/Settings/system-settings/mail-server",
             },
-            {
-              subMenuDropdownname: "SMS Server",
-              subMenuDropdownpathName: "/Settings/system-settings/sms-server",
-            },
+            // {
+            //   subMenuDropdownname: "SMS Server",
+            //   subMenuDropdownpathName: "/Settings/system-settings/sms-server",
+            // },
           ],
         },
 
@@ -198,10 +198,10 @@ const SidebarMenu = () => {
           subMenuIcon: <PolicyIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
-            {
-              subMenuDropdownname: "Alarm",
-              subMenuDropdownpathName: "/Settings/policy/alarm",
-            },
+            // {
+            //   subMenuDropdownname: "Alarm",
+            //   subMenuDropdownpathName: "/Settings/policy/alarm",
+            // },
             {
               subMenuDropdownname: "Policy",
               subMenuDropdownpathName: "/Settings/policy/policy",
@@ -219,11 +219,11 @@ const SidebarMenu = () => {
               subMenuDropdownpathName:
                 "/Settings/device-settings/credential-profile",
             },
-            {
-              subMenuDropdownname: "Site Management",
-              subMenuDropdownpathName:
-                "/Settings/device-settings/site-management",
-            },
+            // {
+            //   subMenuDropdownname: "Site Management",
+            //   subMenuDropdownpathName:
+            //     "/Settings/device-settings/site-management",
+            // },
             {
               subMenuDropdownname: "Profiles",
               subMenuDropdownpathName: "/Settings/device-settings/profiles",
@@ -252,21 +252,21 @@ const SidebarMenu = () => {
             },
           ],
         },
-        {
-          subMenuName: "Traffic",
-          subMenuIcon: <TrafficIcon />,
-          // subMenuPathName: "/page/systemSetting",
-          subMenuDropdown: [
-            {
-              subMenuDropdownname: "Flow",
-              subMenuDropdownpathName: "/Settings/traffic/flow",
-            },
-            {
-              subMenuDropdownname: "Trap",
-              subMenuDropdownpathName: "/Settings/traffic/trap",
-            },
-          ],
-        },
+        // {
+        //   subMenuName: "Traffic",
+        //   subMenuIcon: <TrafficIcon />,
+        //   // subMenuPathName: "/page/systemSetting",
+        //   subMenuDropdown: [
+        //     {
+        //       subMenuDropdownname: "Flow",
+        //       subMenuDropdownpathName: "/Settings/traffic/flow",
+        //     },
+        //     {
+        //       subMenuDropdownname: "Trap",
+        //       subMenuDropdownpathName: "/Settings/traffic/trap",
+        //     },
+        //   ],
+        // },
         {
           subMenuName: "Schedular",
           subMenuIcon: <ScheduleIcon />,
@@ -277,10 +277,10 @@ const SidebarMenu = () => {
               subMenuDropdownpathName:
                 "/Settings/schedular/discovery-schedular",
             },
-            {
-              subMenuDropdownname: "Report Schedular",
-              subMenuDropdownpathName: "/Settings/schedular/report-schedular",
-            },
+            // {
+            //   subMenuDropdownname: "Report Schedular",
+            //   subMenuDropdownpathName: "/Settings/schedular/report-schedular",
+            // },
           ],
         },
       ],
@@ -437,7 +437,7 @@ const SidebarMenu = () => {
               )}
             </ul>
             {/* <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" /> */}
-            <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
+            <div className="absolute left-0 top-0 min-h-full w-[3px] bg-gradient-to-r from-[#B3B6B7] dark:from-black to-transparent before:content-[''] before:block before:absolute before:h-full before:w-3 before:left-0 before:top-0 before:z-0" />
           </div>
         ) : (
           ""

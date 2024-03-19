@@ -15,7 +15,7 @@ import { getAllGropus } from "../api/api/GroupsAPI";
 import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper } from "../api/api/MiscAPI";
+import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -23,7 +23,7 @@ import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import LineChartComponent from "../Components/Charts/LineChart";
-import TimeRangePicker from "../Components/TimeRangePicker";
+import TimeRangePicker from "../Components/Timerangepicker";
 
 const ChartWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
@@ -284,7 +284,7 @@ const ChartWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );
@@ -447,8 +447,8 @@ const ChartWidget = (props: any) => {
     setDropdowns(updatedDropdowns);
   };
 
-  const handleDateRangeChange = (event: any) => {
-    console.log("date event", event);
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
     let updatedPayload: any = { ...data };
 
     if (event.label !== "custom") {
@@ -470,17 +470,8 @@ const ChartWidget = (props: any) => {
         end_timestamp: endepochTime,
       };
     }
-    console.log("updated payload", updatedPayload);
+    // console.log("updated payload", updatedPayload);
     setData(updatedPayload);
-    // console.log("Selected Date Range:", value);
-    // const start = value[0].getTime() / 1000;
-    // const end = value[1].getTime() / 1000;
-    // console.log(start, end);
-    // setTimePeriod({
-    //   ...timePeriod,
-    //   start_timestamp: start,
-    //   end_timestamp: end,
-    // });
   };
 
   useEffect(() => {
@@ -538,20 +529,20 @@ const ChartWidget = (props: any) => {
         // modifiedData.userName = "admin";
 
         // console.log("chart data", modifiedData);
-        // let response = await addChartWidget(modifiedData);
-        // if (response.status === "success") {
-        //   toast.success(response.status, {
-        //     position: "bottom-right",
-        //     autoClose: 1000,
-        //   });
-        //   handleAddDrawerClose();
-        // } else {
-        //   toast.error(response.message, {
-        //     position: "bottom-right",
-        //     autoClose: 2000,
-        //   });
-        // }
-        // toggleWidgetApiState();
+        let response = await addChartWidget(modifiedData);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          handleAddDrawerClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        toggleWidgetApiState();
       };
       addWidget();
     } catch (error) {
@@ -585,10 +576,10 @@ const ChartWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         />
-        <DateRangePicker
+        {/* <DateRangePicker
           placement="bottomStart"
           value={timePeriod}
-          onChange={handleDateRangeChange}
+          onChange={handleDate}
           appearance="subtle"
           ranges={predefinedRanges}
           // showOneCalendar
@@ -604,7 +595,10 @@ const ChartWidget = (props: any) => {
           placeholder="Select Date Range"
           format="yyyy-MM-dd"
           className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-        />
+        /> */}
+        <div className="h-max mt-[1.20rem]">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"

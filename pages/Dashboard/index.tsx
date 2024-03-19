@@ -8,6 +8,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import { Pagination } from "@mui/material";
+import SsidChartIcon from "@mui/icons-material/SsidChart";
+import SpeedIcon from "@mui/icons-material/Speed";
+import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
@@ -31,6 +34,7 @@ import "../../node_modules/react-resizable/css/styles.css";
 import "../../node_modules/react-grid-layout/css/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
+import CustomPagination from "../Components/CustomePagination";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -300,7 +304,7 @@ const index = () => {
         <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
           <div className="container h-full bg-white dark:bg-dark-container">
             <div className="flex border-b  justify-between py-3">
-              <span className="px-4 font-bold dark:text-textColor">
+              <span className="px-4 font-bold dark:text-textColor text-primary2">
                 {" "}
                 Add Widget
               </span>
@@ -363,6 +367,9 @@ const index = () => {
                         </th>
 
                         <th scope="col" className="px-2 py-2 0">
+                          Widget Description
+                        </th>
+                        <th scope="col" className="px-2 py-2 0">
                           Widget Type
                         </th>
 
@@ -386,7 +393,17 @@ const index = () => {
                             </td>
 
                             <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
-                              {row.widget_type}
+                              {row.description ? row.description : "-"}
+                            </td>
+                            <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
+                              {row.widget_type == "chart" ? (
+                                <SsidChartIcon />
+                              ) : row.widget_type == "topN" ||
+                                row.widget_type == "grid" ? (
+                                <TableChartOutlinedIcon  />
+                              ) : (
+                                <SpeedIcon />
+                              )}
                             </td>
 
                             <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
@@ -398,16 +415,7 @@ const index = () => {
                   </table>
                 </div>
                 <div className="flex flex-row-reverse ">
-                  {/* <Pagination
-                    count={Math.ceil(
-                      widgets && widgets.length / ITEMS_PER_PAGE
-                    )}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    variant="outlined"
-                    shape="rounded"
-                    className="mt-4 mb-4"
-                  /> */}
+                  {/* <CustomPagination /> */}
                 </div>
               </div>
             </div>

@@ -15,7 +15,7 @@ import { getAllGropus } from "../api/api/GroupsAPI";
 import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper } from "../api/api/MiscAPI";
+import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -23,6 +23,7 @@ import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
+import TimeRangePicker from "../Components/Timerangepicker";
 
 const GaugeWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
@@ -216,7 +217,7 @@ const GaugeWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );
@@ -379,16 +380,31 @@ const GaugeWidget = (props: any) => {
     setDropdowns(updatedDropdowns);
   };
 
-  const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range:", value);
-    const start = value[0].getTime() / 1000;
-    const end = value[1].getTime() / 1000;
-    console.log(start, end);
-    setTimePeriod({
-      ...timePeriod,
-      start_timestamp: start,
-      end_timestamp: end,
-    });
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
   };
 
   useEffect(() => {
@@ -493,28 +509,9 @@ const GaugeWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        {/* <CustomProvider theme="dark"> */}
-        <DateRangePicker
-          placement="bottomStart"
-          value={timePeriod}
-          onChange={handleDateRangeChange}
-          appearance="subtle"
-          ranges={predefinedRanges}
-          // showOneCalendar
-          style={{
-            margin: "1rem 1rem",
-            width: "18rem",
-            height: "max-content",
-            border:
-              colorTheme == "light" ? "1px solid #e5e7eb" : "1px solid #3C3C3C",
-            padding: ".4rem",
-          }}
-          // shouldDisableDate={afterToday()}
-          placeholder="Select Date Range"
-          format="yyyy-MM-dd"
-          className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-        />
-        {/* </CustomProvider> */}
+        <div className="h-max mt-[1.25rem]">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"

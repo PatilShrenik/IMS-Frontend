@@ -20,7 +20,7 @@ const GridWidgetTabel = (props: any) => {
   function morphData(data: any) {
     const initialData = data?.result || [];
     if (initialData[0]) {
-      const groupBy = "indicator";
+      const groupBy = data["group.by"]
       const totalGroupsKeys: any = {};
       let cols: any = [];
       cols.push({

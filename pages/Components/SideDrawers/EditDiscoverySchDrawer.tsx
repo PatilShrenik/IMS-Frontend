@@ -355,35 +355,36 @@ const EditDiscoverySchDrawer = (props: any) => {
     console.log("modifiedData for discovery", modifiedData);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
-    // let response = await updateDiscSch(modifiedData, id);
-    // // console.log("updated", response);
-    // if (response.status == "success") {
-    //   togglegetDisSchedApiState();
-    //   handleDrawerClose();
-    //   toast.success(response.status, {
-    //     position: "bottom-right",
-    //     autoClose: 1000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "colored",
-    //     transition: Bounce,
-    //   });
-    // } else {
-    //   toast.error(response.message, {
-    //     position: "bottom-right",
-    //     autoClose: 2000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "colored",
-    //     transition: Bounce,
-    //   });
-    // }
+    1;
+    let response = await updateDiscSch(modifiedData, id);
+    // console.log("updated", response);
+    if (response.status == "success") {
+      togglegetDisSchedApiState();
+      handleDrawerClose();
+      toast.success(response.status, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    } else {
+      toast.error(response.message, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
   };
 
   return (

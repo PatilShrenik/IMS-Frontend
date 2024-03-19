@@ -142,6 +142,7 @@ const TimeRangePicker = (props: any) => {
             : predefinedBottomRanges.find((val: any) => val.text === props.text)
                 ?.value
         }
+        className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
       />
     </Stack>
   );

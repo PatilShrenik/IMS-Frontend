@@ -62,6 +62,7 @@
     "multiselect-react-dropdown": "^2.0.25",
     "next": "13.4.19",
     "next-progress": "^2.3.1",
+    "node-fetch": "^3.3.2",
     "postcss": "8.4.28",
     "react": "18.2.0",
     "react-data-table-component": "^7.6.2",

@@ -28,7 +28,7 @@ export const getIndicatorMapperMetric = async () => {
   let res: any;
   try {
     res = await fetch(
-      baseURL + "/api/v1/default/misc/indicator-mapper/metrics",
+      baseURL + "/api/v1/default/misc/indicator-mapper/metric",
       {
         method: "GET",
         // body: JSON.stringify(props),
