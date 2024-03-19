@@ -491,7 +491,7 @@ const DiscoverySchedularTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data && (
+        {data  && data.length > 0 ? (
           <div className="">
             <div
               className=""
@@ -717,6 +717,11 @@ const DiscoverySchedularTable = (props: any) => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             /> */}
             </div>
+          </div>
+        ) : (
+
+          <div className="w-full justify-center dark:text-textColor">
+            No Data
           </div>
         )}
       </div>

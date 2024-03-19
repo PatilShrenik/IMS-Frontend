@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 import {
+  replaceDotWithUnderscore2,
   replaceDotsWithUnderscores,
+  replaceDotsWithUnderscoresSec,
   replacePeriodsWithUnderscores,
   replacePeriodsWithUnderscoresnested,
   replaceUnderscoresWithDotsNested,
@@ -30,16 +32,11 @@ const DiscoverySchedular = () => {
         let response = await getAllDiscoverySch();
         console.log("discover Scheduler data response ", response.result);
         const modifiedData = replaceDotsWithUnderscores(response.result);
-        console.log("modifified data", modifiedData);
-        // const newData = modifiedData && modifiedData.map((item: any) => {
-        //   const entitiesArray = Object.values(item.entities);
-        //   const emailArray = Object.values(item.email || {});
-
-        //   return { ...item, entities: entitiesArray, email: emailArray };
-        // });
-        const col = Object.keys(modifiedData[0]);
+        console.log("modifified All data", modifiedData);
+ 
+        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        console.log("filtered cols----------------", filteredCols);
+   //     console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
@@ -64,7 +61,7 @@ const DiscoverySchedular = () => {
             }
           }
         });
-        console.log("cols", cols);
+      //  console.log("cols", cols);
         setColumns(cols);
 
         const hiddenColumnsValues = [
@@ -80,14 +77,13 @@ const DiscoverySchedular = () => {
         ];
 
         setVisibleColumns(
-          cols
+        cols &&  cols
             .map((column: any) => column.field)
             .filter((field: any) => !hiddenColumnsValues.includes(field))
         );
 
         setData(modifiedData);
-        //setData(newData);
-        // console.log("newData-----", data);
+      
       };
       getData();
     } catch (error) {
