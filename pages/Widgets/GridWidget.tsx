@@ -11,6 +11,7 @@ import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
+import { v4 as uuidv4 } from "uuid";
 import { getAllGropus } from "../api/api/GroupsAPI";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
@@ -20,76 +21,13 @@ import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import GridWidgetTabel from "../Components/Charts/GridWidgetTabel";
 
 const GridWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-  const granuality_time = [
-    {
-      name: "All",
-      id: "all",
-    },
-    {
-      name: "None",
-      id: "none",
-    },
-    {
-      name: "Second",
-      id: "second",
-    },
-    {
-      name: "Minute",
-      id: "minute",
-    },
-    {
-      name: "Five Minute",
-      id: "five_minute",
-    },
-    {
-      name: "Tem Minute",
-      id: "ten_minute",
-    },
-    {
-      name: "Fifteen Minute",
-      id: "fifteen_minute",
-    },
-    {
-      name: "Thirty Minute",
-      id: "thirty_minute",
-    },
-    {
-      name: "Hour",
-      id: "hour",
-    },
-    {
-      name: "Six Hour",
-      id: "six_hour",
-    },
-    {
-      name: "Eight Hour",
-      id: "eight_hour",
-    },
-    {
-      name: "Day",
-      id: "day",
-    },
-    {
-      name: "Week",
-      id: "week",
-    },
-    {
-      name: "Month",
-      id: "month",
-    },
-    {
-      name: "Quarter",
-      id: "quarter",
-    },
-    {
-      name: "Year",
-      id: "year",
-    },
-  ];
+
   const options = ["Metric"];
 
   const [timePeriod, setTimePeriod] = useState({
@@ -124,7 +62,7 @@ const GridWidget = (props: any) => {
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
     group_by: "",
-    time_range: "custome",
+    time_range: "custom",
     start_timestamp: "",
     end_timestamp: "",
     filters: {
@@ -134,6 +72,12 @@ const GridWidget = (props: any) => {
       },
     },
   });
+
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
+
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -455,6 +399,31 @@ const GridWidget = (props: any) => {
     setData({ ...data, group_by: value });
   };
 
+  function getWidgetData(data: any) {
+    // if (pageID == data.pageID) {
+    console.log("widget data", data, pageID);
+    setQueryOutput(data);
+    // }
+  }
+
+  useEffect(() => {
+    Subscribe("ChartReport-" + pageID, eventType, getWidgetData);
+    return () => {
+      unsubscribe("ChartReport-" + pageID, eventType);
+    };
+  }, []);
+
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+
+    emit(eventType, modified);
+  };
+
   const handleSave = () => {
     // console.log("chart data", data);
     try {
@@ -517,30 +486,28 @@ const GridWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        {/* <CustomProvider theme="dark"> */}
+        <DateRangePicker
+          placement="bottomStart"
+          value={timePeriod}
+          onChange={handleDateRangeChange}
+          appearance="subtle"
+          ranges={predefinedRanges}
+          // showOneCalendar
+          style={{
+            margin: "1rem 1rem",
+            width: "18rem",
+            height: "max-content",
+            border:
+              colorTheme == "light" ? "1px solid #e5e7eb" : "1px solid #3C3C3C",
+            padding: ".4rem",
+          }}
+          // shouldDisableDate={afterToday()}
+          placeholder="Select Date Range"
+          format="yyyy-MM-dd"
+          className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+        />
+        {/* </CustomProvider> */}
         <div>
           <SecSingleSelect
             label="Indicator Group"
@@ -552,12 +519,20 @@ const GridWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12  p-8 dark:text-textColor">
+              <GridWidgetTabel data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
-            {dropdowns.map((dropdown, index) => (
+            {dropdowns.map((dropdown : any, index : any) => (
               <div key={index}>
                 <div className="flex">
                   <SecSingleSelect
@@ -728,7 +703,9 @@ const GridWidget = (props: any) => {
             <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Execute" />
+            </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
             </div>

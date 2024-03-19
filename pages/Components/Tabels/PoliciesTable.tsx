@@ -86,71 +86,6 @@ const PoliciesTable = (props: any) => {
       id: item._id,
     }));
 
-  //   useEffect(() => {
-  //     try {
-  //       const getData = async () => {
-  //         let cols: any = [];
-  //         let response = await getAllCredsProfile();
-  //         const modifiedData = replacePeriodsWithUnderscores(response.result);
-  //         console.log("modifidData", modifiedData);
-  //         const col = Object.keys(modifiedData[0]);
-  //         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-  //         console.log("filtered cols", filteredCols);
-  //         filteredCols.filter((key: any) => {
-  //           if (!key.startsWith("_")) {
-  //             if (key == "credential_context") {
-  //               cols.push({
-  //                 field: "snmp_community",
-  //                 headerName: "SNMP Comm.",
-  //                 minWidth: 80,
-  //               });
-  //               cols.push({
-  //                 field: "snmp_version",
-  //                 headerName: "SNMP Version",
-  //                 minWidth: 80,
-  //               });
-  //             } else if (key == "device_ids") {
-  //               cols.push({
-  //                 field: "device_ids",
-  //                 headerName: "Devices",
-  //                 minWidth: 150,
-  //               });
-  //             } else {
-  //               cols.push({
-  //                 field: key.replace(/\./g, "_"),
-  //                 headerName: key.replace(/\./g, " "),
-  //                 minWidth: 110,
-  //               });
-  //             }
-  //           }
-  //         });
-
-  //         console.log("cols", cols);
-  //         setColumns(cols);
-  //         console.log("rows", modifiedData);
-  //         const hiddenColumnsValues = [
-  //           "snmp_community",
-  //           "snmp_version",
-  //           "created_by",
-  //           "created_on",
-  //           "updated_by",
-  //           "updated_on",
-  //         ];
-
-  //         setVisibleColumns(
-  //           cols
-  //             .map((column: any) => column.field)
-  //             .filter((field: any) => !hiddenColumnsValues.includes(field))
-  //         );
-
-  //         setData(modifiedData);
-  //       };
-  //       getData();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, []);
-
   const handleRequestSort = (property: any) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -349,40 +284,44 @@ const PoliciesTable = (props: any) => {
       const entity_type = row.entity_type;
       //   console.log("entitytype", entity_type);
       if (entity_type === "GROUP") {
-        const groupId = row.entities;
-        // Find the corresponding object in groupValues array
-        // const matchingGroup: any = groupValues.find(
-        //   (group: any) => group.id === groupId[0]
-        // );
-        // console.log("entities", matchingGroup.name);
-        const matchingNames: string[] = groupId.map((id: any) => {
-          const matchingGroup: any =
-            groupValues && groupValues.find((group: any) => group.id === id);
-          //   return matchingGroup ? matchingGroup.name : null;
-        });
-        // console.log("groups", matchingNames);
-        return <Chips value={row.entities?.length} />;
-        //     <>
-        //     <div
-        //       className={`${row.entities?.length > 0 ? "cursor-pointer" : ""}`}
-        //       onClick={
-        //         row.entities?.length > 0
-        //           ? () => handleClickOpen(deviceIds)
-        //           : undefined
-        //       }
-        //     >
-        //       <Chips value={deviceIds.length} />
-        //     </div>
-        //     <DeviceDetailsModal
-        //       open={dialogOpen === deviceIds}
-        //       handleDialogClose={handleDialogClose}
-        //       device_ids={deviceIds}
-        //     />
-        //   </>
+        const groupId = row[column.field] && row[column.field];
 
-        // console.log("entities", matchingNames);
+        const matchingGroup: any = groupValues.find(
+          (group: any) => group.id === groupId[0]
+        );
+        console.log(groupId[0]);
+
+        return (
+          <Tooltip
+            TransitionComponent={Zoom}
+            // title={matchingGroup}
+            title="jdbbd"
+            placement="right"
+          >
+            <Chips value={row.entities?.length} />
+          </Tooltip>
+        );
       } else if (entity_type === "DEVICE") {
-        return row.entities ? <Chips value={row.entities?.length} /> : "-";
+        const deviceIds = row[column.field];
+        return (
+          <>
+            <div
+              className={`${deviceIds.length > 0 ? "cursor-pointer" : ""}`}
+              onClick={
+                deviceIds.length > 0
+                  ? () => handleClickOpen(deviceIds)
+                  : undefined
+              }
+            >
+              <Chips value={deviceIds.length} />
+            </div>
+            <DeviceDetailsModal
+              open={dialogOpen === deviceIds}
+              handleDialogClose={handleDialogClose}
+              device_ids={deviceIds}
+            />
+          </>
+        );
       }
     } else if (column.field == "threshold") {
       const { critical, major, warning } = row.threshold;

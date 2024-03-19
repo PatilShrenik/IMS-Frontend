@@ -102,7 +102,7 @@ const index = () => {
     });
   }, [addToDashboard]);
 
-  console.log("layout dummy", layoutsDummy);
+  // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -298,7 +298,7 @@ const index = () => {
         </div>
 
         <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
-          <div className="container h-full bg-light-container dark:bg-dark-container">
+          <div className="container h-full bg-white dark:bg-dark-container">
             <div className="flex border-b  justify-between py-3">
               <span className="px-4 font-bold dark:text-textColor">
                 {" "}

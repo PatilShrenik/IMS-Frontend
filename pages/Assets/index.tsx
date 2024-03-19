@@ -76,11 +76,11 @@ const Assets = () => {
                 //   headerName: "plugin_Avl.",
                 //   minWidth: 120,
                 // });
-                cols.push({
-                  field: "timestamp",
-                  headerName: "timestamp",
-                  minWidth: 120,
-                });
+                // cols.push({
+                //   field: "timestamp",
+                //   headerName: "timestamp",
+                //   minWidth: 120,
+                // });
               } else if (key == "hostname") {
                 cols.unshift({
                   field: key.replace(/\./g, "_"),
@@ -149,9 +149,9 @@ const Assets = () => {
         });
         // }
 
-        // console.log("cols", cols);
+        console.log("cols", cols);
         setColumns(cols);
-        // console.log("rows", modifiedData);
+        console.log("rows", modifiedData);
         const hiddenColumnsValues = [
           // "alias",
           "discovery_schedulers",

@@ -15,6 +15,7 @@ import {
   updateDiscSch,
 } from "@/pages/api/api/DiscoveryScheduleAPI";
 import {
+  isObjectEqual,
   replaceDotsWithUnderscores,
   replaceDotsWithUnderscoresSec,
   replaceUnderscoresWithDots,
@@ -38,6 +39,7 @@ const EditDiscoverySchDrawer = (props: any) => {
   const [date, setDate] = React.useState<any>([]);
   const [selectedDeviceValue, setSelectedDeviceValue] = React.useState<any>([]);
   const [selectedTimeValue, setSelectedTimeValue] = React.useState<any>([]);
+  const [schedulerContext, setSchedulerContext] = useState({}) as any;
   const [selectedDaysValue, setSelectedDaysValue] = React.useState<any>([]);
   const [selectedDatesValue, setSelectedDatesValue] = React.useState<any>([]);
   const { themeSwitch, togglegetDisSchedApiState } = useAppContext();
@@ -96,42 +98,41 @@ const EditDiscoverySchDrawer = (props: any) => {
         const getDiscoveryShById = async () => {
           console.log("edit id----", id);
           let response = await getDiscoverySchById(id);
-            console.log("-----result", response.result);
+          console.log("-----result", response.result);
           const modifiedData = replaceDotsWithUnderscoresSec(response.result);
           console.log("mod data----", modifiedData);
-          
+
           const entitiesArray =
-          modifiedData && Object.values(modifiedData.entities || {});
+            modifiedData && Object.values(modifiedData.entities || {});
           modifiedData.entities = entitiesArray;
           const emailArray =
             modifiedData && Object.values(modifiedData.email || {});
           modifiedData.email = emailArray;
 
           const daysArray =
-          modifiedData &&
-          modifiedData.scheduler_context.days_of_week &&
-          Object.values(modifiedData.scheduler_context.days_of_week || {});
+            modifiedData &&
+            modifiedData.scheduler_context.days_of_week &&
+            Object.values(modifiedData.scheduler_context.days_of_week || {});
           modifiedData.scheduler_context.days_of_week = daysArray && daysArray;
-          
+
           const datesArray =
-          modifiedData &&
-          modifiedData.scheduler_context.days_of_month &&
-          Object.values(modifiedData.scheduler_context.days_of_month || {});
+            modifiedData &&
+            modifiedData.scheduler_context.days_of_month &&
+            Object.values(modifiedData.scheduler_context.days_of_month || {});
 
           modifiedData.scheduler_context.days_of_month =
-          datesArray && datesArray;
-          
-          
-          
+            datesArray && datesArray;
+
           const schTimeArray =
-          modifiedData &&
-          modifiedData.scheduler_context.scheduled_times &&
-          Object.values(modifiedData.scheduler_context.scheduled_times || {});
-          
+            modifiedData &&
+            modifiedData.scheduler_context.scheduled_times &&
+            Object.values(modifiedData.scheduler_context.scheduled_times || {});
+
           modifiedData.scheduler_context.scheduled_times =
-          schTimeArray && schTimeArray;
+            schTimeArray && schTimeArray;
           setData(modifiedData);
-          
+
+          setSchedulerContext(modifiedData.scheduler_context);
           schTimeArray && setSelectedTimeValue(schTimeArray);
           daysArray && setSelectedDaysValue(daysArray);
           datesArray && setSelectedDatesValue(datesArray);
@@ -150,18 +151,25 @@ const EditDiscoverySchDrawer = (props: any) => {
       }
     }
   }, [id, open]);
- // console.log("device",data.scheduler_context.start_date);
+
+  useEffect(() => {
+    console.log("schedulr context", schedulerContext);
+  }, [schedulerContext]);
+  // console.log("device",data.scheduler_context.start_date);
   useEffect(() => {
     if (data && data.entity_type === "DEVICE") {
       data.entities && setSelectedDeviceValue(data.entities);
     }
     if (data && data.entity_type === "GROUP") {
-      data.entities &&  setSelectedGroupValue(data.entities);
+      data.entities && setSelectedGroupValue(data.entities);
     }
     if (data && data.scheduler_context) {
-      data.scheduler_context.days_of_week && setSelectedDaysValue(data.scheduler_context.days_of_week);
-      data.scheduler_context.days_of_month &&  setSelectedDatesValue(data.scheduler_context.days_of_month);
-      data.scheduler_context.scheduled_times &&  setSelectedTimeValue(data.scheduler_context.scheduled_times)
+      data.scheduler_context.days_of_week &&
+        setSelectedDaysValue(data.scheduler_context.days_of_week);
+      data.scheduler_context.days_of_month &&
+        setSelectedDatesValue(data.scheduler_context.days_of_month);
+      data.scheduler_context.scheduled_times &&
+        setSelectedTimeValue(data.scheduler_context.scheduled_times);
     }
   }, [data]);
 
@@ -174,9 +182,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     // handleStorageChange();
   }, [themeSwitch]);
 
-
   React.useEffect(() => {
-   
     const time = generateTimeArray();
     const transformedArray = time.map((time) => ({
       value: time,
@@ -194,7 +200,6 @@ const EditDiscoverySchDrawer = (props: any) => {
       setAllDevices(response.result);
     };
     getDevices();
-  
   }, []);
 
   const generateTimeArray = () => {
@@ -292,13 +297,12 @@ const EditDiscoverySchDrawer = (props: any) => {
           ...restSchedulerContext,
           days_of_week: selectedDaysValue,
         };
-       
+
         return {
           ...prevState,
           scheduler_context: updatedSchedulerContext,
         };
       });
-      
     } else if (value === "MONTHLY") {
       setData((prevState: any) => {
         const { days_of_week, ...restSchedulerContext } =
@@ -326,12 +330,12 @@ const EditDiscoverySchDrawer = (props: any) => {
       },
     }));
   };
-//console.log("df",data.scheduler_context.start_date);  
+  //console.log("df",data.scheduler_context.start_date);
   const handleDate = (values: any) => {
-    console.log("val==",values);
+    console.log("val==", values);
     const date = new Date(values);
-    const epochTime = date.getTime() / 1000; 
-     //   console.log("date------------",epochTime);
+    const epochTime = date.getTime() / 1000;
+    //   console.log("date------------",epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -343,39 +347,43 @@ const EditDiscoverySchDrawer = (props: any) => {
 
   const handleSave = async (event: any) => {
     event.preventDefault();
+    const areEqual = isObjectEqual(data.scheduler_context, schedulerContext);
+    if (!areEqual) {
+      data.scheduler_context_updated = "yes";
+    }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("======", modifiedData);
+    console.log("modifiedData for discovery", modifiedData);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
-    let response = await updateDiscSch(modifiedData, id);
-    // console.log("updated", response);
-    if (response.status == "success") {
-      togglegetDisSchedApiState();
-      handleDrawerClose();
-      toast.success(response.status, {
-        position: "bottom-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
-      });
-    } else {
-      toast.error(response.message, {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
-      });
-    }
+    // let response = await updateDiscSch(modifiedData, id);
+    // // console.log("updated", response);
+    // if (response.status == "success") {
+    //   togglegetDisSchedApiState();
+    //   handleDrawerClose();
+    //   toast.success(response.status, {
+    //     position: "bottom-right",
+    //     autoClose: 1000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "colored",
+    //     transition: Bounce,
+    //   });
+    // } else {
+    //   toast.error(response.message, {
+    //     position: "bottom-right",
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "colored",
+    //     transition: Bounce,
+    //   });
+    // }
   };
 
   return (
@@ -421,7 +429,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   aria-label="Basic button group"
                   className="my-4 mx-4 "
                 >
-                      <Button
+                  <Button
                     className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
                       activeButton == "DEVICE" &&
                       "bg-primary2 hover:bg-primary2 text-white"
@@ -463,8 +471,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Devices"
                     isMulti={true}
-                    value={deviceValues.filter((option) => selectedDeviceValue &&
-                      selectedDeviceValue.includes(option.value)
+                    value={deviceValues.filter(
+                      (option) =>
+                        selectedDeviceValue &&
+                        selectedDeviceValue.includes(option.value)
                     )}
                     selectData={deviceValues}
                     onChange={handleEntities}
@@ -473,8 +483,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Groups"
                     isMulti={true}
-                    value={groupValues.filter((option) => selectedGroupValue &&
-                      selectedGroupValue.includes(option.value)
+                    value={groupValues.filter(
+                      (option) =>
+                        selectedGroupValue &&
+                        selectedGroupValue.includes(option.value)
                     )}
                     selectData={groupValues}
                     onChange={handleEntities}
@@ -484,7 +496,9 @@ const EditDiscoverySchDrawer = (props: any) => {
             </div>
 
             <div>
-              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">Notify To</h5>
+              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
+                Notify To
+              </h5>
               <CustomeInput
                 style={{ marginTop: "10px" }}
                 label="Email"
@@ -510,8 +524,8 @@ const EditDiscoverySchDrawer = (props: any) => {
             <div className="mx-4 py-2">
               <p className="mb-4 font-normal dark:text-textColor">Schedule</p>
               <CustomProvider theme="dark">
-                <DatePicker 
-                onChange={handleDate}
+                <DatePicker
+                  onChange={handleDate}
                   // showOneCalendar
                   value={new Date(data.scheduler_context.start_date * 1000)}
                   appearance="subtle"
@@ -539,7 +553,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   aria-label="Basic button group"
                   className="my-5 mx-4 mr-7"
                 >
-                       <Button
+                  <Button
                     className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
                       frequencyButton == "CUSTOME" &&
                       "bg-primary2 hover:bg-primary2 text-white"
@@ -596,9 +610,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                   label="Select Hours"
                   isMulti={true}
                   width={150}
-                  value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                  selectedTimeValue.includes(day.value)
-                )}
+                  value={timeArray.filter(
+                    (day: { value: any }) =>
+                      selectedTimeValue && selectedTimeValue.includes(day.value)
+                  )}
                   selectData={timeArray}
                   onChange={handleFrequency}
                 />
@@ -609,9 +624,11 @@ const EditDiscoverySchDrawer = (props: any) => {
                     isMulti={true}
                     width={150}
                     selectData={timeArray}
-                    value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                    selectedTimeValue.includes(day.value)
-                  )}
+                    value={timeArray.filter(
+                      (day: { value: any }) =>
+                        selectedTimeValue &&
+                        selectedTimeValue.includes(day.value)
+                    )}
                     onChange={handleFrequency}
                   />
                   <SingleSelect
@@ -634,8 +651,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                     isMulti={true}
                     width={150}
                     selectData={timeArray}
-                    value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                      selectedTimeValue.includes(day.value)
+                    value={timeArray.filter(
+                      (day: { value: any }) =>
+                        selectedTimeValue &&
+                        selectedTimeValue.includes(day.value)
                     )}
                     onChange={handleFrequency}
                   />
@@ -645,7 +664,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                     width={150}
                     selectData={datesOfMonth}
                     value={datesOfMonth.filter(
-                      (day ) =>
+                      (day) =>
                         selectedDatesValue &&
                         selectedDatesValue.includes(day.value)
                     )}

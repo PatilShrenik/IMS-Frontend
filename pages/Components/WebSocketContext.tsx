@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import { baseURL } from "@/constants";
-// import WebSocket from "@vertx/eventbus-bridge-client.js";
+import WebSocket from "@vertx/eventbus-bridge-client.js";
 // import WebSocket from "./eventbus-bridge-clients.js"
 
 const WebSocketContext = createContext<{
@@ -36,22 +36,22 @@ export const WebSocketContextProvider: React.FC<any> = ({ children }: any) => {
     }
   }
 
-//   useEffect(() => {
-//     // socket.current = new WebSocket(baseURL + "/eventbus", ["websocket"]);
-//     socket.current = new WebSocket(baseURL + "/eventbus", {
-//       transports: "websocket",
-//     });
-//     socket.current.enableReconnect(true);
-//     socket.current.onopen = () => {
-//       console.log("Connection open");
-//       setConnection(true);
-//       socket.current.registerHandler("client.event", Broadcast);
-//     };
-//     socket.current.onclose = () => {
-//       console.log("Connection close");
-//       setConnection(false);
-//     };
-//   }, []);
+  useEffect(() => {
+    // socket.current = new WebSocket(baseURL + "/eventbus", ["websocket"]);
+    socket.current = new WebSocket(baseURL + "/eventbus", {
+      transports: "websocket",
+    });
+    socket.current.enableReconnect(true);
+    socket.current.onopen = () => {
+      console.log("Connection open");
+      setConnection(true);
+      socket.current.registerHandler("client.event", Broadcast);
+    };
+    socket.current.onclose = () => {
+      console.log("Connection close");
+      setConnection(false);
+    };
+  }, []);
 
   function emit(eventType: String, data: any) {
     try {
@@ -68,7 +68,7 @@ export const WebSocketContextProvider: React.FC<any> = ({ children }: any) => {
   }
 
   const Subscribe = (subID: String, eventType: String, callback: any) => {
-    // console.log("PEHLE", subs, subID, eventType)
+    console.log("PEHLE", subs, subID, eventType);
     if (subs[`${eventType}`] && subs[`${eventType}`].length) {
       if (!subs[`${eventType}`].find((item: any) => item.id === subID)) {
         subs[`${eventType}`].push({

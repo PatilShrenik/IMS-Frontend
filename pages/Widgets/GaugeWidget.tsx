@@ -12,10 +12,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
 import { getIndicatorMapper } from "../api/api/MiscAPI";
@@ -24,6 +21,8 @@ import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
 
 const GaugeWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
@@ -62,7 +61,7 @@ const GaugeWidget = (props: any) => {
     datasource: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
-    time_range: "custome",
+    time_range: "custom",
     start_timestamp: "",
     end_timestamp: "",
     filters: {
@@ -73,6 +72,12 @@ const GaugeWidget = (props: any) => {
     },
   };
   const [data, setData] = React.useState<any>(initialState);
+
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
+
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -401,6 +406,31 @@ const GaugeWidget = (props: any) => {
     setData({ ...data, group_by: value });
   };
 
+  function getWidgetData(data: any) {
+    // if (pageID == data.pageID) {
+    console.log("widget data", data, pageID);
+    setQueryOutput(data);
+    // }
+  }
+
+  useEffect(() => {
+    Subscribe("ChartReport-" + pageID, eventType, getWidgetData);
+    return () => {
+      unsubscribe("ChartReport-" + pageID, eventType);
+    };
+  }, []);
+
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+
+    emit(eventType, modified);
+  };
+
   const handleSave = () => {
     // console.log("chart data", data);
     try {
@@ -463,30 +493,28 @@ const GaugeWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        {/* <CustomProvider theme="dark"> */}
+        <DateRangePicker
+          placement="bottomStart"
+          value={timePeriod}
+          onChange={handleDateRangeChange}
+          appearance="subtle"
+          ranges={predefinedRanges}
+          // showOneCalendar
+          style={{
+            margin: "1rem 1rem",
+            width: "18rem",
+            height: "max-content",
+            border:
+              colorTheme == "light" ? "1px solid #e5e7eb" : "1px solid #3C3C3C",
+            padding: ".4rem",
+          }}
+          // shouldDisableDate={afterToday()}
+          placeholder="Select Date Range"
+          format="yyyy-MM-dd"
+          className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+        />
+        {/* </CustomProvider> */}
         <div>
           <SecSingleSelect
             label="Indicator Group"
@@ -498,8 +526,16 @@ const GaugeWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12  p-8 dark:text-textColor">
+              <GaugeWidgetTabel data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
@@ -674,7 +710,9 @@ const GaugeWidget = (props: any) => {
             <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Create & Add" />
+            </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
             </div>

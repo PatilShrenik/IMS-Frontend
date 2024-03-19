@@ -1,58 +1,112 @@
 import React, { useEffect, useRef } from "react";
 import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-// import { getUnBlendedCost } from "@/pages/api/FinopsApi/GetUnblendedCost";
+import NoDataToDisplay from "highcharts/modules/no-data-to-display";
+import HighchartsExporting from "highcharts/modules/exporting";
+import HighchartsExportData from "highcharts/modules/export-data";
+import HighchartsAccessibility from "highcharts/modules/accessibility";
+import moment from "moment";
 
 const LineChartComponent = (props: any) => {
-  const chartContainer = useRef(null);
-  // const props : any = {}
   useEffect(() => {
+    HighchartsExporting(Highcharts);
+    HighchartsExportData(Highcharts);
+    HighchartsAccessibility(Highcharts);
+    NoDataToDisplay(Highcharts);
+  }, []);
+  const chartContainer = useRef(null);
+
+  const morphData = (data: any) => {
+    const initialData = data?.result || [];
+    const groupBy = "interface";
+    const totalGroupsKeys: any = {};
+    if (groupBy != "device") {
+      initialData.filter((item: any) => {
+        if (!totalGroupsKeys[item?.event[groupBy]]) {
+          totalGroupsKeys[item?.event[groupBy]] = true;
+        }
+      });
+    }
+    console.log("totalGroupsKeys", totalGroupsKeys);
+    const devices = Array.from(
+      new Set(initialData.map((item: any) => item?.event?.device))
+    );
+    console.log("devices", devices);
+    const firstData = initialData[0]?.event || {};
+    const allKeys = Object.keys(firstData);
+    const indexes = Array.from(
+      new Set(
+        allKeys.filter((keys: any) => {
+          if (keys != "device" && keys != groupBy) {
+            return keys;
+          }
+        })
+      )
+    );
+    console.log("indexes", indexes);
+    const lines: any[] = [];
+    devices.forEach((device: any) => {
+      indexes.forEach((index: any, i: any) => {
+        if (groupBy != "device") {
+          console.log("if");
+          Object.keys(totalGroupsKeys).forEach((key: any, i: any) => {
+            const data = initialData
+              .filter(
+                (item: any) =>
+                  item?.event?.device === device && item?.event[groupBy] == key
+              )
+              .map((item: any) => [
+                moment(item?.timestamp).format("lll"),
+                parseInt(`${item?.event?.[index]}`),
+              ]);
+            const legendName =
+              groupBy == "device"
+                ? device + "-" + index
+                : device +
+                  "-" +
+                  groupBy +
+                  `(${initialData[i]?.event[groupBy]})` +
+                  "-" +
+                  index;
+            lines.push({ name: legendName, data: data });
+          });
+        } else {
+          console.log("else");
+          const data = initialData
+            .filter((item: any) => item?.event?.device === device)
+            .map((item: any) => [
+              moment(item?.timestamp).format("lll"),
+              parseInt(`${item?.event?.[index]}`),
+            ]);
+          const legendName =
+            groupBy == "device"
+              ? device + "-" + index
+              : device +
+                "-" +
+                groupBy +
+                `(${initialData[i]?.event[groupBy]})` +
+                "-" +
+                index;
+          lines.push({ name: legendName, data: data });
+        }
+      });
+    });
+    // console.log("lines", lines);
+    return lines;
+  };
+
+  useEffect(() => {
+    console.log("data in line chart", props.data);
     if (chartContainer.current) {
-      const newData =
-        props &&
-        props.data &&
-        props.data.data &&
-        props?.data?.data.map((e: any) => {
-          let changedData =
-            e &&
-            e.data &&
-            e.data?.map((x: any) => {
-              const monthNames = [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-              ];
-
-              const isValidMonth = monthNames.includes(x[0]);
-              const formattedDate = isValidMonth
-                ? x[0] // If it's a valid month name, use it as-is
-                : new Date(x[0]).toLocaleString("en-US", {
-                    month: "short",
-                    day: "2-digit",
-                  });
-
-              return [formattedDate, x[1]];
-            });
-          return { name: e.name, data: changedData };
-        });
-      // console.log("newdata",newData)
+      // const newData: any = morphData(DummyData);
+      const newData: any = morphData(props && props.data && props.data);
       const options: any = {
         chart: {
           animation: false,
-          height: props?.height || 500, // Adjust the height of the chart based on the reports prop
+          // height: 200, // Adjust the height of the chart based on the reports prop
           zoomType: "x",
         },
         title: {
-          text: props?.data?.title,
+          text: "",
           align: "left",
           style: {
             fontWeight: "bold",
@@ -70,18 +124,18 @@ const LineChartComponent = (props: any) => {
 
         yAxis: {
           title: {
-            text: props?.data?.yAxis || "",
+            text: "",
           },
         },
 
         xAxis: {
           title: {
-            text: props?.data?.xAxis || "",
+            text: "",
           },
           type: "category",
         },
         legend: {
-          enabled: props?.legendEnabled ?? true,
+          enabled: true,
           layout: "horizontal",
           align: "center",
           verticalAlign: "bottom",
@@ -111,40 +165,11 @@ const LineChartComponent = (props: any) => {
         },
 
         series: newData,
-
-        responsive: {
-          rules: [
-            {
-              condition: {
-                maxWidth: 500,
-              },
-              chartOptions: {
-                legend: {
-                  layout: "horizontal",
-                  align: "center",
-                  verticalAlign: "bottom",
-                },
-              },
-            },
-          ],
-        },
-        //   exporting: {
-        //     showTable: true,
-        //     csv: {
-        //         columnHeaderFormatter: function(item, key) {
-        //             if (!item || item instanceof Highcharts.Axis) {
-        //                 return 'My new custom name yo'         //this will be the column heading
-        //             } else {
-        //                 return item.name;
-        //             }
-        //         }
-        //     }
-        // }
       };
 
       Highcharts.chart(chartContainer.current, options);
     }
-  }, [props?.data, props?.reports]);
+  }, [props.data]);
 
   return <div ref={chartContainer} />;
 };

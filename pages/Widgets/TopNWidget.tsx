@@ -12,10 +12,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
 import {
@@ -27,76 +24,13 @@ import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import PieChartComponent from "../Components/Charts/PieChart";
 
 const TOPNWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-  const granuality_time = [
-    {
-      name: "All",
-      id: "all",
-    },
-    {
-      name: "None",
-      id: "none",
-    },
-    {
-      name: "Second",
-      id: "second",
-    },
-    {
-      name: "Minute",
-      id: "minute",
-    },
-    {
-      name: "Five Minute",
-      id: "five_minute",
-    },
-    {
-      name: "Tem Minute",
-      id: "ten_minute",
-    },
-    {
-      name: "Fifteen Minute",
-      id: "fifteen_minute",
-    },
-    {
-      name: "Thirty Minute",
-      id: "thirty_minute",
-    },
-    {
-      name: "Hour",
-      id: "hour",
-    },
-    {
-      name: "Six Hour",
-      id: "six_hour",
-    },
-    {
-      name: "Eight Hour",
-      id: "eight_hour",
-    },
-    {
-      name: "Day",
-      id: "day",
-    },
-    {
-      name: "Week",
-      id: "week",
-    },
-    {
-      name: "Month",
-      id: "month",
-    },
-    {
-      name: "Quarter",
-      id: "quarter",
-    },
-    {
-      name: "Year",
-      id: "year",
-    },
-  ];
+
   const options = ["Metric"];
   // const [timePeriod, setTimePeriod] = React.useState<any>([
   //   new Date(time),
@@ -140,7 +74,7 @@ const TOPNWidget = (props: any) => {
       indicator_type: "",
       direction: "",
     },
-    time_range: "custome",
+    time_range: "custom",
     start_timestamp: "",
     end_timestamp: "",
     filters: {
@@ -150,6 +84,12 @@ const TOPNWidget = (props: any) => {
       },
     },
   });
+
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
+
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -521,6 +461,31 @@ const TOPNWidget = (props: any) => {
     });
   };
 
+  function getWidgetData(data: any) {
+    // if (pageID == data.pageID) {
+    console.log("widget data", data, pageID);
+    setQueryOutput(data);
+    // }
+  }
+
+  useEffect(() => {
+    Subscribe("ChartReport-" + pageID, eventType, getWidgetData);
+    return () => {
+      unsubscribe("ChartReport-" + pageID, eventType);
+    };
+  }, []);
+
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+
+    emit(eventType, modified);
+  };
+
   const handleSave = () => {
     // console.log("chart data", data);
     try {
@@ -618,8 +583,16 @@ const TOPNWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12 border-[2px] p-8 dark:text-textColor">
+              <PieChartComponent data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
@@ -798,7 +771,9 @@ const TOPNWidget = (props: any) => {
             <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Execute" />
+            </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
             </div>
