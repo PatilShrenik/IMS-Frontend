@@ -23,7 +23,7 @@ import { createUser } from "@/pages/api/api/UserManagementAPI";
 import { getAllRole } from "@/pages/api/api/RoleManagementAPI";
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: "50%",
+    width: "40%",
   },
 }));
 
@@ -78,7 +78,8 @@ const AddUserDrawer = (props: any) => {
   const [data, setData] = React.useState<any>(initialState);
   const [isAuthEnabled, setIsAuthEnabled] = useState(true);
   const [selectedValue, setSelectedValue] = React.useState<any>([]);
-
+  const [errorKeys, setErrorKeys] = React.useState<any>([]);
+  const [errors, setErrors] = React.useState<any>({});
  const groupValues = [{value:"1000000000001",label:"Group 1"}]
   const roleValues =
   allRoles &&
@@ -86,7 +87,13 @@ const AddUserDrawer = (props: any) => {
     label: item.name,
     value: item._id,
   }));
-
+  useEffect(() => {
+    const errorKey = errors && Object.keys(errors);
+    setErrorKeys(errorKey);
+    console.log("erro",errorKey);
+    // const validError = validationError && Object.keys(validationError);
+    // setvalidationErrorKeys(validError);
+  }, [errors]);
   React.useEffect(() => {
     try {
       const getRoles = async () => {
@@ -109,6 +116,7 @@ const AddUserDrawer = (props: any) => {
         enable: "yes",
         role: null,
       });
+      setErrorKeys([]);
     }
   }, [open]);
 
@@ -147,7 +155,10 @@ const AddUserDrawer = (props: any) => {
             theme: "colored",
             transition: Bounce,
           });
-        } else {
+          handleDrawerClose();
+          } else 
+          setErrors(response.errors);
+          {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
@@ -162,7 +173,7 @@ const AddUserDrawer = (props: any) => {
         }
       };
       createNewUser();
-      handleDrawerClose();
+   
     } catch (error) {
       console.log(error);
     }
@@ -219,6 +230,11 @@ const AddUserDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+               {errorKeys && errorKeys.includes("username") && (
+                <p className="text-danger text-sm ml-2">
+                username should be unique
+                </p>
+              )}
             <CustomeInput
               type="password"
               label="Password"

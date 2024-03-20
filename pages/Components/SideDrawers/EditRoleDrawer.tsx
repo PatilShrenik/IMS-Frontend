@@ -179,7 +179,7 @@ const EditRoleDrawer = (props: any) => {
               name="description"
               value={data.description}
               onChange={handleInputChange}
-              require={true}
+            //  require={true}
             />
           </div>
           <div className="px-4 py-1 overflow-x-auto">

@@ -56,7 +56,7 @@ const CredntialProfileTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  console.log("pageination", page, rowsPerPage);
+ // console.log("pageination", page, rowsPerPage);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");

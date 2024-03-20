@@ -321,7 +321,7 @@ const DiscoverySchedularTable = (props: any) => {
                   <>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Delete selected credentials"
+                      title="Delete selected discovery schedulars"
                       placement="top"
                     >
                       <DeleteForeverIcon
@@ -339,7 +339,7 @@ const DiscoverySchedularTable = (props: any) => {
                     />
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Download selected credentials"
+                      title="Download selected discovery schedulars"
                       placement="top"
                     >
                       <FileDownloadIcon
@@ -355,7 +355,7 @@ const DiscoverySchedularTable = (props: any) => {
                   <>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Delete selected credentials (Disabled)"
+                      title="Delete selected discovery schedulars (Disabled)"
                       placement="top"
                     >
                       <DeleteForeverIcon
@@ -369,7 +369,7 @@ const DiscoverySchedularTable = (props: any) => {
                     </Tooltip>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Download selected credentials (Disabled)"
+                      title="Download selected discovery schedulars (Disabled)"
                       placement="top"
                     >
                       <FileDownloadIcon
@@ -497,13 +497,13 @@ const DiscoverySchedularTable = (props: any) => {
               className=""
               style={{
                 width: "100%",
-                overflow: "scroll",
+                overflow: "auto",
                 borderRadius: "0",
                 marginTop: ".5rem",
               }}
             >
               <div className="max-h-440">
-                <table className="w-full border-collapse overflow-x-scroll">
+                <table className="w-full border-collapse overflow-auto">
                   <thead>
                     <tr>
                       <th
@@ -706,16 +706,7 @@ const DiscoverySchedularTable = (props: any) => {
                   </tbody>
                 </table>
               </div>
-              {/* <TablePagination
-              className="bg-light-container dark:bg-dark-container dark:text-textColor pt-12"
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={data.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            /> */}
+ 
             </div>
           </div>
         ) : (

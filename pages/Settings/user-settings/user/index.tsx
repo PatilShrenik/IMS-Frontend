@@ -27,21 +27,36 @@ const User = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllUser();
+        console.log("user data from API",response.result);
         const modifiedData = replaceDotsWithUnderscores(response.result);
         console.log("modifified data", modifiedData);
           
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "password");
-        console.log("filtered cols----------------", filteredCols);
+        //console.log("col",col);
+        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "password" && key !== "user_preferences");
+//        console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
-            if (key == "last_name") {
+            if (key == "first_name") {
+              cols.push({
+                field: "first_name",
+                headerName: "first Name",
+                minWidth: 150,
+              });
+            }
+           else if (key == "last_name") {
               cols.push({
                 field: "last_name",
-                headerName: "last name",
+                headerName: "last Name",
                 minWidth: 150,
+              });
+            }
+            else if (key == "enable") {
+              cols.push({
+                field: "enable",
+                headerName: "Status",
+                minWidth: 80,
               });
             }
             else if (key == "email_address") {
@@ -50,10 +65,12 @@ const User = () => {
                 headerName: "Email",
                 minWidth: 80,
               });
-            } else if (key == "first_name") {
+            }
+
+            else if (key == "username") {
               cols.unshift({
-                field: "first_name",
-                headerName: "First Name",
+                field: "username",
+                headerName: "User Name",
                 minWidth: 80,
               });
             } else {
@@ -69,9 +86,9 @@ const User = () => {
         setColumns(cols);
 
         const hiddenColumnsValues = [
-          "username",
+          // "username",
           "password",
-          "enable",
+          // "enable",
           "created_on",
           "created_by",
           "groups",

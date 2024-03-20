@@ -43,12 +43,12 @@ export const WebSocketContextProvider: React.FC<any> = ({ children }: any) => {
     });
     socket.current.enableReconnect(true);
     socket.current.onopen = () => {
-      console.log("Connection open");
+     // console.log("Connection open");
       setConnection(true);
       socket.current.registerHandler("client.event", Broadcast);
     };
     socket.current.onclose = () => {
-      console.log("Connection close");
+     //console.log("Connection close");
       setConnection(false);
     };
   }, []);

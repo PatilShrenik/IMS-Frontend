@@ -14,13 +14,15 @@ import {
   Button,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
-import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
-import { getAllGropus } from "@/pages/api/api/GroupsAPI";
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import ClearIcon from "@mui/icons-material/Clear";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+
 import SearchIcon from "@mui/icons-material/Search";
 import { Bounce, toast } from "react-toastify";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
@@ -171,18 +173,84 @@ const UserTable = (props: any) => {
       }
     });
   };
+  const downloadCSV = () => {
+    const selectedRowsData = data.filter((row: any) =>
+      selectedRows.includes(row._id)
+    );
 
+    const csvData = [Object.keys(selectedRowsData[0])]; // Header
+
+    selectedRowsData.forEach((row: any) => {
+      const rowData: any = Object.values(row);
+      csvData.push(rowData);
+    });
+
+    const csvContent = csvData.map((row) => row.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "data.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
   const processColumnData = (column: any, row: any) => {
     if (column.field === "role") {
       const groupId = row[column.field] && row[column.field];
       // Find the corresponding object in groupValues array
-      console.log("math",groupId);
       const matchingGroup: any = groupValues.find(
         (group: any) => group.id === groupId
       );
       // If a matching group is found, return its name, otherwise return null or a default value
       return matchingGroup ? matchingGroup.name : "-";
     }
+    else if (column.field === "enable") {
+      console.log("first",row.enable);
+      if (
+        row.enable === "yes"
+      ) {
+        return (
+          <>
+            <Tooltip title="Active" placement="left">
+              <div className="flex items-center">
+                {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
+                <CheckRoundedIcon
+                  className="text-success"
+                  fontSize="large"
+                  style={{ fontSize: "1.5rem" }}
+                />
+              </div>
+            </Tooltip>
+            {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
+          </>
+        );
+      } else if (
+        row.enable === "no"
+      ) {
+        return (
+          <>
+            <Tooltip title="Inactive" placement="left">
+              <div className=" flex items-center">
+                {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
+                <ClearRoundedIcon
+                  className="text-danger"
+                  fontSize="large"
+                  style={{ fontSize: "1.5rem" }}
+                />
+              </div>
+            </Tooltip>
+
+            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
+          </>
+        );
+      }
+    } 
+   
     return row[column.field] == "" ? "-" : row[column.field];
   };
   const handleSearchChange = (event: any) => {
@@ -264,7 +332,7 @@ const UserTable = (props: any) => {
                 <>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Delete selected credentials"
+                    title="Delete selected users"
                     placement="top"
                   >
                     <DeleteForeverIcon
@@ -280,13 +348,25 @@ const UserTable = (props: any) => {
                     handleModalClose={handleModalClose}
                     deleteRow={deleteUser}
                   />
-                 
+                   <Tooltip
+                    TransitionComponent={Zoom}
+                    title="Download selected users data"
+                    placement="top"
+                  >
+                    <FileDownloadIcon
+                      onClick={downloadCSV}
+                      className="cursor-pointer dark:text-textColor"
+                      style={{
+                        margin: "0 5px",
+                      }}
+                    />
+                  </Tooltip>
                 </>
               ) : (
                 <>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Delete selected credentials (Disabled)"
+                    title="Delete selected users (Disabled)"
                     placement="top"
                   >
                     <DeleteForeverIcon
@@ -298,9 +378,9 @@ const UserTable = (props: any) => {
                       }}
                     />
                   </Tooltip>
-                  {/* <Tooltip
+                  <Tooltip
                     TransitionComponent={Zoom}
-                    title="Download selected credentials (Disabled)"
+                    title="Download selected users data (Disabled)"
                     placement="top"
                   >
                     <FileDownloadIcon
@@ -311,7 +391,7 @@ const UserTable = (props: any) => {
                         margin: "0 5px",
                       }}
                     />
-                  </Tooltip> */}
+                  </Tooltip>
                 </>
               )}
               {/* Hide and Show column */}
@@ -399,23 +479,12 @@ const UserTable = (props: any) => {
                 <AddIcon fontSize="small" className="mr-2" /> Add User
               
               </Button>
-              {/* <AddIcon
-                  className=" dark:text-textColor"
-                  onClick={handleDrawerOpen}
-                  fontSize="medium"
-                  sx={{
-                    cursor: "pointer",
-                  }}
-                /> */}
+          
               <AddUserDrawer
                 open={isDrawerOpen}
                 handleDrawerClose={handleDrawerClose}
               />
-              {/* <AddCredentialProfile
-                themeSwitch={themeSwitch}
-                open={isAddSingleDialogOpen}
-                handleClose={handleAddSingleCloseDialog}
-              /> */}
+        
             </div>
           </div>
           {/* Global Downlad and delete button for table */}
@@ -599,7 +668,7 @@ const UserTable = (props: any) => {
                                   }}
                                 >
                                   <span
-                                    className={`flex ${
+                                    className={` h-[1.6rem] flex ${
                                       colIndex == 0 || colIndex == 1
                                         ? "justify-start"
                                         : "justify-start "

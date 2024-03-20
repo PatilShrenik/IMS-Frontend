@@ -54,6 +54,8 @@ const DiscoverySchedularDrawer = (props: any) => {
   const [colorTheme, setColorTheme] = useState<any>(
     isBrowser ? localStorage.getItem("color-theme") : null
   );
+  const [errorKeys, setErrorKeys] = React.useState<any>([]);
+  const [errors, setErrors] = React.useState<any>({});
 
   const [allGroups, setAllGroups] = React.useState([]);
   const [allDevices, setAllDevices] = React.useState([]);
@@ -111,6 +113,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
       setFrequency("CUSTOME")
+      setErrorKeys([]);
     }
   }, [open]);
 
@@ -322,6 +325,13 @@ const DiscoverySchedularDrawer = (props: any) => {
       entities: values,
     });
   };
+  useEffect(() => {
+    const errorKey = errors && Object.keys(errors);
+    setErrorKeys(errorKey);
+    console.log("erro",errorKey);
+    // const validError = validationError && Object.keys(validationError);
+    // setvalidationErrorKeys(validError);
+  }, [errors]);
 
   const handleSave = (event: any) => {
     event.preventDefault();
@@ -345,7 +355,10 @@ const DiscoverySchedularDrawer = (props: any) => {
           theme: "colored",
           transition: Bounce,
         });
-      } else {
+        handleDrawerClose(); }
+         else
+         setErrors(response.errors);
+         {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
@@ -364,7 +377,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     } catch (error) {
       console.log(error);
     }
-    handleDrawerClose();
+  
   };
   return (
     <Drawer
@@ -397,6 +410,11 @@ const DiscoverySchedularDrawer = (props: any) => {
                 disable={false}
                 require={true}
               />
+              {errorKeys && errorKeys.includes("name") && (
+                <p className="text-danger text-sm ml-2">
+                Schedular Name should be unique
+                </p>
+              )}
             </div>
 
             <div className="grid grid-flow-row-dense grid-cols-3 ">
