@@ -15,7 +15,10 @@ import { getAllGropus } from "../api/api/GroupsAPI";
 import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";

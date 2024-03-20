@@ -60,6 +60,12 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
       toggleSideBarStateWithArgu(true);
     }
   }, [path]);
+
+  useEffect(() => {
+    if (path == "Settings") {
+      toggleSideBarStateWithArgu(false);
+    }
+  }, [path]);
   const transformedString = path
     .replace(/\//g, " > ")
     .replace(/-/g, " ")

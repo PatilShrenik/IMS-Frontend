@@ -5,15 +5,9 @@ import {
   Menu,
   MenuItem,
   Checkbox,
-  Paper,
-  Modal,
-  Typography,
-  Box,
   TableSortLabel,
   Tooltip,
   Button,
-  Backdrop,
-  Fade,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -39,6 +33,8 @@ import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
 import PolicyDrawer from "../SideDrawers/PolicyDrawer";
 import PolicyActionMenu from "../ActionMenu/PolicyActionMenu";
 import { deleteBulkPolicy } from "@/pages/api/api/PolicyApi";
+import { getAllGropus } from "@/pages/api/api/GroupsAPI";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 const PoliciesTable = (props: any) => {
   const {
@@ -73,6 +69,19 @@ const PoliciesTable = (props: any) => {
   const open = Boolean(anchorE2);
   const { togglegetPolicyApiState } = useAppContext();
   const ITEM_HEIGHT = 48;
+  React.useEffect(() => {
+    const getGroups = async () => {
+      let response = await getAllGropus();
+      setAllGroups(response.result);
+    };
+    getGroups();
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
+
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
@@ -347,23 +356,23 @@ const PoliciesTable = (props: any) => {
     // console.log("--row", row);
     if (column.field === "entities") {
       const entity_type = row.entity_type;
-      //   console.log("entitytype", entity_type);
       if (entity_type === "GROUP") {
         const groupId = row[column.field] && row[column.field];
-
-        const matchingGroup: any = groupValues.find(
-          (group: any) => group.id === groupId[0]
+        const names = groupValues.filter(
+          (option) => groupId && groupId.includes(option.id)
         );
-        console.log(groupId[0]);
+
+        const groupNames: any = names && names.map((item: any) => item.name);
 
         return (
           <Tooltip
             TransitionComponent={Zoom}
-            // title={matchingGroup}
-            title="jdbbd"
-            placement="right"
+            title={groupNames.join(", ")}
+            placement="top"
           >
-            <Chips value={row.entities?.length} />
+            <div className="">
+              <Chips value={groupId.length} />
+            </div>
           </Tooltip>
         );
       } else if (entity_type === "DEVICE") {
