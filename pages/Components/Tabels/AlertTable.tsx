@@ -65,7 +65,7 @@ const AlertTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  // console.log("-----data-------", data);
+  console.log("-----data-------", data);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");
@@ -73,7 +73,16 @@ const AlertTable = (props: any) => {
   const { toggleDeviceTableState, activeButton, toggleActiveButton } =
     useAppContext();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedButtons, setSelectedButtons] = useState([]) as any;
+  const [selectedSeverity, setSelectedSeverity] = useState([]) as any;
+  const [selectedPolicy, setSelectedPolicy] = useState([]) as any;
+  const [selectedDevice, setSelectedDevice] = useState([]) as any;
+  const [selectedStatus, setSelectedStatus] = useState([]) as any;
+  const [selectedButtons, setSelectedButtons] = useState([
+    selectedSeverity,
+    selectedDevice,
+    selectedPolicy,
+    selectedStatus,
+  ]) as any;
   const [allPolicies, setAllPolicies] = React.useState([]);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -126,6 +135,57 @@ const AlertTable = (props: any) => {
 
   const handleContextModalClose = () => setIsContextModalOpen(false);
   const [receivedData, setReceivedData] = React.useState<any>([]);
+  useEffect(() => {
+    setSelectedButtons([
+      selectedSeverity,
+      selectedDevice,
+      selectedPolicy,
+      selectedStatus,
+    ]);
+  }, [selectedSeverity, selectedDevice, selectedPolicy, selectedStatus]);
+
+  const [severityCounts, setSeverityCounts] = useState({
+    critical: 0,
+    major: 0,
+    warning: 0,
+  });
+
+  useEffect(() => {
+    // Function to calculate severity counts
+    if (data) {
+      const calculateSeverityCounts = () => {
+        // Initialize counts object
+        const counts = {
+          critical: 0,
+          major: 0,
+          warning: 0,
+        };
+
+        // Iterate over the data and update counts based on severity
+        data.forEach((item: any) => {
+          switch (item.severity) {
+            case "critical":
+              counts.critical++;
+              break;
+            case "major":
+              counts.major++;
+              break;
+            case "warning":
+              counts.warning++;
+              break;
+            default:
+              break;
+          }
+        });
+
+        // Update the state with the new counts
+        setSeverityCounts(counts);
+      };
+      calculateSeverityCounts();
+    }
+
+    // Call the function to calculate counts
+  }, [data]);
 
   //--------------------------------------code required for DateRangePicker-----------------------------
   const { time, toggleTime } = useAppContext();
@@ -334,14 +394,6 @@ const AlertTable = (props: any) => {
     setSelectAll(!selectAll);
   };
 
-  useEffect(() => {
-    if (selectedRows.length != 0) {
-      setSelected(true);
-    } else {
-      setSelected(false);
-    }
-  }, [selectedRows]);
-
   const downloadCSV = () => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
@@ -377,15 +429,52 @@ const AlertTable = (props: any) => {
           typeof row[columnField] === "string" &&
           row[columnField].toLowerCase().includes(search.toLowerCase())
       );
-
       const matchesButtons =
-        selectedButtons.length === 0 ||
-        selectedButtons.some((button: any) => row["plugin_type"] === button);
-      // console.log("matched button", row["plugin_type"]);
-      return matchesSearch && matchesButtons;
-      //   return matchesSearch;
+        (selectedDevice.length !== 0 ||
+          selectedPolicy.length !== 0 ||
+          selectedSeverity.length !== 0 ||
+          selectedStatus.length !== 0) &&
+        selectedButtons.some((button: any) => {
+          for (const columnField of visibleColumns) {
+            let buttonMatched = false;
+            for (const key of button) {
+              // console.log("------[columnfield]", columnField);
+              if (
+                typeof row[columnField] === "string" &&
+                typeof key == "string"
+              ) {
+                // console.log("------key", key);
+                // console.log("------row[columnfield]", row[columnField]);
+                if (row[columnField].toLowerCase() === key.toLowerCase()) {
+                  buttonMatched = true;
+                  break;
+                }
+              } else if (
+                typeof row[columnField] === "number" &&
+                typeof key == "number"
+              ) {
+                if (row[columnField] === key) {
+                  buttonMatched = true;
+                  break;
+                }
+              }
+            }
+            if (buttonMatched) {
+              return true;
+            }
+          }
+          return false;
+        });
+
+      return selectedDevice.length !== 0 ||
+        selectedPolicy.length !== 0 ||
+        selectedSeverity.length !== 0 ||
+        selectedStatus.length !== 0
+        ? matchesSearch && matchesButtons
+        : matchesSearch;
     });
 
+  // console.log("selectedbuttons", selectedButtons);
   const handleButtonClick = (title: any) => {
     setSelectedButtons((prevSelectedButtons: any) => {
       if (prevSelectedButtons.includes(title)) {
@@ -712,21 +801,35 @@ const AlertTable = (props: any) => {
     }
     setpayloadForAlert(updatedPayload);
   };
-  const handleSelectedButtons = (value: any) => {
-    let newValues = Array.isArray(value) ? value : [value];
-    newValues.forEach((newValue: any) => {
-      setSelectedButtons((prevState: any) => {
-        // Check if newValue already exists in prevState
-        if (prevState.includes(newValue)) {
-          return prevState; // If it exists, return the current state
-        } else {
-          return [...prevState, newValue]; // If not, add newValue to the state
-        }
-      });
-    });
+  // let newValues = Array.isArray(value) ? value : [value];
+  // newValues.forEach((newValue: any) => {
+  //   setSelectedButtons((prevState: any) => {
+  //     // Check if newValue already exists in prevState
+  //     if (prevState.includes(newValue)) {
+  //       return prevState; // If it exists, return the current state
+  //     } else {
+  //       return [...prevState, newValue]; // If not, add newValue to the state
+  //     }
+  //   });
+  // });
+  const handleSelectedSeverity = (value: any) => {
+    // console.log("value-------", value);
+    setSelectedSeverity(value);
+  };
+  const handleSelectedDevice = (value: any) => {
+    setSelectedDevice(value);
+  };
+  const handleSelectedPolicy = (value: any) => {
+    setSelectedPolicy(value);
+  };
+  const handleSelectedStatus = (value: any) => {
+    setSelectedStatus(value);
   };
 
-  // console.log("------------selected buttons", selectedButtons);
+  // console.log("------------selected Severity", selectedSeverity);
+  // console.log("------------selected device", selectedDevice);
+  // console.log("------------selected policy", selectedPolicy);
+  // console.log("------------selected status", selectedStatus);
   return (
     <>
       <div>
@@ -763,17 +866,17 @@ const AlertTable = (props: any) => {
                 <div className="flex mr-2 mb-2 mt-3 items-center">
                   <div>
                     <div className="text-white w-[8rem] rounded-lg mx-2 bg-yellow-400 dark:bg-yellow-500 py-[0.5rem] px-2">
-                      Warning : 20
+                      Warning :  {severityCounts.warning}
                     </div>
                   </div>
                   <div>
                     <div className="text-white w-[8rem] rounded-lg mx-2 bg-orange-400 dark:bg-orange-600 py-[0.5rem] px-2">
-                      Major : 10
+                      Major : {severityCounts.major}
                     </div>
                   </div>
                   <div>
                     <div className="text-white w-[8rem] rounded-lg mx-2 bg-red-500 dark:bg-red-700 py-[0.5rem] px-2">
-                      Critical : 30
+                      Critical : {severityCounts.critical}
                     </div>
                   </div>
                 </div>
@@ -1020,7 +1123,7 @@ const AlertTable = (props: any) => {
                   label="Severity"
                   isMulti={true}
                   selectData={severityValues}
-                  onChange={handleSelectedButtons}
+                  onChange={handleSelectedSeverity}
                 />
               </div>
               <div>
@@ -1028,7 +1131,7 @@ const AlertTable = (props: any) => {
                   label="Device"
                   isMulti={true}
                   selectData={deviceValues}
-                  onChange={handleSelectedButtons}
+                  onChange={handleSelectedDevice}
                 />
               </div>
               <div>
@@ -1036,7 +1139,7 @@ const AlertTable = (props: any) => {
                   label="Policy"
                   isMulti={true}
                   selectData={policyValues}
-                  onChange={handleSelectedButtons}
+                  onChange={handleSelectedPolicy}
                 />
               </div>
               <div>
@@ -1044,7 +1147,7 @@ const AlertTable = (props: any) => {
                   label="Status"
                   isMulti={true}
                   selectData={statusValues}
-                  onChange={handleSelectedButtons}
+                  onChange={handleSelectedStatus}
                 />
               </div>
               {/* <Tooltip

@@ -100,7 +100,7 @@ const Alerts = () => {
           "P1225151828844040-D641660281176464-O21": {
             _id: 1225151828844075,
             severity: "critical",
-            policy: 1225151828844040,
+            policy: 1231575388837024,
             device: 641660281176464,
             object: "21",
             indicator: "cpu.5sec.avg.percentage",
@@ -115,7 +115,7 @@ const Alerts = () => {
           "P1225151828844040-D641660281176464-O22": {
             _id: 1225151828844081,
             severity: "critical",
-            policy: 1225151828844040,
+            policy: 1231575388837024,
             device: 641660281176464,
             object: "22",
             indicator: "cpu.5sec.avg.percentage",
