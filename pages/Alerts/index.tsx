@@ -71,6 +71,7 @@ const Alerts = () => {
     setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
+
   useEffect(() => {
     if (activeButton == "live") {
       emit("ws.alert.live", {});
@@ -127,7 +128,7 @@ const Alerts = () => {
         let cols: any = [];
         // let response = await getAllDevice();
         const modifiedData = convertKeys(receivedData);
-        console.log("modified 1", modifiedData);
+        // console.log("modified 1", modifiedData);
         // const indexOfObjectWithAvailabilityContext =
         //   modifiedData &&
         //   modifiedData.result.findIndex(
@@ -149,13 +150,19 @@ const Alerts = () => {
         let col = [] as any;
         // col = Object.keys(modifiedData["result"]);
         let collectedKeys = collectUniqueKeys(modifiedData);
-        console.log("------------------------keys", collectedKeys);
+        // console.log("------------------------keys", collectedKeys);
 
         // filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
 
-        console.log("columns-------------", cols);
-        console.log("filtercolumns-------------", modifiedData.result);
+        // console.log("columns-------------", cols);
+        // console.log("filtercolumns-------------", modifiedData.result);
+        const resultArray = [];
 
+        for (const key in modifiedData.result) {
+          resultArray.push(modifiedData.result[key]);
+        }
+
+        // console.log("final data-----------", resultArray);
         collectedKeys &&
           collectedKeys.filter((key: any) => {
             // if (!key.startsWith("_")) {
@@ -171,7 +178,7 @@ const Alerts = () => {
 
         // }
 
-        console.log("cols------", cols);
+        // console.log("cols------", cols);
         setColumns(cols);
         // console.log("rows", modifiedData);
         const hiddenColumnsValues = [
@@ -215,7 +222,7 @@ const Alerts = () => {
             .filter((field: any) => !hiddenColumnsValues.includes(field))
         );
 
-        setData(modifiedData);
+        setData(resultArray);
       };
       getData();
     } catch (error) {
@@ -242,10 +249,10 @@ const Alerts = () => {
       <div className="w-full ">
         {/* <PageHeading heading="Credential Profile" /> */}
         <AlertTable
-          // data={data}
-          // visibleColumns={visibleColumns}
-          // setVisibleColumns={setVisibleColumns}
-          // columns={columns}
+          data={data}
+          visibleColumns={visibleColumns}
+          setVisibleColumns={setVisibleColumns}
+          columns={columns}
           page={page}
           rowsPerPage={rowsPerPage}
         />
