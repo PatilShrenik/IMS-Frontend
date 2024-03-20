@@ -5,10 +5,7 @@ import {
   Menu,
   MenuItem,
   Checkbox,
-  Paper,
-  Modal,
-  Typography,
-  Box,
+
   TableSortLabel,
   Tooltip,
   Button,
@@ -17,10 +14,8 @@ import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
-import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
-import { getAllGropus } from "@/pages/api/api/GroupsAPI";
+
 import ClearIcon from "@mui/icons-material/Clear";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
 import { Bounce, toast } from "react-toastify";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
@@ -52,18 +47,18 @@ const SNMPCatalogueTable = (props: any) => {
     const [isModalopen, setIsModalOpen] = React.useState(false);
     const handleModalOpen = () => setIsModalOpen(true);
     const handleModalClose = () => setIsModalOpen(false);
-    const [allGroups, setAllGroups] = React.useState([]);
+    const [allTemplates, setAllTemplates] = React.useState([]);
     console.log("data-----", data);
-    const groupValues =
-    allGroups &&
-    allGroups.map((item: any) => ({
+    const templatesValues =
+    allTemplates &&
+    allTemplates.map((item: any) => ({
       name: item.name,
       id: item._id,
     }));
     React.useEffect(() => {
       const getCredsProfile = async () => {
         let response = await getAllSNMPTemp();
-        setAllGroups(response.result);
+        setAllTemplates(response.result);
       };
       // const getCredsProfile = async () => {
       //   let response = await getAllDevice();
@@ -210,14 +205,14 @@ const SNMPCatalogueTable = (props: any) => {
       };
       const processColumnData = (column: any, row: any) => {
         if (column.field === "snmp_template") {
-          const groupId = row[column.field] && row[column.field];
-          // Find the corresponding object in groupValues array
-          console.log("math",groupId);
-          const matchingGroup: any = groupValues.find(
-            (group: any) => group.id === groupId
+          const templateId = row[column.field] && row[column.field];
+          // Find the corresponding object in templatesValues array
+          
+          const matchingtemplate: any = templatesValues.find(
+            (template: any) => template.id === templateId
           );
-          // If a matching group is found, return its name, otherwise return null or a default value
-          return matchingGroup ? matchingGroup.name : "-";
+          // If a matching template is found, return its name, otherwise return null or a default value
+          return matchingtemplate ? matchingtemplate.name : "-";
         }
         return row[column.field] == "" ? "-" : row[column.field];
       };
@@ -465,13 +460,13 @@ const SNMPCatalogueTable = (props: any) => {
             className=""
             style={{
               width: "100%",
-              overflow: "scroll",
+              overflow: "auto",
               borderRadius: "0",
               marginTop: ".5rem",
             }}
           >
             <div className="max-h-440">
-              <table className="w-full border-collapse overflow-x-scroll">
+              <table className="w-full border-collapse overflow-auto">
                 <thead>
                   <tr>
                     <th

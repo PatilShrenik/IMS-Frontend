@@ -34,7 +34,7 @@ const Role = () => {
           
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
      
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "rbac_context"  && key !== "user_ids" );
+        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "rbac_context" );
        // console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
@@ -53,7 +53,15 @@ const Role = () => {
                 headerName: "Role Name",
                 minWidth: 80,
               });
-            } else {
+            }
+            else if (key == "user_ids") {
+              cols.push({
+                field: "user_ids",
+                headerName: "Users",
+                minWidth: 80,
+              });
+            }
+            else {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
@@ -66,7 +74,7 @@ const Role = () => {
         setColumns(cols);
 
         const hiddenColumnsValues = [
-           "user_ids",
+          //  "user_ids",
           "created_on",
           "created_by",
           "updated_by",

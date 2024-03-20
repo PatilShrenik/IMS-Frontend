@@ -13,6 +13,8 @@ import {
   Tooltip,
   Button,
 } from "@mui/material";
+import Chips from "../Chips";
+
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -26,6 +28,7 @@ import DeleteModal from "../Modals/DeleteModal";
 import { useAppContext } from "../AppContext";
 import { deleteBulkRole } from "@/pages/api/api/RoleManagementAPI";
 import AddRoleDrawer from "../SideDrawers/AddRoleDrawer";
+import RoleDetailsModal from "../Modals/RoleDetailsModal";
 const RoleTable = (props: any) => {
     const {
         data,
@@ -49,7 +52,7 @@ const RoleTable = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
-
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
@@ -121,6 +124,12 @@ const RoleTable = (props: any) => {
     handleColumnToggle(columnField);
     // handleMenuClose();
   };
+  const handleClickOpen = (userIds: any) => {
+    setDialogOpen(userIds);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
   const filteredData =
     data &&
     data.filter((row: any) => {
@@ -155,16 +164,29 @@ const RoleTable = (props: any) => {
   };
 
   const processColumnData = (column: any, row: any) => {
-    // if (column.field === "role") {
-    //   const groupId = row[column.field] && row[column.field];
-    //   // Find the corresponding object in groupValues array
-    //   console.log("math",groupId);
-    //   const matchingGroup: any = groupValues.find(
-    //     (group: any) => group.id === groupId
-    //   );
-    //   // If a matching group is found, return its name, otherwise return null or a default value
-    //   return matchingGroup ? matchingGroup.name : "-";
-    // }
+    if (column.field === "user_ids") {
+      const userIds = row[column.field] && row[column.field];
+      
+      return (
+        <>
+          <div
+            className={`${userIds.length > 0 ? "cursor-pointer" : ""}`}
+            onClick={
+              userIds.length > 0
+                ? () => handleClickOpen(userIds)
+                : undefined
+            }
+          >
+            <Chips value={userIds.length} />
+          </div>
+          <RoleDetailsModal
+            open={dialogOpen === userIds}
+            handleDialogClose={handleDialogClose}
+            user_ids={userIds}
+          />
+        </>
+      );
+    }
     return row[column.field] == "" ? "-" : row[column.field];
   };
   const handleSearchChange = (event: any) => {

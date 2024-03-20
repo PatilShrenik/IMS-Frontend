@@ -29,8 +29,12 @@ import { Checkbox } from "@mui/material";
 const AddRoleDrawer = (props: any) => {
     const { open, handleDrawerClose } = props;
     const classes = useStyles();
+    const [errorKeys, setErrorKeys] = React.useState<any>([]);
+    const [errors, setErrors] = React.useState<any>({});
+
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const { toggleGetRoleApiState} = useAppContext();
+
     const [data, setData] = React.useState({
         name: "",
         description: "",
@@ -52,10 +56,17 @@ const AddRoleDrawer = (props: any) => {
         description: "",
         rbac_context: [],
           });
+          setErrorKeys([]);
         //  setIsSubmitDisabled(true);
         }
       }, [open]);
-     
+      useEffect(() => {
+        const errorKey = errors && Object.keys(errors);
+        setErrorKeys(errorKey);
+        console.log("erro",errorKey);
+        // const validError = validationError && Object.keys(validationError);
+        // setvalidationErrorKeys(validError);
+      }, [errors]);
       const handleInputChange = (event: any) => {
         const { name, value } = event.target;
         setData({ ...data, [name]: value });
@@ -88,6 +99,7 @@ const AddRoleDrawer = (props: any) => {
             };
         });
     };
+  
     const handleSave = (event: any) => {
         event.preventDefault();
         if (data.rbac_context.length === 0) {
@@ -124,7 +136,10 @@ const AddRoleDrawer = (props: any) => {
               theme: "colored",
               transition: Bounce,
             });
-          } else {
+            handleDrawerClose();
+          } else 
+          setErrors(response.errors);
+          {
             toast.error(response.message, {
               position: "bottom-right",
               autoClose: 2000,
@@ -139,7 +154,7 @@ const AddRoleDrawer = (props: any) => {
           }
         };
         createRole(); 
-       handleDrawerClose();
+      
       };
   return (
     <Drawer
@@ -170,13 +185,18 @@ const AddRoleDrawer = (props: any) => {
               onChange={handleInputChange}
               require={true}
             />
+             {errorKeys && errorKeys.includes("name") && (
+                <p className="text-danger text-sm ml-2">
+                Role Name should be unique
+                </p>
+              )}
             <CustomeInput
               type="text"
               label="Role Description"
               name="description"
               value={data.description}
               onChange={handleInputChange}
-              require={true}
+             // require={true}
             />
           </div>
           {/* <AddUserRoleTabel onChange={handleCheckboxChange} /> */}
@@ -201,7 +221,7 @@ const AddRoleDrawer = (props: any) => {
               <tbody>
                 {permissionsData.map(permission => (
                   <tr key={permission.key} className="text-center border-b dark:bg-dark-container dark:text-textColor">
-                    <td className="bg-white dark:bg-dark-container text-sm dark:text-textColor dark:border-dark-border">
+                    <td >
                       {permission.name}
                     </td>
                     <td className="px-6 text-right">

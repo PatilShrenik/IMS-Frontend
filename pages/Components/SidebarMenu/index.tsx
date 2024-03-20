@@ -225,8 +225,8 @@ const SidebarMenu = () => {
             //     "/Settings/device-settings/site-management",
             // },
             {
-              subMenuDropdownname: "Profiles",
-              subMenuDropdownpathName: "/Settings/device-settings/profiles",
+              subMenuDropdownname: "Device Profiles",
+              subMenuDropdownpathName: "/Settings/device-settings/device-profiles",
             },
           ],
         },

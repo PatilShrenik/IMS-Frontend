@@ -99,22 +99,28 @@ const CredentialProfileDrawer = (props: any) => {
       });
       setProtocol("SNMPV1");
       setMsgFlag("no.auth.no.priv");
-
+      setErrorKeys([]);
     }
   }, [open]);
 
+  // useEffect(() => {
+  //   const error = replaceDotsWithUnderscores(errors);
+  //   console.log("errors", errors);
+  //   console.log("er===", error);
+  //   // const errorKey = err && Object.keys(err);
+  //   const errorKeys: string[] = error ? getAllKeys(error) : [];
+  //   //  const  errorKey = err && err.credential_context && Object.keys(err.credential_context);
+
+  //   console.log("err---------", errorKeys);
+  //   setErrorKeys(errorKeys);
+  // }, [errors]);
   useEffect(() => {
-    const error = replaceDotsWithUnderscores(errors);
-    console.log("errors", errors);
-    console.log("er===", error);
-    // const errorKey = err && Object.keys(err);
-    const errorKeys: string[] = error ? getAllKeys(error) : [];
-    //  const  errorKey = err && err.credential_context && Object.keys(err.credential_context);
-
-    console.log("err---------", errorKeys);
-    setErrorKeys(errorKeys);
+    const errorKey = errors && Object.keys(errors);
+    setErrorKeys(errorKey);
+    console.log("erro",errorKey);
+    // const validError = validationError && Object.keys(validationError);
+    // setvalidationErrorKeys(validError);
   }, [errors]);
-
   const msg_flag_values = [
     {
       value: "no.auth.no.priv",

@@ -35,7 +35,7 @@ const DiscoverySchedular = () => {
         console.log("modifified All data", modifiedData);
  
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
+        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "scheduler_context" && key !== "scheduler" && key !== "device_ids"  && key !== "entities");
    //     console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
