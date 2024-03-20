@@ -12,18 +12,21 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 
 const GaugeWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
@@ -62,17 +65,23 @@ const GaugeWidget = (props: any) => {
     datasource: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
-    time_range: "custome",
+    time_range: "custom",
     start_timestamp: "",
     end_timestamp: "",
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
     },
   };
   const [data, setData] = React.useState<any>(initialState);
+
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
+
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -211,7 +220,7 @@ const GaugeWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );
@@ -265,8 +274,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -297,8 +306,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },
@@ -374,16 +383,31 @@ const GaugeWidget = (props: any) => {
     setDropdowns(updatedDropdowns);
   };
 
-  const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range:", value);
-    const start = value[0].getTime() / 1000;
-    const end = value[1].getTime() / 1000;
-    console.log(start, end);
-    setTimePeriod({
-      ...timePeriod,
-      start_timestamp: start,
-      end_timestamp: end,
-    });
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
   };
 
   useEffect(() => {
@@ -399,6 +423,31 @@ const GaugeWidget = (props: any) => {
     // const { value } = event.target;
     console.log(value);
     setData({ ...data, group_by: value });
+  };
+
+  function getWidgetData(data: any) {
+    // if (pageID == data.pageID) {
+    console.log("widget data", data, pageID);
+    setQueryOutput(data);
+    // }
+  }
+
+  useEffect(() => {
+    Subscribe("ChartReport-" + pageID, eventType, getWidgetData);
+    return () => {
+      unsubscribe("ChartReport-" + pageID, eventType);
+    };
+  }, []);
+
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+
+    emit(eventType, modified);
   };
 
   const handleSave = () => {
@@ -463,30 +512,9 @@ const GaugeWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        <div className="h-max mt-[1.25rem]">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"
@@ -498,8 +526,16 @@ const GaugeWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12  p-8 dark:text-textColor">
+              <GaugeWidgetTabel data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
@@ -674,7 +710,9 @@ const GaugeWidget = (props: any) => {
             <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Execute" />
+            </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
             </div>

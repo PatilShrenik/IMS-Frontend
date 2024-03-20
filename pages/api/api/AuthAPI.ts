@@ -2,6 +2,7 @@ import { baseURL } from "@/constants";
 
 export const login = async (props: any) => {
   try {
+    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Skip SSL validation
     const res = await fetch(baseURL + "/login", {
       method: "POST",
       body: JSON.stringify(props),

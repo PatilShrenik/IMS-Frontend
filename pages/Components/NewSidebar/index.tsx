@@ -71,66 +71,66 @@ const Sidebar = () => {
         />
       ),
     },
-    {
-      name: "Topology",
-      path: "/Topology",
-      icon: (
-        <CameraRoundedIcon
-          className={` ${
-            pathname.includes("Topology") && ""
-          } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "black", margin: "0 1.5rem" }}
-        />
-      ),
-    },
-    {
-      name: "Explorer",
-      path: "/Explorer",
-      icon: (
-        <DataSaverOffIcon
-          className={` ${
-            pathname.includes("explorer") && ""
-          } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "black", margin: "0 1.5rem" }}
-        />
-      ),
-    },
-    {
-      name: "Reports",
-      path: "/Reports",
-      icon: (
-        <AssignmentIcon
-          className={` ${
-            pathname.includes("Reports") && ""
-          } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "black", margin: "0 1.5rem" }}
-        />
-      ),
-    },
-    {
-      name: "Diagnostics",
-      path: "/Diagnostics",
-      icon: (
-        <ConstructionIcon
-          className={` ${
-            pathname.includes("diagnostics") && ""
-          } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "black", margin: "0 1.5rem" }}
-        />
-      ),
-    },
-    {
-      name: "NCM",
-      path: "/NCM",
-      icon: (
-        <Person2Icon
-          className={` ${
-            pathname.includes("NCM") && ""
-          } text-dark-menu-color dark:text-light-menu-color`}
-          sx={{ color: "black", margin: "0 1.5rem" }}
-        />
-      ),
-    },
+    // {
+    //   name: "Topology",
+    //   path: "/Topology",
+    //   icon: (
+    //     <CameraRoundedIcon
+    //       className={` ${
+    //         pathname.includes("Topology") && ""
+    //       } text-dark-menu-color dark:text-light-menu-color`}
+    //       sx={{ color: "black", margin: "0 1.5rem" }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Explorer",
+    //   path: "/Explorer",
+    //   icon: (
+    //     <DataSaverOffIcon
+    //       className={` ${
+    //         pathname.includes("explorer") && ""
+    //       } text-dark-menu-color dark:text-light-menu-color`}
+    //       sx={{ color: "black", margin: "0 1.5rem" }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Reports",
+    //   path: "/Reports",
+    //   icon: (
+    //     <AssignmentIcon
+    //       className={` ${
+    //         pathname.includes("Reports") && ""
+    //       } text-dark-menu-color dark:text-light-menu-color`}
+    //       sx={{ color: "black", margin: "0 1.5rem" }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Diagnostics",
+    //   path: "/Diagnostics",
+    //   icon: (
+    //     <ConstructionIcon
+    //       className={` ${
+    //         pathname.includes("diagnostics") && ""
+    //       } text-dark-menu-color dark:text-light-menu-color`}
+    //       sx={{ color: "black", margin: "0 1.5rem" }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "NCM",
+    //   path: "/NCM",
+    //   icon: (
+    //     <Person2Icon
+    //       className={` ${
+    //         pathname.includes("NCM") && ""
+    //       } text-dark-menu-color dark:text-light-menu-color`}
+    //       sx={{ color: "black", margin: "0 1.5rem" }}
+    //     />
+    //   ),
+    // },
     {
       name: "Audit",
       path: "/Audit",

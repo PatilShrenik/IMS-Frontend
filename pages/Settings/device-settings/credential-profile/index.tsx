@@ -28,7 +28,7 @@ const CredentialProfile = () => {
         console.log("modifidData old------", response);
         const modifiedData = replacePeriodsWithUnderscores(response.result);
         console.log("modifidData------", modifiedData);
-        const col = Object.keys(modifiedData[0]);
+        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         console.log("filtered cols", filteredCols);
         filteredCols.filter((key: any) => {
@@ -73,7 +73,7 @@ const CredentialProfile = () => {
         ];
 
         setVisibleColumns(
-          cols
+         cols &&  cols
             .map((column: any) => column.field)
             .filter((field: any) => !hiddenColumnsValues.includes(field))
         );

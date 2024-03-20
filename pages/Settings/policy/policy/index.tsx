@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PageHeading from "@/pages/Components/PageHeading";
-import CredntialProfileTable from "@/pages/Components/Tabels/CredentialProfileTabel";
-import TablePagination from "@mui/material/TablePagination";
-import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { useAppContext } from "@/pages/Components/AppContext";

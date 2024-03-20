@@ -166,7 +166,7 @@ const AddSNMPTempDrawer = (props: any) => {
       open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:border-l-0"
     >
       <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
@@ -202,7 +202,7 @@ const AddSNMPTempDrawer = (props: any) => {
                 </div>
                 {/* <div className="border-b-[1px]"> */}
                 <p className="mx-5 mt-4 dark:text-textColor">Scaler OID</p>
-                <Divider className="my-2 dark:bg-dark-border"/>
+                <Divider className="my-2 dark:bg-dark-border" />
                 {/* </div> */}
                 <div>
                   {formData.map((field: any, index: any) => (
@@ -244,7 +244,7 @@ const AddSNMPTempDrawer = (props: any) => {
                   ))}
                 </div>
                 <p className="mx-5 my-4 dark:text-textColor">Objects</p>
-                <Divider className="my-2 dark:bg-dark-border"/>
+                <Divider className="my-2 dark:bg-dark-border" />
                 <div className="">
                   {nestedFormData.map((item, keyIndex) => (
                     <div key={keyIndex} className="">
@@ -317,12 +317,14 @@ const AddSNMPTempDrawer = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className="w-full sticky bottom-0 left-0 flex justify-end">
+            <div className="w-full absolute bottom-0 left-0 flex justify-end">
               <div className=" flex m-3">
-                {/* <div onClick={handleSave}> */}
-                <SubmitButton title="Save" />
-                {/* </div> */}
-                <CustomeCancelButton title="Close" />
+                <div onClick={handleSave}>
+                  <SubmitButton title="Save" />
+                </div>
+                <div onClick={handleDrawerClose}>
+                  <CustomeCancelButton title="Close" />
+                </div>
               </div>
             </div>
           </form>

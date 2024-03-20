@@ -8,6 +8,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import { Pagination } from "@mui/material";
+import SsidChartIcon from "@mui/icons-material/SsidChart";
+import SpeedIcon from "@mui/icons-material/Speed";
+import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
@@ -31,6 +34,7 @@ import "../../node_modules/react-resizable/css/styles.css";
 import "../../node_modules/react-grid-layout/css/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
+import CustomPagination from "../Components/CustomePagination";
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -42,8 +46,9 @@ const index = () => {
   const [searchValue, setSearchValue] = useState("");
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const open = Boolean(anchorEl);
+  const [currentPage, setCurrentPage] = useState(1) as any;
+  const [rowsPerPage, setRowsPerPage] = useState(10) as any;
+  const [page, setPage] = React.useState(0);
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
   const { getWidgetApiState } = useAppContext();
   const [widgets, setWidgets] = useState<any>();
@@ -102,7 +107,7 @@ const index = () => {
     });
   }, [addToDashboard]);
 
-  console.log("layout dummy", layoutsDummy);
+  // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -115,19 +120,19 @@ const index = () => {
     setIsDrawerOpen(false);
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value);
+  const handlePageChange = (newPage: any) => {
+    setPage(newPage - 1);
+    setCurrentPage(newPage);
+    setPage(newPage - 1);
+    // Fetch data for the new page if needed
   };
-
-  const paginatedWidgets =
-    widgets &&
-    widgets.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
+  // console.log("current page", currentPage);
+  const handleRowsPerPageChange = (newRowsPerPage: any) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); // Reset to the first page when changing rows per page
+    setPage(0);
+    // Fetch data for the new rowsPerPage if needed
+  };
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -174,6 +179,9 @@ const index = () => {
     console.log("layouts", currentLayout, index);
     // console.log("newLayouts", newLayouts);
   }
+
+  const totalCount = widgets && widgets.length;
+
   return (
     <div>
       <ToastContainer />
@@ -297,13 +305,10 @@ const index = () => {
           <AddIcon fontSize="medium" className="dark:text-textColor" />
         </div>
 
-        <Drawer anchor="right" open={isDrawerOpen} variant="persistent">
-          <div className="container h-full bg-light-container dark:bg-dark-container">
+        <Drawer anchor="right" open={isDrawerOpen} variant="persistent" className="dark:border-l-0">
+          <div className="container h-full bg-white dark:bg-dark-container">
             <div className="flex border-b  justify-between py-3">
-              <span className="px-4 font-bold dark:text-textColor">
-                {" "}
-                Add Widget
-              </span>
+              <span className="px-4 font-bold  text-primary2"> Add Widget</span>
 
               <CloseSharpIcon
                 className="cursor-pointer mr-3 dark:text-textColor"
@@ -353,7 +358,7 @@ const index = () => {
                 open={isAddDrawerOpen}
                 handleAddDrawerClose={handleAddDrawerClose}
               />
-              <div className="relative  min-w-[34.375rem] px-4 py-1 overflow-x-auto ">
+              <div className="relative  px-4 py-1 overflow-x-auto ">
                 <div className="min-h-[450px] ">
                   <table className="w-full border-collapse overflow-x-scroll">
                     <thead>
@@ -362,6 +367,9 @@ const index = () => {
                           Widget Name
                         </th>
 
+                        <th scope="col" className="px-2 py-2 0">
+                          Widget Description
+                        </th>
                         <th scope="col" className="px-2 py-2 0">
                           Widget Type
                         </th>
@@ -372,42 +380,54 @@ const index = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {paginatedWidgets &&
-                        paginatedWidgets.map((row: any, index: any) => (
-                          <tr
-                            key={index}
-                            className="bg-white dark:bg-dark-container dark:text-textColor"
-                          >
-                            <td
-                              scope="row"
-                              className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border "
+                      {widgets &&
+                        widgets
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                          .map((row: any, index: any) => (
+                            <tr
+                              key={index}
+                              className="bg-white dark:bg-dark-container dark:text-textColor"
                             >
-                              {row.name}
-                            </td>
+                              <td
+                                scope="row"
+                                className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border "
+                              >
+                                {row.name}
+                              </td>
 
-                            <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
-                              {row.widget_type}
-                            </td>
+                              <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
+                                {row.description ? row.description : "-"}
+                              </td>
+                              <td className="bg-white text-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ">
+                                {row.widget_type == "chart" ? (
+                                  <SsidChartIcon />
+                                ) : row.widget_type == "topN" ||
+                                  row.widget_type == "grid" ? (
+                                  <TableChartOutlinedIcon />
+                                ) : (
+                                  <SpeedIcon />
+                                )}
+                              </td>
 
-                            <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
-                              <WidgetMenu id={row._id} />
-                            </td>
-                          </tr>
-                        ))}
+                              <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
+                                <WidgetMenu id={row._id} />
+                              </td>
+                            </tr>
+                          ))}
                     </tbody>
                   </table>
                 </div>
-                <div className="flex flex-row-reverse ">
-                  {/* <Pagination
-                    count={Math.ceil(
-                      widgets && widgets.length / ITEMS_PER_PAGE
-                    )}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    variant="outlined"
-                    shape="rounded"
-                    className="mt-4 mb-4"
-                  /> */}
+                <div className="fixed bottom-0 ">
+                  <CustomPagination
+                    totalCount={totalCount}
+                    rowsPerPage={rowsPerPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                    onRowsPerPageChange={handleRowsPerPageChange}
+                  />
                 </div>
               </div>
             </div>

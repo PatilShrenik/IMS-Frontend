@@ -5,15 +5,9 @@ import {
   Menu,
   MenuItem,
   Checkbox,
-  Paper,
-  Modal,
-  Typography,
-  Box,
   TableSortLabel,
   Tooltip,
   Button,
-  Backdrop,
-  Fade,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -39,6 +33,8 @@ import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
 import PolicyDrawer from "../SideDrawers/PolicyDrawer";
 import PolicyActionMenu from "../ActionMenu/PolicyActionMenu";
 import { deleteBulkPolicy } from "@/pages/api/api/PolicyApi";
+import { getAllGropus } from "@/pages/api/api/GroupsAPI";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 const PoliciesTable = (props: any) => {
   const {
@@ -73,6 +69,19 @@ const PoliciesTable = (props: any) => {
   const open = Boolean(anchorE2);
   const { togglegetPolicyApiState } = useAppContext();
   const ITEM_HEIGHT = 48;
+  React.useEffect(() => {
+    const getGroups = async () => {
+      let response = await getAllGropus();
+      setAllGroups(response.result);
+    };
+    getGroups();
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
+
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
@@ -85,7 +94,7 @@ const PoliciesTable = (props: any) => {
       name: item.hostname,
       id: item._id,
     }));
-
+  console.log("------------data", data);
   //   useEffect(() => {
   //     try {
   //       const getData = async () => {
@@ -347,54 +356,45 @@ const PoliciesTable = (props: any) => {
     // console.log("--row", row);
     if (column.field === "entities") {
       const entity_type = row.entity_type;
-      //   console.log("entitytype", entity_type);
       if (entity_type === "GROUP") {
-        const groupId = row.entities;
-        // Find the corresponding object in groupValues array
-        // const matchingGroup: any = groupValues.find(
-        //   (group: any) => group.id === groupId[0]
-        // );
-        // console.log("entities", matchingGroup.name);
-        const matchingNames: string[] = groupId.map((id: any) => {
-          const matchingGroup: any =
-            groupValues && groupValues.find((group: any) => group.id === id);
-          //   return matchingGroup ? matchingGroup.name : null;
-        });
-        // console.log("groups", matchingNames);
-        return <Chips value={row.entities?.length} />;
-        //     <>
-        //     <div
-        //       className={`${row.entities?.length > 0 ? "cursor-pointer" : ""}`}
-        //       onClick={
-        //         row.entities?.length > 0
-        //           ? () => handleClickOpen(deviceIds)
-        //           : undefined
-        //       }
-        //     >
-        //       <Chips value={deviceIds.length} />
-        //     </div>
-        //     <DeviceDetailsModal
-        //       open={dialogOpen === deviceIds}
-        //       handleDialogClose={handleDialogClose}
-        //       device_ids={deviceIds}
-        //     />
-        //   </>
+        const groupId = row[column.field] && row[column.field];
+        const names = groupValues.filter(
+          (option) => groupId && groupId.includes(option.id)
+        );
 
-        // console.log("entities", matchingNames);
+        const groupNames: any = names && names.map((item: any) => item.name);
+
+        return (
+          <Tooltip
+            TransitionComponent={Zoom}
+            title={groupNames.join(", ")}
+            placement="top"
+          >
+            <div className="">
+              <Chips value={groupId.length} />
+            </div>
+          </Tooltip>
+        );
       } else if (entity_type === "DEVICE") {
-        const deviceIds = row.entities;
-        console.log("-------deviceids", deviceIds);
-        return row.entities ? (
+        const deviceIds = row[column.field];
+        return (
           <>
-            <Chips value={row.entities?.length} />
+            <div
+              className={`${deviceIds.length > 0 ? "cursor-pointer" : ""}`}
+              onClick={
+                deviceIds.length > 0
+                  ? () => handleClickOpen(deviceIds)
+                  : undefined
+              }
+            >
+              <Chips value={deviceIds.length} />
+            </div>
             <DeviceDetailsModal
               open={dialogOpen === deviceIds}
               handleDialogClose={handleDialogClose}
               device_ids={deviceIds}
             />
           </>
-        ) : (
-          "-"
         );
       }
     } else if (column.field == "threshold") {
@@ -710,7 +710,7 @@ const PoliciesTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data ? (
+        {data && data.length > 0 ? (
           <div
             className=""
             style={{

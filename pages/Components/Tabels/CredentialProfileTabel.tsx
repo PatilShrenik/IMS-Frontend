@@ -672,7 +672,7 @@ const CredntialProfileTable = (props: any) => {
             {/* Global Downlad and delete button for table */}
           </div>
         </div>
-        {data ? (
+        {data && data.length > 0 ?  (
           <div
             className=""
             style={{
@@ -926,8 +926,8 @@ const CredntialProfileTable = (props: any) => {
             /> */}
           </div>
         ) : (
-          <div className="w-full flex justify-center">
-            <p className="dark:text-textColor">No Data</p>
+          <div className="w-full justify-center dark:text-textColor">
+            No Data
           </div>
         )}
       </div>

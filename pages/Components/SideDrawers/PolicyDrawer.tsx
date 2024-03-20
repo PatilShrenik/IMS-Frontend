@@ -1,24 +1,13 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Drawer,
-  Select,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, ButtonGroup, Drawer } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import CustomeInput from "../Inputs";
 import { useAppContext } from "../AppContext";
 import { Bounce, toast } from "react-toastify";
 import {
-  getAllKeys,
   replaceDotsWithUnderscores,
   replaceUnderscoresWithDots,
-  replaceUnderscoresWithDotsNested,
 } from "@/functions/genericFunctions";
-import { createCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import SingleSelect from "../Selects";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,12 +15,10 @@ import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getIndicatorMapper } from "@/pages/api/api/MiscAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import { addPolicies } from "@/pages/api/api/PolicyApi";
-import CustomInputWithChips from "../InputChip";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: "100%",
-    // flexShrink: 100,
+    width: "60%",
   },
 }));
 const PolicyDrawer = (props: any) => {
@@ -278,12 +265,10 @@ const PolicyDrawer = (props: any) => {
   return (
     <Drawer
       anchor="right"
-      open={props.open}
+      open={open}
       variant="temporary"
-      classes={{
-        paper: classes.drawer,
-      }}
-      className={`shadow-sm shadow-dark-container dark:border-l-0`}
+      classes={{ paper: classes.drawer }}
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:border-l-0"
     >
       <div className="h-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-5 border-b border-b-textColor dark:border-b-dark-border">

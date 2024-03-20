@@ -61,7 +61,7 @@ const MailServer= () => {
   const [isAuthEnabled, setIsAuthEnabled] = useState(false);
   const [selectedSecurity, setSelectedSecurity] = useState("NONE");
   const [data, setData] = React.useState<any>(initialState);
-  const [originalData, setOriginalData] = useState({});
+  const [originalData, setOriginalData] = useState([]);
 
   useEffect(() => {
     try {
@@ -70,9 +70,9 @@ const MailServer= () => {
         const modifiedData = replaceDotsWithUnderscores(
           response.result
         );
-        // console.log("get data", modifiedData);
+         console.log("get data", modifiedData);
         setData(modifiedData);
-        // setOriginalData(modifiedData);
+       //  setOriginalData(modifiedData);
         //  console.log("sd",modifiedData)
         modifiedData.smtp_enabled == "yes"
           ? setIsEmailEnabled(true)
@@ -91,8 +91,11 @@ const MailServer= () => {
   // useEffect(() => {
   // //  console.log("usse", isEmailEnabled);
   //   if (isEmailEnabled) {
-  //     // setData({ ...data, smtp_enabled: isEmailEnabled ? "yes" :"no" });
-  //       
+  //     setData({
+  //       ...data,
+  //       smtp_enabled: isEmailEnabled ? "yes" : "no",
+  //     });
+        
   //   } else {
   //     setData({
   //       smtp_enabled: "no",
@@ -179,22 +182,33 @@ const MailServer= () => {
     setSelectedSecurity(securityType);
   };
   const handleCancel = () => {
-    // console.log("email", isEmailEnabled);
+
+    setData(initialState);
+    // Reset any other state variables if needed
     setIsEmailEnabled(false);
+    setIsAuthEnabled(false);
+    setSelectedSecurity("NONE");
+    // Reset the form data to its original state
    // setData(originalData);
+  // Reset any other state variables if needed
+  // setIsEmailEnabled(originalData && originalData.smtp_enabled === "yes");
+  // setIsAuthEnabled(originalData && originalData.smtp_authentication === "yes");
+  // setSelectedSecurity(originalData ? originalData.smtp_security : "NONE");
   };
 
   const handleSave = (event: any) => {
     event.preventDefault();
   
-    console.log("server data",data);
+    console.log("handle save data",data);
    
     try {
       const updateWidget = async () => {
         if(data.smtp_authentication == "no"){
           data.smtp_username = "";
           data.smtp_password = "";
-        } else if(data.smtp_enabled == "no"){
+        } 
+        
+        if(data.smtp_enabled == "no"){
           data.smtp_hostname = "",
           data.smtp_port = "",
           data.sender_email = "",
@@ -267,7 +281,6 @@ const MailServer= () => {
               name="smtp_hostname"
               value={data.smtp_hostname}
               onChange={handleChange}
-              required
               require={true}
             />
             <CustomeInput
@@ -276,7 +289,7 @@ const MailServer= () => {
               name="smtp_port"
               value={data.smtp_port}
               onChange={handleChange}
-              required
+            
              require={true}
             />
             <CustomeInput
@@ -285,7 +298,7 @@ const MailServer= () => {
               name="sender_email"
               value={data.sender_email}
               onChange={handleChange}
-              required
+            
              require={true}
             />
             <div className="mx-6">
@@ -351,18 +364,14 @@ const MailServer= () => {
                 label="UserName"
                 name="smtp_username"
                 value={data.smtp_username}
-                onChange={handleChange}
-                required
-          
+                onChange={handleChange}          
               />
               <CustomeInput
                 type="password"
                 label="Password"
                 name="smtp_password"
                 value={data.smtp_password}
-                onChange={handleChange}
-                
-              
+                onChange={handleChange}            
               />
             </div>
           )}

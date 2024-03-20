@@ -32,7 +32,7 @@ const SNMP = () => {
 
         //   return { ...item, entities: entitiesArray, email: emailArray };
         // });
-        const col = Object.keys(modifiedData[0]);
+        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         console.log("filtered cols----------------", filteredCols);
 
@@ -71,17 +71,14 @@ const SNMP = () => {
 
         const hiddenColumnsValues = [
           "system_oid",
-         
           "created_by",
-       
           "created_on",
-          
           "updated_on",
           "updated_by",
           "snmp_template",
         ];
 
-        setVisibleColumns(
+        cols &&  setVisibleColumns(
           cols
             .map((column: any) => column.field)
             .filter((field: any) => !hiddenColumnsValues.includes(field))

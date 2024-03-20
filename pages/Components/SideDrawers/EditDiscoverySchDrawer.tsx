@@ -15,10 +15,11 @@ import {
   updateDiscSch,
 } from "@/pages/api/api/DiscoveryScheduleAPI";
 import {
+  isObjectEqual,
   replaceDotsWithUnderscores,
   replaceDotsWithUnderscoresSec,
   replaceUnderscoresWithDots,
-  replaceUnderscoresWithDotsNested,
+  replaceDotWithUnderscore2,
 } from "@/functions/genericFunctions";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
@@ -38,6 +39,7 @@ const EditDiscoverySchDrawer = (props: any) => {
   const [date, setDate] = React.useState<any>([]);
   const [selectedDeviceValue, setSelectedDeviceValue] = React.useState<any>([]);
   const [selectedTimeValue, setSelectedTimeValue] = React.useState<any>([]);
+  const [schedulerContext, setSchedulerContext] = useState({}) as any;
   const [selectedDaysValue, setSelectedDaysValue] = React.useState<any>([]);
   const [selectedDatesValue, setSelectedDatesValue] = React.useState<any>([]);
   const { themeSwitch, togglegetDisSchedApiState } = useAppContext();
@@ -94,54 +96,16 @@ const EditDiscoverySchDrawer = (props: any) => {
     if (open) {
       try {
         const getDiscoveryShById = async () => {
-          console.log("edit id----", id);
           let response = await getDiscoverySchById(id);
-            console.log("-----result", response.result);
-          const modifiedData = replaceDotsWithUnderscoresSec(response.result);
-          console.log("mod data----", modifiedData);
-          
-          const entitiesArray =
-          modifiedData && Object.values(modifiedData.entities || {});
-          modifiedData.entities = entitiesArray;
-          const emailArray =
-            modifiedData && Object.values(modifiedData.email || {});
-          modifiedData.email = emailArray;
+          console.log("Get by Id ---result", response.result);
+          const modifiedData = replaceDotWithUnderscore2(response.result);
+          console.log("mod data getById----", modifiedData);
 
-          const daysArray =
-          modifiedData &&
-          modifiedData.scheduler_context.days_of_week &&
-          Object.values(modifiedData.scheduler_context.days_of_week || {});
-          modifiedData.scheduler_context.days_of_week = daysArray && daysArray;
-          
-          const datesArray =
-          modifiedData &&
-          modifiedData.scheduler_context.days_of_month &&
-          Object.values(modifiedData.scheduler_context.days_of_month || {});
-
-          modifiedData.scheduler_context.days_of_month =
-          datesArray && datesArray;
-          
-          
-          
-          const schTimeArray =
-          modifiedData &&
-          modifiedData.scheduler_context.scheduled_times &&
-          Object.values(modifiedData.scheduler_context.scheduled_times || {});
-          
-          modifiedData.scheduler_context.scheduled_times =
-          schTimeArray && schTimeArray;
           setData(modifiedData);
-          
-          schTimeArray && setSelectedTimeValue(schTimeArray);
-          daysArray && setSelectedDaysValue(daysArray);
-          datesArray && setSelectedDatesValue(datesArray);
-          // console.log("dates arr", datesArray);
-          // console.log("days arr", daysArray);
-          //setDate(modifiedData.scheduler_context.start_date * 1000)
+          setSchedulerContext(modifiedData.scheduler_context);
           setActiveButton(modifiedData.entity_type);
           setSelection(modifiedData.entity_type);
           setFrequencyButton(modifiedData.scheduler_context?.frequency);
-          //console.log("frequencyButton----", frequencyButton);
           setFrequency(modifiedData.scheduler_context?.frequency);
         };
         getDiscoveryShById();
@@ -150,18 +114,25 @@ const EditDiscoverySchDrawer = (props: any) => {
       }
     }
   }, [id, open]);
- // console.log("device",data.scheduler_context.start_date);
+
+  useEffect(() => {
+    console.log("schedulr context", schedulerContext);
+  }, [schedulerContext]);
+  // console.log("device",data.scheduler_context.start_date);
   useEffect(() => {
     if (data && data.entity_type === "DEVICE") {
       data.entities && setSelectedDeviceValue(data.entities);
     }
     if (data && data.entity_type === "GROUP") {
-      data.entities &&  setSelectedGroupValue(data.entities);
+      data.entities && setSelectedGroupValue(data.entities);
     }
     if (data && data.scheduler_context) {
-      data.scheduler_context.days_of_week && setSelectedDaysValue(data.scheduler_context.days_of_week);
-      data.scheduler_context.days_of_month &&  setSelectedDatesValue(data.scheduler_context.days_of_month);
-      data.scheduler_context.scheduled_times &&  setSelectedTimeValue(data.scheduler_context.scheduled_times)
+      data.scheduler_context.days_of_week &&
+        setSelectedDaysValue(data.scheduler_context.days_of_week);
+      data.scheduler_context.days_of_month &&
+        setSelectedDatesValue(data.scheduler_context.days_of_month);
+      data.scheduler_context.scheduled_times &&
+        setSelectedTimeValue(data.scheduler_context.scheduled_times);
     }
   }, [data]);
 
@@ -174,9 +145,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     // handleStorageChange();
   }, [themeSwitch]);
 
-
   React.useEffect(() => {
-   
     const time = generateTimeArray();
     const transformedArray = time.map((time) => ({
       value: time,
@@ -194,7 +163,6 @@ const EditDiscoverySchDrawer = (props: any) => {
       setAllDevices(response.result);
     };
     getDevices();
-  
   }, []);
 
   const generateTimeArray = () => {
@@ -278,8 +246,7 @@ const EditDiscoverySchDrawer = (props: any) => {
       },
     }));
   };
-  // console.log("Days of month", data.scheduler_context.days_of_month);
-  // console.log("Days of week", data.scheduler_context.days_of_week);
+
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
     console.log("fre", value);
@@ -292,13 +259,12 @@ const EditDiscoverySchDrawer = (props: any) => {
           ...restSchedulerContext,
           days_of_week: selectedDaysValue,
         };
-       
+
         return {
           ...prevState,
           scheduler_context: updatedSchedulerContext,
         };
       });
-      
     } else if (value === "MONTHLY") {
       setData((prevState: any) => {
         const { days_of_week, ...restSchedulerContext } =
@@ -326,12 +292,12 @@ const EditDiscoverySchDrawer = (props: any) => {
       },
     }));
   };
-//console.log("df",data.scheduler_context.start_date);  
+  //console.log("df",data.scheduler_context.start_date);
   const handleDate = (values: any) => {
-    console.log("val==",values);
+    console.log("val==", values);
     const date = new Date(values);
-    const epochTime = date.getTime() / 1000; 
-     //   console.log("date------------",epochTime);
+    const epochTime = date.getTime() / 1000;
+    //   console.log("date------------",epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -341,12 +307,52 @@ const EditDiscoverySchDrawer = (props: any) => {
     }));
   };
 
+  // const handleSave = async (event: any) => {
+  //   event.preventDefault();
+  //   const modifiedData = replaceUnderscoresWithDots(data);
+  //   console.log("data to be updated : ", modifiedData);
+  //   console.log("id of the data to be updated : ", id);
+  //   let response = await updateDiscSch(modifiedData, id);
+  //   // console.log("updated", response);
+  //   if (response.status == "success") {
+  //     togglegetDisSchedApiState();
+  //     handleDrawerClose();
+  //     toast.success(response.status, {
+  //       position: "bottom-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       transition: Bounce,
+  //     });
+  //   } else {
+  //     toast.error(response.message, {
+  //       position: "bottom-right",
+  //       autoClose: 2000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       transition: Bounce,
+  //     });
+  //   }
+  // };
   const handleSave = async (event: any) => {
     event.preventDefault();
+    const areEqual = isObjectEqual(data.scheduler_context, schedulerContext);
+    if (!areEqual) {
+      data.scheduler_context_updated = "yes";
+    }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("======", modifiedData);
+    console.log("modifiedData for discovery", modifiedData);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
+    1;
     let response = await updateDiscSch(modifiedData, id);
     // console.log("updated", response);
     if (response.status == "success") {
@@ -377,7 +383,6 @@ const EditDiscoverySchDrawer = (props: any) => {
       });
     }
   };
-
   return (
     <Drawer
       // hideBackdrop = {false}temporary
@@ -419,52 +424,54 @@ const EditDiscoverySchDrawer = (props: any) => {
                 <ButtonGroup
                   variant="outlined"
                   aria-label="Basic button group"
-                  className="my-4 mx-4 "
+                  className="my-4 mx-4 items-center"
                 >
-                      <Button
-                    className={`dark:text-textColor border-primary2 px-[2.75rem] py-2.5 rounded-lg ${
-                      activeButton == "DEVICE" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                  <Button
+                    // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                    //   activeButton == "GROUP" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => {
                       handleButtonClick("DEVICE");
                     }}
-                    // style={{
-                    //   width: "120px",
-                    //   backgroundColor:
-                    //     activeButton === "DEVICE" ? "#0078d4" : "",
+                    style={{
+                      width: "145px",
+                      backgroundColor:
+                        activeButton === "DEVICE" ? "#0078d4" : "",
 
-                    //   color: activeButton === "DEVICE" ? "white" : "",
-                    // }}
+                      color: activeButton === "DEVICE" ? "white" : "",
+                    }}
                   >
                     Device
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
-                      activeButton == "GROUP" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                    //   activeButton == "GROUP" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => {
                       handleButtonClick("GROUP");
                     }}
-                    // style={{
-                    //   width: "120px",
-                    //   backgroundColor:
-                    //     activeButton === "GROUP" ? "#0078d4" : "",
-                    //   color: activeButton === "GROUP" ? "white" : "",
-                    // }}
+                    style={{
+                      width: "145px",
+                      backgroundColor:
+                        activeButton === "GROUP" ? "#0078d4" : "",
+                      color: activeButton === "GROUP" ? "white" : "",
+                    }}
                   >
                     Group
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="">
+              <div className="px-8">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
                     isMulti={true}
-                    value={deviceValues.filter((option) => selectedDeviceValue &&
-                      selectedDeviceValue.includes(option.value)
+                    value={deviceValues.filter(
+                      (option) =>
+                        selectedDeviceValue &&
+                        selectedDeviceValue.includes(option.value)
                     )}
                     selectData={deviceValues}
                     onChange={handleEntities}
@@ -473,8 +480,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Groups"
                     isMulti={true}
-                    value={groupValues.filter((option) => selectedGroupValue &&
-                      selectedGroupValue.includes(option.value)
+                    value={groupValues.filter(
+                      (option) =>
+                        selectedGroupValue &&
+                        selectedGroupValue.includes(option.value)
                     )}
                     selectData={groupValues}
                     onChange={handleEntities}
@@ -484,7 +493,9 @@ const EditDiscoverySchDrawer = (props: any) => {
             </div>
 
             <div>
-              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">Notify To</h5>
+              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
+                Notify To
+              </h5>
               <CustomeInput
                 style={{ marginTop: "10px" }}
                 label="Email"
@@ -510,8 +521,8 @@ const EditDiscoverySchDrawer = (props: any) => {
             <div className="mx-4 py-2">
               <p className="mb-4 font-normal dark:text-textColor">Schedule</p>
               <CustomProvider theme="dark">
-                <DatePicker 
-                onChange={handleDate}
+                <DatePicker
+                  onChange={handleDate}
                   // showOneCalendar
                   value={new Date(data.scheduler_context.start_date * 1000)}
                   appearance="subtle"
@@ -539,43 +550,62 @@ const EditDiscoverySchDrawer = (props: any) => {
                   aria-label="Basic button group"
                   className="my-5 mx-4 mr-7"
                 >
-                       <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "CUSTOME" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                  <Button
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "CUSTOME" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => handleFrequencyClick("CUSTOME")}
-                    // style={{
-                    //   backgroundColor:
-                    //     frequencyButton === "CUSTOME" ? "#0078d4" : "",
-                    //   color: frequencyButton === "CUSTOME" ? "white" : "",
-                    // }}
+                    style={{
+                      width: "75px",
+                      backgroundColor:
+                        frequencyButton === "CUSTOME" ? "#0078d4" : "",
+                      color: frequencyButton === "CUSTOME" ? "white" : "",
+                    }}
                   >
                     Custom
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "DAILY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "DAILY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
+                    style={{
+                      width: "65px",
+                      backgroundColor:
+                        frequencyButton === "DAILY" ? "#0078d4" : "",
+                      color: frequencyButton === "DAILY" ? "white" : "",
+                    }}
                     onClick={() => handleFrequencyClick("DAILY")}
                   >
                     Daily
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "WEEKLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "WEEKLY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
+                    style={{
+                      width: "75px",
+                      backgroundColor:
+                        frequencyButton === "WEEKLY" ? "#0078d4" : "",
+                      color: frequencyButton === "WEEKLY" ? "white" : "",
+                    }}
                     onClick={() => handleFrequencyClick("WEEKLY")}
                   >
                     Weekly
                   </Button>
                   <Button
-                    className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
-                      frequencyButton == "MONTHLY" &&
-                      "bg-primary2 hover:bg-primary2 text-white"
-                    }`}
+                    style={{
+                      width: "80px",
+                      backgroundColor:
+                        frequencyButton === "MONTHLY" ? "#0078d4" : "",
+                      color: frequencyButton === "MONTHLY" ? "white" : "",
+                    }}
+                    // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
+                    //   frequencyButton == "MONTHLY" &&
+                    //   "bg-primary2 hover:bg-primary2 text-white"
+                    // }`}
                     onClick={() => handleFrequencyClick("MONTHLY")}
                   >
                     Monthly
@@ -596,9 +626,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                   label="Select Hours"
                   isMulti={true}
                   width={150}
-                  value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                  selectedTimeValue.includes(day.value)
-                )}
+                  value={timeArray.filter(
+                    (day: { value: any }) =>
+                      selectedTimeValue && selectedTimeValue.includes(day.value)
+                  )}
                   selectData={timeArray}
                   onChange={handleFrequency}
                 />
@@ -609,9 +640,11 @@ const EditDiscoverySchDrawer = (props: any) => {
                     isMulti={true}
                     width={150}
                     selectData={timeArray}
-                    value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                    selectedTimeValue.includes(day.value)
-                  )}
+                    value={timeArray.filter(
+                      (day: { value: any }) =>
+                        selectedTimeValue &&
+                        selectedTimeValue.includes(day.value)
+                    )}
                     onChange={handleFrequency}
                   />
                   <SingleSelect
@@ -634,8 +667,10 @@ const EditDiscoverySchDrawer = (props: any) => {
                     isMulti={true}
                     width={150}
                     selectData={timeArray}
-                    value={timeArray.filter((day: { value: any; }) => selectedTimeValue &&
-                      selectedTimeValue.includes(day.value)
+                    value={timeArray.filter(
+                      (day: { value: any }) =>
+                        selectedTimeValue &&
+                        selectedTimeValue.includes(day.value)
                     )}
                     onChange={handleFrequency}
                   />
@@ -645,7 +680,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                     width={150}
                     selectData={datesOfMonth}
                     value={datesOfMonth.filter(
-                      (day ) =>
+                      (day) =>
                         selectedDatesValue &&
                         selectedDatesValue.includes(day.value)
                     )}

@@ -13,7 +13,7 @@ import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper } from "../api/api/MiscAPI";
+import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -196,7 +196,7 @@ const EditGridWidget = (props: any) => {
     };
     getDevices();
     const getMapper = async () => {
-      let response = await getIndicatorMapper();
+      let response = await getIndicatorMapperMetric();
       const modified: any = replacePeriodsWithUnderscoresArrayOfObjects(
         response.result
       );

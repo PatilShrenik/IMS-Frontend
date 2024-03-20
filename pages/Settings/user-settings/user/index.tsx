@@ -22,20 +22,17 @@ const User = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const { themeSwitch, getUserApiState } = useAppContext();
 
-
-
-
   useEffect(() => {
     try {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllUser();
-        console.log("discover Scheduler data response ", response.result);
         const modifiedData = replaceDotsWithUnderscores(response.result);
         console.log("modifified data", modifiedData);
           
-        const col = Object.keys(modifiedData[0]);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
+        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+
+        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "password");
         console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
@@ -74,25 +71,22 @@ const User = () => {
         const hiddenColumnsValues = [
           "username",
           "password",
-          "role",
           "enable",
           "created_on",
+          "created_by",
           "groups",
           "updated_on",
           "updated_by",
-          "role",
-          "user_preferences"
+          "user_preferences",
         ];
 
-        setVisibleColumns(
+        cols && setVisibleColumns(
           cols
             .map((column: any) => column.field)
             .filter((field: any) => !hiddenColumnsValues.includes(field))
         );
 
         setData(modifiedData);
-        //setData(newData);
-        // console.log("newData-----", data);
       };
       getData();
     } catch (error) {

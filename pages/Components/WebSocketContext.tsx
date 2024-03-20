@@ -68,7 +68,7 @@ export const WebSocketContextProvider: React.FC<any> = ({ children }: any) => {
   }
 
   const Subscribe = (subID: String, eventType: String, callback: any) => {
-    // console.log("PEHLE", subs, subID, eventType)
+    console.log("PEHLE", subs, subID, eventType);
     if (subs[`${eventType}`] && subs[`${eventType}`].length) {
       if (!subs[`${eventType}`].find((item: any) => item.id === subID)) {
         subs[`${eventType}`].push({

@@ -12,10 +12,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
 import {
@@ -27,76 +24,14 @@ import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import PieChartComponent from "../Components/Charts/PieChart";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 
 const TOPNWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-  const granuality_time = [
-    {
-      name: "All",
-      id: "all",
-    },
-    {
-      name: "None",
-      id: "none",
-    },
-    {
-      name: "Second",
-      id: "second",
-    },
-    {
-      name: "Minute",
-      id: "minute",
-    },
-    {
-      name: "Five Minute",
-      id: "five_minute",
-    },
-    {
-      name: "Tem Minute",
-      id: "ten_minute",
-    },
-    {
-      name: "Fifteen Minute",
-      id: "fifteen_minute",
-    },
-    {
-      name: "Thirty Minute",
-      id: "thirty_minute",
-    },
-    {
-      name: "Hour",
-      id: "hour",
-    },
-    {
-      name: "Six Hour",
-      id: "six_hour",
-    },
-    {
-      name: "Eight Hour",
-      id: "eight_hour",
-    },
-    {
-      name: "Day",
-      id: "day",
-    },
-    {
-      name: "Week",
-      id: "week",
-    },
-    {
-      name: "Month",
-      id: "month",
-    },
-    {
-      name: "Quarter",
-      id: "quarter",
-    },
-    {
-      name: "Year",
-      id: "year",
-    },
-  ];
+
   const options = ["Metric"];
   // const [timePeriod, setTimePeriod] = React.useState<any>([
   //   new Date(time),
@@ -140,16 +75,22 @@ const TOPNWidget = (props: any) => {
       indicator_type: "",
       direction: "",
     },
-    time_range: "custome",
+    time_range: "custom",
     start_timestamp: "",
     end_timestamp: "",
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
     },
   });
+
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
+
   const today = moment();
   const financialYearStartMonth = 3;
   let financialYearStart;
@@ -342,8 +283,8 @@ const TOPNWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -411,8 +352,8 @@ const TOPNWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },
@@ -486,17 +427,33 @@ const TOPNWidget = (props: any) => {
     setDropdowns(updatedDropdowns);
   };
 
-  const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range:", value);
-    const start = value[0].getTime() / 1000;
-    const end = value[1].getTime() / 1000;
-    console.log(start, end);
-    setTimePeriod({
-      ...timePeriod,
-      start_timestamp: start,
-      end_timestamp: end,
-    });
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
   };
+
   useEffect(() => {
     console.log("time", timePeriod);
     setData({
@@ -519,6 +476,31 @@ const TOPNWidget = (props: any) => {
         direction: value,
       },
     });
+  };
+
+  function getWidgetData(data: any) {
+    // if (pageID == data.pageID) {
+    console.log("widget data", data, pageID);
+    setQueryOutput(data);
+    // }
+  }
+
+  useEffect(() => {
+    Subscribe("ChartReport-" + pageID, eventType, getWidgetData);
+    return () => {
+      unsubscribe("ChartReport-" + pageID, eventType);
+    };
+  }, []);
+
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+
+    emit(eventType, modified);
   };
 
   const handleSave = () => {
@@ -583,30 +565,9 @@ const TOPNWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        <div className="h-max mt-[1.25rem]">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"
@@ -618,8 +579,16 @@ const TOPNWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12 border-[2px] p-8 dark:text-textColor">
+              <PieChartComponent data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
@@ -798,7 +767,9 @@ const TOPNWidget = (props: any) => {
             <p className="dark:text-textColor pb-8">Post Filters :</p>
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Execute" />
+            </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
             </div>

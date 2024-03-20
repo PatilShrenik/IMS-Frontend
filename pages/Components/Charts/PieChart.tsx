@@ -8,7 +8,7 @@ import HighchartsAccessibility from "highcharts/modules/accessibility";
 
 // Initialize Highcharts modules
 
-const ChartComponent = (props: any) => {
+const PieChartComponent = (props: any) => {
   useEffect(() => {
     HighchartsExporting(Highcharts);
     HighchartsExportData(Highcharts);
@@ -16,49 +16,82 @@ const ChartComponent = (props: any) => {
     HighchartsVariablePie(Highcharts);
     NoDataToDisplay(Highcharts);
   }, []);
+  const morphData = (data: any) => {
+    const initialData = data?.result || [];
+    const groupBy = data["group.by"];
+    const totalGroupsKeys: any = {};
+    if (groupBy != "device") {
+      initialData.filter((item: any) => {
+        if (!totalGroupsKeys[item?.event[groupBy]]) {
+          totalGroupsKeys[item?.event[groupBy]] = true;
+        }
+      });
+    }
+    // console.log("totalGroupsKeys", totalGroupsKeys);
+    const devices = Array.from(
+      new Set(initialData.map((item: any) => item?.event?.device))
+    );
+    const firstData = initialData[0]?.event || 0;
+    const allKeys = Object.keys(firstData);
+    const indexes = Array.from(
+      new Set(
+        allKeys.filter((keys: any) => {
+          if (keys != "device" && keys != groupBy) {
+            return keys;
+          }
+        })
+      )
+    );
+    const lines: any[] = [];
+    devices.forEach((device: any) => {
+      indexes.forEach((index: any, i: any) => {
+        if (groupBy != "device") {
+          Object.keys(totalGroupsKeys).forEach((key: any, i: any) => {
+            const data = parseInt(
+              initialData.find(
+                (item: any) =>
+                  item?.event?.device === device && item?.event[groupBy] == key
+              )?.event?.[index]
+            );
+            const legendName =
+              groupBy == "device"
+                ? device + "-" + index
+                : device + "-" + groupBy + `(${key})` + "-" + index;
+            lines.push({ name: legendName, y: data });
+          });
+        } else {
+          const data = parseInt(
+            initialData.find((item: any) => item?.event?.device === device)
+              ?.event?.[index]
+          );
+          const legendName =
+            groupBy == "device"
+              ? device + "-" + index
+              : device +
+                "-" +
+                groupBy +
+                `(${initialData[index]?.event[groupBy]})` +
+                "-" +
+                index;
+          lines.push({ name: legendName, y: data });
+        }
+      });
+    });
+    // console.log("lines", lines);
+    return lines;
+  };
   useEffect(() => {
-    // console.log(props.data.data);
+    // console.log(props);
+
     if (props?.data) {
+      const newData: any = morphData(props.data);
+      console.log("newData", newData);
       const options: any = {
         chart: {
           plotBackgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
           type: "pie",
-          events: {
-            fullscreenOpen: function () {
-              (this as any).update({
-                plotOptions: {
-                  pie: {
-                    size: "90%",
-                    allowPointSelect: true,
-                    cursor: "pointer",
-                    dataLabels: {
-                      enabled: true,
-                      format: "{point.percentage:.1f} %",
-                    },
-                    showInLegend: true,
-                  },
-                },
-              });
-            },
-            fullscreenClose: function () {
-              (this as any).update({
-                plotOptions: {
-                  pie: {
-                    size: props.height / 3 || "200px",
-                    allowPointSelect: true,
-                    cursor: "pointer",
-                    dataLabels: {
-                      enabled: true,
-                      format: "{point.percentage:.1f} %",
-                    },
-                    showInLegend: true,
-                  },
-                },
-              });
-            },
-          },
         },
         credits: {
           enabled: false,
@@ -73,7 +106,7 @@ const ChartComponent = (props: any) => {
         },
         plotOptions: {
           pie: {
-            size: props.height / 3 || "200px",
+            // size: props.height / 3 || "200px",
             allowPointSelect: true,
             cursor: "pointer",
             dataLabels: {
@@ -119,36 +152,19 @@ const ChartComponent = (props: any) => {
             minPointSize: 100,
             innerSize: "40%",
             zMin: 0,
-            name: "networks", //this will come from api
+            name: props?.data?.name || "TopN",
             borderRadius: 0,
             colorByPoint: true,
-            data: props?.data?.data || [],
+            data: newData || [],
           },
         ],
-        //   exporting: {
-        //     showTable: true,
-        //     csv: {
-        //         columnHeaderFormatter: function(item, key) {
-        //             if (!item || item instanceof Highcharts.Axis) {
-        //                 return 'My new custom name yo'         //this will be the column heading
-        //             } else {
-        //                 return item.name;
-        //             }
-        //         }
-        //     }
-        // }
       };
 
       Highcharts.chart("container-" + props.id, options);
     }
   }, [props.data]); // Empty dependency array ensures the effect runs once after initial render
-  const containerStyle = {
-    height: props.height || "500px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-  return <div id={"container-" + props.id} style={containerStyle} />;
+
+  return <div id={"container-" + props.id} />;
 };
 
-export default ChartComponent;
+export default PieChartComponent;
