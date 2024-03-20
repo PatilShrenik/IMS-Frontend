@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
+import {
+  replaceDotsWithUnderscores,
+  replacePeriodsWithUnderscores,
+} from "@/functions/genericFunctions";
 import CustomPagination from "@/pages/Components/CustomePagination";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import AllDeviceTabel from "../Components/Tabels/AllDeviceTabel";
@@ -7,14 +10,50 @@ import { ToastContainer } from "react-toastify";
 import { useAppContext } from "../Components/AppContext";
 import "react-toastify/dist/ReactToastify.css";
 import AlertTable from "../Components/Tabels/AlertTable";
+import { useWebSocketContext } from "../Components/WebSocketContext";
 const Alerts = () => {
-  const { deviceTabelState } = useAppContext();
+  const { deviceTabelState, activeButton, toggleActiveButton } =
+    useAppContext();
+  const { Subscribe, emit, connection } = useWebSocketContext();
 
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibleColumns, setVisibleColumns] = useState<any>([]);
+  const [receivedData, setReceivedData] = React.useState<any>({
+    result: {
+      "P1225151828844040-D641660281176464-O21": {
+        _id: 1225151828844075,
+        severity: "critical",
+        policy: 1225151828844040,
+        device: 641660281176464,
+        object: "21",
+        indicator: "cpu.5sec.avg.percentage",
+        "triggered.value": 19,
+        status: "active",
+        message:
+          "critical! 641660281176464's 21 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+        timestamp: 1710851085,
+        "previous.status": "warning",
+        "event.type": "notify.alert.state.change",
+      },
+      "P1225151828844040-D641660281176464-O22": {
+        _id: 1225151828844081,
+        severity: "critical",
+        policy: 1225151828844040,
+        device: 641660281176464,
+        object: "22",
+        indicator: "cpu.5sec.avg.percentage",
+        "triggered.value": 28,
+        status: "active",
+        message:
+          "critical! 641660281176464's 22 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+        timestamp: 1710851175,
+      },
+    },
+    "event.type": "ws.alert.live",
+  });
 
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
@@ -32,125 +71,107 @@ const Alerts = () => {
     setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
+  useEffect(() => {
+    if (activeButton == "live") {
+      emit("ws.alert.live", {});
+    }
+  }, [activeButton]);
 
+  console.log("activbutton", activeButton);
+
+  function render(payload: any) {
+    // console.log("live alert", payload.result);
+    console.log("recieved data", payload);
+    setReceivedData(payload.result);
+  }
+
+  useEffect(() => {
+    if (connection && activeButton == "historic") {
+      Subscribe("history1", "ws.alert.explorer", render);
+    } else if (connection && activeButton == "live") {
+      Subscribe("liveData1", "ws.alert.live", render);
+    }
+  }, [connection, activeButton]);
+  function convertKeys(obj: any) {
+    const newObj: any = {};
+    for (let key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const newKey: any = key.replace(/\./g, "_");
+        if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+          newObj[newKey] = convertKeys(obj[key]);
+        } else {
+          newObj[newKey] = obj[key];
+        }
+      }
+    }
+    return newObj;
+  }
+  function collectUniqueKeys(data: any) {
+    const uniqueKeys = new Set();
+
+    // Iterate over each object in the result
+    for (const objKey in data.result) {
+      const nestedObj = data.result[objKey];
+      for (const key in nestedObj) {
+        if (!key.startsWith("_")) {
+          uniqueKeys.add(key);
+        }
+      }
+    }
+
+    return Array.from(uniqueKeys);
+  }
   useEffect(() => {
     try {
       const getData = async () => {
         let cols: any = [];
-        let response = await getAllDevice();
-        const modifiedData = replacePeriodsWithUnderscores(response.result);
-        // console.log("modified 1", modifiedData);
-        const indexOfObjectWithAvailabilityContext =
-          modifiedData &&
-          modifiedData.findIndex(
-            (obj: any) => obj.availability_context !== undefined
-          );
-        let col = [] as any;
+        // let response = await getAllDevice();
+        const modifiedData = convertKeys(receivedData);
+        console.log("modified 1", modifiedData);
+        // const indexOfObjectWithAvailabilityContext =
+        //   modifiedData &&
+        //   modifiedData.result.findIndex(
+        //     (obj: any) => obj.availability_context !== undefined
+        //   );
+        // let col = [] as any;
         // console.log("index value", indexOfObjectWithAvailabilityContext);
-        if (
-          indexOfObjectWithAvailabilityContext == -1 &&
-          modifiedData.length != 0
-        ) {
-          // console.log("modified 2", modifiedData);
-          col = Object.keys(modifiedData[0]);
-        } else {
-          col =
-            modifiedData.length != 0 &&
-            Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
-        }
-        let filteredCols =
-          col && col.filter((key: any) => !key.startsWith("_"));
-        filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
+        // if (
+        //   indexOfObjectWithAvailabilityContext == -1 &&
+        //   modifiedData.length != 0
+        // ) {
+        //   // console.log("modified 2", modifiedData);
+        //   col = Object.keys(modifiedData[0]);
+        // } else {
+        //   col =
+        //     modifiedData.length != 0 &&
+        //     Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
+        // }
+        let col = [] as any;
+        // col = Object.keys(modifiedData["result"]);
+        let collectedKeys = collectUniqueKeys(modifiedData);
+        console.log("------------------------keys", collectedKeys);
 
-        // console.log(filteredCols);
-        filteredCols &&
-          filteredCols.filter((key: any) => {
-            if (!key.startsWith("_")) {
-              if (key == "availability_context") {
-                // cols.unshift({
-                //   field: "icmp_availability",
-                //   headerName: "icmp_Avl.",
-                //   minWidth: 120,
-                // });
-                // cols.unshift({
-                //   field: "plugin_availability",
-                //   headerName: "plugin_Avl.",
-                //   minWidth: 120,
-                // });
-                cols.push({
-                  field: "timestamp",
-                  headerName: "timestamp",
-                  minWidth: 120,
-                });
-              } else if (key == "hostname") {
-                cols.unshift({
-                  field: key.replace(/\./g, "_"),
-                  headerName: "HostName",
-                  minWidth: 150,
-                });
-              } else if (key == "ip_address") {
-                cols.push({
-                  field: key.replace(/\./g, "_"),
-                  headerName: "IP Address",
-                  minWidth: 150,
-                });
-              } else if (key == "alias") {
-                cols.push({
-                  field: key.replace(/\./g, "_"),
-                  headerName: "Alias",
-                  minWidth: 150,
-                });
-              } else if (key == "port") {
-                cols.push({
-                  field: key.replace(/\./g, "_"),
-                  headerName: key.replace(/\./g, " "),
-                  minWidth: 80,
-                });
-              } else if (key == "credential_profiles") {
-                cols.push({
-                  field: key.replace(/\./g, "_"),
-                  headerName: key.replace(/\./g, " "),
-                  minWidth: 200,
-                });
-              } else {
-                cols.push({
-                  field: key.replace(/\./g, "_"),
-                  headerName: key.replace(/\./g, " "),
-                  minWidth: 150,
-                });
-              }
-            }
+        // filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
+
+        console.log("columns-------------", cols);
+        console.log("filtercolumns-------------", modifiedData.result);
+
+        collectedKeys &&
+          collectedKeys.filter((key: any) => {
+            // if (!key.startsWith("_")) {
+
+            cols.push({
+              field: key.replace(/\./g, "_"),
+              headerName: key.replace(/\./g, " "),
+              minWidth: 150,
+            });
+            // }
+            // }
           });
-        cols.push({
-          field: "last_availability_on",
-          headerName: "Last Available On",
-          minWidth: 220,
-        });
-        cols.push({
-          field: "last_availability_checked_on",
-          headerName: "Last Availability checked On",
-          minWidth: 250,
-        });
-        // const x = filteredCols && filteredCols.includes("availabilty_context");
-        // if (x) {
-        cols.unshift({
-          field: "plugin_availability",
-          headerName: "plugin_Avl.",
-          minWidth: 120,
-        });
-        cols.unshift({
-          field: "icmp_availability",
-          headerName: "icmp_Avl.",
-          minWidth: 120,
-        });
-        cols.push({
-          field: "timestamp",
-          headerName: "timestamp",
-          minWidth: 120,
-        });
+
         // }
 
-        // console.log("cols", cols);
+        console.log("cols------", cols);
         setColumns(cols);
         // console.log("rows", modifiedData);
         const hiddenColumnsValues = [
@@ -200,7 +221,8 @@ const Alerts = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [deviceTabelState]);
+  }, [activeButton, receivedData]);
+
   const totalCount = data && data.length;
   const handleChangePage = (
     event: any,
@@ -220,10 +242,10 @@ const Alerts = () => {
       <div className="w-full ">
         {/* <PageHeading heading="Credential Profile" /> */}
         <AlertTable
-          data={data}
-          visibleColumns={visibleColumns}
-          setVisibleColumns={setVisibleColumns}
-          columns={columns}
+          // data={data}
+          // visibleColumns={visibleColumns}
+          // setVisibleColumns={setVisibleColumns}
+          // columns={columns}
           page={page}
           rowsPerPage={rowsPerPage}
         />

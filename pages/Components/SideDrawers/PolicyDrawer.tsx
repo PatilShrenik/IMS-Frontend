@@ -159,34 +159,32 @@ const PolicyDrawer = (props: any) => {
           return null; // Handle invalid unit
       }
     };
+
     const payload = {
-      policy_name: name,
+      name: name,
       description: description, //testing is  pending for this
       tags: [tags],
       entity_type: entityType,
       entities: selectedEntity,
-      policy_context: {
-        object_type: indicatorsType,
-        indicator: indicators,
-        operator: operator,
-      },
+      object_type: indicatorsType,
+      indicator: indicators,
+      operator: operator,
       threshold: {
         critical: critical,
         major: major,
         warning: warning,
       },
-      alert_context: {
-        occurrence: occurrences,
-        time_frame_sec: convertTimeToSeconds(timeFrame, timeFrameUnit),
-        time_frame_unit: timeFrameUnit,
-        auto_clear_sec: convertAutoClearToSeconds(autoClear, autoClearUnit),
-        auto_clear_unit: autoClearUnit,
-      },
+      occurrences: occurrences,
+      time_frame_sec: convertTimeToSeconds(timeFrame, timeFrameUnit),
+      time_frame_unit: timeFrameUnit,
+      auto_clear_sec: convertAutoClearToSeconds(autoClear, autoClearUnit),
+      auto_clear_unit: autoClearUnit,
       notification_context: {
         email_recipients: [email],
         message: message,
       },
     };
+
     // console.log("payload", payload);
     const modifiedData = replaceUnderscoresWithDots(payload);
     // Handle saving logic

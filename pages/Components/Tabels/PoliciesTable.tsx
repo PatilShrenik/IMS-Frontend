@@ -344,7 +344,7 @@ const PoliciesTable = (props: any) => {
   const isMenuOpen = Boolean(anchorEl);
   //   console.log("com", columns);
   const processColumnData = (column: any, row: any) => {
-    // console.log("--col", row);
+    // console.log("--row", row);
     if (column.field === "entities") {
       const entity_type = row.entity_type;
       //   console.log("entitytype", entity_type);
@@ -408,7 +408,7 @@ const PoliciesTable = (props: any) => {
       );
     } else if (column.field == "occurrence") {
       //   console.log("row", row.alert_context.occurrence);
-      return row.alert_context.occurrence;
+      return row.occurrence;
     } else if (column.field === "operator") {
       const operatorValue = [
         {
@@ -438,14 +438,27 @@ const PoliciesTable = (props: any) => {
       ];
 
       const operatorName = operatorValue.find(
-        (op) => op.value === row.policy_context.operator
+        (op) => op.value === row.operator
       )?.name;
 
       return operatorName || null;
     } else if (column.field == "indicator") {
-      return row.policy_context.indicator;
+      return row.indicator;
     } else if (column.field == "tags") {
       return row.tags ? <Chips value={row.tags.length} /> : "-";
+    } else if (column.field == "email.recipients") {
+      const recipients =
+        row.notification_context &&
+        row.notification_context["email.recipients"] &&
+        row.notification_context["email.recipients"];
+      // Iterating over the email addresses and console logging them
+      // return (
+      //   recipients &&
+      //   recipients.forEach((email: any) => {
+      //     <div>{email}</div>;
+      //   })
+      // );
+      return recipients && recipients[0] && recipients[0];
     }
 
     // If no specific processing needed, return the original value
