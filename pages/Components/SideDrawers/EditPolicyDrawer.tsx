@@ -122,18 +122,18 @@ const EditPolicyDrawer = (props: any) => {
     if (dataToModify) {
       dataToModify.entity_type && setActiveButton(dataToModify.entity_type);
       dataToModify.entity_type && setSelection(dataToModify.entity_type);
-      dataToModify.policy_context &&
-        dataToModify.policy_context.indicator &&
-        setSelectedOperator([dataToModify.policy_context.operator]);
-      dataToModify.alert_context &&
-        dataToModify.alert_context.time_frame_unit &&
-        setSelectedTimeFrameUnit([dataToModify.alert_context.time_frame_unit]);
-      dataToModify.alert_context &&
-        dataToModify.alert_context.auto_clear_unit &&
-        setSelectedAlertFrameUnit([dataToModify.alert_context.auto_clear_unit]);
-      dataToModify.policy_context &&
-        dataToModify.policy_context.indicator &&
-        setSelectedIndicator([dataToModify.policy_context.indicator]);
+      dataToModify &&
+        dataToModify.operator &&
+        setSelectedOperator([dataToModify.operator]);
+      dataToModify &&
+        dataToModify.time_frame_unit &&
+        setSelectedTimeFrameUnit([dataToModify.time_frame_unit]);
+      dataToModify &&
+        dataToModify.auto_clear_unit &&
+        setSelectedAlertFrameUnit([dataToModify.auto_clear_unit]);
+      dataToModify &&
+        dataToModify.indicator &&
+        setSelectedIndicator([dataToModify.indicator]);
       if (dataToModify && dataToModify.entity_type === "DEVICE") {
         setSelectedDeviceValue(dataToModify.entities);
       }
@@ -242,34 +242,30 @@ const EditPolicyDrawer = (props: any) => {
     // Create payload
 
     const payload = {
-      policy_name: dataToModify.policy_name,
+      name: dataToModify.name,
       description: dataToModify.description,
       tags: dataToModify.tags,
       entity_type: dataToModify.entity_type,
       entities: dataToModify.entities,
-      policy_context: {
-        object_type: dataToModify.policy_context.object_type,
-        indicator: dataToModify.policy_context.indicator,
-        operator: dataToModify.policy_context.operator,
-      },
+      object_type: dataToModify.object_type,
+      indicator: dataToModify.indicator,
+      operator: dataToModify.operator,
       threshold: {
         critical: dataToModify.threshold.critical,
         major: dataToModify.threshold.major,
         warning: dataToModify.threshold.warning,
       },
-      alert_context: {
-        occurrence: dataToModify.alert_context.occurrence,
-        time_frame_sec: convertTimeFrameToSeconds(
-          dataToModify.alert_context.time_frame_sec,
-          dataToModify.alert_context.time_frame_unit
-        ),
-        time_frame_unit: dataToModify.alert_context.time_frame_unit,
-        auto_clear_sec: convertAutoClearToSeconds(
-          dataToModify.alert_context.auto_clear_sec,
-          dataToModify.alert_context.auto_clear_unit
-        ),
-        auto_clear_unit: dataToModify.alert_context.auto_clear_unit,
-      },
+      occurrences: dataToModify.occurrences,
+      time_frame_sec: convertTimeFrameToSeconds(
+        dataToModify.time_frame_sec,
+        dataToModify.time_frame_unit
+      ),
+      time_frame_unit: dataToModify.time_frame_unit,
+      auto_clear_sec: convertAutoClearToSeconds(
+        dataToModify.auto_clear_sec,
+        dataToModify.auto_clear_unit
+      ),
+      auto_clear_unit: dataToModify.auto_clear_unit,
       notification_context: {
         email_recipients: [dataToModify.notification_context.email_recipients],
         message: dataToModify.notification_context.message,
@@ -370,11 +366,9 @@ const EditPolicyDrawer = (props: any) => {
 
     setDataToModify((prevData: any) => ({
       ...prevData,
-      policy_context: {
-        ...prevData.policy_context,
-        object_type: objectTypes,
-        indicator: values,
-      },
+
+      object_type: objectTypes,
+      indicator: values,
     }));
   };
   const handleEntities = (values: any) => {
@@ -388,30 +382,24 @@ const EditPolicyDrawer = (props: any) => {
     // console.log("--------#########", values);
     setDataToModify((prevData: any) => ({
       ...prevData,
-      policy_context: {
-        ...prevData.policy_context,
-        operator: values,
-      },
+
+      operator: values,
     }));
   };
 
   const handleAlertContextTimeFrame = (value: any) => {
     setDataToModify((prevData: any) => ({
       ...prevData,
-      alert_context: {
-        ...prevData.alert_context,
-        time_frame_unit: value,
-      },
+
+      time_frame_unit: value,
     }));
   };
 
   const handleAlertContextAlertFrame = (value: any) => {
     setDataToModify((prevData: any) => ({
       ...prevData,
-      alert_context: {
-        ...prevData.alert_context,
-        auto_clear_unit: value,
-      },
+
+      auto_clear_unit: value,
     }));
   };
   const handleThreshold = (event: any) => {
@@ -433,10 +421,8 @@ const EditPolicyDrawer = (props: any) => {
     // console.log("values", name, value);
     setDataToModify((prevData: any) => ({
       ...prevData,
-      alert_context: {
-        ...prevData.alert_context,
-        [name]: value,
-      },
+
+      [name]: value,
     }));
   };
 
@@ -493,8 +479,8 @@ const EditPolicyDrawer = (props: any) => {
                 <div className="flex">
                   <CustomeInput
                     label="Name"
-                    name="policy_name"
-                    value={dataToModify.policy_name}
+                    name="name"
+                    value={dataToModify.name}
                     onChange={(e: any) => handlePayload(e)}
                     type="text"
                     disable={false}
@@ -649,12 +635,8 @@ const EditPolicyDrawer = (props: any) => {
                 <div className="flex">
                   <CustomeInput
                     label="Occurrences"
-                    name="occurrence"
-                    value={
-                      dataToModify &&
-                      dataToModify.alert_context &&
-                      dataToModify.alert_context.occurrence
-                    }
+                    name="occurrences"
+                    value={dataToModify && dataToModify.occurrences}
                     onChange={(e: any) => handleAlertContext(e)}
                     type="number"
                     disable={false}
@@ -664,11 +646,7 @@ const EditPolicyDrawer = (props: any) => {
                   <CustomeInput
                     label="Time Frame"
                     name="time_frame_sec"
-                    value={
-                      dataToModify &&
-                      dataToModify.alert_context &&
-                      dataToModify.alert_context.time_frame_sec
-                    }
+                    value={dataToModify && dataToModify.time_frame_sec}
                     onChange={(e: any) => handleAlertContext(e)}
                     type="number"
                     disable={false}
@@ -692,11 +670,7 @@ const EditPolicyDrawer = (props: any) => {
                   <CustomeInput
                     label="Auto Clear"
                     name="auto_clear_sec"
-                    value={
-                      dataToModify &&
-                      dataToModify.alert_context &&
-                      dataToModify.alert_context.auto_clear_sec
-                    }
+                    value={dataToModify && dataToModify.auto_clear_sec}
                     onChange={(e: any) => handleAlertContext(e)}
                     type="number"
                     disable={false}
