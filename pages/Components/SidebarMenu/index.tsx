@@ -161,10 +161,10 @@ const SidebarMenu = () => {
               subMenuDropdownname: "Group",
               subMenuDropdownpathName: "/Settings/user-settings/group",
             },
-            {
-              subMenuDropdownname: "Password Settings",
-              subMenuDropdownpathName: "/Settings/user-settings/password",
-            },
+            // {
+            //   subMenuDropdownname: "Password Settings",
+            //   subMenuDropdownpathName: "/Settings/user-settings/password",
+            // },
             // {
             //   subMenuDropdownname: "LDAP",
             //   subMenuDropdownpathName: "/Settings/user-settings/ldap",

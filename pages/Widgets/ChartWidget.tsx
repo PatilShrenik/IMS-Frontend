@@ -133,7 +133,7 @@ const ChartWidget = (props: any) => {
     start_timestamp: 0,
     end_timestamp: 0,
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
@@ -338,8 +338,8 @@ const ChartWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -370,8 +370,8 @@ const ChartWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },

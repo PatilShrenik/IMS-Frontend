@@ -66,7 +66,7 @@ const GaugeWidget = (props: any) => {
     start_timestamp: "",
     end_timestamp: "",
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
@@ -271,8 +271,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -303,8 +303,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },
@@ -708,7 +708,7 @@ const GaugeWidget = (props: any) => {
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
             <div onClick={handleExecute}>
-              <CustomeButton title="Create & Add" />
+              <CustomeButton title="Execute" />
             </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />
