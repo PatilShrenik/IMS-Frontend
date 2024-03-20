@@ -21,39 +21,9 @@ const Alerts = () => {
   const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibleColumns, setVisibleColumns] = useState<any>([]);
-  const [receivedData, setReceivedData] = React.useState<any>({
-    result: {
-      "P1225151828844040-D641660281176464-O21": {
-        _id: 1225151828844075,
-        severity: "critical",
-        policy: 1225151828844040,
-        device: 641660281176464,
-        object: "21",
-        indicator: "cpu.5sec.avg.percentage",
-        "triggered.value": 19,
-        status: "active",
-        message:
-          "critical! 641660281176464's 21 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
-        timestamp: 1710851085,
-        "previous.status": "warning",
-        "event.type": "notify.alert.state.change",
-      },
-      "P1225151828844040-D641660281176464-O22": {
-        _id: 1225151828844081,
-        severity: "critical",
-        policy: 1225151828844040,
-        device: 641660281176464,
-        object: "22",
-        indicator: "cpu.5sec.avg.percentage",
-        "triggered.value": 28,
-        status: "active",
-        message:
-          "critical! 641660281176464's 22 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
-        timestamp: 1710851175,
-      },
-    },
-    "event.type": "ws.alert.live",
-  });
+  const [collectedKeys, setCollectedKeys] = useState<any>([]);
+  // const [receivedDataLive, setReceivedDataLive] = React.useState<any>();
+  const [receivedData, setReceivedData] = React.useState<any>();
 
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
@@ -71,28 +41,284 @@ const Alerts = () => {
     setPage(0);
     // Fetch data for the new rowsPerPage if needed
   };
-
+  const paylodForLive = {};
   useEffect(() => {
     if (activeButton == "live") {
-      emit("ws.alert.live", {});
+      emit("ws.alert.live", paylodForLive);
     }
   }, [activeButton]);
 
-  console.log("activbutton", activeButton);
+  // console.log("activbutton", activeButton);
 
   function render(payload: any) {
-    // console.log("live alert", payload.result);
-    console.log("recieved data", payload);
-    setReceivedData(payload.result);
+    // Check if payload contains 'result' array
+
+    if (
+      activeButton == "historic" &&
+      payload &&
+      payload.result &&
+      Array.isArray(payload.result)
+    ) {
+      // Iterate over each result object
+      const filteredResult = payload.result.map((result: any) => {
+        // Create a copy of the result object
+        const resultCopy = { ...result };
+        // Check if the result object has 'rowSignature' key and remove it
+        if (resultCopy.rowSignature) {
+          delete resultCopy.rowSignature;
+        }
+        return resultCopy;
+      });
+
+      // Create a new object with filtered result and other properties from payload
+      const filteredPayload = { ...payload, result: filteredResult };
+
+      // Store filtered payload in state
+      setReceivedData(filteredPayload);
+    } else if (activeButton == "live") {
+      // setReceivedData(payload.result);
+    }
   }
+
+  console.log("recieved data state#########", receivedData);
 
   useEffect(() => {
     if (connection && activeButton == "historic") {
-      Subscribe("history1", "ws.alert.explorer", render);
+      Subscribe("history1", "ws.alert.historical", render);
     } else if (connection && activeButton == "live") {
       Subscribe("liveData1", "ws.alert.live", render);
     }
   }, [connection, activeButton]);
+
+  useEffect(() => {
+    if (activeButton == "live") {
+      setData(null);
+      setColumns(null);
+      setVisibleColumns(null);
+      setReceivedData({
+        result: {
+          "P1225151828844040-D641660281176464-O21": {
+            _id: 1225151828844075,
+            severity: "critical",
+            policy: 1225151828844040,
+            device: 641660281176464,
+            object: "21",
+            indicator: "cpu.5sec.avg.percentage",
+            "triggered.value": 19,
+            status: "active",
+            message:
+              "critical! 641660281176464's 21 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+            timestamp: 1710851085,
+            "previous.status": "warning",
+            "event.type": "notify.alert.state.change",
+          },
+          "P1225151828844040-D641660281176464-O22": {
+            _id: 1225151828844081,
+            severity: "critical",
+            policy: 1225151828844040,
+            device: 641660281176464,
+            object: "22",
+            indicator: "cpu.5sec.avg.percentage",
+            "triggered.value": 28,
+            status: "active",
+            message:
+              "critical! 641660281176464's 22 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+            timestamp: 1710851175,
+          },
+        },
+        "event.type": "ws.alert.live",
+      });
+    } else if (activeButton == "historic") {
+      setData(null);
+      setColumns(null);
+      setVisibleColumns(null);
+      // setReceivedData({
+      //   result: [
+      //     {
+      //       segmentId:
+      //         "alert_2024-03-20T00:00:00.000Z_2024-03-21T00:00:00.000Z_2024-03-20T05:48:09.765Z_1",
+      //       columns: [
+      //         "__time",
+      //         "_id",
+      //         "policy",
+      //         "device",
+      //         "object",
+      //         "indicator",
+      //         "severity",
+      //         "status",
+      //         "triggered.value",
+      //         "message",
+      //         "previous.status",
+      //         "event.type",
+      //         "cleared.by",
+      //       ],
+      //       events: [
+      //         [
+      //           1710914888000,
+      //           "78202321932342",
+      //           "1231575388837024",
+      //           "641660281176464",
+      //           "3",
+      //           "interface.in.packets",
+      //           "critical",
+      //           "clear",
+      //           "3086822",
+      //           "critical! 90924498573889's 3 [interface.in.packets] has 3 occurrences in 600 seconds",
+      //           "clear",
+      //           "notify.alert.state.change",
+      //           "system",
+      //         ],
+      //       ],
+      //       // rowSignature: [
+      //       //   {
+      //       //     name: "__time",
+      //       //     type: "LONG",
+      //       //   },
+      //       //   {
+      //       //     name: "_id",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "policy",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "device",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "object",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "indicator",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "severity",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "status",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "triggered.value",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "message",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "previous.status",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "event.type",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "cleared.by",
+      //       //     type: "STRING",
+      //       //   },
+      //       // ],
+      //     },
+      //     {
+      //       segmentId:
+      //         "alert_2024-03-20T00:00:00.000Z_2024-03-21T00:00:00.000Z_2024-03-20T05:48:09.765Z_1",
+      //       columns: [
+      //         "__time",
+      //         "_id",
+      //         "policy",
+      //         "device",
+      //         "object",
+      //         "indicator",
+      //         "severity",
+      //         "status",
+      //         "triggered.value",
+      //         "message",
+      //         "previous.status",
+      //         "event.type",
+      //         "cleared.by",
+      //       ],
+      //       events: [
+      //         [
+      //           1710914888000,
+      //           "78202321932343",
+      //           "1231575388837024",
+      //           "641660281176464",
+      //           "3",
+      //           "interface.in.packets",
+      //           "critical",
+      //           "clear",
+      //           "3086822",
+      //           "critical! 90924498573889's 3 [interface.in.packets] has 3 occurrences in 600 seconds",
+      //           "clear",
+      //           "notify.alert.state.change",
+      //           "system",
+      //         ],
+      //       ],
+      //       // rowSignature: [
+      //       //   {
+      //       //     name: "__time",
+      //       //     type: "LONG",
+      //       //   },
+      //       //   {
+      //       //     name: "_id",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "policy",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "device",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "object",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "indicator",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "severity",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "status",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "triggered.value",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "message",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "previous.status",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "event.type",
+      //       //     type: "STRING",
+      //       //   },
+      //       //   {
+      //       //     name: "cleared.by",
+      //       //     type: "STRING",
+      //       //   },
+      //       // ],
+      //     },
+      //   ],
+      // });
+    }
+  }, [activeButton]);
+
   function convertKeys(obj: any) {
     const newObj: any = {};
     for (let key in obj) {
@@ -122,112 +348,161 @@ const Alerts = () => {
 
     return Array.from(uniqueKeys);
   }
+  interface EventData {
+    [key: string]: string | number;
+  }
+
+  interface Segment {
+    columns: string[];
+    events: string[][];
+  }
+
+  interface Result {
+    result: Segment[];
+  }
+  function convertAlertData(jsonData: Result) {
+    if (jsonData && jsonData.result && Array.isArray(jsonData.result)) {
+      return jsonData.result.flatMap((segment) =>
+        segment.events.map((event) => {
+          const convertedEvent: EventData = {};
+          for (let i = 0; i < segment.columns.length; i++) {
+            const columnName = segment.columns[i].replace(/\./g, "_"); // Replace "." with "_"
+            convertedEvent[columnName] = event[i];
+          }
+          return convertedEvent;
+        })
+      );
+    }
+  }
+
   useEffect(() => {
-    try {
-      const getData = async () => {
-        let cols: any = [];
-        // let response = await getAllDevice();
-        const modifiedData = convertKeys(receivedData);
-        // console.log("modified 1", modifiedData);
-        // const indexOfObjectWithAvailabilityContext =
-        //   modifiedData &&
-        //   modifiedData.result.findIndex(
-        //     (obj: any) => obj.availability_context !== undefined
-        //   );
-        // let col = [] as any;
-        // console.log("index value", indexOfObjectWithAvailabilityContext);
-        // if (
-        //   indexOfObjectWithAvailabilityContext == -1 &&
-        //   modifiedData.length != 0
-        // ) {
-        //   // console.log("modified 2", modifiedData);
-        //   col = Object.keys(modifiedData[0]);
-        // } else {
-        //   col =
-        //     modifiedData.length != 0 &&
-        //     Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
-        // }
-        let col = [] as any;
-        // col = Object.keys(modifiedData["result"]);
-        let collectedKeys = collectUniqueKeys(modifiedData);
-        // console.log("------------------------keys", collectedKeys);
+    let col = [] as any;
+    const hiddenColumnsValues = [
+      // "alias",
+      "discovery_schedulers",
 
-        // filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
+      // "last_discovered_on",
+    ];
+    if (activeButton == "live") {
+      let cols: any = [];
 
-        // console.log("columns-------------", cols);
-        // console.log("filtercolumns-------------", modifiedData.result);
-        const resultArray = [];
-
-        for (const key in modifiedData.result) {
-          resultArray.push(modifiedData.result[key]);
-        }
-
-        // console.log("final data-----------", resultArray);
-        collectedKeys &&
-          collectedKeys.filter((key: any) => {
-            // if (!key.startsWith("_")) {
-
+      const modifiedData = convertKeys(receivedData);
+      let collectedKeys = collectUniqueKeys(modifiedData);
+      const resultArray = [];
+      for (const key in modifiedData.result) {
+        resultArray.push(modifiedData.result[key]);
+      }
+      setData(resultArray);
+      collectedKeys &&
+        collectedKeys.filter((key: any) => {
+          // if (!key.startsWith("_")) {
+          if (key == "object") {
+            cols.push({
+              field: "object",
+              headerName: "Object",
+              minWidth: 50,
+            });
+          } else if (key == "severity") {
+            cols.push({
+              field: "severity",
+              headerName: "severity",
+              minWidth: 50,
+            });
+          } else if (key == "status") {
+            cols.push({
+              field: "status",
+              headerName: "status",
+              minWidth: 50,
+            });
+          } else if (key == "cleared_by") {
+            cols.push({
+              field: "cleared_by",
+              headerName: "cleared by",
+              minWidth: 50,
+            });
+          } else if (key == "message") {
+            cols.push({
+              field: "message",
+              headerName: "Message",
+              minWidth: 200,
+            });
+          } else
             cols.push({
               field: key.replace(/\./g, "_"),
               headerName: key.replace(/\./g, " "),
-              minWidth: 150,
+              minWidth: 160,
             });
-            // }
-            // }
-          });
+          // }
+          // }
+        });
+      setColumns(cols);
+      setVisibleColumns(
+        cols
+          .map((column: any) => column.field)
+          .filter((field: any) => !hiddenColumnsValues.includes(field))
+      );
+    } else if (activeButton == "historic") {
+      let cols: any = [];
 
-        // }
-
-        // console.log("cols------", cols);
-        setColumns(cols);
-        // console.log("rows", modifiedData);
-        const hiddenColumnsValues = [
-          // "alias",
-          "discovery_schedulers",
-          "country",
-          // "groups",
-          "profile_type",
-          "port",
-          "credential_profiles",
-          // "hostname",
-          "availability_interval",
-          // "flow_enabled",
-          "auto_provision",
-          "location",
-          "site",
-          "site_code",
-          "device_name",
-          "service",
-          "latitude",
-          "oem",
-          "os",
-          "os_version",
-          "vendor",
-          "check_without_save",
-          "device_list",
-          "longitude",
-          "created_by",
-          "created_on",
-          "updated_by",
-          "updated_on",
-          "timestamp",
-          "timezone",
-          "valid_credential_profile",
-          // "last_discovered_on",
-        ];
-
-        setVisibleColumns(
-          cols
-            .map((column: any) => column.field)
-            .filter((field: any) => !hiddenColumnsValues.includes(field))
-        );
-
-        setData(resultArray);
-      };
-      getData();
-    } catch (error) {
-      console.log(error);
+      let collectedKeys =
+        receivedData &&
+        receivedData.result &&
+        receivedData.result[0] &&
+        receivedData.result[0].columns;
+      const convertedData = convertAlertData(receivedData);
+      // console.log("-----------columns#########", collectedKeys);
+      setData(convertedData);
+      collectedKeys &&
+        collectedKeys.filter((key: any) => {
+          if (key == "object") {
+            cols.push({
+              field: "object",
+              headerName: "Object",
+              minWidth: 50,
+            });
+          } else if (key == "severity") {
+            cols.push({
+              field: "severity",
+              headerName: "severity",
+              minWidth: 50,
+            });
+          } else if (key == "status") {
+            cols.push({
+              field: "status",
+              headerName: "status",
+              minWidth: 50,
+            });
+          } else if (key == "cleared_by") {
+            cols.push({
+              field: "cleared_by",
+              headerName: "cleared by",
+              minWidth: 50,
+            });
+          } else if (key == "message") {
+            cols.push({
+              field: "message",
+              headerName: "Message",
+              minWidth: 200,
+            });
+          } else
+            cols.push({
+              field: key.replace(/\./g, "_"),
+              headerName: key.replace(/\./g, " "),
+              minWidth: 160,
+            });
+          // }
+          // }
+        });
+      setColumns(cols);
+      setVisibleColumns(
+        cols
+          .map((column: any) => column.field)
+          .filter((field: any) => !hiddenColumnsValues.includes(field))
+      );
     }
+    // console.log("-----------data#########", data);
+
+    // setColumns(cols);
   }, [activeButton, receivedData]);
 
   const totalCount = data && data.length;
@@ -242,7 +517,9 @@ const Alerts = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  // console.log("##########columns", columns);
+  // console.log("##########visibilecolumns", visibleColumns);
+  // console.log("##########data", data);
   return (
     <>
       <ToastContainer />

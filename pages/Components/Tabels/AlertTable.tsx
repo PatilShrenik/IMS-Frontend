@@ -34,6 +34,7 @@ import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import {
   convertEpochToDateMonthYear,
+  convertEpochToDateMonthYearTwo,
   replaceDotsWithUnderscores,
   replaceUnderscoresWithDots,
 } from "@/functions/genericFunctions";
@@ -64,7 +65,7 @@ const AlertTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-
+  // console.log("-----data-------", data);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");
@@ -126,8 +127,6 @@ const AlertTable = (props: any) => {
   const handleContextModalClose = () => setIsContextModalOpen(false);
   const [receivedData, setReceivedData] = React.useState<any>([]);
 
- 
-
   //--------------------------------------code required for DateRangePicker-----------------------------
   const { time, toggleTime } = useAppContext();
   const { timeEnd, toggleTimeEnd } = useAppContext();
@@ -136,7 +135,7 @@ const AlertTable = (props: any) => {
     new Date(timeEnd),
   ]);
   const today = moment();
-  console.log("date", timePeriod);
+  // console.log("date", timePeriod);
   const financialYearStartMonth = 3;
   let financialYearStart;
   let financialYearEnd;
@@ -263,9 +262,12 @@ const AlertTable = (props: any) => {
   const policyValues =
     allPolicies &&
     allPolicies.map((item: any) => ({
-      label: item.policy_name,
+      label: item.name,
       value: item._id,
     }));
+
+  // console.log("policies", allPolicies);
+  // console.log("devices", allDevices);
   React.useEffect(() => {
     const getAllPolicies = async () => {
       let response = await getAllPolicy();
@@ -288,7 +290,7 @@ const AlertTable = (props: any) => {
     };
     // getDiscoveryScheduler();
   }, []);
-  console.log("policy data", allPolicies);
+  // console.log("policy data", allPolicies);
   const handleRequestSort = (property: any) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -326,7 +328,7 @@ const AlertTable = (props: any) => {
       const allRowIds = data
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((row: any) => row._id);
-      console.log("allrow ids", allRowIds);
+      // console.log("allrow ids", allRowIds);
       setSelectedRows(allRowIds);
     }
     setSelectAll(!selectAll);
@@ -376,11 +378,11 @@ const AlertTable = (props: any) => {
           row[columnField].toLowerCase().includes(search.toLowerCase())
       );
 
-      //   const matchesButtons =
-      //     selectedButtons.length === 0 ||
-      //     selectedButtons.some((button: any) => row["plugin_type"] === button);
-      //   console.log("matched button", row["plugin_type"]);
-      //   return matchesSearch && matchesButtons;
+      const matchesButtons =
+        selectedButtons.length === 0 ||
+        selectedButtons.some((button: any) => row["plugin_type"] === button);
+      // console.log("matched button", row["plugin_type"]);
+      return matchesSearch && matchesButtons;
       //   return matchesSearch;
     });
 
@@ -491,11 +493,11 @@ const AlertTable = (props: any) => {
   };
 
   const handleSearch = () => {
-    console.log("in handlesearch");
+    // console.log("in handlesearch");
     const modifiedData = replaceUnderscoresWithDots(payloadForAlert);
-    console.log("modified payload for alert", modifiedData);
+    // console.log("modified payload for alert", modifiedData);
 
-    emit("ws.alert.explorer", modifiedData);
+    emit("ws.alert.historical", modifiedData);
   };
 
   const stableSort = (array: any, comparator: any) => {
@@ -537,7 +539,7 @@ const AlertTable = (props: any) => {
   };
 
   const handleMenuItemClick = (columnField: any) => {
-    console.log("clicked");
+    // console.log("clicked");
     handleColumnToggle(columnField);
     // handleMenuClose();
   };
@@ -559,188 +561,48 @@ const AlertTable = (props: any) => {
 
   const processColumnData = (column: any, row: any) => {
     // Perform operations based on the column and row data
-    if (column.field === "groups") {
-      const groupId = row[column.field] && row[column.field];
-      // Find the corresponding object in groupValues array
-      const matchingGroup: any = groupValues.find(
-        (group: any) => group.id === groupId[0]
+    // console.log("-------column", column);
+    // console.log("-------row", row);
+    if (column.field === "policy") {
+      const policyName: any = allPolicies.find(
+        (alert: any) => alert._id === parseInt(row.policy)
       );
-
-      // If a matching group is found, return its name, otherwise return null or a default value
-      return matchingGroup ? matchingGroup.name : "-";
-    } else if (column.field === "credential_profiles") {
-      const credProfileId = row[column.field] && row[column.field];
-      const numericCredProfileId = parseInt(credProfileId[0], 10);
-
-      //   const matchingCredsProfile: any = allCredsPrfile.find(
-      //     (creds: any) => creds._id === numericCredProfileId
-      //   );
-      // console.log("----", matchingCredsProfile);
-      // If a matching group is found, return its name, otherwise return null or a default value
-      //   return matchingCredsProfile ? matchingCredsProfile.name : "-";
-      // : row[column.field];
-    } else if (column.field === "icmp_availability") {
-      if (
-        row.availability_context &&
-        row.availability_context["icmp.availability"]
-      ) {
-        return (
-          <>
-            <Tooltip title="OnLine" placement="top-end">
-              <div className="flex items-center">
-                {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <ArrowDropUpIcon
-                  className="text-success"
-                  fontSize="large"
-                  style={{ fontSize: "2.5rem" }}
-                />
-              </div>
-            </Tooltip>
-            {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
-          </>
-        );
-      } else if (
-        row.availability_context &&
-        !row.availability_context["icmp.availability"]
-      ) {
-        return (
-          <>
-            <Tooltip title="Offline" placement="top-end">
-              <div className=" flex items-center">
-                {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <ArrowDropDownIcon
-                  className="text-danger"
-                  fontSize="large"
-                  style={{ fontSize: "2.5rem" }}
-                />
-              </div>
-            </Tooltip>
-
-            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
-          </>
-        );
-      }
-    } else if (column.field === "plugin_availability") {
-      if (
-        row.availability_context &&
-        row.availability_context["plugin.availability"]
-      ) {
-        return (
-          <>
-            <Tooltip title="OnLine" placement="top-end">
-              <div className="flex items-center">
-                {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-                <ArrowDropUpIcon
-                  className="text-success"
-                  fontSize="large"
-                  // sx={{ height: "4rem" }}
-                  style={{ fontSize: "2.5rem" }}
-                />
-              </div>
-            </Tooltip>
-          </>
-        );
-      } else if (
-        row.availability_context &&
-        !row.availability_context["plugin.availability"]
-      ) {
-        return (
-          <>
-            <Tooltip title="OffLine" placement="top-end">
-              <div className=" flex items-center">
-                {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-                <ArrowDropDownIcon
-                  className="text-danger"
-                  fontSize="large"
-                  style={{ fontSize: "2.5rem" }}
-                />
-              </div>
-            </Tooltip>
-            {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
-          </>
-        );
-      }
-    } else if (column.field == "hostname") {
-      const value = row[column.field];
-      return (
-        <>
-          <p
-            className="cursor-pointer text-primary2 text-[16px]"
-            onClick={() => handleContextModalOpen(row._id)}
-          >
-            {value}
-          </p>
-          <DiscoveryContext
-            open={isContextModalopen === row._id}
-            handleModalClose={handleContextModalClose}
-            deviceIds={row._id}
-          />
-        </>
+      if (policyName && policyName.name) return <div>{policyName.name}</div>;
+      // console.log("policname",policyName.name)
+    } else if (column.field === "device") {
+      const deviceName: any = allDevices.find(
+        (alert: any) => alert._id === parseInt(row.device)
       );
-    }
-    // else if (column.field === "flow_enabled") {
-    //   if (row[column.field] == "yes") {
-    //     return (
-    //       <>
-    //         <Tooltip title="OnLine" placement="top-end">
-    //           <div className="flex items-center">
-    //             {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-    //             <CheckCircleOutlineIcon
-    //               fontSize="large"
-    //               className="text-success"
-    //               style={{ fontSize: "1.5rem" }}
-    //             />
-    //           </div>
-    //         </Tooltip>
-    //         {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
-    //       </>
-    //     );
-    //   } else if (row[column.field] == "no") {
-    //     return (
-    //       <>
-    //         <Tooltip title="Offline" placement="top-end">
-    //           <div className=" flex items-center">
-    //             {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-    //             <HighlightOffIcon
-    //               className="text-danger"
-    //               fontSize="large"
-    //               style={{ fontSize: "1.5rem" }}
-    //             />
-    //           </div>
-    //         </Tooltip>
-
-    //         {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
-    //       </>
-    //     );
-    //   }
-    // }
-    else if (
-      column.field === "timestamp" ||
-      column.field == "last_discovered_on"
-    ) {
-      const timestamp =
-        row.availability_context &&
-        (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"]);
-
-      if (
-        row.availability_context &&
-        (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"])
-      ) {
-        const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp);
-        return formattedDateMonthYear ? formattedDateMonthYear : "-";
+      if (deviceName && deviceName.hostname)
+        return <div>{deviceName.hostname}</div>;
+      // console.log("policname",policyName.name)
+    } else if (column.field === "timestamp" || column.field == "__time") {
+      const timestamp1 = row.timestamp && row.timestamp;
+      const timestamp2 = row.__time && row["__time"];
+      // console.log(row["__time"])
+      if (timestamp1 && row.timestamp) {
+        const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp1);
+        return formattedDateMonthYear ? (
+          <div className="w-full align-center">{formattedDateMonthYear}</div>
+        ) : (
+          "-"
+        );
+      } else if (timestamp2 && row.__time) {
+        const formattedDateMonthYear =
+          convertEpochToDateMonthYearTwo(timestamp2);
+        return formattedDateMonthYear ? (
+          <div className="w-full align-center">{formattedDateMonthYear}</div>
+        ) : (
+          "-"
+        );
       }
-    } else if (column.field == "device_status") {
-      const device_status = row[column.field] && row[column.field];
-      return <StatusChips value={device_status} />;
     }
 
     // If no specific processing needed, return the original value
-    return row[column.field];
+    return <div className="px-2">{row[column.field]}</div>;
   };
   const deleteDevice = async () => {
-    console.log("delete array", selectedRows);
+    // console.log("delete array", selectedRows);
     try {
       let response = await bulkActionDeviceDelete(selectedRows);
 
@@ -864,7 +726,7 @@ const AlertTable = (props: any) => {
     });
   };
 
-  console.log("------------selected buttons", selectedButtons);
+  // console.log("------------selected buttons", selectedButtons);
   return (
     <>
       <div>
@@ -1185,31 +1047,6 @@ const AlertTable = (props: any) => {
                   onChange={handleSelectedButtons}
                 />
               </div>
-              <div className="w-[15rem] ml-2">
-                {/* <DateRangePicker
-                  placement="auto"
-                  value={timePeriod}
-                  //   onChange={setTimePeriod}
-                  onChange={(e: any) => handleDate(e)}
-                  ranges={predefinedRanges}
-                  // showOneCalendar
-                  style={{ width: "100%" }}
-                  shouldDisableDate={afterToday()}
-                  placeholder="Select Date Range"
-                  format="yyyy-MM-dd"
-                  className="hover:bg-gray-50 focus:bg-gray-50 dark:bg-card-color"
-                /> */}
-                <TimeRangePicker onTimeRangeChange={handleDate} />
-
-                {/* </CustomProvider> */}
-              </div>
-
-              <div className="ml-3" onClick={handleSearch}>
-                <div className=" mx-2 inline-flex items-center justify-center rounded-md py-2 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer">
-                  Search
-                </div>
-                {/* <CustomeButton title="Search" /> */}
-              </div>
               {/* <Tooltip
                   TransitionComponent={Zoom}
                   title="Reset Filter"
@@ -1266,9 +1103,9 @@ const AlertTable = (props: any) => {
                         const iconDirection = column.field ? order : "asc";
                         return (
                           <th
-                            className="bg-textColor text-start text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                            className="bg-textColor text-start text-tabel-header dark:text-textColor dark:bg-tabel-header"
                             key={column.id}
-                            align={column.align}
+                            // align={column.align}
                             style={{
                               padding: "0px 8px",
                               minWidth: column.minWidth,
@@ -1319,22 +1156,6 @@ const AlertTable = (props: any) => {
                           </th>
                         );
                       })}
-                  <th
-                    className=" bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
-                    style={{
-                      padding: "0px 8px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      borderBottom: "0",
-                      letterSpacing: ".7px",
-                      textAlign: "start",
-                      fontStyle: "normal",
-                      fontFamily: `"Poppins", sans-serif`,
-                      // backgroundColor:"#D8D8D8"
-                    }}
-                  >
-                    Actions
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -1342,7 +1163,7 @@ const AlertTable = (props: any) => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: any, rowIndex: any) => {
                     const isLastRow = rowIndex === data.length - 1;
-                    // console.log("---------------", row.device_status);
+                    // console.log("-------ROW--------", row);
                     return (
                       <tr
                         className="bg-white dark:bg-dark-container dark:text-textColor"
@@ -1371,88 +1192,48 @@ const AlertTable = (props: any) => {
                             onChange={() => handleRowCheckboxToggle(row._id)}
                           />
                         </td>
-                        {columns
-                          .filter((column: any) =>
-                            visibleColumns.includes(column.field)
-                          )
-                          .map((column: any, colIndex: any) => {
-                            const value = row[column.field];
-                            const processedValue = processColumnData(
-                              column,
-                              row
-                            );
+                        {columns &&
+                          columns
+                            .filter((column: any) =>
+                              visibleColumns.includes(column.field)
+                            )
+                            .map((column: any, colIndex: any) => {
+                              const value = row[column.field];
+                              const processedValue = processColumnData(
+                                column,
+                                row
+                              );
 
-                            return (
-                              <td
-                                className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
-                                  isLastRow ? "border-b " : "border-b "
-                                }`}
-                                key={column.id}
-                                align={column.align}
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: "normal",
-                                  padding: "px",
-                                  textAlign: "center",
-                                  fontFamily: `"Poppins", sans-serif`,
-                                }}
-                              >
-                                <span
-                                  className={`flex ${
-                                    colIndex == 0 || colIndex == 1
-                                      ? "justify-start"
-                                      : "justify-start "
+                              return (
+                                <td
+                                  className={`dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
+                                    isLastRow ? "border-b " : "border-b "
                                   }`}
+                                  key={column.id}
+                                  align={column.align}
+                                  style={{
+                                    fontSize: "13px",
+                                    fontWeight: "normal",
+                                    padding: "px",
+                                    textAlign: "center",
+                                    fontFamily: `"Poppins", sans-serif`,
+                                  }}
                                 >
-                                  {column.format &&
-                                  typeof processedValue === "number"
-                                    ? column.format(processedValue)
-                                    : processedValue}
-                                </span>
-                              </td>
-                            );
-                          })}
-                        <td
-                          className={` bg-white items-center dark:bg-dark-container dark:text-textColor dark:border-dark-border ${
-                            isLastRow ? "border-b" : "border-b "
-                          }`}
-                          style={{
-                            // fontSize: "11px",
-                            fontWeight: "normal",
-                            padding: "0",
-                            textAlign: "start",
-                            fontFamily: `"Poppins", sans-serif`,
-                          }}
-                        >
-                          <div className="flex items-center">
-                            {row.device_status != "disabled" ? (
-                              <Tooltip
-                                TransitionComponent={Zoom}
-                                title="Run Discovery Now"
-                                placement="top"
-                              >
-                                <div onClick={() => runDeviceDiscovery(row)}>
-                                  <SlowMotionVideoIcon className="cursor-pointer" />
-                                </div>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip
-                                TransitionComponent={Zoom}
-                                title="Run Discovery Now (Disabled)"
-                                placement="top"
-                              >
-                                {/* <div onClick={() => runDeviceDiscovery(row)}> */}
-                                <SlowMotionVideoIcon
-                                  color="disabled"
-                                  className="cursor-pointer dark:text-gray-700"
-                                />
-                                {/* </div> */}
-                              </Tooltip>
-                            )}
-                            <AssetsActionMenu rowData={row} />
-                          </div>
-                          {/* <CredentialProfileMenu rowData={row} /> */}
-                        </td>
+                                  <span
+                                    className={`flex ${
+                                      colIndex == 0 || colIndex == 1
+                                        ? "justify-start"
+                                        : "justify-start "
+                                    }`}
+                                  >
+                                    {column.format &&
+                                    typeof processedValue === "number"
+                                      ? column.format(processedValue)
+                                      : processedValue}
+                                  </span>
+                                </td>
+                              );
+                            })}
                       </tr>
                     );
                   })}

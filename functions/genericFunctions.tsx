@@ -91,6 +91,16 @@ export function convertEpochToDateMonthYear(epochTimeInSeconds: any) {
   return formattedDate;
 }
 
+export function convertEpochToDateMonthYearTwo(epochTimeInSeconds: any) {
+  const epochTimeInMilliseconds = epochTimeInSeconds ;
+  const date = new Date(epochTimeInMilliseconds);
+
+  const options: any = { year: "numeric", month: "numeric", day: "numeric" };
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  return formattedDate;
+}
+
 export function replaceDotsWithUnderscores(obj: any) {
   const newObj: any = [];
 
