@@ -131,7 +131,7 @@ const Profiling = () => {
             modifiedData.length != 0 &&
             Object.keys(modifiedData[indexOfObjectWithDeviceList]);
         }
-     //   console.log("fil",cols);
+        //   console.log("fil",cols);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
@@ -277,8 +277,6 @@ const Profiling = () => {
     }
   }, [selectedRows]);
 
-
-
   // const filteredData =
   //   data &&
   //   data.filter((row: any) => {
@@ -348,7 +346,6 @@ const Profiling = () => {
     // handleMenuClose();
   };
 
-
   const handleClickOpen = (keysArray: any) => {
     setDialogOpen(keysArray);
   };
@@ -365,7 +362,7 @@ const Profiling = () => {
       const matchingGroup: any = groupValues.find(
         (group: any) => group.id === groupId[0]
       );
-        console.log("gr0",matchingGroup);
+      console.log("gr0", matchingGroup);
       return matchingGroup ? matchingGroup.name : "-";
     } else if (column.field === "credential_profiles") {
       const credProfileId = row[column.field] && row[column.field];
@@ -434,7 +431,6 @@ const Profiling = () => {
       const device_status = row[column.field] && row[column.field];
       return <StatusChips value={device_status} />;
     } else if (column.field == "device_list") {
-    
       const keysArray: any = Object.keys(row.device_list);
       const DeviceList = row.device_list;
       //  const DeviceList = {
@@ -579,37 +575,38 @@ const Profiling = () => {
               }}
               style={{ padding: "0" }}
             >
-              {columns && columns.map((column: any) => (
-                <MenuItem
-                  className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
-                  style={{
-                    fontFamily: `"Poppins", sans-serif`,
-                  }}
-                  key={column.field}
-                  onClick={() => handleMenuItemClick(column.field)}
-                >
-                  <Checkbox
-                    className=" dark:text-textColor"
+              {columns &&
+                columns.map((column: any) => (
+                  <MenuItem
+                    className="bg-light-container dark:bg-dark-container dark:text-textColor hover:dark:bg-tabel-header"
                     style={{
-                      padding: "0 .5rem",
+                      fontFamily: `"Poppins", sans-serif`,
                     }}
-                    size="small"
-                    checked={visibleColumns.includes(column.field)}
-                  />
-                  {column.headerName
-                    .split(" ")
-                    .map((word: any) =>
-                      word
-                        .split("_")
-                        .map(
-                          (subWord: any) =>
-                            subWord.charAt(0).toUpperCase() + subWord.slice(1)
-                        )
-                        .join(" ")
-                    )
-                    .join(" ")}
-                </MenuItem>
-              ))}
+                    key={column.field}
+                    onClick={() => handleMenuItemClick(column.field)}
+                  >
+                    <Checkbox
+                      className=" dark:text-textColor"
+                      style={{
+                        padding: "0 .5rem",
+                      }}
+                      size="small"
+                      checked={visibleColumns.includes(column.field)}
+                    />
+                    {column.headerName
+                      .split(" ")
+                      .map((word: any) =>
+                        word
+                          .split("_")
+                          .map(
+                            (subWord: any) =>
+                              subWord.charAt(0).toUpperCase() + subWord.slice(1)
+                          )
+                          .join(" ")
+                      )
+                      .join(" ")}
+                  </MenuItem>
+                ))}
             </Menu>
             <div>
               <Link href="/Assets/">
