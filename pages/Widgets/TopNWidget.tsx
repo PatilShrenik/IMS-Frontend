@@ -565,7 +565,7 @@ const TOPNWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <div className="h-max mt-[1.25rem]">
+               <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker onTimeRangeChange={handleDate} />
         </div>
         <div>

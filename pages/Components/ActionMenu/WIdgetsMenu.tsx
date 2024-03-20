@@ -4,27 +4,27 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Bounce, toast } from "react-toastify";
-import EditCredentialProfileDrawer from "../SideDrawers/EditCredentialProfileDrawer";
-import { useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Modal } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { deleteSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
-import EditSNMPTempDrawer from "../SideDrawers/EditSNMPTempDrawer";
-import { getWidgetById, widgetDelete } from "@/pages/api/api/ReportsAPI";
-import replacePeriodsWithUnderscoresSingleObject from "@/functions/genericFunctions";
+import { widgetDelete } from "@/pages/api/api/ReportsAPI";
 import EditWidgetDrawer from "../SideDrawers/EditWidgetDrawer";
+import {
+  GetDashboardWidgetsData,
+  UpdateWidgetsData,
+} from "@/pages/api/api/DashboardWidgetsAPI";
 
 const ITEM_HEIGHT = 48;
 
 const WidgetMenu = (props: any) => {
+  const { id, setAddToDashboard, widget_type } = props;
+  // console.log("widget type", widget_type);
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
     setIsModalOpen(true);
     // handleClose();
   };
   const handleModalClose = () => setIsModalOpen(false);
-  const { id } = props;
   const { toggleWidgetApiState } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -41,8 +41,7 @@ const WidgetMenu = (props: any) => {
   const handleEditDrawerClose = () => {
     setIsEditDrawerOpen(false);
   };
-  const handleEditClick = (rowId: number) => {
-    //console.log("EditRowId", rowId);
+  const handleEditClick = () => {
     setIsEditDrawerOpen(true);
     handleClose();
   };
@@ -105,6 +104,61 @@ const WidgetMenu = (props: any) => {
     handleClose();
   };
 
+  async function getWidgetData() {
+    let id = "1000000000001";
+    return await GetDashboardWidgetsData(id);
+  }
+  async function updateWidgetData(body: any) {
+    let id = "1000000000001";
+    await UpdateWidgetsData(id, body);
+  }
+
+  function AddToDashboard(id: any) {
+    let num: any;
+    let widget: any;
+    getWidgetData().then((res: any) => {
+      num = res?.result?.widgets?.length || 0;
+      console.log("res", res?.result);
+      if (num) {
+        let widgetNum =
+          parseInt(res.result.widgets[num - 1].i.split("/")[1]) + 1;
+        widget = [
+          ...res.result.widgets,
+          {
+            widgetID: id,
+            i: `widget/${widgetNum}/${widget_type}/${id}`,
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 10,
+            minW: 4,
+            maxH: 10,
+            moved: false,
+            static: false,
+          },
+        ];
+      } else {
+        widget = [
+          {
+            widgetID: id,
+            i: `widget/1/${widget_type}/${id}`,
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 10,
+            minW: 4,
+            maxH: 10,
+            moved: false,
+            static: false,
+          },
+        ];
+      }
+      updateWidgetData({ ...res.result, widgets: widget }).then(() => {
+        setAddToDashboard((v: number) => v + 1);
+      });
+    });
+  }
+
   return (
     <div className="ml-4">
       <IconButton
@@ -139,17 +193,24 @@ const WidgetMenu = (props: any) => {
       >
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
-          onClick={() => handleEditClick(id)}
+          onClick={() => handleEditClick()}
         >
           Edit
         </MenuItem>
 
         <MenuItem
           className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
-          //  onClick={() => handleDeleteClick(id)}
           onClick={handleModalOpen}
         >
           Delete
+        </MenuItem>
+        <MenuItem
+          className="bg-textColor dark:bg-tabel-header dark:text-textColor hover:dark:bg-tabel-header hover:bg-textColor"
+          onClick={() => {
+            AddToDashboard(id);
+          }}
+        >
+          Add to Dashboard
         </MenuItem>
       </Menu>
 

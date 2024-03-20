@@ -8,7 +8,6 @@ import moment from "moment";
 import { useWebSocketContext } from "@/pages/Components/WebSocketContext";
 import { GetWidgetsData } from "@/pages/api/api/DashboardWidgetsAPI";
 
-
 const LineChartDashboardComponent = (props: any) => {
   useEffect(() => {
     HighchartsExporting(Highcharts);
@@ -21,8 +20,8 @@ const LineChartDashboardComponent = (props: any) => {
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
   // console.log("props.keys", props);
   function renderer(payload: any) {
-    if (props.keys.endsWith(`${payload._id}`)){
-      console.log("payload - "+props.keys, payload);
+    if (props.keys.endsWith(`${payload._id}`)) {
+      console.log("payload - " + props.keys, payload);
       setData(payload);
     }
   }
@@ -32,21 +31,21 @@ const LineChartDashboardComponent = (props: any) => {
   }
   useEffect(() => {
     // console.log(props.keys, eventType)
-    if (!connection) return
+    if (!connection) return;
     Subscribe(props.keys, eventType, renderer);
-    
+
     return () => {
       unsubscribe(props.keys, eventType);
     };
   }, [Subscribe, emit, props.id, props.keys, unsubscribe, connection]);
-  useEffect(()=>{
-    if (!connection) return
+  useEffect(() => {
+    if (!connection) return;
 
     getWidgetData().then((res: any) => {
       // console.log("line chart res",res, props.keys)
       emit(eventType, res.result);
     });
-  },[connection])
+  }, [connection]);
 
   const chartContainer = useRef(null);
 

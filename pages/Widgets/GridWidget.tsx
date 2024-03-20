@@ -15,7 +15,10 @@ import { v4 as uuidv4 } from "uuid";
 import { getAllGropus } from "../api/api/GroupsAPI";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -24,7 +27,6 @@ import { toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import GridWidgetTabel from "../Components/Charts/GridWidgetTabel";
 import TimeRangePicker from "../Components/TimeRnangePicker";
-
 
 const GridWidget = (props: any) => {
   const { handleAddDrawerClose } = props;
@@ -501,7 +503,7 @@ const GridWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <div className="h-max mt-[1.25rem]">
+        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker onTimeRangeChange={handleDate} />
         </div>
         <div>

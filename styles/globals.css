@@ -367,8 +367,9 @@ main::before {
   z-index: 9999 !important;
 }
 .rs-input-group {
-  padding: 0.4rem 0 !important;
-  width: 16rem !important;
+  padding: 0.3rem 0 !important;
+  width: 18rem !important;
+  height: 3rem !important;
 }
 .rs-picker-toggle:hover {
   background-color: none !important;
@@ -397,7 +398,6 @@ main::before {
 .discPadding {
   @apply !px-[5px] !py-2.5;
 }
-/* .css-79xub {
-  padding: 12px 44px !important;
-  border-radius: 8px !important;
-} */
+.css-1ciwpa8 {
+  border-left: 0 !important;
+}

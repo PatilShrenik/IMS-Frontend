@@ -33,6 +33,7 @@ import {
   addDeviceManager,
   addSingleDevice,
 } from "@/pages/api/api/DeviceManagementAPI";
+import SecSingleSelect from "../Selects/secSelect";
 // import MultiSelect from "../MultiSelect";
 
 const useStyles = makeStyles((theme) => ({
@@ -97,7 +98,7 @@ const AddDeviceDrawer = (props: any) => {
             onClick={handleDrawerClose}
           />
         </div>
-        <div className="py-8 px-6">
+        <div className="py-8 px-6 dark:bg-dark-menu-color">
           <Box
             sx={{
               flexGrow: 1,
@@ -185,60 +186,62 @@ const AddSingleDeviceTab = (props: any) => {
   };
 
   return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
-      <ButtonGroup
-        variant="outlined"
-        aria-label="Basic button group"
-        className="mx-8"
-      >
-        <Button
-          onClick={() => setValue("address")}
-          style={{
-            backgroundColor: value == "address" ? "#0078d4" : "",
-            color: value == "address" ? "white" : "",
-          }}
-          className={`${
-            value == "address" && "bg-primary2 text-white"
-          } text-primary2`}
+    <div className="dark:bg-dark-menu-color">
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <ButtonGroup
+          variant="outlined"
+          aria-label="Basic button group"
+          className="mx-8"
         >
-          IP Address
-        </Button>
-        <Button
-          onClick={() => setValue("range")}
-          style={{
-            backgroundColor: value == "range" ? "#0078d4" : "",
-            color: value == "range" ? "white" : "",
-          }}
-          className={`${
-            value == "range" && "bg-primary2 text-white"
-          } text-primary2`}
-        >
-          IP Range
-        </Button>
-        <Button
-          onClick={() => setValue("cidr")}
-          style={{
-            backgroundColor: value == "cidr" ? "#0078d4" : "",
-            color: value == "cidr" ? "white" : "",
-          }}
-          className={`${
-            value == "cidr" && "bg-primary2 text-white"
-          } text-primary2`}
-        >
-          CIDR
-        </Button>
-      </ButtonGroup>
-      <div>
-        {value == "address" ? (
-          <IPAddress handleDrawerClose={handleDrawerClose} />
-        ) : value == "range" ? (
-          <IPRange handleDrawerClose={handleDrawerClose} />
-        ) : (
-          <CIDR handleDrawerClose={handleDrawerClose} />
-          // <p>hi</p>
-        )}
-      </div>
-    </Box>
+          <Button
+            onClick={() => setValue("address")}
+            style={{
+              backgroundColor: value == "address" ? "#0078d4" : "",
+              color: value == "address" ? "white" : "",
+            }}
+            className={`${
+              value == "address" && "bg-primary2 text-white"
+            } text-primary2`}
+          >
+            IP Address
+          </Button>
+          <Button
+            onClick={() => setValue("range")}
+            style={{
+              backgroundColor: value == "range" ? "#0078d4" : "",
+              color: value == "range" ? "white" : "",
+            }}
+            className={`${
+              value == "range" && "bg-primary2 text-white"
+            } text-primary2`}
+          >
+            IP Range
+          </Button>
+          <Button
+            onClick={() => setValue("cidr")}
+            style={{
+              backgroundColor: value == "cidr" ? "#0078d4" : "",
+              color: value == "cidr" ? "white" : "",
+            }}
+            className={`${
+              value == "cidr" && "bg-primary2 text-white"
+            } text-primary2`}
+          >
+            CIDR
+          </Button>
+        </ButtonGroup>
+        <div>
+          {value == "address" ? (
+            <IPAddress handleDrawerClose={handleDrawerClose} />
+          ) : value == "range" ? (
+            <IPRange handleDrawerClose={handleDrawerClose} />
+          ) : (
+            <CIDR handleDrawerClose={handleDrawerClose} />
+            // <p>hi</p>
+          )}
+        </div>
+      </Box>
+    </div>
   );
 };
 
@@ -262,14 +265,14 @@ const IPAddress = (props: any) => {
     // device_name: "",
     // description: "",
     alias: "",
-    // country: "",
-    // location: "",
+    country: "",
+    location: "",
     site: "",
-    // site_code: 0,
-    // service: "",
-    // latitude: 0,
-    // longitude: 0,
-    // timezone: "",
+    site_code: 0,
+    service: "",
+    latitude: "",
+    longitude: "",
+    timezone: "",
     flow_enabled: false,
     device_status: "new",
     // availability_interval: 60,
@@ -289,6 +292,17 @@ const IPAddress = (props: any) => {
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
 
   // Add your dialog content and functionality here
+  const countryNames = countries.getNames();
+  const countriesArray = countryNames.map((name) => ({
+    label: name,
+    value: name,
+  }));
+
+  const tzCodes = timezones.map((timezone) => timezone.tzCode);
+  const timezonesArray = tzCodes.map((tzCode) => ({
+    label: tzCode,
+    value: tzCode,
+  }));
 
   React.useEffect(() => {
     const getCredsProfile = async () => {
@@ -305,7 +319,6 @@ const IPAddress = (props: any) => {
           label: item.name,
           value: item._id,
         }));
-      console.log("----", groupValues);
     };
     getGroups();
     const getDiscoveryScheduler = async () => {
@@ -340,12 +353,7 @@ const IPAddress = (props: any) => {
     }
   };
 
-  // const validateIp = (event: any) => {
-  //   // const { name, value } = event.target;
-  //   console.log("event", event);
-  // };
-
-  console.log("validation error", validationError);
+  // console.log("validation error", validationError);
   const handleChange = (event: any) => {
     const proto: any = event.target.value as string;
     console.log(proto);
@@ -392,6 +400,18 @@ const IPAddress = (props: any) => {
       device_type: value,
     });
   };
+  const handleCountry = (value: any) => {
+    setData({
+      ...data,
+      country: value,
+    });
+  };
+  const handleTimeZone = (value: any) => {
+    setData({
+      ...data,
+      timeZone: value,
+    });
+  };
 
   const handleCredProfile = (values: any) => {
     const val = parseInt(values);
@@ -423,41 +443,41 @@ const IPAddress = (props: any) => {
     // }
     const modifiedData = replaceUnderscoresWithDots(data);
     console.log("ip address save data", modifiedData);
-    response = await addSingleDevice(modifiedData);
-    response && console.log(response);
-    if (response) {
-      if (response.status == "success") {
-        toast.success(response && response.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-        toggleDeviceTableState();
-        handleDrawerClose();
-      } else {
-        setErrors(response.errors);
-        toast.error(response.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-      }
-    }
+    // response = await addSingleDevice(modifiedData);
+    // response && console.log(response);
+    // if (response) {
+    //   if (response.status == "success") {
+    //     toast.success(response && response.message, {
+    //       position: "bottom-right",
+    //       autoClose: 2000,
+    //       hideProgressBar: true,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: "colored",
+    //       transition: Bounce,
+    //     });
+    //     toggleDeviceTableState();
+    //     handleDrawerClose();
+    //   } else {
+    //     setErrors(response.errors);
+    //     toast.error(response.message, {
+    //       position: "bottom-right",
+    //       autoClose: 2000,
+    //       hideProgressBar: true,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: "colored",
+    //       transition: Bounce,
+    //     });
+    //   }
+    // }
   };
   return (
-    <div className=" rounded-lg m-2 p-2">
+    <div className=" rounded-lg m-2 p-2 dark:bg-dark-menu-color">
       {/* <SingleSelect
         label="Protocol"
         selectData={["SNMP"]}
@@ -522,8 +542,8 @@ const IPAddress = (props: any) => {
               isMulti={true}
             />
             {errorKeys && errorKeys.includes("credential.profiles") && (
-              <p className="text-danger text-sm ml-2">l
-                Credential Profiles is {errors["credential.profiles"]} *
+              <p className="text-danger text-sm ml-2">
+                l Credential Profiles is {errors["credential.profiles"]} *
               </p>
             )}
           </div>
@@ -559,6 +579,46 @@ const IPAddress = (props: any) => {
               type="text"
               require={false}
             />
+            <CustomeInput
+              label="Site Code"
+              name="site_code"
+              value={data.site_code}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Location"
+              name="location"
+              value={data.location}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Service"
+              name="service"
+              value={data.service}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Latitude"
+              name="latitide"
+              value={data.latitide}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Longitude"
+              name="longitude"
+              value={data.longitude}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
             <SingleSelect
               label="Device Type"
               selectData={[
@@ -569,6 +629,20 @@ const IPAddress = (props: any) => {
               onChange={handleDeviceType}
               require={false}
               // values={[]}
+            />
+            <SingleSelect
+              label="Country"
+              selectData={countriesArray}
+              onChange={handleCountry}
+              require={false}
+              // values={data.country}
+            />
+            <SingleSelect
+              label="TimeZone"
+              selectData={timezonesArray}
+              onChange={handleTimeZone}
+              require={false}
+              // values={data.timeZone}
             />
             <CustomeInput
               label="OEM"
@@ -664,7 +738,6 @@ const IPAddress = (props: any) => {
 
 const IPRange = (props: any) => {
   const { handleDrawerClose } = props;
-  const { toggleDeviceTableState } = useAppContext();
   const initialState = {
     plugin_type: "SNMP",
     profile_type: "ip.range",
@@ -673,7 +746,6 @@ const IPRange = (props: any) => {
     end_ip: null,
     port: "161",
     credential_profiles: [],
-    discovery_schedulers: [],
     groups: [],
     device_type: "",
     oem: "",
@@ -683,21 +755,21 @@ const IPRange = (props: any) => {
     // device_name: "",
     // description: "",
     alias: "",
-    // country: "",
-    // location: "",
+    country: "",
+    location: "",
     site: "",
-    // site_code: 0,
-    // service: "",
-    // latitude: 0,
-    // longitude: 0,
-    // timezone: "",
+    site_code: 0,
+    service: "",
+    latitude: 0,
+    longitude: 0,
+    timezone: "",
     device_status: "new",
     availability_interval: 60,
     auto_provision: "yes",
     check_without_save: "yes",
   };
 
-  // const { togglegetTableApiState } = useAppContext();
+  const { toggleDeviceTableState } = useAppContext();
   const [data, setData] = React.useState<any>(initialState);
   const [protocol, setProtocol] = React.useState("10");
   const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
@@ -708,7 +780,16 @@ const IPRange = (props: any) => {
   const [validationError, setvalidationError] = React.useState<any>({});
 
   const countryNames = countries.getNames();
+  const countriesArray = countryNames.map((name) => ({
+    label: name,
+    value: name,
+  }));
+
   const tzCodes = timezones.map((timezone) => timezone.tzCode);
+  const timezonesArray = tzCodes.map((tzCode) => ({
+    label: tzCode,
+    value: tzCode,
+  }));
 
   React.useEffect(() => {
     const getCredsProfile = async () => {
@@ -754,7 +835,7 @@ const IPRange = (props: any) => {
       }
     }
   };
-  console.log("ips", validationError);
+  // console.log("ips", validationError);
   const handleChange = (event: any) => {
     const proto: any = event.target.value as string;
     console.log(proto);
@@ -771,25 +852,26 @@ const IPRange = (props: any) => {
     });
   };
 
-  const handleTimeZoneDropdown = (value: any) => {
-    setData({
-      ...data,
-      timezone: value,
-    });
-  };
-  const handleCountryDropdown = (value: any) => {
-    setData({
-      ...data,
-      country: value,
-    });
-  };
-
   const handleDeviceType = (value: any) => {
     setData({
       ...data,
       device_type: value,
     });
   };
+
+  const handleCountry = (value: any) => {
+    setData({
+      ...data,
+      country: value,
+    });
+  };
+  const handleTimeZone = (value: any) => {
+    setData({
+      ...data,
+      timeZone: value,
+    });
+  };
+
   const handleCheckboxChange = (event: any) => {
     setData({ ...data, flow_enabled: event.target.checked });
   };
@@ -797,13 +879,13 @@ const IPRange = (props: any) => {
   const handleCredProfile = (values: any) => {
     setData({
       ...data,
-      credential_profiles: [values],
+      credential_profiles: values,
     });
   };
   const handleGroupDropdown = (value: any) => {
     setData({
       ...data,
-      groups: [value],
+      groups: value,
     });
   };
 
@@ -818,6 +900,7 @@ const IPRange = (props: any) => {
     let response;
     data.port = parseInt(data.port);
     const modifiedData = replaceUnderscoresWithDots(data);
+    console.log("iprange data", modifiedData);
     response = await addDeviceManager(modifiedData);
     response && console.log(response);
     if (response) {
@@ -974,6 +1057,46 @@ const IPRange = (props: any) => {
               type="text"
               require={false}
             />
+            <CustomeInput
+              label="Site Code"
+              name="site_code"
+              value={data.site_code}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Location"
+              name="location"
+              value={data.location}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Service"
+              name="service"
+              value={data.service}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Latitude"
+              name="latitide"
+              value={data.latitide}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Longitude"
+              name="longitude"
+              value={data.longitude}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
             <SingleSelect
               label="Device Type"
               selectData={[
@@ -984,6 +1107,20 @@ const IPRange = (props: any) => {
               onChange={handleDeviceType}
               require={false}
               // values={[]}
+            />
+            <SingleSelect
+              label="Country"
+              selectData={countriesArray}
+              onChange={handleCountry}
+              require={false}
+              // values={data.country}
+            />
+            <SingleSelect
+              label="TimeZone"
+              selectData={timezonesArray}
+              onChange={handleTimeZone}
+              require={false}
+              // values={data.timeZone}
             />
             <CustomeInput
               label="OEM"
@@ -1087,7 +1224,6 @@ const CIDR = (props: any) => {
     cidr: null,
     port: "161",
     credential_profiles: [],
-    discovery_schedulers: [],
     groups: [],
     device_type: "",
     oem: "",
@@ -1097,14 +1233,14 @@ const CIDR = (props: any) => {
     // device_name: "",
     // description: "",
     alias: "",
-    // country: "",
-    // location: "",
+    country: "",
+    location: "",
     site: "",
-    // site_code: 0,
-    // service: "",
-    // latitude: 0,
-    // longitude: 0,
-    // timezone: "",
+    site_code: 0,
+    service: "",
+    latitude: 0,
+    longitude: 0,
+    timezone: "",
     device_status: "new",
     availability_interval: 60,
     auto_provision: "yes",
@@ -1121,7 +1257,16 @@ const CIDR = (props: any) => {
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
 
   const countryNames = countries.getNames();
+  const countriesArray = countryNames.map((name) => ({
+    label: name,
+    value: name,
+  }));
+
   const tzCodes = timezones.map((timezone) => timezone.tzCode);
+  const timezonesArray = tzCodes.map((tzCode) => ({
+    label: tzCode,
+    value: tzCode,
+  }));
 
   React.useEffect(() => {
     const getCredsProfile = async () => {
@@ -1161,32 +1306,11 @@ const CIDR = (props: any) => {
     setData({ ...data, [name]: value });
   };
 
-  const handleChange = (event: any) => {
-    const proto: any = event.target.value as string;
-    console.log(proto);
-    // setFormValue(true);
-    setProtocol(proto);
-    // setData({ ...data, port: proto == "10" ? "161" : "22" });
-  };
-
   const handleRadioChange = (event: any) => {
     const { name, value } = event.target;
     setData({
       ...data,
       [name]: value,
-    });
-  };
-
-  const handleTimeZoneDropdown = (value: any) => {
-    setData({
-      ...data,
-      timezone: value,
-    });
-  };
-  const handleCountryDropdown = (value: any) => {
-    setData({
-      ...data,
-      country: value,
     });
   };
 
@@ -1201,16 +1325,29 @@ const CIDR = (props: any) => {
     });
   };
 
+  const handleCountry = (value: any) => {
+    setData({
+      ...data,
+      country: value,
+    });
+  };
+  const handleTimeZone = (value: any) => {
+    setData({
+      ...data,
+      timeZone: value,
+    });
+  };
+
   const handleCredProfile = (values: any) => {
     setData({
       ...data,
-      credential_profiles: [values],
+      credential_profiles: values,
     });
   };
   const handleGroupDropdown = (value: any) => {
     setData({
       ...data,
-      groups: [value],
+      groups: value,
     });
   };
 
@@ -1225,6 +1362,7 @@ const CIDR = (props: any) => {
     let response;
     data.port = parseInt(data.port);
     const modifiedData = replaceUnderscoresWithDots(data);
+    console.log("cidr data", modifiedData);
     response = await addDeviceManager(modifiedData);
     response && console.log(response);
     if (response) {
@@ -1303,7 +1441,7 @@ const CIDR = (props: any) => {
               <CustomeInput
                 label="CIDR"
                 name="cidr"
-                value={data.cide}
+                value={data.cidr}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
@@ -1371,6 +1509,46 @@ const CIDR = (props: any) => {
               type="text"
               require={false}
             />
+            <CustomeInput
+              label="Site Code"
+              name="site_code"
+              value={data.site_code}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Location"
+              name="location"
+              value={data.location}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Service"
+              name="service"
+              value={data.service}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Latitude"
+              name="latitide"
+              value={data.latitide}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Longitude"
+              name="longitude"
+              value={data.longitude}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
             <SingleSelect
               label="Device Type"
               selectData={[
@@ -1381,6 +1559,20 @@ const CIDR = (props: any) => {
               onChange={handleDeviceType}
               require={false}
               // values={[]}
+            />
+            <SingleSelect
+              label="Country"
+              selectData={countriesArray}
+              onChange={handleCountry}
+              require={false}
+              // values={data.country}
+            />
+            <SingleSelect
+              label="TimeZone"
+              selectData={timezonesArray}
+              onChange={handleTimeZone}
+              require={false}
+              // values={data.timeZone}
             />
             <CustomeInput
               label="OEM"

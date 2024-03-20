@@ -15,7 +15,10 @@ import { getAllGropus } from "../api/api/GroupsAPI";
 import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -510,7 +513,7 @@ const ChartWidget = (props: any) => {
     modified["query.id"] = randomId;
     modified.userName = "admin";
     modified["pageID"] = pageID;
-
+    console.log("chart widget called");
     emit(eventType, modified);
   };
 
@@ -596,7 +599,7 @@ const ChartWidget = (props: any) => {
           format="yyyy-MM-dd"
           className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
         /> */}
-        <div className="h-max mt-[1.20rem]">
+        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker onTimeRangeChange={handleDate} />
         </div>
         <div>

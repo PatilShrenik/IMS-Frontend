@@ -2,20 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { Button, Drawer, InputBase } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+
 import ClearIcon from "@mui/icons-material/Clear";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 import SearchIcon from "@mui/icons-material/Search";
-import { Pagination } from "@mui/material";
 import SsidChartIcon from "@mui/icons-material/SsidChart";
 import SpeedIcon from "@mui/icons-material/Speed";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
-import { CustomProvider, DateRangePicker } from "rsuite";
-import moment from "moment";
+
 import { useAppContext } from "../Components/AppContext";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import {
@@ -35,6 +32,8 @@ import "../../node_modules/react-grid-layout/css/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
 import CustomPagination from "../Components/CustomePagination";
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
 interface Widget {
   widget_name: string;
   widget_type: string;
@@ -43,7 +42,6 @@ const ITEMS_PER_PAGE = 10;
 const index = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1) as any;
@@ -52,35 +50,18 @@ const index = () => {
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
   const { getWidgetApiState } = useAppContext();
   const [widgets, setWidgets] = useState<any>();
-  const [addToDashboard, setAddToDashboard] = useState<any>(0);
+
+  const [editable, setEditable] = useState(false);
   const [layouts, setLayouts] = useState<any>([]);
-  const [layoutsDummy, setLayoutsDummy] = useState<any>([]);
   const [layoutsCurrent, setLayoutsCurrent] = useState<any>([]);
   const [layoutsWholeData, setLayoutsWholeData] = useState<any>({});
-  const [editable, setEditable] = useState(false);
-  const ResponsiveReactGridLayout = WidthProvider(Responsive);
+  const [addToDashboard, setAddToDashboard] = useState<any>(0);
 
-  // function renderer(payload: any) {
-  //   console.log("payload", payload);
-  // }
-
-  // useEffect(() => {
-  //   if (connection) {
-  //     Subscribe("1", "get.all", renderer);
-  //     return () => {
-  //       unsubscribe("1", "get.all");
-  //     };
-  //   }
-  // }, [connection]);
   useEffect(() => {
     try {
       const getData = async () => {
         let response = await getAllWidget();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        // console.log("device data", response.result);
-        // console.log("modifiedData", modifiedData);
-        // setData(modifiedData);
-        // console.log("-----------data-----------", modifiedData);
         setWidgets(modifiedData);
       };
       getData();
@@ -90,20 +71,14 @@ const index = () => {
   }, [getWidgetApiState]);
 
   useEffect(() => {
-    // console.log(addToDashboard)
     async function getWidgetData() {
       let id = "1000000000001";
       return await GetDashboardWidgetsData(id);
     }
     getWidgetData().then((res: any) => {
-      console.log("res", res);
-      res &&
-        res.result &&
-        res.result.widgets &&
-        setLayoutsDummy(res.result.widgets);
-      // setLayouts(res.result?.widgets ?? []);
-      // setLayoutsCurrent(res.result?.widgets ?? []);
-      // setLayoutsWholeData(res.result);
+      setLayouts(res.result?.widgets ?? []);
+      setLayoutsCurrent(res.result?.widgets ?? []);
+      setLayoutsWholeData(res.result);
     });
   }, [addToDashboard]);
 
@@ -134,13 +109,6 @@ const index = () => {
     // Fetch data for the new rowsPerPage if needed
   };
 
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const handleAddDrawerOpen = () => {
     setIsAddDrawerOpen(true);
     // handleDrawerClose();
@@ -150,6 +118,18 @@ const index = () => {
     setIsAddDrawerOpen(false);
     //  setIsDrawerOpen(false);
   };
+
+  function onLayoutChange(layout: any, currentLayout: any) {
+    setLayouts(currentLayout);
+  }
+
+  function deleteReport(index: any) {
+    let currentLayout = layouts;
+    delete currentLayout[index];
+    currentLayout = currentLayout.filter(Boolean);
+    setLayouts(currentLayout);
+  }
+
   function saveLayout() {
     setLayoutsCurrent(layouts);
     async function updateWidgetData() {
@@ -164,22 +144,6 @@ const index = () => {
     setLayouts(layoutsCurrent);
   }
 
-  function onLayoutChange(layout: any, currentLayout: any) {
-    setLayouts(currentLayout);
-    // console.log("layouts - ", layouts);
-  }
-
-  function deleteReport(index: any) {
-    let currentLayout = layouts;
-    delete currentLayout[index];
-    currentLayout = currentLayout.filter(Boolean);
-    setLayouts(currentLayout);
-    // const { [`${index}`], ...layoutsNewData } = x;
-    // const { a, ...newLayouts } = widgets;
-    console.log("layouts", currentLayout, index);
-    // console.log("newLayouts", newLayouts);
-  }
-
   const totalCount = widgets && widgets.length;
 
   return (
@@ -189,16 +153,10 @@ const index = () => {
         <div className="text-xl border-b-2 border-slate-400 pb-2 px-4 mb-2 flex justify-between w-full items-end">
           <div>Dashboards</div>
           <div>
-            {/* <button
-              className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
-              onClick={() => emit("get.all", {})}
-            >
-              Emit
-            </button> */}
             {!editable && (
               <button
                 className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
-                onClick={() => setEditable(true)}
+                onClick={() => setEditable(!editable)}
               >
                 Edit Layout
               </button>
@@ -208,7 +166,7 @@ const index = () => {
                 className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
                 onClick={() => {
                   saveLayout();
-                  setEditable(false);
+                  setEditable(!editable);
                 }}
               >
                 Save Layout
@@ -219,7 +177,7 @@ const index = () => {
                 className="bg-red-500 rounded p-2 ml-2 text-sm text-white"
                 onClick={() => {
                   discardLayout();
-                  setEditable(false);
+                  setEditable(!editable);
                 }}
               >
                 Discard Layout
@@ -227,8 +185,6 @@ const index = () => {
             )}
           </div>
         </div>
-
-        {/* Content of your dashboard */}
         <div>
           <ResponsiveReactGridLayout
             className="layout"
@@ -237,10 +193,9 @@ const index = () => {
             isDraggable={editable}
             isResizable={editable}
             layouts={{ layouts }}
-            onLayoutChange={(
-              currentLayout: any,
-              currentLayoutResponsive: any
-            ) => onLayoutChange(currentLayout, currentLayout)}
+            onLayoutChange={(currentLayout, currentLayoutResponsive) =>
+              onLayoutChange(currentLayout, currentLayout)
+            }
           >
             {/* <div className="w-auto h-auto relative"> */}
             {layouts &&
@@ -300,12 +255,17 @@ const index = () => {
         </div>
         <div
           onClick={handleButtonClick}
-          className="rounded-2xl border-2 border-primary2 p-2 bottom-2 right-4 fixed cursor-pointer "
+          className="rounded-[50%] shadow-sm border-2 border-primary2 bg-primary2 p-1 bottom-2 right-4 fixed cursor-pointer "
         >
-          <AddIcon fontSize="medium" className="dark:text-textColor" />
+          <AddIcon fontSize="large" className="text-textColor" />
         </div>
 
-        <Drawer anchor="right" open={isDrawerOpen} variant="persistent" className="dark:border-l-0">
+        <Drawer
+          anchor="right"
+          open={isDrawerOpen}
+          variant="persistent"
+          className="dark:border-l-0"
+        >
           <div className="container h-full bg-white dark:bg-dark-container">
             <div className="flex border-b  justify-between py-3">
               <span className="px-4 font-bold  text-primary2"> Add Widget</span>
@@ -413,7 +373,13 @@ const index = () => {
                               </td>
 
                               <td className="px-6 py-1 text-gray-900 whitespace-nowrap">
-                                <WidgetMenu id={row._id} />
+                                <WidgetMenu
+                                  setAddToDashboard={setAddToDashboard}
+                                  id={row._id && row._id}
+                                  widget_type={
+                                    row.widget_type && row.widget_type
+                                  }
+                                />
                               </td>
                             </tr>
                           ))}

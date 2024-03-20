@@ -19,7 +19,7 @@ const CustomeInput = (props: any) => {
     <div className="items-center mx-4 my-4">
       <div className="relative">
         <input
-          className={`w-[18rem]  text-gray-400 ${
+          className={`w-[17rem]  text-gray-400 ${
             color ? `border-${color}` : ""
           } border-[1px] rounded-lg dark:border-dark-border bg-transparent py-[0.9rem] px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
             inputFocused ? "input-focused" : ""

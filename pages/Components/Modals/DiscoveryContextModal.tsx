@@ -111,7 +111,7 @@ const DiscoveryContext = (props: any) => {
     <Dialog open={open} onClose={handleModalClose} fullScreen maxWidth="xl">
       <DialogTitle className="dark:bg-dark-container dark:text-textColor border-b border-b-dark-border">
         <div className="flex justify-between">
-          <p>Device Details</p>
+          <p className="text-primary2">Device Details</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
             onClick={handleModalClose}
