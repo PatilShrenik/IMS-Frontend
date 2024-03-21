@@ -169,11 +169,11 @@ const Profiling = () => {
           }
         });
 
-        cols.push({
-          field: "last_availability_on",
-          headerName: "Last Avaiable On",
-          minWidth: 120,
-        });
+        // cols.push({
+        //   field: "last_availability_on",
+        //   headerName: "Last Avaiable On",
+        //   minWidth: 120,
+        // });
         console.log("cols", cols);
         setColumns(cols);
 
@@ -362,7 +362,6 @@ const Profiling = () => {
       const matchingGroup: any = groupValues.find(
         (group: any) => group.id === groupId[0]
       );
-      console.log("gr0", matchingGroup);
       return matchingGroup ? matchingGroup.name : "-";
     } else if (column.field === "credential_profiles") {
       const credProfileId = row[column.field] && row[column.field];
@@ -431,14 +430,16 @@ const Profiling = () => {
       const device_status = row[column.field] && row[column.field];
       return <StatusChips value={device_status} />;
     } else if (column.field == "device_list") {
-      const keysArray: any = Object.keys(row.device_list);
-      const DeviceList = row.device_list;
+      const keysArray = row.device_list ? Object.keys(row.device_list) : [];
+      // const keysArray = row.device_list &&  Object.keys(row.device_list);
+      console.log("keys arr lenght", row.device_list);
+      const DeviceList = row.device_list ?? {};
       //  const DeviceList = {
       //   "134.119.179.18": 641660281176474,
       //   "134.119.179.20": 641660281176464,
       // };
 
-      //const keysArray: any = Object.keys(DeviceList);
+      // const keysArray: any = Object.keys(DeviceList);
       return (
         <>
           <div
@@ -503,20 +504,6 @@ const Profiling = () => {
       console.log(error);
     }
   };
-  const handleAddMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleAddMenuClose = () => {
-    setAnchorE2(null);
-  };
-
-  const handleActionClick = (event: any) => {
-    setAnchorE3(event.currentTarget);
-  };
-
-  const handleActionClose = () => {
-    setAnchorE3(null);
-  };
 
   return (
     <>
@@ -549,7 +536,7 @@ const Profiling = () => {
           </div>
         </div>
         <div className="flex">
-          <div className="flex items-center m-4 mr-0">
+          <div className="flex items-center m-4 mr-4">
             <Tooltip
               TransitionComponent={Zoom}
               title="Hide/UnHide Columns"
@@ -608,7 +595,7 @@ const Profiling = () => {
                   </MenuItem>
                 ))}
             </Menu>
-            <div>
+            {/* <div>
               <Link href="/Assets/">
                 <Button
                   // onClick={handleDrawerOpen}
@@ -619,7 +606,7 @@ const Profiling = () => {
                   Assets
                 </Button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -634,7 +621,7 @@ const Profiling = () => {
           }}
         >
           <div className="max-h-440">
-            <table className="w-full border-collapse overflow-x-auto">
+            <table className="w-full border-collapse overflow-auto">
               <thead>
                 <tr>
                   <th
@@ -841,7 +828,9 @@ const Profiling = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full justify-center dark:text-textColor">No Data</div>
+        <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
       )}
     </>
   );

@@ -211,19 +211,16 @@ const EditUserDrawer = (props: any) => {
       classes={{ paper: classes.drawer }}
       className={`shadow-sm shadow-dark-container w-full overflow-y-auto ${classes.drawer}`}
     >
-         <div className="h-full bg-white dark:bg-dark-menu-color px-4">
+      <div className="h-full bg-white dark:bg-dark-menu-color px-4">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">
-          <p className="text-primary2 font-semibold">
-            {" "}
-            Edit User{" "}
-          </p>
+          <p className="text-primary2 font-semibold"> Edit User </p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
             onClick={handleDrawerClose}
           />
         </div>
         <form onSubmit={handleSave} method="POST">
-          <div className="grid grid-flow-row-dense grid-cols-2 my-4">
+          <div className="flex">
             <CustomeInput
               label="Username"
               name="username"
@@ -242,6 +239,8 @@ const EditUserDrawer = (props: any) => {
               disable={false}
               // require={true}
             />
+          </div>
+          <div className="flex">
             <CustomeInput
               label="Enter First name"
               name="first_name"
@@ -260,6 +259,8 @@ const EditUserDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+          </div>
+          <div className="flex">
             <CustomeInput
               label="Enter email"
               name="email_address"
@@ -276,36 +277,41 @@ const EditUserDrawer = (props: any) => {
               )}
               selectData={roleValues}
               onChange={handleRole}
-             // require={true}
+              // require={true}
             />
-             <div className="flex-col justify-center  px-5 pt-4">
-             <div className=" text-lg mx-2  font-medium text-gray-700 dark:text-textColor">Status</div>
-          <div style={{ pointerEvents: 'none' }} className="mx-4 items-center">
-            <FormGroup>
-              <FormControlLabel
-                className="dark:text-textColor"
-                label={
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      pointerEvents: 'auto',
-                    }}
-                  >
-                    <span>No</span>
-                    <Android12Switch
-                      checked={isAuthEnabled}
-                      onChange={handleEnable}
-                      value={data.enable}
-                    />
-                    <span>Yes</span>
-                  </div>
-                }
-                control={<div />} 
-              />
-            </FormGroup>
+          </div>
+          <div className="flex-col justify-center  px-5 pt-4">
+            <div className=" text-lg mx-2  font-medium text-gray-700 dark:text-textColor">
+              Status
             </div>
+            <div
+              style={{ pointerEvents: "none" }}
+              className="mx-4 items-center"
+            >
+              <FormGroup>
+                <FormControlLabel
+                  className="dark:text-textColor"
+                  label={
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        pointerEvents: "auto",
+                      }}
+                    >
+                      <span>No</span>
+                      <Android12Switch
+                        checked={isAuthEnabled}
+                        onChange={handleEnable}
+                        value={data.enable}
+                      />
+                      <span>Yes</span>
+                    </div>
+                  }
+                  control={<div />}
+                />
+              </FormGroup>
             </div>
           </div>
 
@@ -324,9 +330,9 @@ const EditUserDrawer = (props: any) => {
             </div>
           </div>
         </form>
-        </div>
+      </div>
     </Drawer>
-  )
+  );
 }
 
 export default EditUserDrawer

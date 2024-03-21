@@ -31,10 +31,37 @@ const User = () => {
         const modifiedData = replaceDotsWithUnderscores(response.result);
         console.log("modifified data", modifiedData);
           
-        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-        //console.log("col",col);
+
+        const extractAllKeys = (data: any[]) => {
+          const allKeys: Set<string> = new Set();
+          data.forEach(obj => {
+              Object.keys(obj).forEach(key => allKeys.add(key));
+          });
+          return Array.from(allKeys);
+      };
+      
+      // Extract all keys from the API response
+      const allKeys = extractAllKeys(modifiedData);
+      
+  
+      console.log("All keys from the API response:",allKeys);
+     // allKeys.forEach(key => console.log(key));
+      const col = allKeys ;
+      //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+      //   const indexOfObjectWithEmail =
+      //   modifiedData &&
+      //   modifiedData.findIndex((obj: any) => obj.email_address !== undefined);
+      // let col = [] as any;
+      // if (indexOfObjectWithEmail == -1 && modifiedData.length != 0) {
+      //   col = Object.keys(modifiedData[0]);
+      // } else {
+      //   col =
+      //     modifiedData.length != 0 &&
+      //     Object.keys(modifiedData[indexOfObjectWithEmail]);
+      // }
+        console.log("col",col);
         const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "password" && key !== "user_preferences");
-//        console.log("filtered cols----------------", filteredCols);
+        console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {

@@ -33,8 +33,20 @@ const DiscoverySchedular = () => {
         console.log("discover Scheduler data response ", response.result);
         const modifiedData = replaceDotsWithUnderscores(response.result);
         console.log("modifified All data", modifiedData);
- 
-        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+        
+
+        //const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+        const indexOfObjectWithEmail =
+        modifiedData &&
+        modifiedData.findIndex((obj: any) => obj.email !== undefined);
+      let col = [] as any;
+      if (indexOfObjectWithEmail == -1 && modifiedData.length != 0) {
+        col = Object.keys(modifiedData[0]);
+      } else {
+        col =
+          modifiedData.length != 0 &&
+          Object.keys(modifiedData[indexOfObjectWithEmail]);
+      }
         const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "scheduler_context" && key !== "scheduler" && key !== "device_ids"  && key !== "entities");
    //     console.log("filtered cols----------------", filteredCols);
 

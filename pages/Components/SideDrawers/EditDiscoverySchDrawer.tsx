@@ -98,9 +98,9 @@ const EditDiscoverySchDrawer = (props: any) => {
       try {
         const getDiscoveryShById = async () => {
           let response = await getDiscoverySchById(id);
-          console.log("Get by Id ---result", response.result);
+          //   console.log("Get by Id ---result", response.result);
           const modifiedData = replaceDotWithUnderscore2(response.result);
-          console.log("mod data getById----", modifiedData);
+          //  console.log("mod data getById----", modifiedData);
 
           setData(modifiedData);
           setSchedulerContext(modifiedData.scheduler_context);
@@ -250,7 +250,7 @@ const EditDiscoverySchDrawer = (props: any) => {
 
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
-    console.log("fre", value);
+    //  console.log("fre", value);
     if (value === "WEEKLY") {
       setData((prevState: any) => {
         const { days_of_month, ...restSchedulerContext } =
@@ -281,9 +281,7 @@ const EditDiscoverySchDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-      console.log("=====2", data);
     }
-    // console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
@@ -326,7 +324,7 @@ const EditDiscoverySchDrawer = (props: any) => {
       data.scheduler_context_updated = "yes";
     }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("modifiedData for discovery", modifiedData);
+    // console.log("modifiedData for discovery", modifiedData);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
     1;
@@ -396,7 +394,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                 require={true}
               />
             </div>
-            <div className="grid grid-flow-row-dense grid-cols-3 ">
+            <div className="flex">
               <Box>
                 <ButtonGroup
                   variant="outlined"
@@ -440,7 +438,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="px-8">
+              <div className="px-4">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"

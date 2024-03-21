@@ -23,18 +23,13 @@ const SNMP = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getSNMPCatalog();
-        console.log("discover Scheduler data response ", response.result);
+      //  console.log("discover Scheduler data response ", response.result);
         const modifiedData = replaceDotsWithUnderscores(response.result);
-        console.log("modifified data", modifiedData);
-        // const newData = modifiedData && modifiedData.map((item: any) => {
-        //   const entitiesArray = Object.values(item.entities);
-        //   const emailArray = Object.values(item.email || {});
-
-        //   return { ...item, entities: entitiesArray, email: emailArray };
-        // });
+       // console.log("modifified data", modifiedData);
+     
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        console.log("filtered cols----------------", filteredCols);
+      //  console.log("filtered cols----------------", filteredCols);
 
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
@@ -86,7 +81,7 @@ const SNMP = () => {
 
         setData(modifiedData);
         //setData(newData);
-         console.log("newData-----", data);
+        
       };
       getData();
     } catch (error) {

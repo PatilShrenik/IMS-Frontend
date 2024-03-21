@@ -225,8 +225,8 @@ const SidebarMenu = () => {
             //     "/Settings/device-settings/site-management",
             // },
             {
-              subMenuDropdownname: "Device Profiles",
-              subMenuDropdownpathName: "/Settings/device-settings/device-profiles",
+              subMenuDropdownname: "Device Profile",
+              subMenuDropdownpathName: "/Settings/device-settings/device-profile",
             },
           ],
         },
@@ -268,18 +268,18 @@ const SidebarMenu = () => {
         //   ],
         // },
         {
-          subMenuName: "Schedular",
+          subMenuName: "Scheduler",
           subMenuIcon: <ScheduleIcon />,
           // subMenuPathName: "/page/systemSetting",
           subMenuDropdown: [
             {
-              subMenuDropdownname: "Discovery Schedular",
+              subMenuDropdownname: "Discovery Scheduler",
               subMenuDropdownpathName:
-                "/Settings/schedular/discovery-schedular",
+                "/Settings/scheduler/discovery-scheduler",
             },
             // {
-            //   subMenuDropdownname: "Report Schedular",
-            //   subMenuDropdownpathName: "/Settings/schedular/report-schedular",
+            //   subMenuDropdownname: "Report Scheduler",
+            //   subMenuDropdownpathName: "/Settings/scheduler/report-scheduler",
             // },
           ],
         },

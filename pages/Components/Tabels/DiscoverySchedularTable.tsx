@@ -307,13 +307,15 @@ const DiscoverySchedularTable = (props: any) => {
                 value={search}
                 onChange={handleSearchChange}
               />
-              {search != "" && (
-                <ClearIcon
-                  className="dark:text-white border rounded-2xl"
+             <ClearIcon
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                  className="cursor-pointer rounded-2xl"
                   fontSize="small"
-                  sx={{ fontSize: "13px", marginRight: "3px" }}
+                  color={search == "" ? "disabled" : "warning"}
+                  sx={{ fontSize: "13px", marginRight: "8px" }}
                 />
-              )}
             </div>
             <div className="flex">
               <div className="flex items-center m-4 mr-0">
@@ -321,7 +323,7 @@ const DiscoverySchedularTable = (props: any) => {
                   <>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Delete selected discovery schedulars"
+                      title="Delete selected discovery schedulers"
                       placement="top"
                     >
                       <DeleteForeverIcon
@@ -339,7 +341,7 @@ const DiscoverySchedularTable = (props: any) => {
                     />
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Download selected discovery schedulars"
+                      title="Download selected discovery schedulaes"
                       placement="top"
                     >
                       <FileDownloadIcon
@@ -355,7 +357,7 @@ const DiscoverySchedularTable = (props: any) => {
                   <>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Delete selected discovery schedulars (Disabled)"
+                      title="Delete selected discovery schedulers (Disabled)"
                       placement="top"
                     >
                       <DeleteForeverIcon
@@ -369,7 +371,7 @@ const DiscoverySchedularTable = (props: any) => {
                     </Tooltip>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Download selected discovery schedulars (Disabled)"
+                      title="Download selected discovery schedulers (Disabled)"
                       placement="top"
                     >
                       <FileDownloadIcon
@@ -467,7 +469,7 @@ const DiscoverySchedularTable = (props: any) => {
                   size="small"
                 >
                   <AddIcon fontSize="small" className="mr-2" /> Add Discovery
-                  Schedular
+                  Scheduler
                 </Button>
                 {/* <AddIcon
                     className=" dark:text-textColor"
@@ -711,9 +713,9 @@ const DiscoverySchedularTable = (props: any) => {
           </div>
         ) : (
 
-          <div className="w-full justify-center dark:text-textColor">
-            No Data
-          </div>
+        <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
         )}
       </div>
     </>

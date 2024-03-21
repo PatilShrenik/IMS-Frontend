@@ -227,7 +227,6 @@ const CredntialProfileTable = (props: any) => {
   }, [selectedRows]);
 
   const deleteDevice = async () => {
-    console.log("delete array", selectedRows);
     try {
       let response = await bulkActionCredsProfileDelete(selectedRows);
 
@@ -367,7 +366,6 @@ const CredntialProfileTable = (props: any) => {
   };
 
   const isMenuOpen = Boolean(anchorEl);
-  console.log("com", columns);
   const processColumnData = (column: any, row: any) => {
     // Perform operations based on the column and row data
     // console.log("cols", column);
@@ -486,13 +484,15 @@ const CredntialProfileTable = (props: any) => {
                 value={search}
                 onChange={handleSearchChange}
               />
-              {search != "" && (
-                <ClearIcon
-                  className="dark:text-white border rounded-2xl"
+             <ClearIcon
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                  className="cursor-pointer rounded-2xl"
                   fontSize="small"
-                  sx={{ fontSize: "13px", marginRight: "3px" }}
+                  color={search == "" ? "disabled" : "warning"}
+                  sx={{ fontSize: "13px", marginRight: "8px" }}
                 />
-              )}
             </div>
             <div className="flex">
               <div className="flex items-center m-4 mr-0">
@@ -505,7 +505,7 @@ const CredntialProfileTable = (props: any) => {
                     >
                       <DeleteForeverIcon
                         onClick={handleModalOpen}
-                        className="cursor-pointer"
+                        className="cursor-pointer  dark:text-textColor"
                         style={{
                           margin: "0 5px",
                         }}
@@ -523,7 +523,7 @@ const CredntialProfileTable = (props: any) => {
                     >
                       <FileDownloadIcon
                         onClick={downloadCSV}
-                        className="cursor-pointer"
+                        className="cursor-pointer  dark:text-textColor"
                         style={{
                           margin: "0 5px",
                         }}
@@ -553,7 +553,7 @@ const CredntialProfileTable = (props: any) => {
                     >
                       <FileDownloadIcon
                         // onClick={downloadCSV}
-                        className="cursor-pointer"
+                        className="cursor-pointer dark:text-gray-700"
                         color="disabled"
                         style={{
                           margin: "0 5px",
@@ -926,9 +926,9 @@ const CredntialProfileTable = (props: any) => {
             /> */}
           </div>
         ) : (
-          <div className="w-full justify-center dark:text-textColor">
-            No Data
-          </div>
+          <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
         )}
       </div>
     </>

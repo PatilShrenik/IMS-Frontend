@@ -318,13 +318,15 @@ const UserTable = (props: any) => {
               value={search}
               onChange={handleSearchChange}
             />
-            {search != "" && (
-              <ClearIcon
-                className="dark:text-white border rounded-2xl"
-                fontSize="small"
-                sx={{ fontSize: "13px", marginRight: "3px" }}
-              />
-            )}
+          <ClearIcon
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                  className="cursor-pointer rounded-2xl"
+                  fontSize="small"
+                  color={search == "" ? "disabled" : "warning"}
+                  sx={{ fontSize: "13px", marginRight: "8px" }}
+                />
           </div>
           <div className="flex">
             <div className="flex items-center m-4 mr-0">
@@ -709,9 +711,9 @@ const UserTable = (props: any) => {
           </div>
         </div>
       ) : (
-        <div className="w-full justify-center dark:text-textColor">
-            No Data
-          </div>
+        <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
       )}
     </div>
   </>

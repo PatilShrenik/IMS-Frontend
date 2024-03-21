@@ -138,6 +138,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     }));
 
     setTimeArray(transformedArray);
+
     const getGroups = async () => {
       let response = await getAllGropus();
       setAllGroups(response.result);
@@ -167,7 +168,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     }));
   };
   React.useEffect(() => {
-    console.log("useeffect");
+    //console.log("useeffect");
     setData({
       ...data,
       entities: [],
@@ -175,7 +176,7 @@ const DiscoverySchedularDrawer = (props: any) => {
   }, [change]);
   const handleButtonClick = (value: any) => {
     // setChange(!change);
-    console.log("ent type ", value);
+    // console.log("ent type ", value);
     setSelection(value);
     setActiveButton(value);
     setData({ ...data, entity_type: value, entities: [] });
@@ -215,7 +216,6 @@ const DiscoverySchedularDrawer = (props: any) => {
       });
     }
 
-    console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
@@ -311,7 +311,6 @@ const DiscoverySchedularDrawer = (props: any) => {
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
-    console.log("erro", errorKey);
     // const validError = validationError && Object.keys(validationError);
     // setvalidationErrorKeys(validError);
   }, [errors]);
@@ -319,11 +318,11 @@ const DiscoverySchedularDrawer = (props: any) => {
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("created", modifiedData);
+    // console.log("created", modifiedData);
     try {
       const createDiscovery = async () => {
         let response = await createDiscoverySch(modifiedData);
-        console.log(response);
+        //  console.log(response);
         if (response.status == "success") {
           togglegetDisSchedApiState();
           handleDrawerClose();
@@ -339,8 +338,9 @@ const DiscoverySchedularDrawer = (props: any) => {
             transition: Bounce,
           });
           handleDrawerClose();
-        } else setErrors(response.errors);
-        {
+        } else {
+          setErrors(response.errors);
+
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
@@ -382,7 +382,7 @@ const DiscoverySchedularDrawer = (props: any) => {
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
-                label="Schedular Name"
+                label="Scheduler Name"
                 name="name"
                 value={data.name}
                 onChange={handleInputChange}
@@ -392,12 +392,12 @@ const DiscoverySchedularDrawer = (props: any) => {
               />
               {errorKeys && errorKeys.includes("name") && (
                 <p className="text-danger text-sm ml-2">
-                  Schedular Name should be unique
+                  Scheduler Name should be unique
                 </p>
               )}
             </div>
 
-            <div className="grid grid-flow-row-dense grid-cols-3 ">
+            <div className="flex ">
               <Box>
                 <ButtonGroup
                   variant="outlined"
@@ -433,7 +433,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="px-8">
+              <div className="px-4">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
@@ -459,7 +459,7 @@ const DiscoverySchedularDrawer = (props: any) => {
             </div>
 
             <div>
-              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
+              <h5 className="mx-4 font-normal dark:text-textColor">
                 Notify To
               </h5>
               <CustomeInput

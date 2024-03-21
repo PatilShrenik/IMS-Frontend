@@ -117,7 +117,7 @@ const CredentialProfileDrawer = (props: any) => {
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
-    console.log("erro",errorKey);
+  
     // const validError = validationError && Object.keys(validationError);
     // setvalidationErrorKeys(validError);
   }, [errors]);
@@ -139,7 +139,7 @@ const CredentialProfileDrawer = (props: any) => {
   const handleChange = (values: any) => {
     setProtocol(values);
     // setMsgFlag("no.auth.no.priv");
-    console.log("values-----------", values);
+   
     // let value = "";
     if (values == "SNMPV1" || values == "SNMPV2C") {
       setMsgFlag("no.auth.no.priv");
@@ -156,7 +156,7 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleAuthChange = (values: any) => {
     setAuthType(values);
-    console.log("val", values);
+
     setSnmpv3Object((prevSnmpv3Object) => ({
       ...prevSnmpv3Object,
       credential_context: {
@@ -167,7 +167,7 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleFlagChange = (values: any) => {
     setMsgFlag(values);
-    console.log("value1", values);
+   
     setSnmpv3Object((prevSnmpv3Object) => ({
       ...prevSnmpv3Object,
       credential_context: {
@@ -176,7 +176,7 @@ const CredentialProfileDrawer = (props: any) => {
       },
     }));
   };
-  // console.log("msg",msg_flag);
+
   const handleEncryptChange = (values: any) => {
     setEncryptType(values);
     setSnmpv3Object((prevSnmpv3Object) => ({
@@ -233,16 +233,16 @@ const CredentialProfileDrawer = (props: any) => {
     setSnmpObject({ ...snmpObject, [name]: value });
     setSnmpv3Object({ ...snmpv3Object, [name]: value });
     const trimmedValue = value.trim();
-    console.log("Value to send to backend:", trimmedValue);
+  
   };
 
   const handleSSHSave = () => {
     const modifiedData = replaceUnderscoresWithDots(sshObject);
-    console.log("ssh object", modifiedData);
+
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
-        console.log(response);
+     
         if (response) {
           if (response.status == "success") {
             togglegetCredProfileApiState();
@@ -290,16 +290,15 @@ const CredentialProfileDrawer = (props: any) => {
       console.log(error);
     }
   };
-  // console.log("msg_flag",msg_flag );
 
   const handlesnmpSave = () => {
     // console.log("snmp object", snmpObject);
     const modifiedData = replaceUnderscoresWithDots(snmpObject);
-    console.log("snmp object", modifiedData);
+    // console.log("snmp object", modifiedData);
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
-        response && console.log(response);
+        // response && console.log(response);
         if (response) {
           if (response.status == "success") {
             togglegetCredProfileApiState();
@@ -348,11 +347,11 @@ const CredentialProfileDrawer = (props: any) => {
   const handleSNMPv3Save = () => {
     // console.log("snmp object", snmpObject);
     const modifiedData = replaceUnderscoresWithDots(snmpv3Object);
-    console.log("snmpv3 Object ", modifiedData);
+  //  console.log("snmpv3 Object ", modifiedData);
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
-        console.log(response);
+      //  console.log(response);
         if (response) {
           if (response.status == "success") {
             togglegetCredProfileApiState();
@@ -400,8 +399,7 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleSave = (event: any) => {
     event.preventDefault();
-    console.log("click", event);
-    console.log("protocol", protocol);
+
     // Choose the appropriate onSubmit method based on the protocol
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       handlesnmpSave();
@@ -698,7 +696,7 @@ const CredentialProfileDrawer = (props: any) => {
                   className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                   type="submit"
                 >
-                  save
+                  Save
                 </button>
               </div>
               <div onClick={handleDrawerClose}>

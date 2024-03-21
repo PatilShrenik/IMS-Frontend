@@ -59,7 +59,7 @@ const Assets = () => {
         }
         let filteredCols =
           col && col.filter((key: any) => !key.startsWith("_"));
-        filteredCols = col && col.filter((key: any) => key !== "flow_enabled");
+        filteredCols = col && col.filter((key: any) => key !== "flow_enabled" && key!="last_discovered_on");
 
         // console.log(filteredCols);
         filteredCols &&
@@ -184,7 +184,7 @@ const Assets = () => {
           "timestamp",
           "timezone",
           "valid_credential_profile",
-          // "last_discovered_on",
+           "last_discovered_on",
         ];
 
         setVisibleColumns(

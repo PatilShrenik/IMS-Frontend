@@ -21,9 +21,14 @@ import SingleSelect from "../Selects";
 import { useAppContext } from "../AppContext";
 import { createUser } from "@/pages/api/api/UserManagementAPI";
 import { getAllRole } from "@/pages/api/api/RoleManagementAPI";
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   drawer: {
-    width: "40%",
+    // width: drawerWidth,
+    flexShrink: 100,
+  },
+  drawerPaper: {
+    // width: drawerWidth,
+    backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
 
@@ -157,8 +162,9 @@ const AddUserDrawer = (props: any) => {
           });
           handleDrawerClose();
           } else 
-          setErrors(response.errors);
+         
           {
+            setErrors(response.errors);
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
@@ -220,7 +226,8 @@ const AddUserDrawer = (props: any) => {
           />
         </div>
         <form onSubmit={handleSave} method="POST">
-          <div className="grid grid-flow-row-dense grid-cols-2 my-4">
+          {/* <div className="grid grid-flow-row-dense grid-cols-2 my-4"> */}
+          <div className="flex">
             <CustomeInput
               label="Username"
               name="username"
@@ -230,11 +237,11 @@ const AddUserDrawer = (props: any) => {
               disable={false}
               require={true}
             />
-               {errorKeys && errorKeys.includes("username") && (
-                <p className="text-danger text-sm ml-2">
+            {errorKeys && errorKeys.includes("username") && (
+              <p className="text-danger text-sm ml-2">
                 username should be unique
-                </p>
-              )}
+              </p>
+            )}
             <CustomeInput
               type="password"
               label="Password"
@@ -244,6 +251,8 @@ const AddUserDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+          </div>
+          <div className="flex">
             <CustomeInput
               label="Enter First name"
               name="first_name"
@@ -262,6 +271,8 @@ const AddUserDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+          </div>
+          <div className="flex">
             <CustomeInput
               label="Enter email"
               name="email_address"
@@ -278,6 +289,8 @@ const AddUserDrawer = (props: any) => {
               onChange={handleRole}
               // require={true}
             />
+          </div>
+          <div className="flex">
             <SingleSelect
               label="Select Group"
               // value={groupValues.find(
@@ -321,6 +334,7 @@ const AddUserDrawer = (props: any) => {
               </div>
             </div>
           </div>
+          {/* </div> */}
 
           <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
             <div>
