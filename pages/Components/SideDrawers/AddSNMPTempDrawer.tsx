@@ -166,7 +166,7 @@ const AddSNMPTempDrawer = (props: any) => {
       open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto"
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:border-l-0"
     >
       <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-10 border-b border-b-textColor dark:border-b-dark-border">

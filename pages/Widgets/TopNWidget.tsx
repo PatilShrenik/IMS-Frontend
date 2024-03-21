@@ -79,7 +79,7 @@ const TOPNWidget = (props: any) => {
     start_timestamp: "",
     end_timestamp: "",
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
@@ -283,8 +283,8 @@ const TOPNWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -352,8 +352,8 @@ const TOPNWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },

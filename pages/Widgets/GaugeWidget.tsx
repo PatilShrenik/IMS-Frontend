@@ -15,7 +15,10 @@ import { getAllGropus } from "../api/api/GroupsAPI";
 import { v4 as uuidv4 } from "uuid";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
@@ -66,7 +69,7 @@ const GaugeWidget = (props: any) => {
     start_timestamp: "",
     end_timestamp: "",
     filters: {
-      device_filters: {
+      device_filter: {
         entity_type: activeButton,
         entities: [],
       },
@@ -271,8 +274,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -303,8 +306,8 @@ const GaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },
@@ -708,7 +711,7 @@ const GaugeWidget = (props: any) => {
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
             <div onClick={handleExecute}>
-              <CustomeButton title="Create & Add" />
+              <CustomeButton title="Execute" />
             </div>
             <div onClick={handleSave}>
               <CustomeButton title="Create" />

@@ -69,7 +69,8 @@ const AlertTable = (props: any) => {
   const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");
   const [deviceIds, setDeviceIds] = useState() as any;
-  const { toggleDeviceTableState } = useAppContext();
+  const { toggleDeviceTableState, activeButton, toggleActiveButton } =
+    useAppContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState([]) as any;
   const [allPolicies, setAllPolicies] = React.useState([]);
@@ -113,7 +114,7 @@ const AlertTable = (props: any) => {
   const [isCSVDrawerOpen, setICSVDrawerOpen] = useState(false);
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const [isContextModalopen, setIsContextModalOpen] = React.useState(false);
-  const [activeButton, setActiveButton] = React.useState<string | null>("live");
+  //   const [activeButton, setActiveButton] = React.useState<string | null>("live");
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
   const { Subscribe, emit, connection } = useWebSocketContext();
@@ -125,26 +126,7 @@ const AlertTable = (props: any) => {
   const handleContextModalClose = () => setIsContextModalOpen(false);
   const [receivedData, setReceivedData] = React.useState<any>([]);
 
-  useEffect(() => {
-    if (activeButton == "live") {
-      handleSearch();
-    }
-  }, [activeButton]);
-  console.log("activbutton", activeButton);
-
-  function render(payload: any) {
-    // console.log("live alert", payload.result);
-    console.log("recieved data", payload);
-    setReceivedData(payload.result);
-  }
-
-  useEffect(() => {
-    if (connection && activeButton == "historic") {
-      Subscribe("history1", "ws.alert.explorer", render);
-    } else if (connection && activeButton == "live") {
-      Subscribe("liveData1", "ws.alert.live.view", render);
-    }
-  }, [connection, activeButton]);
+ 
 
   //--------------------------------------code required for DateRangePicker-----------------------------
   const { time, toggleTime } = useAppContext();
@@ -397,9 +379,9 @@ const AlertTable = (props: any) => {
       //   const matchesButtons =
       //     selectedButtons.length === 0 ||
       //     selectedButtons.some((button: any) => row["plugin_type"] === button);
-      // console.log("matched button", row["plugin_type"]);
+      //   console.log("matched button", row["plugin_type"]);
       //   return matchesSearch && matchesButtons;
-      return matchesSearch;
+      //   return matchesSearch;
     });
 
   const handleButtonClick = (title: any) => {
@@ -415,38 +397,38 @@ const AlertTable = (props: any) => {
   const handleToggleButtonClick = (value: any) => {
     // setChange(!change);
     // setSelection(value);
-    setActiveButton(value);
-    // if (value == "live") {
-    setpayloadForAlert({
-      time_range: "",
-      start_timestamp: 0,
-      end_timestamp: 0,
-      filters: {
-        device_filter: {
-          entity_type: "device",
-          entities: [],
+    toggleActiveButton(value);
+    if (value == "historic") {
+      setpayloadForAlert({
+        time_range: "",
+        start_timestamp: 0,
+        end_timestamp: 0,
+        filters: {
+          device_filter: {
+            entity_type: "device",
+            entities: [],
+          },
+          pre_filters: [
+            {
+              filter_type: "equals",
+              indicator: "severity",
+              values: [],
+            },
+            {
+              filter_type: "equals",
+              indicator: "policy",
+              values: [],
+            },
+            {
+              filter_type: "equals",
+              indicator: "status",
+              values: [],
+            },
+          ],
+          post_filters: [],
         },
-        pre_filters: [
-          {
-            filter_type: "equals",
-            indicator: "severity",
-            values: [],
-          },
-          {
-            filter_type: "equals",
-            indicator: "policy",
-            values: [],
-          },
-          {
-            filter_type: "equals",
-            indicator: "status",
-            values: [],
-          },
-        ],
-        post_filters: [],
-      },
-    });
-    // }
+      });
+    }
     // setData({ ...data, entity_type: value, entities: [] });
   };
   const handleResetButtonClick = () => {
@@ -512,11 +494,8 @@ const AlertTable = (props: any) => {
     console.log("in handlesearch");
     const modifiedData = replaceUnderscoresWithDots(payloadForAlert);
     console.log("modified payload for alert", modifiedData);
-    if (activeButton == "historic") {
-      emit("ws.alert.explorer", modifiedData);
-    } else if (activeButton == "live") {
-      emit("ws.alert.live.view", modifiedData);
-    }
+
+    emit("ws.alert.explorer", modifiedData);
   };
 
   const stableSort = (array: any, comparator: any) => {
@@ -872,14 +851,17 @@ const AlertTable = (props: any) => {
     setpayloadForAlert(updatedPayload);
   };
   const handleSelectedButtons = (value: any) => {
-    //   setSelectedButtons((prevdata: any) => {
-    //     let newValues = Array.isArray(value) ? value : [value]; // Ensure value is an array
-    //     newValues = [...(prevdata || []), ...newValues]; // Concatenate with existing values
-    //     return {
-    //       ...prevdata,
-    //       values: newValues,
-    //     };
-    //   });
+    let newValues = Array.isArray(value) ? value : [value];
+    newValues.forEach((newValue: any) => {
+      setSelectedButtons((prevState: any) => {
+        // Check if newValue already exists in prevState
+        if (prevState.includes(newValue)) {
+          return prevState; // If it exists, return the current state
+        } else {
+          return [...prevState, newValue]; // If not, add newValue to the state
+        }
+      });
+    });
   };
 
   console.log("------------selected buttons", selectedButtons);

@@ -42,6 +42,8 @@ const AppContext = createContext<{
   toggleGetRoleApiState: () => void;
   getUserApiState: boolean;
   toggleGetUserApiState: () => void;
+  activeButton: any;
+  toggleActiveButton: (alert: any) => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -84,6 +86,8 @@ const AppContext = createContext<{
   togglegetPolicyApiState: () => {},
   getUserApiState: false,
   toggleGetUserApiState: () => {},
+  activeButton: "live",
+  toggleActiveButton: (alert: any) => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -105,7 +109,7 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getPolicyApiState, setGetPolicyApiState] = useState(false);
   const [getRoleApiState, setRoleApiState] = useState(false);
   const [getUserApiState, setUserApiState] = useState(false);
-
+  const [activeButton, setActiveButton] = useState("live");
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
@@ -126,6 +130,11 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const toggleSideBarStateWithArgu = (state: any) => {
     setSidebarOpen(state);
   };
+
+  const toggleActiveButton = (state: any) => {
+    setActiveButton(state);
+  };
+
   const toggleThemeSwitch = () => {
     setThemeSwitch((prevState) => !prevState);
   };
@@ -228,6 +237,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         togglegetPolicyApiState,
         getPolicyApiState,
         toggleSideBarStateWithArgu,
+        toggleActiveButton,
+        activeButton,
       }}
     >
       {children}
