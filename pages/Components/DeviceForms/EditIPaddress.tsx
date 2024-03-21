@@ -5,10 +5,11 @@ import replacePeriodsWithUnderscoresSingleObject, {
 } from "@/functions/genericFunctions";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import {
-  addSingleDevice,
   getDeviceByID,
   updateSingleDevice,
 } from "@/pages/api/api/DeviceManagementAPI";
+import countries from "country-list";
+import timezones from "timezones-list";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { FormControlLabel, Checkbox, Typography, Switch } from "@mui/material";
@@ -17,7 +18,6 @@ import { SubmitButton, CustomeCancelButton } from "../Buttons";
 import CustomeInput from "../Inputs";
 import SingleSelect from "../Selects";
 import Select from "react-select";
-import { AnyNsRecord } from "dns";
 const EditIPAddress = (props: any) => {
   const { device_id, handleDrawerClose } = props;
   const { toggleDeviceTableState } = useAppContext();
@@ -38,14 +38,14 @@ const EditIPAddress = (props: any) => {
     // device_name: "",
     // description: "",
     alias: "",
-    // country: "",
-    // location: "",
+    country: "",
+    location: "",
     site: "",
-    // site_code: 0,
-    // service: "",
-    // latitude: 0,
-    // longitude: 0,
-    // timezone: "",
+    site_code: 0,
+    service: "",
+    latitude: 0,
+    longitude: 0,
+    timezone: "",
     flow_enabled: false,
     device_status: "new",
     // availability_interval: 60,
@@ -95,6 +95,19 @@ const EditIPAddress = (props: any) => {
     };
     getDataById();
   }, [device_id]);
+
+  const countryNames = countries.getNames();
+  const countriesArray = countryNames.map((name) => ({
+    label: name,
+    value: name,
+  }));
+
+  const tzCodes = timezones.map((timezone) => timezone.tzCode);
+  const timezonesArray = tzCodes.map((tzCode) => ({
+    label: tzCode,
+    value: tzCode,
+  }));
+
   const credsProfileValues =
     allCredsPrfile &&
     allCredsPrfile.map((item: any) => ({
@@ -138,17 +151,16 @@ const EditIPAddress = (props: any) => {
     });
   };
 
-  const handleCheckWithoudSaveCheck = (event: any) => {
+  const handleCountry = (value: any) => {
     setData({
       ...data,
-      check_without_save: event.target.checked == true ? "yes" : "no",
+      country: value,
     });
   };
-
-  const handleTimeZoneDropdown = (value: any) => {
+  const handleTimeZone = (value: any) => {
     setData({
       ...data,
-      timezone: value,
+      timeZone: value,
     });
   };
 
@@ -374,17 +386,46 @@ const EditIPAddress = (props: any) => {
               type="text"
               require={false}
             />
-            {/* <SingleSelect
-              label="Device Type"
-              selectData={[
-                { label: "Router", value: "Router" },
-                { label: "Switch", value: "Switch" },
-                { label: "FireWall", value: "FireWall" },
-              ]}
-              onChange={handleDeviceType}
-              require={true}
-              values={[]}
-            /> */}
+            <CustomeInput
+              label="Site Code"
+              name="site_code"
+              value={data.site_code}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Location"
+              name="location"
+              value={data.location}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Service"
+              name="service"
+              value={data.service}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Latitude"
+              name="latitide"
+              value={data.latitide}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Longitude"
+              name="longitude"
+              value={data.longitude}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
             <Select
               onChange={handleDeviceType}
               value={{ label: data.device_type, value: data.device_type }} // Setting value based on data.device_type
@@ -396,6 +437,20 @@ const EditIPAddress = (props: any) => {
               ]}
               className="my-react-select-container w-[18rem] rounded-lg mx-4 my-4 z-999"
               classNamePrefix="my-react-select"
+            />
+            <SingleSelect
+              label="Country"
+              selectData={countriesArray}
+              onChange={handleCountry}
+              require={false}
+              values={data.country}
+            />
+            <SingleSelect
+              label="TimeZone"
+              selectData={timezonesArray}
+              onChange={handleTimeZone}
+              require={false}
+              values={data.timeZone}
             />
             <CustomeInput
               label="OEM"

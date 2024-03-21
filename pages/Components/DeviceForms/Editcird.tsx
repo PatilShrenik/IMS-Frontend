@@ -5,6 +5,8 @@ import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { FormControlLabel, Checkbox, Typography, Switch } from "@mui/material";
 import React, { useEffect } from "react";
+import countries from "country-list";
+import timezones from "timezones-list";
 import { toast, Bounce } from "react-toastify";
 import { useAppContext } from "../AppContext";
 import { SubmitButton, CustomeCancelButton } from "../Buttons";
@@ -31,14 +33,14 @@ const Editcidr = (props: any) => {
     // device_name: "",
     // description: "",
     alias: "",
-    // country: "",
-    // location: "",
+    country: "",
+    location: "",
     site: "",
-    // site_code: 0,
-    // service: "",
-    // latitude: 0,
-    // longitude: 0,
-    // timezone: "",
+    site_code: 0,
+    service: "",
+    latitude: 0,
+    longitude: 0,
+    timezone: "",
     device_status: "new",
     availability_interval: 60,
     auto_provision: "yes",
@@ -85,6 +87,18 @@ const Editcidr = (props: any) => {
       value: item._id,
     }));
 
+  const countryNames = countries.getNames();
+  const countriesArray = countryNames.map((name) => ({
+    label: name,
+    value: name,
+  }));
+
+  const tzCodes = timezones.map((timezone) => timezone.tzCode);
+  const timezonesArray = tzCodes.map((tzCode) => ({
+    label: tzCode,
+    value: tzCode,
+  }));
+
   //Functions to set value into the state
 
   const handleInputChange = (event: any) => {
@@ -108,16 +122,16 @@ const Editcidr = (props: any) => {
     });
   };
 
-  const handleTimeZoneDropdown = (value: any) => {
-    setData({
-      ...data,
-      timezone: value,
-    });
-  };
-  const handleCountryDropdown = (value: any) => {
+  const handleCountry = (value: any) => {
     setData({
       ...data,
       country: value,
+    });
+  };
+  const handleTimeZone = (value: any) => {
+    setData({
+      ...data,
+      timeZone: value,
     });
   };
 
@@ -300,6 +314,46 @@ const Editcidr = (props: any) => {
               type="text"
               require={false}
             />
+            <CustomeInput
+              label="Site Code"
+              name="site_code"
+              value={data.site_code}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Location"
+              name="location"
+              value={data.location}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Service"
+              name="service"
+              value={data.service}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Latitude"
+              name="latitide"
+              value={data.latitide}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
+            <CustomeInput
+              label="Longitude"
+              name="longitude"
+              value={data.longitude}
+              onChange={handleInputChange}
+              type="text"
+              require={false}
+            />
             <SingleSelect
               label="Device Type"
               selectData={[
@@ -310,6 +364,20 @@ const Editcidr = (props: any) => {
               onChange={handleDeviceType}
               require={true}
               // values={[]}
+            />
+            <SingleSelect
+              label="Country"
+              selectData={countriesArray}
+              onChange={handleCountry}
+              require={false}
+              values={data.country}
+            />
+            <SingleSelect
+              label="TimeZone"
+              selectData={timezonesArray}
+              onChange={handleTimeZone}
+              require={false}
+              values={data.timeZone}
             />
             <CustomeInput
               label="OEM"

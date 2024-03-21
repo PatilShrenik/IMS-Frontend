@@ -358,6 +358,13 @@ main::before {
   flex-grow: 1;
   margin: 12px 0;
 }
+.rs-input {
+  @apply bg-white dark:bg-dark-menu-color;
+}
+
+.rs-input-group.rs-input-group-inside {
+  @apply bg-white dark:bg-dark-menu-color;
+}
 
 .rs-picker-menu {
   z-index: 9999 !important;

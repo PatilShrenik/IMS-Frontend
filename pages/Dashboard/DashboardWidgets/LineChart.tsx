@@ -7,6 +7,7 @@ import HighchartsAccessibility from "highcharts/modules/accessibility";
 import moment from "moment";
 import { useWebSocketContext } from "@/pages/Components/WebSocketContext";
 import { GetWidgetsData } from "@/pages/api/api/DashboardWidgetsAPI";
+import { useAppContext } from "@/pages/Components/AppContext";
 
 const LineChartDashboardComponent = (props: any) => {
   useEffect(() => {
@@ -29,6 +30,23 @@ const LineChartDashboardComponent = (props: any) => {
     // console.log("props - ",props.id, props.keys);
     return await GetWidgetsData(props.id);
   }
+  const { themeSwitch, toggleThemeSwitch } = useAppContext();
+
+  const isBrowser = typeof window !== "undefined";
+
+  const [colorTheme, setColorTheme] = useState<any>(
+    isBrowser ? localStorage.getItem("color-theme") : null
+  );
+  useEffect(() => {
+    const handleStorageChange = () => {
+      // console.log("Storage change detected");
+      const newColorTheme = localStorage.getItem("color-theme");
+      // console.log("New color theme:", newColorTheme);
+      setColorTheme(newColorTheme);
+    };
+    handleStorageChange();
+  }, [themeSwitch]);
+
   useEffect(() => {
     // console.log(props.keys, eventType)
     if (!connection) return;
@@ -128,12 +146,15 @@ const LineChartDashboardComponent = (props: any) => {
     if (chartContainer.current && data) {
       // console.log(props.data);
       // const newData: any = morphData(DummyData);
+      const backgroundColor = colorTheme == "dark" ? "#2C2C38" : "#fff";
+      const fontColor = colorTheme == "dark" ? "white" : "black ";
       const newData: any = morphData(data);
       const options: any = {
         chart: {
           animation: false,
           // height: 200, // Adjust the height of the chart based on the reports prop
           zoomType: "x",
+          backgroundColor,
         },
         title: {
           text: data.name || "",
@@ -141,6 +162,7 @@ const LineChartDashboardComponent = (props: any) => {
           style: {
             fontWeight: "bold",
             fontSize: "14px",
+            color: fontColor,
           },
         },
         credits: {
@@ -156,6 +178,9 @@ const LineChartDashboardComponent = (props: any) => {
           title: {
             text: "",
           },
+          style: {
+            color: fontColor,
+          },
         },
 
         xAxis: {
@@ -163,6 +188,9 @@ const LineChartDashboardComponent = (props: any) => {
             text: "",
           },
           type: "category",
+          style: {
+            color: fontColor,
+          },
         },
         legend: {
           enabled: true,
@@ -170,7 +198,10 @@ const LineChartDashboardComponent = (props: any) => {
           align: "center",
           verticalAlign: "bottom",
           itemStyle: {
-            fontSize: "10px", // Adjust font size of legends
+            fontSize: "10px",
+            // style: {
+            color: fontColor,
+            // }, // Adjust font size of legends
           },
           itemWidth: 150, // Set the width of each legend item
           itemDistance: 5,
@@ -187,10 +218,12 @@ const LineChartDashboardComponent = (props: any) => {
           noData: "No Data to Display",
         },
         plotOptions: {
+          color: fontColor,
           series: {
             label: {
               connectorAllowed: false,
             },
+            color: fontColor,
           },
         },
 
@@ -201,7 +234,9 @@ const LineChartDashboardComponent = (props: any) => {
     }
   }, [data, props.id]);
 
-  return <div className="p-2" id={props.keys} ref={chartContainer} />;
+  return (
+    <div className="p-2 overflow-hidden" id={props.keys} ref={chartContainer} />
+  );
 };
 
 export default LineChartDashboardComponent;

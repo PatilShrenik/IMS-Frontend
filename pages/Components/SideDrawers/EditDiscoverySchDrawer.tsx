@@ -24,6 +24,7 @@ import {
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import SingleSelect from "../Selects";
+import TimeRangePicker from "../TimeRnangePicker";
 const useStyles = makeStyles(() => ({
   drawer: {
     width: "60%",
@@ -293,55 +294,31 @@ const EditDiscoverySchDrawer = (props: any) => {
     }));
   };
   //console.log("df",data.scheduler_context.start_date);
-  const handleDate = (values: any) => {
-    console.log("val==", values);
-    const date = new Date(values);
-    const epochTime = date.getTime() / 1000;
-    //   console.log("date------------",epochTime);
-    setData((prevSnmpObject: any) => ({
-      ...prevSnmpObject,
-      scheduler_context: {
-        ...prevSnmpObject.scheduler_context,
-        start_date: epochTime,
-      },
-    }));
+  const handleDate = (event: any) => {
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    setData(updatedPayload);
   };
 
-  // const handleSave = async (event: any) => {
-  //   event.preventDefault();
-  //   const modifiedData = replaceUnderscoresWithDots(data);
-  //   console.log("data to be updated : ", modifiedData);
-  //   console.log("id of the data to be updated : ", id);
-  //   let response = await updateDiscSch(modifiedData, id);
-  //   // console.log("updated", response);
-  //   if (response.status == "success") {
-  //     togglegetDisSchedApiState();
-  //     handleDrawerClose();
-  //     toast.success(response.status, {
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //       transition: Bounce,
-  //     });
-  //   } else {
-  //     toast.error(response.message, {
-  //       position: "bottom-right",
-  //       autoClose: 2000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //       transition: Bounce,
-  //     });
-  //   }
-  // };
   const handleSave = async (event: any) => {
     event.preventDefault();
     const areEqual = isObjectEqual(data.scheduler_context, schedulerContext);
@@ -506,42 +483,13 @@ const EditDiscoverySchDrawer = (props: any) => {
                 disable={false}
               />
             </div>
-            {/* <div>
-              <i>{`Note :- Enter email's in comma(,) seperated  formate.`}</i>
-            </div> */}
-            {/* <CustomeInput
-                label="Send Message to"
-                name="message"
-                value={data.message}
-                onChange={handleInputChange}
-                type="text"
-                disable={false}
-              /> */}
-            {/* </div> */}
+
             <div className="mx-4 py-2">
-              <p className="mb-4 font-normal dark:text-textColor">Schedule</p>
-              <CustomProvider theme="dark">
-                <DatePicker
-                  onChange={handleDate}
-                  // showOneCalendar
-                  value={new Date(data.scheduler_context.start_date * 1000)}
-                  appearance="subtle"
-                  style={{
-                    // margin: "1rem 1rem",
-                    width: "18rem",
-                    height: "max-content",
-                    border:
-                      colorTheme == "light"
-                        ? "1px solid #e5e7eb"
-                        : "1px solid #ccc",
-                    padding: ".4rem",
-                  }}
-                  placeholder="Select Date Range"
-                  // format="yyyy-MM-dd"
-                  className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-                />
-              </CustomProvider>
-              {/* <DateInput label="Start Date" onChange={handleDate} /> */}
+              <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
+              <TimeRangePicker
+                showOneCalendar={true}
+                onTimeRangeChange={handleDate}
+              />
             </div>
             <div className="flex items-center">
               <Box>

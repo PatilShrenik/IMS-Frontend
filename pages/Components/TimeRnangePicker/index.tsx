@@ -97,17 +97,6 @@ const TimeRangePicker = (props: any) => {
   const handleShortcutClick = (shortcut: any, event: any) => {
     props.onTimeRangeChange(shortcut);
   };
-  // console.log("props", props.text);
-  // const [selectedText, setSelectedText] = React.useState<Date | null>();
-  // React.useEffect(() => {
-  //   // Find the corresponding range object based on the selected text
-  //   const selectedRange = predefinedBottomRanges.find(
-  //     (range: any) => range.text === props.text
-  //   );
-  //   // console.log("selectedrnage", selectedRange);
-  //   // Update the selected text in the state
-  //   // setSelectedText(selectedRange ? selectedRange.value : "");
-  // }, [props.text]);
 
   return (
     <Stack
@@ -120,6 +109,7 @@ const TimeRangePicker = (props: any) => {
         ranges={predefinedBottomRanges}
         placeholder="TimeLine"
         style={{ width: 250 }}
+        showOneCalendar={props.showOneCalendar ? true : false}
         shouldDisableDate={afterToday()}
         onChange={(value: any, format: any) => {
           let dateRange = {

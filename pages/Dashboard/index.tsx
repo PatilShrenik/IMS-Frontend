@@ -32,6 +32,7 @@ import "../../node_modules/react-grid-layout/css/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
 import CustomPagination from "../Components/CustomePagination";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface Widget {
@@ -50,7 +51,7 @@ const index = () => {
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
   const { getWidgetApiState } = useAppContext();
   const [widgets, setWidgets] = useState<any>();
-
+  const [data, setData] = useState({});
   const [editable, setEditable] = useState(false);
   const [layouts, setLayouts] = useState<any>([]);
   const [layoutsCurrent, setLayoutsCurrent] = useState<any>([]);
@@ -81,6 +82,8 @@ const index = () => {
       setLayoutsWholeData(res.result);
     });
   }, [addToDashboard]);
+
+
 
   // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
@@ -120,6 +123,7 @@ const index = () => {
   };
 
   function onLayoutChange(layout: any, currentLayout: any) {
+    console.log("current layout event", currentLayout);
     setLayouts(currentLayout);
   }
 
@@ -129,21 +133,51 @@ const index = () => {
     currentLayout = currentLayout.filter(Boolean);
     setLayouts(currentLayout);
   }
-
   function saveLayout() {
     setLayoutsCurrent(layouts);
     async function updateWidgetData() {
       let id = "1000000000001";
       let body = { ...layoutsWholeData, widgets: layouts };
-      await UpdateWidgetsData(id, body);
+      body = { ...layoutsWholeData, widgets: data };
+      console.log("body data", body);
+      // await UpdateWidgetsData(id, body);
     }
     updateWidgetData();
   }
+  useEffect(() => {
+    saveLayout();
+  }, [layouts, data]);
 
   function discardLayout() {
     setLayouts(layoutsCurrent);
   }
 
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
+  };
   const totalCount = widgets && widgets.length;
 
   return (
@@ -153,26 +187,33 @@ const index = () => {
         <div className="text-xl border-b-2 border-slate-400 pb-2 px-4 mb-2 flex justify-between w-full items-end">
           <div>Dashboards</div>
           <div>
-            {!editable && (
-              <button
-                className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
-                onClick={() => setEditable(!editable)}
-              >
-                Edit Layout
-              </button>
-            )}
-            {editable && (
-              <button
-                className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
-                onClick={() => {
-                  saveLayout();
-                  setEditable(!editable);
-                }}
-              >
-                Save Layout
-              </button>
-            )}
-            {editable && (
+            <div className="flex">
+              <div className="mx-8">
+                <TimeRangePicker onTimeRangeChange={handleDate} />
+              </div>
+
+              {!editable && (
+                <button
+                  className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
+                  onClick={() => setEditable(!editable)}
+                >
+                  Unlock Dashboard
+                </button>
+              )}
+              {editable && (
+                <button
+                  className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
+                  onClick={() => {
+                    saveLayout();
+                    setEditable(!editable);
+                  }}
+                >
+                  Lock Dasboaard
+                </button>
+              )}
+            </div>
+
+            {/* {editable && (
               <button
                 className="bg-red-500 rounded p-2 ml-2 text-sm text-white"
                 onClick={() => {
@@ -182,7 +223,7 @@ const index = () => {
               >
                 Discard Layout
               </button>
-            )}
+            )} */}
           </div>
         </div>
         <div>

@@ -157,6 +157,7 @@ const WidgetMenu = (props: any) => {
         setAddToDashboard((v: number) => v + 1);
       });
     });
+    handleClose();
   }
 
   return (
