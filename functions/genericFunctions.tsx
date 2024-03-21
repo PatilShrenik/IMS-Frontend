@@ -91,6 +91,51 @@ export function convertEpochToDateMonthYear(epochTimeInSeconds: any) {
   return formattedDate;
 }
 
+export function convertEpochToDateMonthYearWithTime(epochTimeInSeconds: any) {
+  const epochTimeInMilliseconds = epochTimeInSeconds * 1000;
+  const date = new Date(epochTimeInMilliseconds);
+
+  const options: any = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  return formattedDate;
+}
+export function convertEpochToDateMonthYearWithTimeTwo(
+  epochTimeInSeconds: any
+) {
+  const epochTimeInMilliseconds = epochTimeInSeconds;
+  const date = new Date(epochTimeInMilliseconds);
+
+  const options: any = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  return formattedDate;
+}
+
+export function convertEpochToDateMonthYearTwo(epochTimeInSeconds: any) {
+  const epochTimeInMilliseconds = epochTimeInSeconds;
+  const date = new Date(epochTimeInMilliseconds);
+
+  const options: any = { year: "numeric", month: "numeric", day: "numeric" };
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  return formattedDate;
+}
+
 export function replaceDotsWithUnderscores(obj: any) {
   const newObj: any = [];
 
@@ -191,8 +236,8 @@ export function getAllKeys(obj: any) {
 }
 
 export const isObjectEqual = (obj1: any, obj2: any) => {
-  console.log("obj1", obj1)
-  console.log("obj2", obj2)
+  console.log("obj1", obj1);
+  console.log("obj2", obj2);
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 

@@ -22,45 +22,57 @@ export const getAllGropus = async () => {
 
 export const addGroup = async (props: any) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(baseURL + "/api/v1/settings/group", {
-    method: "POST",
-    body: JSON.stringify(props),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await res.json();
-  //   console.log("data", data);
-  return data;
+  try {
+    const res = await fetch(baseURL + "/api/v1/settings/group", {
+      method: "POST",
+      body: JSON.stringify(props),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const updateGroup = async (modifiedData: any, id: any) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(baseURL + `/api/v1/settings/group/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(modifiedData),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await res.json();
-  //   console.log("data", data);
-  return data;
+  try {
+    const res = await fetch(baseURL + `/api/v1/settings/group/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(modifiedData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const deleteGroup = async (id: any) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(baseURL + `/api/v1/settings/group/${id}`, {
-    method: "DELETE",
-    // body: JSON.stringify(modifiedData),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await res.json();
-  //   console.log("data", data);
-  return data;
+  try {
+    const res = await fetch(baseURL + `/api/v1/settings/group/${id}`, {
+      method: "DELETE",
+      // body: JSON.stringify(modifiedData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };

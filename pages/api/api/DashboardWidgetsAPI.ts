@@ -60,34 +60,40 @@ export const GetWidgetsData = async (id: any) => {
   }
 };
 
-
 export const getAllWidget = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch(baseURL + "/api/v1/visualization/widget", {
-    method: "GET",
-    // body: JSON.stringify(props),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await res.json();
-  //   console.log("data", data);
-  return data;
+  try {
+    const res = await fetch(baseURL + "/api/v1/visualization/widget", {
+      method: "GET",
+      // body: JSON.stringify(props),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
-
 
 export const deleteWidgt = async (props: any) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(baseURL + `/api/v1/visualization/widget/${props}`, {
-    method: "Delete",
-    // body: JSON.stringify(props),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await res.json();
-  //   console.log("data", data);
-  return data;
+  try {
+    const res = await fetch(baseURL + `/api/v1/visualization/widget/${props}`, {
+      method: "Delete",
+      // body: JSON.stringify(props),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };

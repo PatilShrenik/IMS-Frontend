@@ -304,7 +304,7 @@ main::before {
   }
 
   .my-react-smallselect-container .my-react-select__control {
-    @apply py-[.0.9rem] rounded-lg bg-white dark:bg-[#1E1E1E] border-[1px] border-[#cccccc] dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
+    @apply py-[1px] rounded-lg bg-white dark:bg-[#1E1E1E] border-[1px] border-[#cccccc] dark:border-[#3C3C3C] hover:border-[#3C3C3C] dark:hover:border-neutral-500;
   }
   .my-react-smallselect-container .my-react-select__control--is-focused {
     @apply hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
@@ -338,6 +338,11 @@ main::before {
   .my-react-smallselect-container .my-react-select__placeholder,
   .my-react-smallselect-container .my-react-select__single-value {
     @apply text-neutral-600 dark:text-[#D8D8D8];
+  }
+
+  .my-daterangepicker .rs-input-group {
+    padding: 0.1rem 0 !important;
+    width: 16rem !important;
   }
 }
 .css-12a83d4-MultiValueRemove {

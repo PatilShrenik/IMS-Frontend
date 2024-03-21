@@ -18,7 +18,7 @@ import { addPolicies } from "@/pages/api/api/PolicyApi";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: "60%",
+    width: "75%",
   },
 }));
 const PolicyDrawer = (props: any) => {
@@ -268,9 +268,9 @@ const PolicyDrawer = (props: any) => {
       open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:border-l-0"
+      className="shadow-sm shadow-dark-container w-full overflow-y-auto min-w-[75%] dark:border-l-0"
     >
-      <div className="h-full bg-white dark:bg-dark-menu-color">
+      <div className="h-full w-full bg-white dark:bg-dark-menu-color">
         <div className="flex justify-between py-3 px-5 border-b border-b-textColor dark:border-b-dark-border">
           <p className="text-primary2 font-semibold">Add Policy</p>
           <CloseSharpIcon

@@ -38,7 +38,7 @@ const Assets = () => {
         let cols: any = [];
         let response = await getAllDevice();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        // console.log("modified 1", modifiedData);
+        console.log("modified 1", modifiedData);
         const indexOfObjectWithAvailabilityContext =
           modifiedData &&
           modifiedData.findIndex(
