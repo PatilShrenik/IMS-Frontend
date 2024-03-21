@@ -22,7 +22,7 @@ const SingleSelect = (props: any) => {
       required={require && true}
       placeholder={label}
       options={selectData}
-      className="my-react-select-container w-[17rem]  rounded-lg  mx-4 my-4 z-999"
+      className="my-react-select-container w-[18rem]  rounded-lg  mx-4 my-4 z-999"
       classNamePrefix="my-react-select"
     />
     // <div className="flex items-center mx-4 my-4">

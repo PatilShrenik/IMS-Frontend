@@ -26,7 +26,7 @@ const SecSingleSelect = (props: any) => {
       <div className="relative bg-white dark:bg-dark-menu-color dark:text-textColor">
         <select
           // ref={selectRef}
-          className={`relative w-[17rem] text-gray-400  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
+          className={`relative w-[18rem] text-gray-400  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
             value ? "" : ""
           }`}
           // placeholder={label}
