@@ -124,7 +124,7 @@ const AddRoleDrawer = (props: any) => {
           console.log("role added=",response);
           if (response.status == "success") {
             toggleGetRoleApiState();
-            
+
             toast.success(response.status, {
               position: "bottom-right",
               autoClose: 1000,
@@ -137,9 +137,9 @@ const AddRoleDrawer = (props: any) => {
               transition: Bounce,
             });
             handleDrawerClose();
-          } else 
-          setErrors(response.errors);
-          {
+          } else {
+            setErrors(response.errors);
+
             toast.error(response.message, {
               position: "bottom-right",
               autoClose: 2000,
@@ -185,56 +185,83 @@ const AddRoleDrawer = (props: any) => {
               onChange={handleInputChange}
               require={true}
             />
-             {errorKeys && errorKeys.includes("name") && (
-                <p className="text-danger text-sm ml-2">
+            {errorKeys && errorKeys.includes("name") && (
+              <p className="text-danger text-sm ml-2">
                 Role Name should be unique
-                </p>
-              )}
+              </p>
+            )}
             <CustomeInput
               type="text"
               label="Role Description"
               name="description"
               value={data.description}
               onChange={handleInputChange}
-             // require={true}
+              // require={true}
             />
           </div>
           {/* <AddUserRoleTabel onChange={handleCheckboxChange} /> */}
-          <div className="px-4 py-1 overflow-x-auto">
-            <table className="min-w-full border-collapse table-fixed">
+          <div className="px-4 py-1 ">
+            <table className="min-w-full border-collapse px-4 table-fixed">
               <thead>
-                <tr className="bg-textColor text-center dark:bg-tabel-header dark:text-textColor">
-                  <th className="px-6 py-3 text-center text-base font-semibold dark:bg-tabel-header dark:text-textColor">
+                <tr className="bg-textColor  text-center dark:bg-tabel-header dark:text-textColor">
+                  <th className="px-6 py-3 text-left text-base font-semibold dark:bg-tabel-header dark:text-textColor">
                     Module
                   </th>
-                  <th className="px-6 py-3 text-right text-base font-semibold dark:bg-tabel-header dark:text-textColor">
+                  <th className="px-6 py-3 text-left text-base font-semibold dark:bg-tabel-header dark:text-textColor">
                     Read
                   </th>
-                  <th className="px-6 py-3 text-right text-base font-semibold dark:bg-tabel-header dark:text-textColor">
+                  <th className="px-6 py-3 text-left text-base font-semibold dark:bg-tabel-header dark:text-textColor">
                     Write
                   </th>
-                  <th className="px-6 py-3 text-right text-base font-semibold dark:bg-tabel-header dark:text-textColor">
+                  <th className="px-6 py-3 text-left text-base font-semibold dark:bg-tabel-header dark:text-textColor">
                     Delete
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {permissionsData.map(permission => (
-                  <tr key={permission.key} className="text-center border-b dark:bg-dark-container dark:text-textColor">
-                    <td >
-                      {permission.name}
-                    </td>
-                    <td className="px-6 text-right">
-                      <Checkbox  className=" dark:text-textColor"  onChange={() => handleCheckboxChange(`read:${permission.key}`)} />
-                    </td>
-                    <td className="px-6 text-right">
-                      <Checkbox className=" dark:text-textColor"  onChange={() => handleCheckboxChange(`write:${permission.key}`)} />
-                    </td>
-                    <td className="px-6 text-right">
-                      <Checkbox  className=" dark:text-textColor" onChange={() => handleCheckboxChange(`delete:${permission.key}`)} />
-                    </td>
-                  </tr>
-                ))}
+                {permissionsData.map((permission: any, index: any) => {
+                  const isLastRow = index === permissionsData.length - 1;
+                  return (
+                    <tr 
+                      key={permission.key}
+                      className={`bg-white dark:bg-dark-menu-color  dark:text-textColor dark:border-dark-border py-1 ${
+                        isLastRow ? "border-b" : "border-b"
+                      }`}
+                    >
+                      <td className="px-6 text-left" >{permission.name}</td>
+                      <td className="px-6 text-left">
+                        <Checkbox
+                          className={`bg-white dark:bg-dark-menu-color dark:text-textColor dark:border-dark-border py-1 ${
+                            isLastRow ? "border-b" : "border-b"
+                          }`}
+                          onChange={() =>
+                            handleCheckboxChange(`read:${permission.key}`)
+                          }
+                        />
+                      </td>
+                      <td className="px-6 text-left">
+                        <Checkbox
+                          className={`bg-white dark:bg-dark-menu-color dark:text-textColor dark:border-dark-border py-1 ${
+                            isLastRow ? "border-b" : "border-b"
+                          }`}
+                          onChange={() =>
+                            handleCheckboxChange(`write:${permission.key}`)
+                          }
+                        />
+                      </td>
+                      <td className="px-6 text-left">
+                        <Checkbox
+                          className={`bg-white dark:bg-dark-menu-color dark:text-textColor dark:border-dark-border py-1 ${
+                            isLastRow ? "border-b" : "border-b"
+                          }`}
+                          onChange={() =>
+                            handleCheckboxChange(`delete:${permission.key}`)
+                          }
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -242,7 +269,7 @@ const AddRoleDrawer = (props: any) => {
             <div>
               {/* <SubmitButton title="Save" /> */}
               <button
-              // disabled={isSubmitDisabled}
+                // disabled={isSubmitDisabled}
                 className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 type="submit"
               >

@@ -6,7 +6,10 @@ import Button from "@mui/material/Button";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { createDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { CustomProvider, DatePicker, DateRangePicker } from "rsuite";
-import { replaceUnderscoresWithDots, replaceUnderscoresWithDotsNested } from "@/functions/genericFunctions";
+import {
+  replaceUnderscoresWithDots,
+  replaceUnderscoresWithDotsNested,
+} from "@/functions/genericFunctions";
 import CustomeInput, { DateInput } from "../Inputs";
 import { ButtonGroup } from "@mui/material";
 import { CustomeCancelButton, SubmitButton } from "../Buttons";
@@ -29,7 +32,7 @@ const initialState = {
 
   scheduler_context: {
     scheduled_times: [""],
-   // cron: "",
+    // cron: "",
     start_date: "",
     frequency: "CUSTOME",
   },
@@ -104,7 +107,7 @@ const DiscoverySchedularDrawer = (props: any) => {
         // message: "",
         scheduler_context: {
           scheduled_times: [""],
-       //   cron: "",
+          //   cron: "",
           start_date: "",
           frequency: "CUSTOME",
         },
@@ -112,7 +115,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setActiveButton("DEVICE");
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
-      setFrequency("CUSTOME")
+      setFrequency("CUSTOME");
       setErrorKeys([]);
     }
   }, [open]);
@@ -134,6 +137,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     }));
 
     setTimeArray(transformedArray);
+
     const getGroups = async () => {
       let response = await getAllGropus();
       setAllGroups(response.result);
@@ -163,7 +167,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     }));
   };
   React.useEffect(() => {
-    console.log("useeffect");
+    //console.log("useeffect");
     setData({
       ...data,
       entities: [],
@@ -171,7 +175,7 @@ const DiscoverySchedularDrawer = (props: any) => {
   }, [change]);
   const handleButtonClick = (value: any) => {
     // setChange(!change);
-    console.log("ent type ",value)
+   // console.log("ent type ", value);
     setSelection(value);
     setActiveButton(value);
     setData({ ...data, entity_type: value, entities: [] });
@@ -209,10 +213,8 @@ const DiscoverySchedularDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-      
-    } 
+    }
 
-    console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
@@ -253,7 +255,6 @@ const DiscoverySchedularDrawer = (props: any) => {
   // }));
 
   // };
-  
 
   const handleFrequency = (values: any) => {
     setData((prevSnmpObject: any) => ({
@@ -295,13 +296,13 @@ const DiscoverySchedularDrawer = (props: any) => {
         //frequency: "CUSTOME",
       },
     }));
-   // console.log("date", data);
+    // console.log("date", data);
   };
 
   const handleDate = (values: any) => {
     const date = new Date(values);
     const epochTime = date.getTime() / 1000;
-   // console.log("date------------", epochTime);
+    // console.log("date------------", epochTime);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -319,7 +320,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     });
   };
   const handleGroupEntities = (values: any) => {
-   // setChange(!change);
+    // setChange(!change);
     setData({
       ...data,
       entities: values,
@@ -328,7 +329,6 @@ const DiscoverySchedularDrawer = (props: any) => {
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
-    console.log("erro",errorKey);
     // const validError = validationError && Object.keys(validationError);
     // setvalidationErrorKeys(validError);
   }, [errors]);
@@ -336,48 +336,46 @@ const DiscoverySchedularDrawer = (props: any) => {
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("created", modifiedData);
+   // console.log("created", modifiedData);
     try {
-    const createDiscovery = async () => {
-      let response = await createDiscoverySch(modifiedData);
-      console.log(response);
-      if (response.status == "success") {
-        togglegetDisSchedApiState();
-        handleDrawerClose();
-        toast.success(response.status, {
-          position: "bottom-right",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-        handleDrawerClose(); }
-         else
-         setErrors(response.errors);
-         {
-        toast.error(response.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-      }
-    };
-    createDiscovery();
-    
+      const createDiscovery = async () => {
+        let response = await createDiscoverySch(modifiedData);
+      //  console.log(response);
+        if (response.status == "success") {
+          togglegetDisSchedApiState();
+          handleDrawerClose();
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+          handleDrawerClose();
+        } else {
+          setErrors(response.errors);
+
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        }
+      };
+      createDiscovery();
     } catch (error) {
       console.log(error);
     }
-  
   };
   return (
     <Drawer
@@ -398,11 +396,11 @@ const DiscoverySchedularDrawer = (props: any) => {
             onClick={handleDrawerClose}
           />
         </div>
-        <form onSubmit={handleSave} >
+        <form onSubmit={handleSave}>
           <div className="flex flex-col">
             <div className="mt-4">
               <CustomeInput
-                label="Schedular Name"
+                label="Scheduler Name"
                 name="name"
                 value={data.name}
                 onChange={handleInputChange}
@@ -412,12 +410,12 @@ const DiscoverySchedularDrawer = (props: any) => {
               />
               {errorKeys && errorKeys.includes("name") && (
                 <p className="text-danger text-sm ml-2">
-                Schedular Name should be unique
+                  Scheduler Name should be unique
                 </p>
               )}
             </div>
 
-            <div className="grid grid-flow-row-dense grid-cols-3 ">
+            <div className="flex ">
               <Box>
                 <ButtonGroup
                   variant="outlined"
@@ -425,10 +423,10 @@ const DiscoverySchedularDrawer = (props: any) => {
                   className="my-4 mx-4 items-center"
                 >
                   <Button
-        // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
+                    // className={`dark:text-textColor border-primary2 px-[2.75rem] rounded-lg ${
                     //   activeButton == "GROUP" &&
                     //   "bg-primary2 hover:bg-primary2 text-white"
-                    // }`}                      
+                    // }`}
                     onClick={() => {
                       handleButtonClick("DEVICE");
                     }}
@@ -461,12 +459,12 @@ const DiscoverySchedularDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="px-8">
+              <div className="px-4">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
                     isMulti={true}
-                   // change={change}
+                    // change={change}
                     title="Select Devices"
                     selectData={deviceValues}
                     onChange={handleDeviceEntities}
@@ -476,7 +474,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Groups"
                     isMulti={true}
-                   // change={change}
+                    // change={change}
                     title="Select Groups"
                     selectData={groupValues}
                     onChange={handleGroupEntities}
@@ -487,7 +485,7 @@ const DiscoverySchedularDrawer = (props: any) => {
             </div>
 
             <div>
-              <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
+              <h5 className="mx-4 font-normal dark:text-textColor">
                 Notify To
               </h5>
               <CustomeInput
@@ -515,14 +513,15 @@ const DiscoverySchedularDrawer = (props: any) => {
             <div className="mx-4 py-2">
               <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
               {/* <CustomProvider theme="dark"> */}
-                <DatePicker 
-                onChange={handleDate}
+             
+                <DatePicker
+                  onChange={handleDate}
                   // showOneCalendar
                   appearance="subtle"
                   style={{
                     // margin: "1rem 1rem",
                     width: "18rem",
-                    height: "max-content",
+                    // height: "max-content",
                     border:
                       colorTheme == "light"
                         ? "1px solid #e5e7eb"
@@ -533,6 +532,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   format="yyyy-MM-dd"
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
+           
               {/* </CustomProvider> */}
               {/* <DateInput label="Start Date" onChange={handleDate} /> */}
             </div>

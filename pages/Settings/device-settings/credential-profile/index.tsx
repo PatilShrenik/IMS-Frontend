@@ -25,12 +25,12 @@ const CredentialProfile = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllCredsProfile();
-        console.log("modifidData old------", response);
+      //  console.log("modifidData old------", response);
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        console.log("modifidData------", modifiedData);
+      //  console.log("modifidData------", modifiedData);
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        console.log("filtered cols", filteredCols);
+      //  console.log("filtered cols", filteredCols);
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "credential_context") {
@@ -60,9 +60,9 @@ const CredentialProfile = () => {
           }
         });
 
-        console.log("cols", cols);
+      
         setColumns(cols);
-        console.log("rows", modifiedData);
+       
         const hiddenColumnsValues = [
           "snmp_community",
           "snmp_version",

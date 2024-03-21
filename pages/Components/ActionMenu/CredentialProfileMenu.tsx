@@ -37,13 +37,12 @@ const CredentialProfileMenu = (props: any) => {
     setIsEditDrawerOpen(false);
   };
   const handleEditClick = (rowId: number) => {
-    //console.log("EditRowId", rowId);
+  
     setIsEditDrawerOpen(true);
     handleClose();
   };
 
   const handleDeleteClick = async (rowId: number) => {
-    // console.log("DeleteRowId", rowId);
 
     try {
       const response = await deleteCredsProfile(rowId);
@@ -96,7 +95,7 @@ const CredentialProfileMenu = (props: any) => {
     }
     handleClose();
   };
-  console.log("rdata", rowData);
+
   return (
     <div className="ml-4">
       <IconButton

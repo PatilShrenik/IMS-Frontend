@@ -97,9 +97,9 @@ const EditDiscoverySchDrawer = (props: any) => {
       try {
         const getDiscoveryShById = async () => {
           let response = await getDiscoverySchById(id);
-          console.log("Get by Id ---result", response.result);
+        //   console.log("Get by Id ---result", response.result);
           const modifiedData = replaceDotWithUnderscore2(response.result);
-          console.log("mod data getById----", modifiedData);
+         //  console.log("mod data getById----", modifiedData);
 
           setData(modifiedData);
           setSchedulerContext(modifiedData.scheduler_context);
@@ -249,7 +249,7 @@ const EditDiscoverySchDrawer = (props: any) => {
 
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
-    console.log("fre", value);
+  //  console.log("fre", value);
     if (value === "WEEKLY") {
       setData((prevState: any) => {
         const { days_of_month, ...restSchedulerContext } =
@@ -280,9 +280,8 @@ const EditDiscoverySchDrawer = (props: any) => {
           scheduler_context: updatedSchedulerContext,
         };
       });
-      console.log("=====2", data);
+   
     }
-    // console.log("=====", data);
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
@@ -292,12 +291,12 @@ const EditDiscoverySchDrawer = (props: any) => {
       },
     }));
   };
-  //console.log("df",data.scheduler_context.start_date);
+  
   const handleDate = (values: any) => {
-    console.log("val==", values);
+  
     const date = new Date(values);
     const epochTime = date.getTime() / 1000;
-    //   console.log("date------------",epochTime);
+    
     setData((prevSnmpObject: any) => ({
       ...prevSnmpObject,
       scheduler_context: {
@@ -307,41 +306,6 @@ const EditDiscoverySchDrawer = (props: any) => {
     }));
   };
 
-  // const handleSave = async (event: any) => {
-  //   event.preventDefault();
-  //   const modifiedData = replaceUnderscoresWithDots(data);
-  //   console.log("data to be updated : ", modifiedData);
-  //   console.log("id of the data to be updated : ", id);
-  //   let response = await updateDiscSch(modifiedData, id);
-  //   // console.log("updated", response);
-  //   if (response.status == "success") {
-  //     togglegetDisSchedApiState();
-  //     handleDrawerClose();
-  //     toast.success(response.status, {
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //       transition: Bounce,
-  //     });
-  //   } else {
-  //     toast.error(response.message, {
-  //       position: "bottom-right",
-  //       autoClose: 2000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //       transition: Bounce,
-  //     });
-  //   }
-  // };
   const handleSave = async (event: any) => {
     event.preventDefault();
     const areEqual = isObjectEqual(data.scheduler_context, schedulerContext);
@@ -349,7 +313,7 @@ const EditDiscoverySchDrawer = (props: any) => {
       data.scheduler_context_updated = "yes";
     }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("modifiedData for discovery", modifiedData);
+   // console.log("modifiedData for discovery", modifiedData);
     const entitiesArray = Object.values(modifiedData.entities);
     modifiedData.entities = entitiesArray;
     1;
@@ -419,7 +383,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                 require={true}
               />
             </div>
-            <div className="grid grid-flow-row-dense grid-cols-3 ">
+            <div className="flex">
               <Box>
                 <ButtonGroup
                   variant="outlined"
@@ -463,7 +427,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              <div className="px-8">
+              <div className="px-4">
                 {selection == "DEVICE" ? (
                   <SingleSelect
                     label="Select Devices"
@@ -537,7 +501,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                     padding: ".4rem",
                   }}
                   placeholder="Select Date Range"
-                  // format="yyyy-MM-dd"
+                   format="yyyy-MM-dd"
                   className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
                 />
               </CustomProvider>

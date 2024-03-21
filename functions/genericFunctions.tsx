@@ -191,8 +191,8 @@ export function getAllKeys(obj: any) {
 }
 
 export const isObjectEqual = (obj1: any, obj2: any) => {
-  console.log("obj1", obj1)
-  console.log("obj2", obj2)
+ // console.log("obj1", obj1)
+ // console.log("obj2", obj2)
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 

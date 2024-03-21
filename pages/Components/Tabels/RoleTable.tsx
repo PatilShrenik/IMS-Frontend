@@ -279,13 +279,15 @@ const RoleTable = (props: any) => {
               value={search}
               onChange={handleSearchChange}
             />
-            {search != "" && (
-              <ClearIcon
-                className="dark:text-white border rounded-2xl"
-                fontSize="small"
-                sx={{ fontSize: "13px", marginRight: "3px" }}
-              />
-            )}
+           <ClearIcon
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                  className="cursor-pointer rounded-2xl"
+                  fontSize="small"
+                  color={search == "" ? "disabled" : "warning"}
+                  sx={{ fontSize: "13px", marginRight: "8px" }}
+                />
           </div>
           <div className="flex">
             <div className="flex items-center m-4 mr-0">
@@ -293,7 +295,7 @@ const RoleTable = (props: any) => {
                 <>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Delete selected credentials"
+                    title="Delete selected roles data"
                     placement="top"
                   >
                     <DeleteForeverIcon
@@ -311,7 +313,7 @@ const RoleTable = (props: any) => {
                   />
                     <Tooltip
                       TransitionComponent={Zoom}
-                      title="Download selected credentials"
+                      title="Download selected roles data"
                       placement="top"
                     >
                       <FileDownloadIcon
@@ -328,7 +330,7 @@ const RoleTable = (props: any) => {
                 <>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Delete selected credentials (Disabled)"
+                    title="Delete selected roles data (Disabled)"
                     placement="top"
                   >
                     <DeleteForeverIcon
@@ -342,7 +344,7 @@ const RoleTable = (props: any) => {
                   </Tooltip>
                   <Tooltip
                     TransitionComponent={Zoom}
-                    title="Download selected credentials (Disabled)"
+                    title="Download selected roles data (Disabled)"
                     placement="top"
                   >
                     <FileDownloadIcon
@@ -476,7 +478,7 @@ const RoleTable = (props: any) => {
             }}
           >
             <div className="max-h-440">
-              <table className="w-full border-collapse overflow-x-auto">
+              <table className="w-full border-collapse overflow-auto">
                 <thead>
                   <tr>
                     <th
@@ -687,9 +689,9 @@ const RoleTable = (props: any) => {
             /> */}
           </div>
         ) : (
-          <div className="w-full justify-center dark:text-textColor">
-            No Data
-          </div>
+          <div className="w-full flex justify-center p-5">
+          <p className="dark:text-textColor">No Data</p>
+        </div>
         )}
       </div>
     </>

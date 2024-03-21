@@ -12,8 +12,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { deleteDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import EditDiscoverySchDrawer from "../SideDrawers/EditDiscoverySchDrawer";
 
-
-
 const DiscoverySchedularMenu = (props: any) => {
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
