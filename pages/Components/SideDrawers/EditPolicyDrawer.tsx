@@ -35,7 +35,7 @@ import SecSingleSelect from "../Selects/secSelect";
 
 const useStyles = makeStyles(() => ({
   drawer: {
-    width: "100%",
+    width: "75%",
     // flexShrink: 100,
   },
 }));

@@ -75,12 +75,13 @@ const Alerts = () => {
 
       // Store filtered payload in state
       setReceivedData(filteredPayload);
-    } else if (activeButton == "live") {
+    } else if (activeButton == "live" && payload && payload.result) {
       // setReceivedData(payload.result);
+      console.log("response from live alert", payload.result);
     }
   }
 
-  console.log("recieved data state#########", receivedData);
+  // console.log("recieved data state#########", receivedData);
 
   useEffect(() => {
     if (connection && activeButton == "historic") {
@@ -362,15 +363,17 @@ const Alerts = () => {
   }
   function convertAlertData(jsonData: Result) {
     if (jsonData && jsonData.result && Array.isArray(jsonData.result)) {
-      return jsonData.result.flatMap((segment) =>
-        segment.events.map((event) => {
-          const convertedEvent: EventData = {};
-          for (let i = 0; i < segment.columns.length; i++) {
-            const columnName = segment.columns[i].replace(/\./g, "_"); // Replace "." with "_"
-            convertedEvent[columnName] = event[i];
-          }
-          return convertedEvent;
-        })
+      return jsonData.result.flatMap(
+        (segment) =>
+          segment.events &&
+          segment.events.map((event) => {
+            const convertedEvent: EventData = {};
+            for (let i = 0; i < segment.columns.length; i++) {
+              const columnName = segment.columns[i].replace(/\./g, "_"); // Replace "." with "_"
+              convertedEvent[columnName] = event[i];
+            }
+            return convertedEvent;
+          })
       );
     }
   }
@@ -436,11 +439,12 @@ const Alerts = () => {
           // }
         });
       setColumns(cols);
-      setVisibleColumns(
-        cols
-          .map((column: any) => column.field)
-          .filter((field: any) => !hiddenColumnsValues.includes(field))
-      );
+      cols &&
+        setVisibleColumns(
+          cols
+            .map((column: any) => column.field)
+            .filter((field: any) => !hiddenColumnsValues.includes(field))
+        );
     } else if (activeButton == "historic") {
       let cols: any = [];
 
@@ -494,11 +498,12 @@ const Alerts = () => {
           // }
         });
       setColumns(cols);
-      setVisibleColumns(
-        cols
-          .map((column: any) => column.field)
-          .filter((field: any) => !hiddenColumnsValues.includes(field))
-      );
+      cols &&
+        setVisibleColumns(
+          cols
+            .map((column: any) => column.field)
+            .filter((field: any) => !hiddenColumnsValues.includes(field))
+        );
     }
     // console.log("-----------data#########", data);
 

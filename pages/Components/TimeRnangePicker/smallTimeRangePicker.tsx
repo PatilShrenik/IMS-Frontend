@@ -91,7 +91,7 @@ const predefinedBottomRanges: any = [
   // },
 ];
 
-const TimeRangePicker = (props: any) => {
+const SmallTimeRangePicker = (props: any) => {
   const { afterToday }: any = DateRangePicker;
 
   const handleShortcutClick = (shortcut: any, event: any) => {
@@ -142,10 +142,10 @@ const TimeRangePicker = (props: any) => {
             : predefinedBottomRanges.find((val: any) => val.text === props.text)
                 ?.value
         }
-        className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+        className="my-daterangepicker rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
       />
     </Stack>
   );
 };
 
-export default TimeRangePicker;
+export default SmallTimeRangePicker;

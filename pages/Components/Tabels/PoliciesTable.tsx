@@ -964,8 +964,8 @@ const PoliciesTable = (props: any) => {
             /> */}
           </div>
         ) : (
-          <div className="w-full justify-center dark:text-textColor">
-            No Data
+          <div className="w-full text-center dark:text-textColor">
+            <p>No Data</p>
           </div>
         )}
       </div>

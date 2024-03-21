@@ -35,6 +35,8 @@ import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import {
   convertEpochToDateMonthYear,
   convertEpochToDateMonthYearTwo,
+  convertEpochToDateMonthYearWithTime,
+  convertEpochToDateMonthYearWithTimeTwo,
   replaceDotsWithUnderscores,
   replaceUnderscoresWithDots,
 } from "@/functions/genericFunctions";
@@ -56,6 +58,7 @@ import moment from "moment";
 import { getAllPolicy } from "@/pages/api/api/PolicyApi";
 import { useWebSocketContext } from "../WebSocketContext";
 import TimeRangePicker from "../TimeRnangePicker";
+import SmallTimeRangePicker from "../TimeRnangePicker/smallTimeRangePicker";
 const AlertTable = (props: any) => {
   const {
     data,
@@ -331,17 +334,19 @@ const AlertTable = (props: any) => {
   React.useEffect(() => {
     const getAllPolicies = async () => {
       let response = await getAllPolicy();
-      setAllPolicies(replaceDotsWithUnderscores(response.result));
+      response &&
+        response.result &&
+        setAllPolicies(replaceDotsWithUnderscores(response.result));
     };
     getAllPolicies();
     const getDevices = async () => {
       let response = await getAllDevice();
-      setAllDevices(response.result);
+      response && response.result && setAllDevices(response.result);
     };
     getDevices();
     const getGroups = async () => {
       let response = await getAllGropus();
-      setAllGroups(response.result);
+      response && response.result && setAllGroups(response.result);
     };
     getGroups();
     const getDiscoveryScheduler = async () => {
@@ -385,9 +390,11 @@ const AlertTable = (props: any) => {
     if (selectAll) {
       setSelectedRows([]);
     } else {
-      const allRowIds = data
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((row: any) => row._id);
+      const allRowIds =
+        data &&
+        data
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((row: any) => row._id);
       // console.log("allrow ids", allRowIds);
       setSelectedRows(allRowIds);
     }
@@ -424,11 +431,13 @@ const AlertTable = (props: any) => {
   const filteredData =
     data &&
     data.filter((row: any) => {
-      const matchesSearch = visibleColumns.some(
-        (columnField: any) =>
-          typeof row[columnField] === "string" &&
-          row[columnField].toLowerCase().includes(search.toLowerCase())
-      );
+      const matchesSearch =
+        visibleColumns &&
+        visibleColumns.some(
+          (columnField: any) =>
+            typeof row[columnField] === "string" &&
+            row[columnField].toLowerCase().includes(search.toLowerCase())
+        );
       const matchesButtons =
         (selectedDevice.length !== 0 ||
           selectedPolicy.length !== 0 ||
@@ -531,11 +540,14 @@ const AlertTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        pre_filters: prevData.filters["pre_filters"].map((filter: any) =>
-          filter.indicator === "severity"
-            ? { ...filter, values: [value] }
-            : filter
-        ),
+        pre_filters:
+          prevData.filters &&
+          prevData.filters["pre_filters"] &&
+          prevData.filters["pre_filters"].map((filter: any) =>
+            filter.indicator === "severity"
+              ? { ...filter, values: value }
+              : filter
+          ),
       },
     }));
   };
@@ -547,7 +559,7 @@ const AlertTable = (props: any) => {
         ...prevData.filters,
         device_filter: {
           ...prevData.filters["device_filter"],
-          entities: [value],
+          entities: value,
         },
       },
     }));
@@ -558,11 +570,14 @@ const AlertTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        pre_filters: prevData.filters["pre_filters"].map((filter: any) =>
-          filter.indicator === "status"
-            ? { ...filter, values: [value] }
-            : filter
-        ),
+        pre_filters:
+          prevData.filters &&
+          prevData.filters["pre_filters"] &&
+          prevData.filters["pre_filters"].map((filter: any) =>
+            filter.indicator === "status"
+              ? { ...filter, values: value }
+              : filter
+          ),
       },
     }));
   };
@@ -572,11 +587,14 @@ const AlertTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        pre_filters: prevData.filters["pre_filters"].map((filter: any) =>
-          filter.indicator === "policy"
-            ? { ...filter, values: [value] }
-            : filter
-        ),
+        pre_filters:
+          prevData.filters &&
+          prevData.filters["pre_filters"] &&
+          prevData.filters["pre_filters"].map((filter: any) =>
+            filter.indicator === "policy"
+              ? { ...filter, values: value }
+              : filter
+          ),
       },
     }));
   };
@@ -584,19 +602,20 @@ const AlertTable = (props: any) => {
   const handleSearch = () => {
     // console.log("in handlesearch");
     const modifiedData = replaceUnderscoresWithDots(payloadForAlert);
-    // console.log("modified payload for alert", modifiedData);
+    console.log("modified payload for alert", modifiedData);
 
     emit("ws.alert.historical", modifiedData);
   };
 
   const stableSort = (array: any, comparator: any) => {
-    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
+    const stabilizedThis =
+      array && array.map((el: any, index: any) => [el, index]);
     stabilizedThis.sort((a: any, b: any) => {
       const order = comparator(a[0], b[0]);
       if (order !== 0) return order;
       return a[1] - b[1];
     });
-    return stabilizedThis.map((el: any) => el[0]);
+    return stabilizedThis && stabilizedThis.map((el: any) => el[0]);
   };
 
   const getComparator = (order: any, orderBy: any) => {
@@ -653,15 +672,15 @@ const AlertTable = (props: any) => {
     // console.log("-------column", column);
     // console.log("-------row", row);
     if (column.field === "policy") {
-      const policyName: any = allPolicies.find(
-        (alert: any) => alert._id === parseInt(row.policy)
-      );
+      const policyName: any =
+        allPolicies &&
+        allPolicies.find((alert: any) => alert._id === parseInt(row.policy));
       if (policyName && policyName.name) return <div>{policyName.name}</div>;
       // console.log("policname",policyName.name)
     } else if (column.field === "device") {
-      const deviceName: any = allDevices.find(
-        (alert: any) => alert._id === parseInt(row.device)
-      );
+      const deviceName: any =
+        allDevices &&
+        allDevices.find((alert: any) => alert._id === parseInt(row.device));
       if (deviceName && deviceName.hostname)
         return <div>{deviceName.hostname}</div>;
       // console.log("policname",policyName.name)
@@ -670,7 +689,8 @@ const AlertTable = (props: any) => {
       const timestamp2 = row.__time && row["__time"];
       // console.log(row["__time"])
       if (timestamp1 && row.timestamp) {
-        const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp1);
+        const formattedDateMonthYear =
+          convertEpochToDateMonthYearWithTime(timestamp1);
         return formattedDateMonthYear ? (
           <div className="w-full align-center">{formattedDateMonthYear}</div>
         ) : (
@@ -678,7 +698,7 @@ const AlertTable = (props: any) => {
         );
       } else if (timestamp2 && row.__time) {
         const formattedDateMonthYear =
-          convertEpochToDateMonthYearTwo(timestamp2);
+          convertEpochToDateMonthYearWithTimeTwo(timestamp2);
         return formattedDateMonthYear ? (
           <div className="w-full align-center">{formattedDateMonthYear}</div>
         ) : (
@@ -788,10 +808,12 @@ const AlertTable = (props: any) => {
         time_range: event.text,
       };
     } else {
-      const startdate = new Date(event.value[0]);
-      const startepochTime = startdate.getTime() / 1000;
-      const enddate = new Date(event.value[1]);
-      const endepochTime = enddate.getTime() / 1000;
+      const startdate =
+        event && event.value && event.value[0] && new Date(event.value[0]);
+      const startepochTime = startdate && startdate.getTime() / 1000;
+      const enddate =
+        event && event.value && event.value[1] && new Date(event.value[1]);
+      const endepochTime = enddate && enddate.getTime() / 1000;
       updatedPayload = {
         ...updatedPayload,
         time_range: event.text,
@@ -866,7 +888,7 @@ const AlertTable = (props: any) => {
                 <div className="flex mr-2 mb-2 mt-3 items-center">
                   <div>
                     <div className="text-white w-[8rem] rounded-lg mx-2 bg-yellow-400 dark:bg-yellow-500 py-[0.5rem] px-2">
-                      Warning :  {severityCounts.warning}
+                      Warning : {severityCounts.warning}
                     </div>
                   </div>
                   <div>
@@ -1094,15 +1116,23 @@ const AlertTable = (props: any) => {
                   format="yyyy-MM-dd"
                   className="hover:bg-gray-50 focus:bg-gray-50 dark:bg-card-color"
                 /> */}
-                <TimeRangePicker onTimeRangeChange={handleDate} />
+                <SmallTimeRangePicker onTimeRangeChange={handleDate} />
 
                 {/* </CustomProvider> */}
               </div>
-              <div className="ml-3" onClick={handleSearch}>
-                <div className=" mx-2 inline-flex items-center justify-center rounded-md py-2 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer">
+              <div className="ml-6">
+                <div
+                  className="mx-2 inline-flex items-center justify-center rounded-md py-2 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
+                  onClick={handleSearch}
+                  style={{
+                    cursor: payloadForAlert.time_range
+                      ? "pointer"
+                      : "not-allowed",
+                    backgroundColor: payloadForAlert.time_range ? "" : "gray",
+                  }}
+                >
                   Search
                 </div>
-                {/* <CustomeButton title="Search" /> */}
               </div>
               {/* <Tooltip
                   TransitionComponent={Zoom}
