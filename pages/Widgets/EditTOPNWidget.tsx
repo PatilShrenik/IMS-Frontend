@@ -498,6 +498,15 @@ const EditTopnWidget = (props: any) => {
           require={true}
           // rows={1}
         />
+        <CustomeInput
+          label="Limit"
+          name="limit"
+          value={data && data.limit}
+          onChange={handleInputChange}
+          type="number"
+          require={true}
+          // rows={1}
+        />
         {/* <SecSingleSelect
           label="Granuality"
           value={data.granularity}

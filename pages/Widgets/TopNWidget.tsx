@@ -67,6 +67,7 @@ const TOPNWidget = (props: any) => {
     description: "",
     widget_type: "topN",
     datasource: "",
+    limit: "",
     indicator_group: "",
     indicators: [{ aggregation: "", indicator: "", indicator_type: "" }],
     group_by: "",
@@ -507,8 +508,9 @@ const TOPNWidget = (props: any) => {
     // console.log("chart data", data);
     try {
       const addWidget = async () => {
+        data.limit = parseInt(data.limit);
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("chart widget data", modifiedData);
+        console.log("topn widget data", modifiedData);
         // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 
@@ -518,20 +520,20 @@ const TOPNWidget = (props: any) => {
         // modifiedData.userName = "admin";
 
         // // console.log("chart data", modifiedData);
-        let response = await addChartWidget(modifiedData);
-        if (response.status === "success") {
-          toast.success(response.status, {
-            position: "bottom-right",
-            autoClose: 1000,
-          });
-          handleAddDrawerClose();
-        } else {
-          toast.error(response.message, {
-            position: "bottom-right",
-            autoClose: 2000,
-          });
-        }
-        toggleWidgetApiState();
+        // let response = await addChartWidget(modifiedData);
+        // if (response.status === "success") {
+        //   toast.success(response.status, {
+        //     position: "bottom-right",
+        //     autoClose: 1000,
+        //   });
+        //   handleAddDrawerClose();
+        // } else {
+        //   toast.error(response.message, {
+        //     position: "bottom-right",
+        //     autoClose: 2000,
+        //   });
+        // }
+        // toggleWidgetApiState();
       };
       addWidget();
     } catch (error) {
@@ -556,7 +558,14 @@ const TOPNWidget = (props: any) => {
           onChange={handleInputChange}
           type="text"
           require={true}
-          // rows={1}
+        />
+        <CustomeInput
+          label="Limit"
+          name="limit"
+          value={data.limit}
+          onChange={handleInputChange}
+          type="number"
+          require={true}
         />
         {/* <SecSingleSelect
           label="Granuality"
@@ -565,7 +574,7 @@ const TOPNWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-               <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
+        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker onTimeRangeChange={handleDate} />
         </div>
         <div>

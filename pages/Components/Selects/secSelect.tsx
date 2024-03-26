@@ -59,7 +59,7 @@ const SecSingleSelect = (props: any) => {
               selectFocused || value ? "label-focused" : ""
             }`}
           >
-            {label} {require && "*"}
+            {label} <span className="text-danger">{require && "*"}</span>
           </label>
         )}
         <style jsx>{`

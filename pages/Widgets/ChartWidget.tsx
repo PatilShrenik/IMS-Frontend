@@ -53,7 +53,7 @@ const ChartWidget = (props: any) => {
       id: "five_minute",
     },
     {
-      name: "Tem Minute",
+      name: "Ten Minutes",
       id: "ten_minute",
     },
     {

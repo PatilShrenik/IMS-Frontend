@@ -95,7 +95,7 @@ const AllDeviceTabel = (props: any) => {
   React.useEffect(() => {
     const getCredsProfile = async () => {
       let response = await getAllCredsProfile();
-      setAllCredsProfil(response.result);
+      setAllCredsProfil(response && response.result);
     };
     // const getCredsProfile = async () => {
     //   let response = await getAllDevice();
@@ -104,7 +104,7 @@ const AllDeviceTabel = (props: any) => {
     getCredsProfile();
     const getGroups = async () => {
       let response = await getAllGropus();
-      setAllGroups(response.result);
+      setAllGroups(response && response.result);
     };
     getGroups();
     const getDiscoveryScheduler = async () => {
@@ -401,56 +401,22 @@ const AllDeviceTabel = (props: any) => {
           />
         </>
       );
-    }
-    // else if (column.field === "flow_enabled") {
-    //   if (row[column.field] == "yes") {
-    //     return (
-    //       <>
-    //         <Tooltip title="OnLine" placement="top-end">
-    //           <div className="flex items-center">
-    //             {/* <div className="bg-success rounded-xl w-3 h-3  mr-2"></div> */}
-    //             <CheckCircleOutlineIcon
-    //               fontSize="large"
-    //               className="text-success"
-    //               style={{ fontSize: "1.5rem" }}
-    //             />
-    //           </div>
-    //         </Tooltip>
-    //         {/* <ArrowDropUpIcon style={{fontSize : "28px"}} color="success" fontSize="small" /> */}
-    //       </>
-    //     );
-    //   } else if (row[column.field] == "no") {
-    //     return (
-    //       <>
-    //         <Tooltip title="Offline" placement="top-end">
-    //           <div className=" flex items-center">
-    //             {/* <div className="bg-danger rounded-xl w-3 h-3 mr-2"></div> */}
-    //             <HighlightOffIcon
-    //               className="text-danger"
-    //               fontSize="large"
-    //               style={{ fontSize: "1.5rem" }}
-    //             />
-    //           </div>
-    //         </Tooltip>
-
-    //         {/* <ArrowDropDownIcon color="error" fontSize="small" /> */}
-    //       </>
-    //     );
-    //   }
-    // }
-    else if (
+    } else if (
       column.field === "timestamp" ||
-      column.field == "last_discovered_on"
+      column.field == "last_discovered_on" ||
+      column.field == "last_availability_checked_on"
     ) {
       const timestamp =
         row.availability_context &&
         (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"]);
+          row.availability_context["last_discovered_on"] ||
+          row.availability_context["last_availability_checked_on"]);
 
       if (
         row.availability_context &&
         (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"])
+          row.availability_context["last_discovered_on"] ||
+          row.availability_context["last_availability_checked_on"])
       ) {
         const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp);
         return formattedDateMonthYear ? formattedDateMonthYear : "-";
@@ -572,7 +538,7 @@ const AllDeviceTabel = (props: any) => {
                 {/* )} */}
               </div>
 
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <div>
                   <CustomeButtonGroupButton
                     selectedButtons={selectedButtons}
@@ -619,7 +585,7 @@ const AllDeviceTabel = (props: any) => {
                     className="cursor-pointer mx-2"
                   />
                 </Tooltip>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex">

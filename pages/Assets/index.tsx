@@ -59,7 +59,11 @@ const Assets = () => {
         }
         let filteredCols =
           col && col.filter((key: any) => !key.startsWith("_"));
-        filteredCols = col && col.filter((key: any) => key !== "flow_enabled" && key!="last_discovered_on");
+        filteredCols =
+          col &&
+          col.filter(
+            (key: any) => key !== "flow_enabled" && key != "last_discovered_on"
+          );
 
         // console.log(filteredCols);
         filteredCols &&
@@ -85,6 +89,12 @@ const Assets = () => {
                 cols.unshift({
                   field: key.replace(/\./g, "_"),
                   headerName: "HostName",
+                  minWidth: 150,
+                });
+              } else if (key == "device_status") {
+                cols.unshift({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "Status",
                   minWidth: 150,
                 });
               } else if (key == "ip_address") {
@@ -184,7 +194,7 @@ const Assets = () => {
           "timestamp",
           "timezone",
           "valid_credential_profile",
-           "last_discovered_on",
+          "last_discovered_on",
         ];
 
         setVisibleColumns(

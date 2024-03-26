@@ -7,25 +7,13 @@ import {
   Checkbox,
   TableSortLabel,
   Tooltip,
-  Button,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import SlowMotionVideoIcon from "@mui/icons-material/SlowMotionVideo";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ClearIcon from "@mui/icons-material/Clear";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-// import VisibilityIcon from "@mui/icons-material/ViewColumn";
 import { Bounce, toast } from "react-toastify";
 import {
   bulkActionDeviceDelete,
@@ -33,20 +21,14 @@ import {
 } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
-import {
-  bulkActionCredsProfileDelete,
-  getAllCredsProfile,
-} from "@/pages/api/api/CredentialProfileAPI";
+import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
 import {
   convertEpochToDateMonthYear,
   replacePeriodsWithUnderscores,
 } from "@/functions/genericFunctions";
 
-import Link from "next/link";
 import { useAppContext } from "../../../Components/AppContext";
-import DeleteModal from "../../../Components/Modals/DeleteModal";
 import Chips, { StatusChips } from "../../../Components/Chips";
-import CustomPagination from "../../../Components/CustomePagination";
 import DeviceProfileModal from "@/pages/Components/Modals/DeviceProfileModal";
 
 const Profiling = () => {
@@ -59,15 +41,12 @@ const Profiling = () => {
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedButtons, setSelectedButtons] = useState([]) as any;
   const [allCredsPrfile, setAllCredsProfil] = React.useState([]);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [allDevices, setAllDevices] = React.useState([]);
   const [allGroups, setAllGroups] = React.useState([]);
   const [selected, setSelected] = useState(false);
-  const [anchorE3, setAnchorE3] = useState(null);
-  const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
 
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
@@ -94,10 +73,7 @@ const Profiling = () => {
       let response = await getAllCredsProfile();
       setAllCredsProfil(response.result);
     };
-    // const getCredsProfile = async () => {
-    //   let response = await getAllDevice();
-    //   setAllDevices(response.result);
-    // };
+
     getCredsProfile();
     const getGroups = async () => {
       let response = await getAllGropus();

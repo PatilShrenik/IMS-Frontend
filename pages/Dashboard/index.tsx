@@ -62,7 +62,9 @@ const index = () => {
     try {
       const getData = async () => {
         let response = await getAllWidget();
-        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        const modifiedData =
+          response &&
+          replacePeriodsWithUnderscores(response && response.result);
         setWidgets(modifiedData);
       };
       getData();
@@ -82,8 +84,6 @@ const index = () => {
       setLayoutsWholeData(res.result);
     });
   }, [addToDashboard]);
-
-
 
   // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {

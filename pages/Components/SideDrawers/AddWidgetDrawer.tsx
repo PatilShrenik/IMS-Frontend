@@ -50,22 +50,22 @@ const AddWidgetDrawer = (props: any) => {
                   <Tab
                     label="Chart"
                     value="chart"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                   />
                   <Tab
                     label="Grid"
                     value="grid"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                   />
                   <Tab
                     label="TopN"
                     value="topn"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                   />
                   <Tab
                     label="Gauge"
                     value="gauge"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                   />
                   {/* <Tab
                     label="Sankey"

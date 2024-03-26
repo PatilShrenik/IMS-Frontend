@@ -53,12 +53,28 @@ const MonitoringSettingsDrawer = (props: any) => {
   }, [open]);
 
   const handleInputChange = (id: number, field: string, value: any) => {
-    const updatedData =
-      data &&
-      data.map((row: any) =>
-        row._id === id ? { ...row, [field]: value, _isDirty: true } : row
-      );
-    setData(updatedData);
+    if (field == "object_enabled" && value == true) {
+      const updatedData =
+        data &&
+        data.map((row: any) =>
+          row._id === id ? { ...row, [field]: "yes", _isDirty: true } : row
+        );
+      setData(updatedData);
+    } else if (field == "object_enabled" && value == false) {
+      const updatedData =
+        data &&
+        data.map((row: any) =>
+          row._id === id ? { ...row, [field]: "no", _isDirty: true } : row
+        );
+      setData(updatedData);
+    } else {
+      const updatedData =
+        data &&
+        data.map((row: any) =>
+          row._id === id ? { ...row, [field]: value, _isDirty: true } : row
+        );
+      setData(updatedData);
+    }
   };
 
   const handleUpdate = (id: number) => {

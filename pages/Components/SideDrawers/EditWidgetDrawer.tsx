@@ -95,25 +95,25 @@ const EditWidgetDrawer = (props: any) => {
                   <Tab
                     label="Chart"
                     value="chart"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                     disabled={value == "chart" ? false : true}
                   />
                   <Tab
                     label="Grid"
                     value="grid"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                     disabled={value == "grid" ? false : true}
                   />
                   <Tab
                     label="TopN"
                     value="topN"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                     disabled={value == "topN" ? false : true}
                   />
                   <Tab
                     label="Gauge"
                     value="gauge"
-                    className="dark:text-textColor"
+                    className="dark:text-textColor text-black items-baseline mx-4"
                     disabled={value == "gauge" ? false : true}
                   />
                   {/* <Tab

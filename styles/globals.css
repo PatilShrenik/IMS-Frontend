@@ -413,3 +413,6 @@ main::before {
 .css-1ciwpa8 {
   border-left: 0 !important;
 }
+.css-1q2h7u5.Mui-disabled {
+  @apply dark:text-textColor;
+}
