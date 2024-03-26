@@ -175,8 +175,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     });
   }, [change]);
   const handleButtonClick = (value: any) => {
-    // setChange(!change);
-    // console.log("ent type ", value);
+   
     setSelection(value);
     setActiveButton(value);
     setData({...data, entity_type: value, entities: [] });
