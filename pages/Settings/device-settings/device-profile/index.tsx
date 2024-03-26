@@ -132,8 +132,8 @@ const Profiling = () => {
             Object.keys(modifiedData[indexOfObjectWithDeviceList]);
         }
         //   console.log("fil",cols);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-        filteredCols.filter((key: any) => {
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_"));
+        filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "profile_type") {
               cols.push({

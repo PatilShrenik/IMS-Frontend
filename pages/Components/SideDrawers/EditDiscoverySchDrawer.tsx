@@ -117,7 +117,7 @@ const EditDiscoverySchDrawer = (props: any) => {
   }, [id, open]);
 
   useEffect(() => {
-    console.log("schedulr context", schedulerContext);
+   // console.log("schedulr context", schedulerContext);
   }, [schedulerContext]);
   // console.log("device",data.scheduler_context.start_date);
   useEffect(() => {

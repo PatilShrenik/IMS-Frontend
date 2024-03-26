@@ -56,15 +56,12 @@ const SNMPCatalogueTable = (props: any) => {
       id: item._id,
     }));
     React.useEffect(() => {
-      const getCredsProfile = async () => {
+      const getTemp = async () => {
         let response = await getAllSNMPTemp();
-        setAllTemplates(response.result);
+        setAllTemplates( response && response.result);
       };
-      // const getCredsProfile = async () => {
-      //   let response = await getAllDevice();
-      //   setAllDevices(response.result);
-      // };
-      getCredsProfile();
+  
+      getTemp();
     },[]);
     const handleDrawerOpen = () => {
         setIsDrawerOpen(true);

@@ -15,9 +15,14 @@ import "rsuite/dist/rsuite.min.css";
 import { useAppContext } from "../AppContext";
 import { addSNMPCatalog } from "@/pages/api/api/SNMPCatalogueAPI";
 import { getAllSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   drawer: {
-    width: "65%",
+    // width: drawerWidth,
+    flexShrink: 100,
+  },
+  drawerPaper: {
+    // width: drawerWidth,
+    backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
 const SNMPCatalogueDrawer = (props: any) => {
@@ -33,18 +38,19 @@ const SNMPCatalogueDrawer = (props: any) => {
     snmp_template: null,
   });
 
-  const tempValues = tempData && tempData.map((item: any) => ({
-    label: item.name,
-    value: item._id,
-  }));
+  const tempValues =
+    tempData &&
+    tempData.map((item: any) => ({
+      label: item.name,
+      value: item._id,
+    }));
 
-  console.log("tempData", tempData);
   React.useEffect(() => {
     try {
       const gettemp = async () => {
         let response = await getAllSNMPTemp();
-        console.log("temp", response.result);
-        setTempData(response.result);
+
+        setTempData(response && response.result);
       };
       gettemp();
     } catch (error) {
@@ -78,10 +84,10 @@ const SNMPCatalogueDrawer = (props: any) => {
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("===", modifiedData);
+
     const createSNMPC = async () => {
       let response = await addSNMPCatalog(modifiedData);
-      console.log(response);
+
       if (response.status == "success") {
         toggleGetSNMPCatApiState();
         handleDrawerClose();
@@ -110,7 +116,7 @@ const SNMPCatalogueDrawer = (props: any) => {
         });
       }
     };
-    createSNMPC(); 
+    createSNMPC();
     handleDrawerClose();
   };
   return (
@@ -130,7 +136,16 @@ const SNMPCatalogueDrawer = (props: any) => {
           />
         </div>
         <form onSubmit={handleSave} method="POST">
-          <div className="flex  my-5">
+          <div className="flex mt-4">
+            <CustomeInput
+              label="Enter Syatem OID"
+              name="system_oid"
+              value={data.system_oid}
+              onChange={handleInputChange}
+              type="text"
+              disable={false}
+              require={true}
+            />
             <CustomeInput
               label="Enter Vendor"
               name="vendor"
@@ -140,6 +155,8 @@ const SNMPCatalogueDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+          </div>
+          <div className="flex">
             <CustomeInput
               label="Enter Model"
               name="model"
@@ -160,18 +177,9 @@ const SNMPCatalogueDrawer = (props: any) => {
             />
           </div>
           <div className="flex">
-            <CustomeInput
-              label="Enter Syatem OID"
-              name="system_oid"
-              value={data.system_oid}
-              onChange={handleInputChange}
-              type="text"
-              disable={false}
-              require={true}
-            />
             <SingleSelect
               label="Select SNMP Template"
-            //   value ={ data.snmp_template && data.snmp_template}
+              //   value ={ data.snmp_template && data.snmp_template}
               selectData={tempValues}
               onChange={handleTemp}
               require={true}

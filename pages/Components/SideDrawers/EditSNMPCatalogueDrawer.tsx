@@ -23,7 +23,12 @@ import {
 import { getAllSNMPTemp } from "@/pages/api/api/SNMPTemplateAPI";
 const useStyles = makeStyles(() => ({
   drawer: {
-    width: "65%",
+    // width: drawerWidth,
+    flexShrink: 100,
+  },
+  drawerPaper: {
+    // width: drawerWidth,
+    backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
 
@@ -51,7 +56,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
     try {
       const gettemp = async () => {
         let response = await getAllSNMPTemp();
-        console.log("temp", response.result);
+       // console.log("temp", response.result);
         setTempData(response.result);
       };
       gettemp();
@@ -63,9 +68,9 @@ const EditSNMPCatalogueDrawer = (props: any) => {
     if (open) {
       try {
         const getDiscoveryShById = async () => {
-          console.log("edit id----", id);
+         
           let response = await getSNMPCatalogById(id);
-          console.log("-----DD", response.result);
+        
           const modifiedData = replaceDotsWithUnderscores(response.result);
           setData(modifiedData);
         };
@@ -95,7 +100,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
   const handleSave = async (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDotsNested(data);
-    console.log("======", modifiedData);
+   // console.log("======", modifiedData);
     let response = await updateSNMPCatalog(modifiedData, id);
     // console.log("updated", response);
     if (response.status == "success") {
@@ -148,7 +153,16 @@ const EditSNMPCatalogueDrawer = (props: any) => {
           />
         </div>
         <form onSubmit={handleSave} method="POST">
-          <div className="flex my-5">
+          <div className="flex mt-4">
+          <CustomeInput
+              label="Enter Syatem OID"
+              name="system_oid"
+              value={data.system_oid}
+              onChange={handleInputChange}
+              type="text"
+              disable={false}
+              require={true}
+            />
             <CustomeInput
               label="Enter Vendor"
               name="vendor"
@@ -158,6 +172,8 @@ const EditSNMPCatalogueDrawer = (props: any) => {
               disable={false}
               require={true}
             />
+            </div>
+            <div className="flex">
             <CustomeInput
               label="Enter Model"
               name="model"
@@ -178,15 +194,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
             />
           </div>
           <div className="flex">
-            <CustomeInput
-              label="Enter Syatem OID"
-              name="system_oid"
-              value={data.system_oid}
-              onChange={handleInputChange}
-              type="text"
-              disable={false}
-              require={true}
-            />
+        
             <SingleSelect
               label="Select SNMP Template"
               value={tempValues.find(
@@ -204,7 +212,7 @@ const EditSNMPCatalogueDrawer = (props: any) => {
                 className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 type="submit"
               >
-                Save
+                Update
               </button>
             </div>
             <div onClick={handleDrawerClose}>

@@ -27,9 +27,9 @@ const User = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllUser();
-        console.log("user data from API",response.result);
-        const modifiedData = replaceDotsWithUnderscores(response.result);
-        console.log("modifified data", modifiedData);
+    
+        const modifiedData = replaceDotsWithUnderscores( response && response.result);
+     
           
 
         const extractAllKeys = (data: any[]) => {
@@ -40,30 +40,18 @@ const User = () => {
           return Array.from(allKeys);
       };
       
-      // Extract all keys from the API response
       const allKeys = extractAllKeys(modifiedData);
       
   
-      console.log("All keys from the API response:",allKeys);
+     // console.log("All keys from the API response:",allKeys);
      // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
       //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-      //   const indexOfObjectWithEmail =
-      //   modifiedData &&
-      //   modifiedData.findIndex((obj: any) => obj.email_address !== undefined);
-      // let col = [] as any;
-      // if (indexOfObjectWithEmail == -1 && modifiedData.length != 0) {
-      //   col = Object.keys(modifiedData[0]);
-      // } else {
-      //   col =
-      //     modifiedData.length != 0 &&
-      //     Object.keys(modifiedData[indexOfObjectWithEmail]);
-      // }
-        console.log("col",col);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "password" && key !== "user_preferences");
-        console.log("filtered cols----------------", filteredCols);
+   
+      
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_") && key !== "password" && key !== "user_preferences");
 
-        filteredCols.filter((key: any) => {
+      filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "first_name") {
               cols.push({
@@ -109,7 +97,7 @@ const User = () => {
             }
           }
         });
-        console.log("cols", cols);
+       // console.log("cols", cols);
         setColumns(cols);
 
         const hiddenColumnsValues = [
