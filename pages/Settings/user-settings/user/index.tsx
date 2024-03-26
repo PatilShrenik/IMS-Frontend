@@ -74,13 +74,13 @@ const User = () => {
                 minWidth: 80,
               });
             }
-            else if (key == "email_address") {
-              cols.push({
-                field: "email_address",
-                headerName: "Email",
-                minWidth: 80,
-              });
-            }
+            // else if (key == "email_address") {
+            //   cols.push({
+            //     field: "email_address",
+            //     headerName: "Email",
+            //     minWidth: 80,
+            //   });
+            // }
 
             else if (key == "username") {
               cols.unshift({
@@ -103,7 +103,7 @@ const User = () => {
         const hiddenColumnsValues = [
           // "username",
           "password",
-          // "enable",
+          "email_address",
           "created_on",
           "created_by",
           "groups",
