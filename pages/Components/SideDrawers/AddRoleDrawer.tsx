@@ -63,7 +63,7 @@ const AddRoleDrawer = (props: any) => {
       useEffect(() => {
         const errorKey = errors && Object.keys(errors);
         setErrorKeys(errorKey);
-        console.log("erro",errorKey);
+     //   console.log("erro",errorKey);
         // const validError = validationError && Object.keys(validationError);
         // setvalidationErrorKeys(validError);
       }, [errors]);
@@ -118,10 +118,10 @@ const AddRoleDrawer = (props: any) => {
           return; // Prevent form submission
       }
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("===", modifiedData);
+      //  console.log("===", modifiedData);
         const createRole= async () => {
           let response = await addRole(modifiedData);
-          console.log("role added=",response);
+       //   console.log("role added=",response);
           if (response.status == "success") {
             toggleGetRoleApiState();
 

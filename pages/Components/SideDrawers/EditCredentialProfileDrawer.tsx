@@ -94,8 +94,8 @@ const EditCredentialProfileDrawer = (props: any) => {
       const getById = async () => {
         let response = await getCredsProfileById(rowId);
         const modifiedData = replaceDotsWithUnderscoresSEC(response.result);
-        console.log("OG data------", response.result);
-        console.log("modi data------", modifiedData);
+      //  console.log("OG data------", response.result);
+       // console.log("modi data------", modifiedData);
         setData(modifiedData);
       };
       getById();
@@ -138,7 +138,7 @@ const EditCredentialProfileDrawer = (props: any) => {
       setProtocolValue("SSH");
       setProtocol("SSH");
     }
-    console.log("data-------------", data);
+   // console.log("data-------------", data);
   }, [data]);
 
   useEffect(() => {
@@ -187,10 +187,10 @@ const EditCredentialProfileDrawer = (props: any) => {
       }
     }
   }, [protocol, data]);
-  console.log("snmp 3", snmpv3Object);
+//  console.log("snmp 3", snmpv3Object);
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
-    console.log("community", value);
+  //  console.log("community", value);
     setSnmpObject((prevSnmpObject) => ({
       ...prevSnmpObject,
       credential_context: {
@@ -294,7 +294,7 @@ const EditCredentialProfileDrawer = (props: any) => {
   const handleSNMPv3Save = () => {
     // console.log("snmp object", snmpObject);
     const modifiedData = replaceUnderscoresWithDots(snmpv3Object);
-    console.log("snmpv3 Object ", modifiedData);
+   // console.log("snmpv3 Object ", modifiedData);
     try {
       const createprofile = async () => {
         let response = await updateCredsProfile(modifiedData, data._id);
@@ -341,7 +341,7 @@ const EditCredentialProfileDrawer = (props: any) => {
     }
     handleDrawerClose();
   };
-  console.log("protocol", protocol);
+ // console.log("protocol", protocol);
 
   const handleChange = (values: any) => {
     setMsgFlag("no.auth.no.priv");
@@ -357,7 +357,6 @@ const EditCredentialProfileDrawer = (props: any) => {
     }
     setProtocolValue(values);
 
-    console.log("protocol------------------", values);
     // let value = "";
     if (values == "SNMPV1") {
       // value = "V1";
@@ -407,7 +406,7 @@ const EditCredentialProfileDrawer = (props: any) => {
   };
 
   const handleAuthChange = (value: any) => {
-    console.log("authtype in fucntion", value);
+  //  console.log("authtype in fucntion", value);
     setAuthType(value);
     setSnmpv3Object((prevSnmpv3Object) => ({
       ...prevSnmpv3Object,
@@ -417,9 +416,9 @@ const EditCredentialProfileDrawer = (props: any) => {
       },
     }));
   };
-  console.log("authtype in commoj", authType);
+ // console.log("authtype in commoj", authType);
   const handleFlagChange = (values: any) => {
-    console.log("flag values", values);
+  //  console.log("flag values", values);
     if (values == "No Auth No Privacy") {
       setSnmpv3Object((prevSnmpv3Object) => ({
         ...prevSnmpv3Object,

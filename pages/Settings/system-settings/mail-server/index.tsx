@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { replaceDotsWithUnderscores, replaceUnderscoresWithDots } from '@/functions/genericFunctions';
 import CustomeInput from '@/pages/Components/Inputs';
 import { getSMTPServer, updateSMTPServer } from '@/pages/api/api/SMTPServerAPI';
@@ -62,7 +62,7 @@ const MailServer= () => {
   const [selectedSecurity, setSelectedSecurity] = useState("NONE");
   const [data, setData] = React.useState<any>(initialState);
   const [originalData, setOriginalData] = useState([]);
-
+  const lastSavedData = useRef<any>(initialState);
   useEffect(() => {
     try {
       const getData = async () => {
@@ -70,10 +70,10 @@ const MailServer= () => {
         const modifiedData = replaceDotsWithUnderscores(
           response.result
         );
-         console.log("get data", modifiedData);
+       //  console.log("get data", modifiedData);
         setData(modifiedData);
        //  setOriginalData(modifiedData);
-        //  console.log("sd",modifiedData)
+       lastSavedData.current = { ...modifiedData };
         modifiedData.smtp_enabled == "yes"
           ? setIsEmailEnabled(true)
           : setIsEmailEnabled(false);
@@ -181,20 +181,7 @@ const MailServer= () => {
     });
     setSelectedSecurity(securityType);
   };
-  const handleCancel = () => {
 
-    setData(initialState);
-    // Reset any other state variables if needed
-    setIsEmailEnabled(false);
-    setIsAuthEnabled(false);
-    setSelectedSecurity("NONE");
-    // Reset the form data to its original state
-   // setData(originalData);
-  // Reset any other state variables if needed
-  // setIsEmailEnabled(originalData && originalData.smtp_enabled === "yes");
-  // setIsAuthEnabled(originalData && originalData.smtp_authentication === "yes");
-  // setSelectedSecurity(originalData ? originalData.smtp_security : "NONE");
-  };
 
   const handleSave = (event: any) => {
     event.preventDefault();
@@ -202,7 +189,7 @@ const MailServer= () => {
     console.log("handle save data",data);
    
     try {
-      const updateWidget = async () => {
+      const updateMailServer = async () => {
         if(data.smtp_authentication == "no"){
           data.smtp_username = "";
           data.smtp_password = "";
@@ -218,7 +205,7 @@ const MailServer= () => {
           data.smtp_password = "";
         }
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("smtp server data", data);
+        console.log("smtp server data", modifiedData);
         let response = await updateSMTPServer(modifiedData);
         if (response.status == "success") {
           
@@ -233,6 +220,7 @@ const MailServer= () => {
             theme: "colored",
             transition: Bounce,
           });
+          lastSavedData.current = { ...data };
         } else {
           toast.error(response.message, {
             position: "bottom-right",
@@ -247,12 +235,19 @@ const MailServer= () => {
           });
         }
       };
-      updateWidget();
+      updateMailServer();
      
     } catch (error) {
       console.log(error);
     }
   
+  };
+  const handleCancel = () => {
+
+    setData({ ...lastSavedData.current });
+    setIsEmailEnabled(lastSavedData.current.smtp_enabled === "yes");
+    setIsAuthEnabled(lastSavedData.current.smtp_authentication === "yes");
+    setSelectedSecurity(lastSavedData.current.smtp_security);
   };
   return (
     <>

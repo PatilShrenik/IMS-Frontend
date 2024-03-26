@@ -29,15 +29,27 @@ const Role = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllRole();
-        const modifiedData = replaceDotsWithUnderscores(response.result);
+        const modifiedData = replaceDotsWithUnderscores(response && response.result);
       ///  console.log("modifified data", modifiedData);
-          
-        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-     
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "rbac_context" );
-       // console.log("filtered cols----------------", filteredCols);
+      const extractAllKeys = (data: any[]) => {
+        const allKeys: Set<string> = new Set();
+        data.forEach(obj => {
+            Object.keys(obj).forEach(key => allKeys.add(key));
+        });
+        return Array.from(allKeys);
+    };
+    
+    const allKeys = extractAllKeys(modifiedData);
+    
 
-        filteredCols.filter((key: any) => {
+    console.log("All keys from the API response:",allKeys);
+   // allKeys.forEach(key => console.log(key));
+    const col = allKeys ;
+       // const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+     
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_") && key !== "rbac_context" );
+
+        filteredCols && filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "description") {
               cols.push({

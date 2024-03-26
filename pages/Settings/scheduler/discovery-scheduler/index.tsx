@@ -30,9 +30,7 @@ const DiscoverySchedular = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllDiscoverySch();
-        console.log("discover Scheduler data response ", response.result);
-        const modifiedData = replaceDotsWithUnderscores(response.result);
-        console.log("modifified All data", modifiedData);
+        const modifiedData = replaceDotsWithUnderscores( response && response.result);
         
 
         //const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
@@ -47,10 +45,10 @@ const DiscoverySchedular = () => {
           modifiedData.length != 0 &&
           Object.keys(modifiedData[indexOfObjectWithEmail]);
       }
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "scheduler_context" && key !== "scheduler" && key !== "device_ids"  && key !== "entities");
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_") && key !== "scheduler_context" && key !== "scheduler" && key !== "device_ids"  && key !== "entities");
    //     console.log("filtered cols----------------", filteredCols);
 
-        filteredCols.filter((key: any) => {
+   filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "entity_type") {
               cols.push({

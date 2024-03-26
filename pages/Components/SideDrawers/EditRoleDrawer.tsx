@@ -52,11 +52,11 @@ const EditRoleDrawer = (props: any) => {
     if (open) {
       try {
         const getUserRoleById = async () => {
-          console.log("edit id----", id);
+      
           let response = await getRoleById(id);
-          console.log("-----dd", response.result);
+        
           const modifiedData = replaceDotWithUnderscore2(response.result);
-          console.log("-----DD", modifiedData);
+        
           setData(modifiedData);
         };
         getUserRoleById();
@@ -77,7 +77,6 @@ const EditRoleDrawer = (props: any) => {
   //   }));
   // }; 
   const handleCheckboxChange = (permissionKey: string) => {
-    console.log("key----",permissionKey);
     setData(prevData => {
       let updatedContext = [...prevData.rbac_context];
       const index = updatedContext.indexOf(permissionKey);
@@ -112,9 +111,7 @@ const EditRoleDrawer = (props: any) => {
       return; 
     }
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("======", modifiedData);
     let response = await updateRole(modifiedData, id);
-     console.log("updated", response);
     if (response.status == "success") {
       toggleGetRoleApiState();
 
@@ -255,7 +252,7 @@ const EditRoleDrawer = (props: any) => {
                 className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 type="submit"
               >
-                Save
+               Update
               </button>
             </div>
             <div onClick={handleDrawerClose}>

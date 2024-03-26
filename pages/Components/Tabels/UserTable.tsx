@@ -85,7 +85,7 @@ const UserTable = (props: any) => {
   React.useEffect(() => {
     const getRoles = async () => {
       let response = await getAllRole();
-      setAllGroups(response.result);
+      setAllGroups ( response && response.result);
     };
     getRoles();
   },[]);
@@ -210,7 +210,6 @@ const UserTable = (props: any) => {
       return matchingGroup ? matchingGroup.name : "-";
     }
     else if (column.field === "enable") {
-      console.log("first",row.enable);
       if (
         row.enable === "yes"
       ) {
@@ -258,7 +257,7 @@ const UserTable = (props: any) => {
   };
 
   const deleteUser = async () => {
-    console.log("delete array", selectedRows);
+   
     try {
       let response = await deleteBulkUser(selectedRows);
 

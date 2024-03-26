@@ -23,26 +23,47 @@ const SNMP = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getSNMPCatalog();
-      //  console.log("discover Scheduler data response ", response.result);
-        const modifiedData = replaceDotsWithUnderscores(response.result);
-       // console.log("modifified data", modifiedData);
      
-        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-      //  console.log("filtered cols----------------", filteredCols);
+        const modifiedData = replaceDotsWithUnderscores(response && response.result);
 
-        filteredCols.filter((key: any) => {
+        const extractAllKeys = (data: any[]) => {
+          const allKeys: Set<string> = new Set();
+          data.forEach(obj => {
+              Object.keys(obj).forEach(key => allKeys.add(key));
+          });
+          return Array.from(allKeys);
+      };
+      
+      const allKeys = extractAllKeys(modifiedData);
+      
+  
+      console.log("All keys from the API response:",allKeys);
+     // allKeys.forEach(key => console.log(key));
+      const col = allKeys ;
+      //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_"));
+   
+
+      filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
-            if (key == "model") {
+            if (key == "vendor") {
+              cols.push({
+                field: "vendor",
+                headerName: "vendor",
+                minWidth: 150,
+              });
+            }
+            else if (key == "system_oid") {
+              cols.unshift({
+                field: "system_oid",
+                headerName: "system_oid",
+                minWidth: 80,
+              });
+            }
+             else if (key == "model") {
               cols.push({
                 field: "model",
                 headerName: "model",
-                minWidth: 150,
-              });
-            } else if (key == "vendor") {
-              cols.unshift({
-                field: "vendor",
-                headerName: "vendor",
                 minWidth: 80,
               });
             }
@@ -61,11 +82,10 @@ const SNMP = () => {
             }
           }
         });
-        console.log("cols", cols);
         setColumns(cols);
 
         const hiddenColumnsValues = [
-          "system_oid",
+          // "system_oid",
           "created_by",
           "created_on",
           "updated_on",

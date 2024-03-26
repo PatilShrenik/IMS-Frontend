@@ -24,7 +24,12 @@ import { getAllRole, getRoleById } from "@/pages/api/api/RoleManagementAPI";
 import { getUserData } from "@/pages/api/getUserData";
 const useStyles = makeStyles(() => ({
   drawer: {
-    width: "60%",
+    // width: drawerWidth,
+    flexShrink: 100,
+  },
+  drawerPaper: {
+    // width: drawerWidth,
+    backdropFilter: "brightness(80%)", // Adjust the brightness for opacity
   },
 }));
 
@@ -91,9 +96,8 @@ const EditUserDrawer = (props: any) => {
     if (open) {
       try {
         const getUser = async () => {
-          console.log("edit id----", id);
+        //  console.log("edit id----", id);
           let response = await getUserById(id);
-          console.log("-----DD", response.result);
           const modifiedData = replaceDotsWithUnderscores(response.result);
           setData(modifiedData); 
 
@@ -158,9 +162,7 @@ const EditUserDrawer = (props: any) => {
   const handleSave = async (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("======", modifiedData);
     let response = await updateUser(modifiedData, id);
-    // console.log("updated", response);
     if (response.status == "success") {
       toggleGetUserApiState();
       
@@ -220,7 +222,7 @@ const EditUserDrawer = (props: any) => {
           />
         </div>
         <form onSubmit={handleSave} method="POST">
-          <div className="flex">
+          <div className="flex mt-4">
             <CustomeInput
               label="Username"
               name="username"
@@ -322,7 +324,7 @@ const EditUserDrawer = (props: any) => {
                 className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 type="submit"
               >
-                Save
+                Update
               </button>
             </div>
             <div onClick={handleDrawerClose}>

@@ -95,9 +95,9 @@ const RoleDetailsModal = (props: any) => {
                     >
                       <td
                         style={{
-                          textAlign: "center",
+                          textAlign: "left",
                         }}
-                        className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
+                        className={`bg-white dark:bg-dark-container  dark:text-textColor dark:border-dark-border py-3 px-4 ${
                           isLastRow ? "border-b" : "border-b"
                         }`}
                       >
@@ -105,7 +105,7 @@ const RoleDetailsModal = (props: any) => {
                       </td>
                       <td
                         style={{
-                          textAlign: "center",
+                          textAlign: "left",
                         }}
                         className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
                           isLastRow ? "border-b" : "border-b"
@@ -115,7 +115,7 @@ const RoleDetailsModal = (props: any) => {
                       </td>
                       <td
                         style={{
-                          textAlign: "center",
+                          textAlign: "left",
                         }}
                         className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
                           isLastRow ? "border-b" : "border-b"

@@ -95,15 +95,13 @@ const AddUserDrawer = (props: any) => {
   useEffect(() => {
     const errorKey = errors && Object.keys(errors);
     setErrorKeys(errorKey);
-    console.log("erro",errorKey);
-    // const validError = validationError && Object.keys(validationError);
-    // setvalidationErrorKeys(validError);
+
   }, [errors]);
   React.useEffect(() => {
     try {
       const getRoles = async () => {
         let response = await getAllRole();
-        setAllRoles(response.result);
+        setAllRoles(response && response.result);
       };
       getRoles();
     } catch (error) {
@@ -140,13 +138,11 @@ const AddUserDrawer = (props: any) => {
   const handleSave = (event: any) => {
     event.preventDefault();
     const modifiedData = replaceUnderscoresWithDots(data);
-    console.log("======mod", modifiedData);
     modifiedData.groups = ["1000000000001"];
     try {
       const createNewUser = async () => {
         let response = await createUser(modifiedData);
-        console.log("======res",response);
-        console.log(response);
+    
         if (response.status == "success") {
           toggleGetUserApiState();
           toast.success(response.status, {
@@ -227,7 +223,7 @@ const AddUserDrawer = (props: any) => {
         </div>
         <form onSubmit={handleSave} method="POST">
           {/* <div className="grid grid-flow-row-dense grid-cols-2 my-4"> */}
-          <div className="flex">
+          <div className="flex mt-4">
             <CustomeInput
               label="Username"
               name="username"

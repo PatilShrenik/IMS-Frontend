@@ -25,32 +25,47 @@ const CredentialProfile = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllCredsProfile();
-      //  console.log("modifidData old------", response);
+    
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-      //  console.log("modifidData------", modifiedData);
         const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
-      //  console.log("filtered cols", filteredCols);
+ 
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
-            if (key == "credential_context") {
-              cols.push({
-                field: "snmp_community",
-                headerName: "SNMP Comm.",
+             if (key == "name") {
+              cols.unshift({
+                field: "name",
+                headerName: "Name",
                 minWidth: 80,
               });
+            }
+            else if (key == "auth_protocol") {
               cols.push({
-                field: "snmp_version",
-                headerName: "SNMP Version",
-                minWidth: 80,
+                field: "auth_protocol",
+                headerName: "auth protocol",
+                minWidth: 150,
               });
-            } else if (key == "device_ids") {
+            }
+            else if (key == "device_ids") {
               cols.push({
                 field: "device_ids",
                 headerName: "Devices",
                 minWidth: 150,
               });
-            } else {
+            }
+            // else if (key == "credential_context") {
+            //   cols.push({
+            //     field: "snmp_community",
+            //     headerName: "SNMP Comm.",
+            //     minWidth: 80,
+            //   });
+            //   cols.push({
+            //     field: "snmp_version",
+            //     headerName: "SNMP Version",
+            //     minWidth: 80,
+            //   });
+            // }  
+            else {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
@@ -64,12 +79,15 @@ const CredentialProfile = () => {
         setColumns(cols);
        
         const hiddenColumnsValues = [
+          "credential_context",
           "snmp_community",
           "snmp_version",
           "created_by",
           "created_on",
           "updated_by",
           "updated_on",
+          "snmp_security",
+          
         ];
 
         setVisibleColumns(
