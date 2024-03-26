@@ -54,7 +54,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     scheduler_context: {
       scheduled_times: [""],
       cron: "0 */2 * ? * *",
-      start_date: "",
+      start_date: 0,
       frequency: "",
     },
   });

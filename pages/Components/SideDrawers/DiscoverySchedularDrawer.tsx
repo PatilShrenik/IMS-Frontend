@@ -34,7 +34,7 @@ const initialState = {
   scheduler_context: {
     scheduled_times: [""],
     // cron: "",
-    start_date: "",
+    start_date: 0,
     frequency: "CUSTOME",
   },
 };
@@ -109,7 +109,7 @@ const DiscoverySchedularDrawer = (props: any) => {
         scheduler_context: {
           scheduled_times: [""],
           //   cron: "",
-          start_date: "",
+          start_date: 0,
           frequency: "CUSTOME",
         },
       });
@@ -179,7 +179,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     // console.log("ent type ", value);
     setSelection(value);
     setActiveButton(value);
-    setData({ ...data, entity_type: value, entities: [] });
+    setData({...data, entity_type: value, entities: [] });
   };
 
   const handleFrequencyClick = (value: any) => {
