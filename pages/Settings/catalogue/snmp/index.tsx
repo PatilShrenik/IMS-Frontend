@@ -37,7 +37,7 @@ const SNMP = () => {
       const allKeys = extractAllKeys(modifiedData);
       
   
-      console.log("All keys from the API response:",allKeys);
+     // console.log("All keys from the API response:",allKeys);
      // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
       //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);

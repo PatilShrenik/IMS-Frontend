@@ -577,7 +577,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   </Button>
                   <Button
                     style={{
-                      width: "80px",
+                      width: "85px",
                       backgroundColor:
                         frequencyButton === "MONTHLY" ? "#0078d4" : "",
                       color: frequencyButton === "MONTHLY" ? "white" : "",

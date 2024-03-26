@@ -116,9 +116,9 @@ const Profiling = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllDeviceManager();
-        console.log("get all device from API", response.result);
+       // console.log("get all device from API", response.result);
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        console.log("profiling data", modifiedData);
+       // console.log("profiling data", modifiedData);
         // const col = Object.keys(modifiedData[0]);
         const indexOfObjectWithDeviceList =
           modifiedData &&
@@ -174,7 +174,6 @@ const Profiling = () => {
         //   headerName: "Last Avaiable On",
         //   minWidth: 120,
         // });
-        console.log("cols", cols);
         setColumns(cols);
 
         const hiddenColumnsValues = [
@@ -341,7 +340,7 @@ const Profiling = () => {
   };
 
   const handleMenuItemClick = (columnField: any) => {
-    console.log("clicked");
+  //  console.log("clicked");
     handleColumnToggle(columnField);
     // handleMenuClose();
   };
@@ -432,7 +431,7 @@ const Profiling = () => {
     } else if (column.field == "device_list") {
       const keysArray = row.device_list ? Object.keys(row.device_list) : [];
       // const keysArray = row.device_list &&  Object.keys(row.device_list);
-      console.log("keys arr lenght", row.device_list);
+    //  console.log("keys arr lenght", row.device_list);
       const DeviceList = row.device_list ?? {};
       //  const DeviceList = {
       //   "134.119.179.18": 641660281176474,
@@ -466,7 +465,7 @@ const Profiling = () => {
     return row[column.field];
   };
   const deleteDevice = async () => {
-    console.log("delete array", selectedRows);
+   // console.log("delete array", selectedRows);
     try {
       let response = await bulkActionDeviceDelete(selectedRows);
 
