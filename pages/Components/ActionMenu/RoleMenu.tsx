@@ -36,13 +36,11 @@ const RoleMenu = (props: any) => {
       setIsEditDrawerOpen(false);
     };
     const handleEditClick = (rowId: number) => {
-      console.log("EditRowId", rowId);
       setIsEditDrawerOpen(true);
       handleClose();
     };
   
     const handleDeleteClick = async (rowId: number) => {
-      console.log("DeleteRowId", rowId);
   
       try {
         const response = await deleteRoleById(rowId);

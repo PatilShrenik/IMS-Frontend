@@ -186,7 +186,7 @@ const MailServer= () => {
   const handleSave = (event: any) => {
     event.preventDefault();
   
-    console.log("handle save data",data);
+   // console.log("handle save data",data);
    
     try {
       const updateMailServer = async () => {
@@ -205,7 +205,7 @@ const MailServer= () => {
           data.smtp_password = "";
         }
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("smtp server data", modifiedData);
+      // console.log("smtp server data", modifiedData);
         let response = await updateSMTPServer(modifiedData);
         if (response.status == "success") {
           

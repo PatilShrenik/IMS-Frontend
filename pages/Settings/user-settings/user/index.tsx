@@ -34,7 +34,7 @@ const User = () => {
 
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
-          data.forEach(obj => {
+        data &&  data.forEach(obj => {
               Object.keys(obj).forEach(key => allKeys.add(key));
           });
           return Array.from(allKeys);
@@ -74,13 +74,13 @@ const User = () => {
                 minWidth: 80,
               });
             }
-            else if (key == "email_address") {
-              cols.push({
-                field: "email_address",
-                headerName: "Email",
-                minWidth: 80,
-              });
-            }
+            // else if (key == "email_address") {
+            //   cols.push({
+            //     field: "email_address",
+            //     headerName: "Email",
+            //     minWidth: 80,
+            //   });
+            // }
 
             else if (key == "username") {
               cols.unshift({
@@ -103,7 +103,7 @@ const User = () => {
         const hiddenColumnsValues = [
           // "username",
           "password",
-          // "enable",
+          "email_address",
           "created_on",
           "created_by",
           "groups",

@@ -27,7 +27,21 @@ const CredentialProfile = () => {
         let response = await getAllCredsProfile();
     
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-        const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
+        const extractAllKeys = (data: any[]) => {
+          const allKeys: Set<string> = new Set();
+         data && data.forEach(obj => {
+              Object.keys(obj).forEach(key => allKeys.add(key));
+          });
+          return Array.from(allKeys);
+      };
+      
+      const allKeys = extractAllKeys(modifiedData);
+      
+  
+     // console.log("All keys from the API response:",allKeys);
+     // allKeys.forEach(key => console.log(key));
+      const col = allKeys ;
+      //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const filteredCols = col.filter((key: any) => !key.startsWith("_"));
  
         filteredCols.filter((key: any) => {
@@ -36,7 +50,7 @@ const CredentialProfile = () => {
               cols.unshift({
                 field: "name",
                 headerName: "Name",
-                minWidth: 80,
+                minWidth: 120,
               });
             }
             else if (key == "auth_protocol") {
@@ -50,7 +64,7 @@ const CredentialProfile = () => {
               cols.push({
                 field: "device_ids",
                 headerName: "Devices",
-                minWidth: 150,
+                minWidth: 80,
               });
             }
             // else if (key == "credential_context") {

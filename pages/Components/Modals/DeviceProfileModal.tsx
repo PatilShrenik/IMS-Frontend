@@ -25,6 +25,7 @@ const DeviceProfileModal = (props: any) => {
       .map((filteredDevice: any) => ({
         hostname: filteredDevice.hostname,
       }));
+    //  console.log("first",deviceValues);
   return (
     <Drawer
       anchor="right"
@@ -43,12 +44,7 @@ const DeviceProfileModal = (props: any) => {
         <table className="w-full border-collapse overflow-x-scroll overflow-y-scroll">
           <thead>
             <tr>
-              {/* {keys.map((key: any) => {
-                const formattedKey = key
-                  .replace(/_/g, " ")
-                  .replace(/\b\w/g, (char: any) => char.toUpperCase());
-
-                return ( */}
+       
               <th
                 style={{ width: "18rem" }}
                 className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2"
@@ -67,7 +63,6 @@ const DeviceProfileModal = (props: any) => {
             {deviceValues &&
               deviceValues.map((data: any, index: any) => {
                 const isLastRow = index === data.length - 1;
-                //   console.log("---",data.hostname);
                 return (
                   <tr
                     className="bg-white dark:bg-dark-container dark:text-textColor"
@@ -98,6 +93,57 @@ const DeviceProfileModal = (props: any) => {
               })}
           </tbody>
         </table>
+        {/* <table className="w-full border-collapse overflow-x-scroll overflow-y-scroll">
+          <thead>
+            <tr>
+              <th
+                style={{ width: "18rem" }}
+                className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2"
+              >
+                Device IP
+              </th>
+              <th
+                style={{ width: "18rem" }}
+                className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2"
+              >
+                Device Name
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {keysArray.map((key:any, index:any) => {
+              const data = deviceValues[index];
+              const isLastRow = index === keysArray.length - 1;
+              return (
+                <tr
+                  className="bg-white dark:bg-dark-container dark:text-textColor"
+                  key={index}
+                >
+                  <td
+                    style={{
+                      textAlign: "center",
+                    }}
+                    className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
+                      isLastRow ? "border-b" : "border-b"
+                    }`}
+                  >
+                    {key}
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "center",
+                    }}
+                    className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
+                      isLastRow ? "border-b" : "border-b"
+                    }`}
+                  >
+                    {data ? data.hostname : ""}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table> */}
       </div>
       <div
         className=" absolute bottom-0 w-full flex justify-end my-4"

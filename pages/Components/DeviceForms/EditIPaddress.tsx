@@ -61,8 +61,9 @@ const EditIPAddress = (props: any) => {
   const [errorKeys, setErrorKeys] = React.useState<any>([]);
   const [errors, setErrors] = React.useState<any>({});
   const [allDiscoverySch, setAllDiscoverySch] = React.useState([]);
-  const [selectedValue, setSelectedValue] = useState([]);
-  const [groupselectedValue, setGroupSelectedValue] = useState([]);
+  const [selectedCredValue, setSelectedCredValue] = useState<any>([]);
+  const [selectedGroupValue, setSelectedGroupValue] = React.useState<any>([]);
+
   // Add your dialog content and functionality here
 
   React.useEffect(() => {
@@ -91,7 +92,8 @@ const EditIPAddress = (props: any) => {
         response.result
       );
       setData(modifiedData);
-      // console.log("single device data", modifiedData);
+      
+       console.log("single device data", modifiedData);
     };
     getDataById();
   }, [device_id]);
@@ -120,10 +122,8 @@ const EditIPAddress = (props: any) => {
       label: item.name,
       value: item._id,
     }));
-  // console.log("groups", groupValues);
 
   //Functions to set value into the state
-
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
@@ -176,27 +176,26 @@ const EditIPAddress = (props: any) => {
   };
 
   const handleCredProfile = (values: any) => {
-    const val = parseInt(values);
+    //const val = parseInt(values);
     setData({
       ...data,
-      credential_profiles: [val],
+      credential_profiles: values,
     });
   };
 
   useEffect(() => {
     if (data && data.credential_profiles) {
-      setSelectedValue(data.credential_profiles);
+      setSelectedCredValue(data.credential_profiles);
     }
     if (data && data.groups) {
-      setGroupSelectedValue(data.group);
+      data.groups && setSelectedGroupValue(data.groups);
     }
   }, [data]);
-
   const handleGroupDropdown = (selectedOptions: any) => {
-    const selectedValues = selectedOptions.map((option: any) => option.value);
+   // const selectedValues = selectedOptions.map((option: any) => option.value);
     setData({
       ...data,
-      groups: selectedValues,
+      groups: selectedOptions,
     });
   };
   useEffect(() => {
@@ -246,7 +245,6 @@ const EditIPAddress = (props: any) => {
       }
     }
   };
-  const [selectedValues, setSelectedValues] = useState([]);
 
   // const handleGroupDropdown = (selectedOptions) => {
   //   setSelectedValues(selectedOptions);
@@ -312,16 +310,20 @@ const EditIPAddress = (props: any) => {
           </div>
           {/* <div className="flex"> */}
           <div className="flex flex-col">
-            {/* <SingleSelect
-              // label="Select Credential Profile"
-              selectData={credsProfileValues}
-              onChange={handleCredProfile}
-              require={true}
-              value={data.credential_profiles[0]}
-              isMulti={false}
-            /> */}
+          <SingleSelect
+                    label="Select Groups"
+                    isMulti={true}
+                    value={credsProfileValues.filter(
+                      (option) =>
+                        selectedCredValue &&
+                        selectedCredValue.includes(option.value)
+                    )}
+                    selectData={credsProfileValues}
+                    onChange={handleCredProfile}
+                  />
 
-            <Select
+
+            {/* <Select
               onChange={handleCredProfile}
               value={credsProfileValues.find(
                 (option) => option.value === selectedValue
@@ -332,7 +334,7 @@ const EditIPAddress = (props: any) => {
               options={credsProfileValues}
               className="my-react-select-container w-[18rem] rounded-lg  mx-4 my-4 z-999"
               classNamePrefix="my-react-select"
-            />
+            /> */}
 
             {errorKeys && errorKeys.includes("credential.profiles") && (
               <p className="text-danger text-sm ml-2">
@@ -341,16 +343,19 @@ const EditIPAddress = (props: any) => {
             )}
           </div>
           <div className="flex flex-col">
-            {/* <SingleSelect
-              label="Select Group"
-              selectData={groupValues}
-              onChange={handleGroupDropdown}
-              require={true}
-              values={data && data.group}
-              isMulti={true}
-            /> */}
+          <SingleSelect
+                    label="Select Groups"
+                    isMulti={true}
+                    value={groupValues.filter(
+                      (option) =>
+                        selectedGroupValue &&
+                        selectedGroupValue.includes(option.value)
+                    )}
+                    selectData={groupValues}
+                    onChange={handleGroupDropdown}
+                  />
 
-            <Select
+            {/* <Select
               onChange={handleGroupDropdown}
               value={groupValues.find(
                 (option) => option.value === groupselectedValue
@@ -361,7 +366,7 @@ const EditIPAddress = (props: any) => {
               options={groupValues}
               className="my-react-select-container w-[18rem] rounded-lg mx-4 my-4 z-999"
               classNamePrefix="my-react-select"
-            />
+            /> */}
             {errorKeys && errorKeys.includes("groups") && (
               <p className="text-danger text-sm ml-2">
                 Groups is {errors["groups"]} *

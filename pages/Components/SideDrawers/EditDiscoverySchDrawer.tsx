@@ -54,7 +54,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     scheduler_context: {
       scheduled_times: [""],
       cron: "0 */2 * ? * *",
-      start_date: "",
+      start_date: 0,
       frequency: "",
     },
   });
@@ -292,30 +292,44 @@ const EditDiscoverySchDrawer = (props: any) => {
     }));
   };
   //console.log("df",data.scheduler_context.start_date);
-  const handleDate = (event: any) => {
-    let updatedPayload: any = { ...data };
+  // const handleDate = (event: any) => {
+  //   let updatedPayload: any = { ...data };
 
-    if (event.label !== "custom") {
-      delete updatedPayload.start_timestamp;
-      delete updatedPayload.end_timestamp;
-      updatedPayload = {
-        ...updatedPayload,
-        time_range: event.text,
-      };
-    } else {
-      const startdate = new Date(event.value[0]);
-      const startepochTime = startdate.getTime() / 1000;
-      const enddate = new Date(event.value[1]);
-      const endepochTime = enddate.getTime() / 1000;
-      updatedPayload = {
-        ...updatedPayload,
-        time_range: event.text,
-        start_timestamp: startepochTime,
-        end_timestamp: endepochTime,
-      };
-    }
-    setData(updatedPayload);
+  //   if (event.label !== "custom") {
+  //     delete updatedPayload.start_timestamp;
+  //     delete updatedPayload.end_timestamp;
+  //     updatedPayload = {
+  //       ...updatedPayload,
+  //       time_range: event.text,
+  //     };
+  //   } else {
+  //     const startdate = new Date(event.value[0]);
+  //     const startepochTime = startdate.getTime() / 1000;
+  //     const enddate = new Date(event.value[1]);
+  //     const endepochTime = enddate.getTime() / 1000;
+  //     updatedPayload = {
+  //       ...updatedPayload,
+  //       time_range: event.text,
+  //       start_timestamp: startepochTime,
+  //       end_timestamp: endepochTime,
+  //     };
+  //   }
+  //   setData(updatedPayload);
+  // };
+  const handleDate = (values: any) => {
+  
+    const date = new Date(values);
+    const epochTime = date.getTime() / 1000;
+    
+    setData((prevSnmpObject: any) => ({
+      ...prevSnmpObject,
+      scheduler_context: {
+        ...prevSnmpObject.scheduler_context,
+        start_date: epochTime,
+      },
+    }));
   };
+
 
   const handleSave = async (event: any) => {
     event.preventDefault();
@@ -482,12 +496,35 @@ const EditDiscoverySchDrawer = (props: any) => {
               />
             </div>
 
-            <div className="mx-4 py-2">
+            <div className="mx-3 py-2">
               <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
-              <TimeRangePicker
+              {/* <TimeRangePicker
                 showOneCalendar={true}
                 onTimeRangeChange={handleDate}
-              />
+              /> */}
+              {/* <CustomProvider theme="dark"> */}
+                <DatePicker
+                  onChange={handleDate}
+                  // showOneCalendar
+                  value={data.scheduler_context.start_date ? new Date(data.scheduler_context.start_date * 1000) : null}
+                  appearance="subtle"
+                  placement="rightStart"
+                  style={{
+                    // margin: "1rem 1rem",
+                    width: "19rem",
+                   // height: "max-content",
+                    border:
+                      colorTheme == "light"
+                        ? "1px solid #e5e7eb"
+                        : "1px solid #ccc",
+                    padding: ".4rem",
+                  }}
+                  placeholder="Select Date "
+                   format="yyyy-MM-dd"
+                  className="rounded-lg   dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+                />
+              {/* </CustomProvider> */}
+
             </div>
             <div className="flex items-center">
               <Box>
@@ -543,7 +580,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   </Button>
                   <Button
                     style={{
-                      width: "80px",
+                      width: "85px",
                       backgroundColor:
                         frequencyButton === "MONTHLY" ? "#0078d4" : "",
                       color: frequencyButton === "MONTHLY" ? "white" : "",
