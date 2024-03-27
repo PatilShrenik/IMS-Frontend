@@ -59,6 +59,7 @@ import { getAllPolicy } from "@/pages/api/api/PolicyApi";
 import { useWebSocketContext } from "../WebSocketContext";
 import TimeRangePicker from "../TimeRnangePicker";
 import SmallTimeRangePicker from "../TimeRnangePicker/smallTimeRangePicker";
+import { getAllUser } from "@/pages/api/api/UserManagementAPI";
 const AuditTable = (props: any) => {
   const {
     data,
@@ -86,40 +87,41 @@ const AuditTable = (props: any) => {
     selectedPolicy,
     selectedStatus,
   ]) as any;
-  const [allPolicies, setAllPolicies] = React.useState([]);
+  const [allUsers, setAllusers] = React.useState([]);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [allDevices, setAllDevices] = React.useState([]);
-  const [allGroups, setAllGroups] = React.useState([]);
+
   const [payloadForAlert, setpayloadForAlert] = React.useState({
     time_range: "",
-    start_timestamp: 0,
-    end_timestamp: 0,
     filters: {
       device_filter: {
-        entity_type: "device",
-        entities: [],
+        pre_filters: [
+          {
+            filter_type: "equals",
+            indicator: "collection",
+            values: [],
+          },
+          {
+            filter_type: "equals",
+            indicator: "request",
+            values: [],
+          },
+          {
+            filter_type: "equals",
+            indicator: "status",
+            values: [],
+          },
+          {
+            filter_type: "equals",
+            indicator: "username",
+            values: [],
+          },
+        ],
+        post_filters: [],
       },
-      pre_filters: [
-        {
-          filter_type: "equals",
-          indicator: "severity",
-          values: [],
-        },
-        {
-          filter_type: "equals",
-          indicator: "policy",
-          values: [],
-        },
-        {
-          filter_type: "equals",
-          indicator: "status",
-          values: [],
-        },
-      ],
-      post_filters: [],
     },
   });
+
   const [selected, setSelected] = useState(false);
   const [anchorE3, setAnchorE3] = useState(null);
   const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
@@ -310,50 +312,23 @@ const AuditTable = (props: any) => {
 
   //-----------------------------code required for DateRangePicker ENDS-----------------------------
 
-  const groupValues =
-    allGroups &&
-    allGroups.map((item: any) => ({
-      label: item.name,
-      value: item._id,
-    }));
-  const deviceValues =
-    allDevices &&
-    allDevices.map((item: any) => ({
-      label: item.hostname,
-      value: item._id,
-    }));
-  const policyValues =
-    allPolicies &&
-    allPolicies.map((item: any) => ({
-      label: item.name,
-      value: item._id,
+  const userValues =
+    allUsers &&
+    allUsers.map((item: any) => ({
+      label: item.first_name,
+      value: item.username,
     }));
 
   // console.log("policies", allPolicies);
   // console.log("devices", allDevices);
   React.useEffect(() => {
-    const getAllPolicies = async () => {
-      let response = await getAllPolicy();
+    const getAllUsers = async () => {
+      let response = await getAllUser();
       response &&
         response.result &&
-        setAllPolicies(replaceDotsWithUnderscores(response.result));
+        setAllusers(replaceDotsWithUnderscores(response.result));
     };
-    getAllPolicies();
-    const getDevices = async () => {
-      let response = await getAllDevice();
-      response && response.result && setAllDevices(response.result);
-    };
-    getDevices();
-    const getGroups = async () => {
-      let response = await getAllGropus();
-      response && response.result && setAllGroups(response.result);
-    };
-    getGroups();
-    const getDiscoveryScheduler = async () => {
-      let response = await getAllDiscoverySch();
-      // setAllDiscoverySch(response.result);
-    };
-    // getDiscoveryScheduler();
+    getAllUsers();
   }, []);
   // console.log("policy data", allPolicies);
   const handleRequestSort = (property: any) => {
@@ -501,31 +476,32 @@ const AuditTable = (props: any) => {
     if (value == "historic") {
       setpayloadForAlert({
         time_range: "",
-        start_timestamp: 0,
-        end_timestamp: 0,
         filters: {
           device_filter: {
-            entity_type: "device",
-            entities: [],
+            pre_filters: [
+              {
+                filter_type: "equals",
+                indicator: "collection",
+                values: [],
+              },
+              {
+                filter_type: "equals",
+                indicator: "request",
+                values: [],
+              },
+              {
+                filter_type: "equals",
+                indicator: "status",
+                values: [],
+              },
+              {
+                filter_type: "equals",
+                indicator: "username",
+                values: [],
+              },
+            ],
+            post_filters: [],
           },
-          pre_filters: [
-            {
-              filter_type: "equals",
-              indicator: "severity",
-              values: [],
-            },
-            {
-              filter_type: "equals",
-              indicator: "policy",
-              values: [],
-            },
-            {
-              filter_type: "equals",
-              indicator: "status",
-              values: [],
-            },
-          ],
-          post_filters: [],
         },
       });
     }
@@ -535,31 +511,37 @@ const AuditTable = (props: any) => {
     setSelectedButtons([]);
   };
 
-  const handleSeverity = (value: any) => {
-    setpayloadForAlert((prevData: any) => ({
-      ...prevData,
-      filters: {
-        ...prevData.filters,
-        pre_filters:
-          prevData.filters &&
-          prevData.filters["pre_filters"] &&
-          prevData.filters["pre_filters"].map((filter: any) =>
-            filter.indicator === "severity"
-              ? { ...filter, values: value }
-              : filter
-          ),
-      },
-    }));
-  };
-
-  const handleDevice = (value: any) => {
+  const handleCollection = (value: any) => {
     setpayloadForAlert((prevData: any) => ({
       ...prevData,
       filters: {
         ...prevData.filters,
         device_filter: {
-          ...prevData.filters["device_filter"],
-          entities: value,
+          ...prevData.filters.device_filter,
+          pre_filters: prevData.filters.device_filter.pre_filters.map(
+            (filter: any) =>
+              filter.indicator === "collection"
+                ? { ...filter, values: value }
+                : filter
+          ),
+        },
+      },
+    }));
+  };
+
+  const handleUser = (value: any) => {
+    setpayloadForAlert((prevData: any) => ({
+      ...prevData,
+      filters: {
+        ...prevData.filters,
+        device_filter: {
+          ...prevData.filters.device_filter,
+          pre_filters: prevData.filters.device_filter.pre_filters.map(
+            (filter: any) =>
+              filter.indicator === "username"
+                ? { ...filter, values: value }
+                : filter
+          ),
         },
       },
     }));
@@ -570,31 +552,33 @@ const AuditTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        pre_filters:
-          prevData.filters &&
-          prevData.filters["pre_filters"] &&
-          prevData.filters["pre_filters"].map((filter: any) =>
-            filter.indicator === "status"
-              ? { ...filter, values: value }
-              : filter
+        device_filter: {
+          ...prevData.filters.device_filter,
+          pre_filters: prevData.filters.device_filter.pre_filters.map(
+            (filter: any) =>
+              filter.indicator === "status"
+                ? { ...filter, values: value }
+                : filter
           ),
+        },
       },
     }));
   };
 
-  const handlePolicy = (value: any) => {
+  const handleRequestType = (value: any) => {
     setpayloadForAlert((prevData: any) => ({
       ...prevData,
       filters: {
         ...prevData.filters,
-        pre_filters:
-          prevData.filters &&
-          prevData.filters["pre_filters"] &&
-          prevData.filters["pre_filters"].map((filter: any) =>
-            filter.indicator === "policy"
-              ? { ...filter, values: value }
-              : filter
+        device_filter: {
+          ...prevData.filters.device_filter,
+          pre_filters: prevData.filters.device_filter.pre_filters.map(
+            (filter: any) =>
+              filter.indicator === "request"
+                ? { ...filter, values: value }
+                : filter
           ),
+        },
       },
     }));
   };
@@ -602,9 +586,9 @@ const AuditTable = (props: any) => {
   const handleSearch = () => {
     // console.log("in handlesearch");
     const modifiedData = replaceUnderscoresWithDots(payloadForAlert);
-    console.log("modified payload for alert", modifiedData);
+    console.log("modified payload for audit", modifiedData);
 
-    emit("ws.alert.historical", modifiedData);
+    emit("ws.audit", modifiedData);
   };
 
   const stableSort = (array: any, comparator: any) => {
@@ -672,17 +656,8 @@ const AuditTable = (props: any) => {
     // console.log("-------column", column);
     // console.log("-------row", row);
     if (column.field === "policy") {
-      const policyName: any =
-        allPolicies &&
-        allPolicies.find((alert: any) => alert._id === parseInt(row.policy));
-      if (policyName && policyName.name) return <div>{policyName.name}</div>;
       // console.log("policname",policyName.name)
     } else if (column.field === "device") {
-      const deviceName: any =
-        allDevices &&
-        allDevices.find((alert: any) => alert._id === parseInt(row.device));
-      if (deviceName && deviceName.hostname)
-        return <div>{deviceName.hostname}</div>;
       // console.log("policname",policyName.name)
     } else if (column.field === "timestamp" || column.field == "__time") {
       const timestamp1 = row.timestamp && row.timestamp;
@@ -787,14 +762,22 @@ const AuditTable = (props: any) => {
   };
   // console.log("======", data);
 
-  const severityValues = [
-    { label: "WARNING", value: "warning" },
-    { label: "MAJOR", value: "major" },
-    { label: "CRITICAL", value: "critical" },
+  const CollectionValues = [
+    { label: "Credential Profile", value: "credential-profile" },
+    { label: "Dashboard", value: "dashboard" },
+    { label: "Device", value: "device" },
+    { label: "Device Manager", value: "device-manager" },
+    { label: "Device Object", value: "object" },
+    { label: "Widget", value: "widget" },
   ];
-  const statusValues = [
-    { label: "ACTIVE", value: "active" },
-    { label: "CLEAR", value: "clear" },
+  const StatusValues = [
+    { label: "SUCCESS", value: "success" },
+    { label: "FAILED", value: "failed" },
+  ];
+  const RequestTypeValues = [
+    { label: "CREATE", value: "create" },
+    { label: "UPDATE", value: "update" },
+    { label: "DELETE", value: "delete" },
   ];
 
   const handleDate = (event: any) => {
@@ -894,34 +877,34 @@ const AuditTable = (props: any) => {
           <div className="flex mr-2 mb-3 mt-1 items-center">
             <div>
               <SmallSingleSelect
-                label="Severity"
+                label="Collections"
                 isMulti={true}
-                selectData={severityValues}
-                onChange={handleSeverity}
-              />
-            </div>
-            <div>
-              <SmallSingleSelect
-                label="Device"
-                isMulti={true}
-                selectData={deviceValues}
-                onChange={handleDevice}
-              />
-            </div>
-            <div>
-              <SmallSingleSelect
-                label="Policy"
-                isMulti={true}
-                selectData={policyValues}
-                onChange={handlePolicy}
+                selectData={CollectionValues}
+                onChange={handleCollection}
               />
             </div>
             <div>
               <SmallSingleSelect
                 label="Status"
                 isMulti={true}
-                selectData={statusValues}
+                selectData={StatusValues}
                 onChange={handleStatus}
+              />
+            </div>
+            <div>
+              <SmallSingleSelect
+                label="Request Type"
+                isMulti={true}
+                selectData={RequestTypeValues}
+                onChange={handleRequestType}
+              />
+            </div>
+            <div>
+              <SmallSingleSelect
+                label="User"
+                isMulti={true}
+                selectData={userValues}
+                onChange={handleUser}
               />
             </div>
             <div className="w-[15rem] ml-2">

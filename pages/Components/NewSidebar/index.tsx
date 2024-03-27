@@ -252,12 +252,12 @@ const Sidebar = () => {
                     }`}
                   >
                     <div className="w-full px-2">
-                      <div className="flex justify-around">{link.icon}</div>
+                      <div className="flex justify-center">{link.icon}</div>
                       <p
                         className={`${
                           pathname.includes(link.name)
-                            ? "text-black dark:text-textColor text-[9px] flex mx-2 justify-evenly"
-                            : "dark:text-textColor text-black text-[9px] flex mx-2 justify-evenly"
+                            ? "text-black dark:text-textColor text-[9px] flex mx-2 justify-center"
+                            : "dark:text-textColor text-black text-[9px] flex mx-2 justify-center"
                         } " text-black"`}
                       >
                         {link.name}
