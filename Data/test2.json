@@ -1,0 +1,37 @@
+{
+  "time.range": "this.month",
+  "filters": {
+    "device.filter": {
+      "pre.filters": [
+        {
+          "filter.type": "equals",
+          "indicator": "collection",
+          "values": [
+            "dashboard",
+            "device",
+            "device-manager",
+            "object",
+            "credential-profile"
+          ]
+        },
+        {
+          "filter.type": "equals",
+          "indicator": "request",
+          "values": ["create", "update", "delete"]
+        },
+        {
+          "filter.type": "equals",
+          "indicator": "status",
+          "values": ["success", "failed"]
+        },
+        {
+          "filter.type": "equals",
+          "indicator": "username",
+          "values": ["vvek", "test"]
+        }
+      ],
+      "post.filters": []
+    }
+  },
+  "event.type": "ws.audit"
+}

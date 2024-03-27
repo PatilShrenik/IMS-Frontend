@@ -341,8 +341,7 @@ main::before {
   }
 
   .my-daterangepicker .rs-input-group {
-    padding: 0.1rem 0 !important;
-    width: 16rem !important;
+    @apply !py-[0.1rem] !w-[16rem] max-h-[2.5rem];
   }
 }
 .css-12a83d4-MultiValueRemove {
