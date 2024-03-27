@@ -34,7 +34,7 @@ const User = () => {
 
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
-          data.forEach(obj => {
+        data &&  data.forEach(obj => {
               Object.keys(obj).forEach(key => allKeys.add(key));
           });
           return Array.from(allKeys);

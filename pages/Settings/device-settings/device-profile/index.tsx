@@ -110,15 +110,15 @@ const Profiling = () => {
     };
     getDiscoveryScheduler();
   }, []);
-
   useEffect(() => {
     try {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllDeviceManager();
-       // console.log("get all device from API", response.result);
+    
         const modifiedData = replacePeriodsWithUnderscores(response.result);
-       // console.log("profiling data", modifiedData);
+        console.log("data from api",modifiedData);
+       
         // const col = Object.keys(modifiedData[0]);
         const indexOfObjectWithDeviceList =
           modifiedData &&
@@ -128,10 +128,10 @@ const Profiling = () => {
           col = Object.keys(modifiedData[0]);
         } else {
           col =
-            modifiedData.length != 0 &&
+          modifiedData && modifiedData.length != 0 &&
             Object.keys(modifiedData[indexOfObjectWithDeviceList]);
         }
-        //   console.log("fil",cols);
+        console.log("col",col);
         const filteredCols = col && col.filter((key: any) => !key.startsWith("_"));
         filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
@@ -141,7 +141,7 @@ const Profiling = () => {
                 headerName: key.replace(/\./g, " "),
                 minWidth: 80,
               });
-            } else if (key == "credential_profiles") {
+            } else if (key == "groups") {
               cols.push({
                 field: key.replace(/\./g, "_"),
                 headerName: key.replace(/\./g, " "),
@@ -150,7 +150,7 @@ const Profiling = () => {
             } else if (key == "hostname") {
               cols.push({
                 field: key.replace(/\./g, "_"),
-                headerName: "Host Name",
+                headerName: "Profile Name",
                 minWidth: 150,
               });
             } else if (key == "device_list") {
@@ -177,15 +177,15 @@ const Profiling = () => {
         setColumns(cols);
 
         const hiddenColumnsValues = [
-          // "alias",
+          //  "groups",
           "discovery_schedulers",
           "country",
-          "hostname",
-          // "profile_type",
+           "site",
+           "plugin_type",
           "port",
           "credential_profiles",
           "availability_interval",
-          // "flow_enabled",
+           "flow_enabled",
           "auto_provision",
           "location",
           "site",
@@ -340,7 +340,7 @@ const Profiling = () => {
   };
 
   const handleMenuItemClick = (columnField: any) => {
-  //  console.log("clicked");
+
     handleColumnToggle(columnField);
     // handleMenuClose();
   };
@@ -369,7 +369,7 @@ const Profiling = () => {
       const matchingCredsProfile: any = allCredsPrfile.find(
         (creds: any) => creds._id === numericCredProfileId
       );
-      // console.log("----", matchingCredsProfile);
+      
       // If a matching group is found, return its name, otherwise return null or a default value
       return matchingCredsProfile ? matchingCredsProfile.name : "-";
       // : row[column.field];
@@ -430,8 +430,9 @@ const Profiling = () => {
       return <StatusChips value={device_status} />;
     } else if (column.field == "device_list") {
       const keysArray = row.device_list ? Object.keys(row.device_list) : [];
+     // console.log("arr",keysArray);
       // const keysArray = row.device_list &&  Object.keys(row.device_list);
-    //  console.log("keys arr lenght", row.device_list);
+
       const DeviceList = row.device_list ?? {};
       //  const DeviceList = {
       //   "134.119.179.18": 641660281176474,

@@ -121,11 +121,11 @@ const DiscoverySchedularDrawer = (props: any) => {
     }
   }, [open]);
 
-  const groupValues = allGroups.map((item: any) => ({
+  const groupValues = allGroups && allGroups.map((item: any) => ({
     label: item.name,
     value: item._id,
   }));
-  const deviceValues = allDevices.map((item: any) => ({
+  const deviceValues = allDevices && allDevices.map((item: any) => ({
     label: item.hostname,
     value: item._id,
   }));
