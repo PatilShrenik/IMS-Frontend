@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import { Button, Drawer, InputBase } from "@mui/material";
+import { Button, Drawer, InputBase, Modal } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -16,12 +16,17 @@ import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
 import { useAppContext } from "../Components/AppContext";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import {
+  CreateDashboard,
+  GetAllDashboard,
   GetDashboardWidgetsData,
   UpdateWidgetsData,
   getAllWidget,
 } from "../api/api/DashboardWidgetsAPI";
-import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
-import { ToastContainer } from "react-toastify";
+import {
+  replacePeriodsWithUnderscores,
+  replaceUnderscoresWithDots,
+} from "@/functions/genericFunctions";
+import { ToastContainer, toast } from "react-toastify";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import DashboardGaugeWidget from "./DashboardWidgets/GaugeWidget";
 import DashboardGridWidget from "./DashboardWidgets/GridWidget";
@@ -33,6 +38,10 @@ import "react-toastify/dist/ReactToastify.css";
 import WidgetMenu from "../Components/ActionMenu/WIdgetsMenu";
 import CustomPagination from "../Components/CustomePagination";
 import TimeRangePicker from "../Components/TimeRnangePicker";
+import SingleSelect from "../Components/Selects";
+import SecSingleSelect from "../Components/Selects/secSelect";
+import CustomeInput from "../Components/Inputs";
+import CustomeButton, { CustomeCancelButton } from "../Components/Buttons";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface Widget {
@@ -44,7 +53,6 @@ const index = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const [page, setPage] = React.useState(0);
@@ -54,9 +62,13 @@ const index = () => {
   const [data, setData] = useState({});
   const [editable, setEditable] = useState(false);
   const [layouts, setLayouts] = useState<any>([]);
+  const [isModalopen, setIsModalOpen] = React.useState(false);
   const [layoutsCurrent, setLayoutsCurrent] = useState<any>([]);
   const [layoutsWholeData, setLayoutsWholeData] = useState<any>({});
   const [addToDashboard, setAddToDashboard] = useState<any>(0);
+  const [dashboards, setDashboards] = useState<any>([]);
+  const [dashboardId, setDashboardId] = useState<any>(1000000000001);
+  const [dashboardName, setDashBoardName] = useState("") as any;
 
   useEffect(() => {
     try {
@@ -74,16 +86,49 @@ const index = () => {
   }, [getWidgetApiState]);
 
   useEffect(() => {
+    try {
+      const getDashboards = async () => {
+        let response = await GetAllDashboard();
+        const modifiedData =
+          response &&
+          replacePeriodsWithUnderscores(response && response.result);
+        setDashboards(modifiedData);
+      };
+      getDashboards();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const dashboardValues = dashboards.map((item: any) => ({
+    name: item.name,
+    id: item._id,
+  }));
+
+  useEffect(() => {
     async function getWidgetData() {
-      let id = "1000000000001";
-      return await GetDashboardWidgetsData(id);
+      // let id = "1000000000001";
+      return await GetDashboardWidgetsData(dashboardId);
     }
     getWidgetData().then((res: any) => {
-      setLayouts(res.result?.widgets ?? []);
-      setLayoutsCurrent(res.result?.widgets ?? []);
+      setLayouts(res && res.result && res.result.widgets && res.result.widgets);
+      setLayoutsCurrent(
+        res && res.result && res.result.widgets && res.result.widgets
+      );
       setLayoutsWholeData(res.result);
     });
-  }, [addToDashboard]);
+  }, [addToDashboard, dashboardId]);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    // handleClose();
+  };
+  const handleModalClose = () => setIsModalOpen(false);
+
+  const handleInputChange = (event: any) => {
+    const { value } = event.target;
+    setDashBoardName(value);
+  };
 
   // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
@@ -136,15 +181,16 @@ const index = () => {
   function saveLayout() {
     setLayoutsCurrent(layouts);
     async function updateWidgetData() {
-      let id = "1000000000001";
+      // let id = "1000000000001";
       let body = { ...layoutsWholeData, widgets: layouts };
-      body = { ...layoutsWholeData, widgets: data };
-      console.log("body data", body);
-      // await UpdateWidgetsData(id, body);
+      // body = { ...layoutsWholeData, widgets: data };
+      // console.log("body data", body);
+      await UpdateWidgetsData(dashboardId, body);
     }
     updateWidgetData();
   }
   useEffect(() => {
+    console.log("dashboard saved");
     saveLayout();
   }, [layouts, data]);
 
@@ -152,6 +198,13 @@ const index = () => {
     setLayouts(layoutsCurrent);
   }
 
+  const handleDashChange = (value: any) => {
+    if (value == "Add Dashboard") {
+      handleModalOpen();
+    } else {
+      setDashboardId(value);
+    }
+  };
   const handleDate = (event: any) => {
     // console.log("date event", event);
     let updatedPayload: any = { ...data };
@@ -179,6 +232,36 @@ const index = () => {
     setData(updatedPayload);
   };
   const totalCount = widgets && widgets.length;
+
+  const handleSave = () => {
+    const APIdata = {
+      name: dashboardName,
+    };
+    try {
+      const addDashboard = async () => {
+        const modifiedData = replaceUnderscoresWithDots(APIdata);
+        console.log("Dashboard Data", modifiedData);
+
+        let response = await CreateDashboard(modifiedData);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          handleModalClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        // toggleWidgetApiState();
+      };
+      addDashboard();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -226,7 +309,17 @@ const index = () => {
             )} */}
           </div>
         </div>
-        <div>
+        <div className="mt-[2rem]">
+          <div className="mt-4">
+            <SecSingleSelect
+              label="Select Dashboard"
+              value={dashboardId}
+              selectData={dashboardValues}
+              onChange={handleDashChange}
+              require={true}
+              onDash={true}
+            />
+          </div>
           <ResponsiveReactGridLayout
             className="layout"
             cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
@@ -420,6 +513,7 @@ const index = () => {
                                   widget_type={
                                     row.widget_type && row.widget_type
                                   }
+                                  dahboardID={dashboardId}
                                 />
                               </td>
                             </tr>
@@ -441,6 +535,37 @@ const index = () => {
           </div>
         </Drawer>
       </div>
+      <Modal open={isModalopen} onClose={handleModalClose}>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md dark:bg-tabel-row">
+          <div className="flex w-full">
+            <p className="text-xl">Create New Dashboard</p>
+          </div>
+          <div>
+            <CustomeInput
+              label="Name"
+              name="name"
+              value={dashboardName}
+              onChange={handleInputChange}
+              type="text"
+              require={true}
+            />
+          </div>
+          <div className="right-0 flex justify-end mt-6">
+            <div onClick={handleSave}>
+              <CustomeButton title="Create" />
+            </div>
+            <div onClick={handleModalClose}>
+              <CustomeCancelButton title="Cancel" />
+            </div>
+          </div>
+          {/* <button
+            onClick={handleModalClose}
+            className=" border border-light3 font-normal py-1 px-4 rounded mb-2  dark:text-textColor"
+          >
+            Cancel
+          </button> */}
+        </div>
+      </Modal>
     </div>
   );
 };

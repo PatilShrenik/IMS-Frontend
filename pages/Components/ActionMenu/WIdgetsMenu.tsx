@@ -17,7 +17,7 @@ import {
 const ITEM_HEIGHT = 48;
 
 const WidgetMenu = (props: any) => {
-  const { id, setAddToDashboard, widget_type } = props;
+  const { id, setAddToDashboard, widget_type, dahboardID } = props;
   // console.log("widget type", widget_type);
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => {
@@ -105,12 +105,12 @@ const WidgetMenu = (props: any) => {
   };
 
   async function getWidgetData() {
-    let id = "1000000000001";
-    return await GetDashboardWidgetsData(id);
+    // let id = "1000000000001";
+    return await GetDashboardWidgetsData(dahboardID);
   }
   async function updateWidgetData(body: any) {
-    let id = "1000000000001";
-    await UpdateWidgetsData(id, body);
+    // let id = "1000000000001";
+    await UpdateWidgetsData(dahboardID, body);
   }
 
   function AddToDashboard(id: any) {

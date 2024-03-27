@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import CustomeButton from "../Buttons";
 
 const SecSingleSelect = (props: any) => {
-  const { label, selectData, onChange, require, value, index, type } = props;
+  const { label, selectData, onChange, require, value, index, type, onDash } =
+    props;
 
   // console.log(index, type);
   const [selectFocused, setSelectFocused] = useState(false);
@@ -16,7 +18,7 @@ const SecSingleSelect = (props: any) => {
       console.log(selectedValue);
       onChange(selectedValue);
     } else {
-      console.log("3");
+      console.log("in dropdown", index, type, selectedValue);
       onChange(index, type, selectedValue);
     }
   };
@@ -36,22 +38,33 @@ const SecSingleSelect = (props: any) => {
           onFocus={() => setSelectFocused(true)}
           onBlur={() => setSelectFocused(false)}
         >
-          {selectFocused ? (
+          {/* {selectFocused ? (
             <option>{label && label}</option>
           ) : (
             <option>{label && label}</option>
-          )}
+          )} */}
 
           {selectData &&
             selectData.map((item: any, index: any) => (
-              <option
-                className="dark:text-textColor"
-                key={index}
-                value={item.id ? item.id : item}
-              >
-                <p className="my-4">{item.name ? item.name : item}</p>
-              </option>
+              <>
+                <option
+                  className="dark:text-textColor"
+                  key={index}
+                  value={item.id ? item.id : item}
+                >
+                  <p className="my-4">{item.name ? item.name : item}</p>
+                </option>
+              </>
             ))}
+          {onDash && (
+            <option
+              className="dark:text-textColor"
+              // value={item.id ? item.id : item}
+            >
+              <p className="text-md">+ Add Dashboard</p>
+              {/* <CustomeButton title="Add Dashboard" /> */}
+            </option>
+          )}
         </select>
         {label && (
           <label
