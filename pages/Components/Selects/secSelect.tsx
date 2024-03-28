@@ -22,7 +22,7 @@ const SecSingleSelect = (props: any) => {
       onChange(index, type, selectedValue);
     }
   };
-
+  // console.log("selectdata", selectData);
   return (
     <div className="flex items-center mx-4 my-4 z-0">
       <div className="relative bg-white dark:bg-dark-menu-color dark:text-textColor">
@@ -50,9 +50,9 @@ const SecSingleSelect = (props: any) => {
                 <option
                   className="dark:text-textColor"
                   key={index}
-                  value={item.id ? item.id : item}
+                  value={item && item.id ? item.id : item}
                 >
-                  <p className="my-4">{item.name ? item.name : item}</p>
+                  <p className="my-4">{item && item.name ? item.name : item}</p>
                 </option>
               </>
             ))}

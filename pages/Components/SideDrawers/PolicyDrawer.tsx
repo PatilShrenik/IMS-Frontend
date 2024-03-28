@@ -28,7 +28,7 @@ const PolicyDrawer = (props: any) => {
   const [tags, setTags] = useState("");
   const [message, setMessage] = useState("");
   const [description, setDescription] = useState("");
-  const [entityType, setEntityType] = useState("GROUP");
+  const [entityType, setEntityType] = useState("DEVICE");
   const [selectedEntity, setSelectedEntity] = useState("");
   const [indicators, setIndicators] = useState("");
   const [indicatorsType, setIndicatorsType] = useState("");
@@ -116,10 +116,29 @@ const PolicyDrawer = (props: any) => {
     getDevices();
   }, []);
 
+  const clearAllFields = () => {
+    setName("");
+    setDescription("");
+    setTags("");
+    setEntityType("");
+    setSelectedEntity("");
+    setIndicatorsType(""), setIndicators("");
+    setOperator(""),
+      setCritical(0),
+      setMajor(0),
+      setWarning(0),
+      setOccurrences(0),
+      setTimeFrame(0),
+      setTimeFrameUnit(""),
+      setAutoClear(0),
+      setAutoClearUnit(""),
+      setEmail(""),
+      setMessage("");
+  };
+
   const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Create payload
-
     const convertTimeToSeconds = (value: any, unit: any) => {
       switch (unit) {
         case "SEC":
@@ -149,9 +168,9 @@ const PolicyDrawer = (props: any) => {
 
     const payload = {
       name: name,
-      description: description, //testing is  pending for this
+      description: description,
       tags: [tags],
-      entity_type: entityType,
+      entity_type: selection,
       entities: selectedEntity,
       object_type: indicatorsType,
       indicator: indicators,
@@ -182,6 +201,7 @@ const PolicyDrawer = (props: any) => {
       if (response.status === "success") {
         props.handleDrawerClose();
         togglegetPolicyApiState();
+        clearAllFields();
         toast.success(response.status, {
           position: "bottom-right",
           autoClose: 1000,
@@ -236,6 +256,7 @@ const PolicyDrawer = (props: any) => {
     setChange(!change);
     setSelection(value);
     setActiveButton(value);
+    setEntityType(value);
     // setData({ ...data, entity_type: value, entities: [] });
   };
   const handleDeviceEntities = (values: any) => {
@@ -275,7 +296,10 @@ const PolicyDrawer = (props: any) => {
           <p className="text-primary2 font-semibold">Add Policy</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
-            onClick={props.handleDrawerClose}
+            onClick={() => {
+              props.handleDrawerClose();
+              clearAllFields();
+            }}
           />
         </div>
         <div className="px-2 dark:bg-dark-menu-color">
@@ -511,7 +535,12 @@ const PolicyDrawer = (props: any) => {
                   Save
                 </button>
               </div>
-              <div onClick={props.handleDrawerClose}>
+              <div
+                onClick={() => {
+                  props.handleDrawerClose();
+                  clearAllFields();
+                }}
+              >
                 <CustomeCancelButton title="Cancel" />
               </div>
             </div>

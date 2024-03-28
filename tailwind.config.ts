@@ -294,6 +294,7 @@ const config: Config = {
         light3: "#b9b9b9",
         success: "green",
         danger: "red",
+        dropdownBg: "#464646",
       },
     },
   },
