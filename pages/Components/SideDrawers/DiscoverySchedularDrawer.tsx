@@ -33,7 +33,9 @@ const initialState = {
 
   scheduler_context: {
     scheduled_times: [""],
-    // cron: "",
+    days_of_week: [""],
+    days_of_month: [""],
+    cron: "",
     start_date: 0,
     frequency: "CUSTOME",
   },
@@ -108,7 +110,9 @@ const DiscoverySchedularDrawer = (props: any) => {
         // message: "",
         scheduler_context: {
           scheduled_times: [""],
-          //   cron: "",
+          days_of_week: [""],
+          days_of_month: [""],
+          cron: "",
           start_date: 0,
           frequency: "CUSTOME",
         },
@@ -121,14 +125,18 @@ const DiscoverySchedularDrawer = (props: any) => {
     }
   }, [open]);
 
-  const groupValues = allGroups && allGroups.map((item: any) => ({
-    label: item.name,
-    value: item._id,
-  }));
-  const deviceValues = allDevices && allDevices.map((item: any) => ({
-    label: item.hostname,
-    value: item._id,
-  }));
+  const groupValues =
+    allGroups &&
+    allGroups.map((item: any) => ({
+      label: item.name,
+      value: item._id,
+    }));
+  const deviceValues =
+    allDevices &&
+    allDevices.map((item: any) => ({
+      label: item.hostname,
+      value: item._id,
+    }));
 
   React.useEffect(() => {
     const time = generateTimeArray();
@@ -161,59 +169,52 @@ const DiscoverySchedularDrawer = (props: any) => {
   const handleEmailChange = (event: any) => {
     const newEmailValue = event.target.value;
     const emailArray = newEmailValue.split(",");
-
+   // const emailArray = newEmailValue.split(",").map(email => email.trim());
     setData((prevData: any) => ({
       ...prevData,
       email: emailArray,
     }));
   };
-  React.useEffect(() => {
-    //console.log("useeffect");
-    setData({
-      ...data,
-      entities: [],
-    });
-  }, [change]);
+
   const handleButtonClick = (value: any) => {
-   
     setSelection(value);
     setActiveButton(value);
-    setData({...data, entity_type: value, entities: [] });
+    setData({ ...data, entity_type: value, entities: [] });
   };
 
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
-    if (value === "WEEKLY") {
-      setData((prevState: any) => {
-        const { days_of_month, ...restSchedulerContext } =
-          prevState.scheduler_context;
+    // if (value === "WEEKLY") {
+    //   setData((prevState: any) => {
+    //     const { days_of_month, ...restSchedulerContext } =
+    //       prevState.scheduler_context;
 
-        const updatedSchedulerContext = {
-          ...restSchedulerContext,
-          days_of_week: "",
-        };
+    //     const updatedSchedulerContext = {
+    //       ...restSchedulerContext,
+    //       days_of_week: "",
+    //     };
 
-        return {
-          ...prevState,
-          scheduler_context: updatedSchedulerContext,
-        };
-      });
-    } else if (value === "MONTHLY") {
-      setData((prevState: any) => {
-        const { days_of_week, ...restSchedulerContext } =
-          prevState.scheduler_context;
+    //     return {
+    //       ...prevState,
+    //       scheduler_context: updatedSchedulerContext,
+    //     };
+    //   });
+    // } else if (value === "MONTHLY") {
+    //   setData((prevState: any) => {
+    //     const { days_of_week, ...restSchedulerContext } =
+    //       prevState.scheduler_context;
 
-        const updatedSchedulerContext = {
-          ...restSchedulerContext,
-          days_of_month: "",
-        };
+    //     const updatedSchedulerContext = {
+    //       ...restSchedulerContext,
+    //       days_of_month: "",
+    //     };
 
-        return {
-          ...prevState,
-          scheduler_context: updatedSchedulerContext,
-        };
-      });
-    }
+    //     return {
+    //       ...prevState,
+    //       scheduler_context: updatedSchedulerContext,
+    //     };
+    //   });
+    // }
 
     setFrequencyButton(value);
     setData((prevSnmpObject: any) => ({
@@ -305,7 +306,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       },
     }));
     // console.log("date",data);
-  }; 
+  };
 
   const handleDeviceEntities = (values: any) => {
     //setChange(!change);
@@ -335,7 +336,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     try {
       const createDiscovery = async () => {
         let response = await createDiscoverySch(modifiedData);
-        //  console.log(response);
+        console.log(modifiedData);
         if (response.status == "success") {
           togglegetDisSchedApiState();
           handleDrawerClose();
@@ -451,7 +452,6 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Devices"
                     isMulti={true}
-                    // change={change}
                     title="Select Devices"
                     selectData={deviceValues}
                     onChange={handleDeviceEntities}
@@ -461,7 +461,6 @@ const DiscoverySchedularDrawer = (props: any) => {
                   <SingleSelect
                     label="Select Groups"
                     isMulti={true}
-                    // change={change}
                     title="Select Groups"
                     selectData={groupValues}
                     onChange={handleGroupEntities}
@@ -476,9 +475,10 @@ const DiscoverySchedularDrawer = (props: any) => {
                 Notify To
               </h5>
               <CustomeInput
-                label="Emails"
+                label="Email"
                 name="email"
                 value={data && data.email.join(",")}
+                // value={data && data.email ? data.email.join(",") : ""}
                 onChange={handleEmailChange}
                 type="email"
                 disable={false}
@@ -504,24 +504,23 @@ const DiscoverySchedularDrawer = (props: any) => {
                 onTimeRangeChange={handleDate}
               /> */}
               <DatePicker
-                  onChange={handleDate}
-                  // showOneCalendar
-                  appearance="subtle"
-                  placement="rightStart"
-                  style={{
-                    // margin: "1rem 1rem",
-                    width: "19rem",
-                    border:
-                      colorTheme == "light"
-                        ? "1px solid #e5e7eb"
-                        : "1px solid #ccc",
-                    padding: ".4rem",
-                  }}
-                  placeholder="Select Date"
-                  format="yyyy-MM-dd"
-                  className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-                />
-
+                onChange={handleDate}
+                // showOneCalendar
+                appearance="subtle"
+                placement="rightStart"
+                style={{
+                  // margin: "1rem 1rem",
+                  width: "19rem",
+                  border:
+                    colorTheme == "light"
+                      ? "1px solid #e5e7eb"
+                      : "1px solid #ccc",
+                  padding: ".4rem",
+                }}
+                placeholder="Select Date"
+                format="yyyy-MM-dd"
+                className="rounded-lg  dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
+              />
             </div>
             <div className="flex items-center">
               <Box>

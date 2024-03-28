@@ -113,6 +113,7 @@ const DeviceProfileModal = (props: any) => {
           <tbody>
             {keysArray.map((key:any, index:any) => {
               const data = deviceValues[index];
+            console.log("first",index)
               const isLastRow = index === keysArray.length - 1;
               return (
                 <tr

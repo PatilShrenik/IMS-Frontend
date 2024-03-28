@@ -39,9 +39,8 @@ const MonitoringSettingsDrawer = (props: any) => {
       try {
         const getData = async () => {
           let response = await getMonitoringDetailsByDeviced(rowId);
-
           const modifiedData: any = replacePeriodsWithUnderscoresArrayOfObjects(
-            response.result
+            response && response.result
           );
           setData(modifiedData);
         };
@@ -52,30 +51,37 @@ const MonitoringSettingsDrawer = (props: any) => {
     }
   }, [open]);
 
-  const handleInputChange = (id: number, field: string, value: any) => {
-    if (field == "object_enabled" && value == true) {
-      const updatedData =
-        data &&
-        data.map((row: any) =>
-          row._id === id ? { ...row, [field]: "yes", _isDirty: true } : row
-        );
-      setData(updatedData);
-    } else if (field == "object_enabled" && value == false) {
-      const updatedData =
-        data &&
-        data.map((row: any) =>
-          row._id === id ? { ...row, [field]: "no", _isDirty: true } : row
-        );
-      setData(updatedData);
-    } else {
-      const updatedData =
-        data &&
-        data.map((row: any) =>
-          row._id === id ? { ...row, [field]: value, _isDirty: true } : row
-        );
-      setData(updatedData);
-    }
-  };
+  // const handleInputChange = (id: number, field: string, value: any) => {
+  //   if (field == "object_enabled" && value == true) {
+  //     const updatedData =
+  //       data &&
+  //       data.map((row: any) =>
+  //         row._id === id ? { ...row, [field]: "yes", _isDirty: true } : row
+  //       );
+  //     setData(updatedData);
+  //   } else if (field == "object_enabled" && value == false) {
+  //     const updatedData =
+  //       data &&
+  //       data.map((row: any) =>
+  //         row._id === id ? { ...row, [field]: "no", _isDirty: true } : row
+  //       );
+  //     setData(updatedData);
+  //   } else {
+  //     const updatedData =
+  //       data &&
+  //       data.map((row: any) =>
+  //         row._id === id ? { ...row, [field]: value, _isDirty: true } : row
+  //       );
+  //     setData(updatedData);
+  //   }
+  // };
+
+const handleInputChange = (id: number, field: string, value: any) => {
+  const updatedData = data.map((row: any) =>
+      row._id === id ? { ...row, [field]: value, _isDirty: true } : row
+  );
+  setData(updatedData);
+};
 
   const handleUpdate = (id: number) => {
     const updatedData = data.map((row: any) =>
@@ -210,12 +216,12 @@ const MonitoringSettingsDrawer = (props: any) => {
                               }`}
                             >
                               <Checkbox
-                                checked={row.object_enabled}
+                                checked={row.object_enabled === 'yes'}
                                 onChange={() =>
                                   handleInputChange(
                                     row._id,
                                     "object_enabled",
-                                    !row.object_enabled
+                                    row.object_enabled === 'yes' ? "no" : "yes"
                                   )
                                 }
                               />
@@ -288,12 +294,12 @@ const MonitoringSettingsDrawer = (props: any) => {
                               }`}
                             >
                               <Checkbox
-                                checked={row.object_enabled}
+                                checked={row.object_enabled === 'yes'}
                                 onChange={() =>
                                   handleInputChange(
                                     row._id,
                                     "object_enabled",
-                                    !row.object_enabled
+                                    row.object_enabled === 'yes' ? "no" : "yes"
                                   )
                                 }
                               />

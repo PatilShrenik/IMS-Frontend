@@ -438,7 +438,7 @@ const IPAddress = (props: any) => {
     event.preventDefault();
     let response;
     data.port = parseInt(data.port);
-    // if(data.hostname == "") {
+    // if(data.profile_name == "") {
     //   setErrors({})
     // }
     const modifiedData = replaceUnderscoresWithDots(data);
@@ -497,7 +497,7 @@ const IPAddress = (props: any) => {
               />
               {errorKeys && errorKeys.includes("hostname") && (
                 <p className="text-danger text-sm ml-2">
-                  HostName is {errors["hostname"]} *
+                  Host Name is {errors["hostname"]} *
                 </p>
               )}
             </div>
@@ -741,7 +741,7 @@ const IPRange = (props: any) => {
   const initialState = {
     plugin_type: "SNMP",
     profile_type: "ip.range",
-    hostname: "",
+    profile_name: "",
     start_ip: null,
     end_ip: null,
     port: "161",
@@ -948,15 +948,15 @@ const IPRange = (props: any) => {
             <div className="flex flex-col">
               <CustomeInput
                 label="Name"
-                name="hostname"
-                value={data.hostname}
+                name="profile_name"
+                value={data.profile_name}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
               />
-              {errorKeys && errorKeys.includes("hostname") && (
+              {errorKeys && errorKeys.includes("profile_name") && (
                 <p className="text-danger text-sm ml-2">
-                  HostName is {errors["hostname"]}*
+                  Host Name is {errors["profile_name"]}*
                 </p>
               )}
             </div>
@@ -1220,7 +1220,7 @@ const CIDR = (props: any) => {
   const initialState = {
     plugin_type: "SNMP",
     profile_type: "cidr",
-    hostname: "",
+    profile_name: "",
     cidr: null,
     port: "161",
     credential_profiles: [],
@@ -1410,15 +1410,15 @@ const CIDR = (props: any) => {
             <div className="flex flex-col">
               <CustomeInput
                 label="Name"
-                name="hostname"
-                value={data.hostname}
+                name="profile_name"
+                value={data.profile_name}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
               />
-              {errorKeys && errorKeys.includes("hostname") && (
+              {errorKeys && errorKeys.includes("profile_name") && (
                 <p className="text-danger text-sm ml-2">
-                  HostName is {errors["hostname"]}*
+                  Host Name is {errors["profile_name"]}*
                 </p>
               )}
             </div>
