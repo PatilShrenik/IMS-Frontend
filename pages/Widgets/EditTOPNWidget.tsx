@@ -128,19 +128,19 @@ const EditTopnWidget = (props: any) => {
     // setGroupByArray([{ name: data.group_by, id: data.group_by }]);
   }, [widgetData]);
 
-  useEffect(() => {
-    const formatTimestamp = (timestamp: any) => {
-      const milliseconds = timestamp * 1000;
-      const date = new Date(milliseconds);
-      return date.toString(); // Adjust the format as needed
-    };
+  // useEffect(() => {
+  //   const formatTimestamp = (timestamp: any) => {
+  //     const milliseconds = timestamp * 1000;
+  //     const date = new Date(milliseconds);
+  //     return date.toString(); // Adjust the format as needed
+  //   };
 
-    console.log("---", data.start_timestamp)
-    const formattedStart: any = formatTimestamp(data.start_timestamp);
-    const formattedEnd: any = formatTimestamp(data.end_timestamp);
-    console.log("---", formattedEnd, formattedStart)
-    setFormattedData([formattedStart, formattedEnd]);
-  }, [data]);
+  //   console.log("---", data.start_timestamp)
+  //   const formattedStart: any = formatTimestamp(data.start_timestamp);
+  //   const formattedEnd: any = formatTimestamp(data.end_timestamp);
+  //   console.log("---", formattedEnd, formattedStart)
+  //   setFormattedData([formattedStart, formattedEnd]);
+  // }, [data]);
 
   useEffect(() => {
     if (
@@ -503,8 +503,8 @@ const EditTopnWidget = (props: any) => {
         <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker
             onTimeRangeChange={handleDate}
-            text={data.time_range}
-            formatedTime = {formattedData}
+            // text={data.time_range}
+            // formatedTime = {formattedData}
           />
         </div>
         <div>

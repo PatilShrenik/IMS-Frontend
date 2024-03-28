@@ -93,7 +93,7 @@ const predefinedBottomRanges: any = [
 
 const TimeRangePicker = (props: any) => {
   const { afterToday }: any = DateRangePicker;
-  console.log("timerange value", props.formatedTime && props.formatedTime);
+
   const handleShortcutClick = (shortcut: any, event: any) => {
     props.onTimeRangeChange(shortcut);
   };
@@ -125,13 +125,10 @@ const TimeRangePicker = (props: any) => {
         }}
         onShortcutClick={handleShortcutClick}
         value={
-          props.text != "custome"
-            ? Array.isArray(props.text)
-              ? props.text
-              : predefinedBottomRanges.find(
-                  (val: any) => val.text === props.text
-                )?.value
-            : props.formatedTime
+          Array.isArray(props.text)
+            ? props.text
+            : predefinedBottomRanges.find((val: any) => val.text === props.text)
+                ?.value
         }
         className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
       />
