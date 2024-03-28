@@ -74,8 +74,12 @@ const AuditTable = (props: any) => {
   const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");
   const [deviceIds, setDeviceIds] = useState() as any;
-  const { toggleDeviceTableState, activeButton, toggleActiveButton } =
-    useAppContext();
+  const {
+    toggleDeviceTableState,
+    activeButton,
+    toggleActiveButton,
+    toggleauditSocketCalled,
+  } = useAppContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSeverity, setSelectedSeverity] = useState([]) as any;
   const [selectedPolicy, setSelectedPolicy] = useState([]) as any;
@@ -587,8 +591,8 @@ const AuditTable = (props: any) => {
     // console.log("in handlesearch");
     const modifiedData = replaceUnderscoresWithDots(payloadForAlert);
     console.log("modified payload for audit", modifiedData);
-
     emit("ws.audit", modifiedData);
+    toggleauditSocketCalled();
   };
 
   const stableSort = (array: any, comparator: any) => {
