@@ -443,38 +443,38 @@ const IPAddress = (props: any) => {
     // }
     const modifiedData = replaceUnderscoresWithDots(data);
     console.log("ip address save data", modifiedData);
-    // response = await addSingleDevice(modifiedData);
-    // response && console.log(response);
-    // if (response) {
-    //   if (response.status == "success") {
-    //     toast.success(response && response.message, {
-    //       position: "bottom-right",
-    //       autoClose: 2000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //       theme: "colored",
-    //       transition: Bounce,
-    //     });
-    //     toggleDeviceTableState();
-    //     handleDrawerClose();
-    //   } else {
-    //     setErrors(response.errors);
-    //     toast.error(response.message, {
-    //       position: "bottom-right",
-    //       autoClose: 2000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //       theme: "colored",
-    //       transition: Bounce,
-    //     });
-    //   }
-    // }
+    response = await addSingleDevice(modifiedData);
+    response && console.log(response);
+    if (response) {
+      if (response.status == "success") {
+        toast.success(response && response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        toggleDeviceTableState();
+        handleDrawerClose();
+      } else {
+        setErrors(response.errors);
+        toast.error(response.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+    }
   };
   return (
     <div className=" rounded-lg m-2 p-2 dark:bg-dark-menu-color">
@@ -723,9 +723,9 @@ const IPAddress = (props: any) => {
             </div>
           </div>
           <div className=" fixed bottom-0 right-0 p-2 my-2 flex justify-end mt-6">
-            {/* <div onClick={handleSave}> */}
-            <SubmitButton title="Save" />
-            {/* </div> */}
+            <div onClick={handleSave}>
+              <SubmitButton title="Save" />
+            </div>
             <div onClick={handleDrawerClose}>
               <CustomeCancelButton title="Cancel" />
             </div>

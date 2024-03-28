@@ -316,12 +316,7 @@ const ChartWidget = (props: any) => {
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
-    // if (name == "limit") {
-    //   let limit_value = Number(value);
-    //   setData({ ...data, [name]: limit_value });
-    // } else {
     setData({ ...data, [name]: value });
-    // }
   };
 
   const handleGranTimeChange = (value: any) => {
@@ -386,7 +381,7 @@ const ChartWidget = (props: any) => {
   }, [dropdowns]);
 
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log(index, field, value);
+    console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
@@ -523,15 +518,7 @@ const ChartWidget = (props: any) => {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
         console.log("chart widget data", modifiedData);
-        // const entities = Object.values(modifiedData.entities);
-        // modifiedData.entities = entities;
 
-        // const indicators = Object.values(modifiedData.indicators);
-        // modifiedData.indicators = indicators;
-        // modifiedData["query.id"] = 124453455;
-        // modifiedData.userName = "admin";
-
-        // console.log("chart data", modifiedData);
         let response = await addChartWidget(modifiedData);
         if (response.status === "success") {
           toast.success(response.status, {
@@ -646,7 +633,7 @@ const ChartWidget = (props: any) => {
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                      selectData={["MIN", "MAX", "SUM", "AVG"]}
                       // onChange={(e: any) =>
                       //   handleDropdownChange(
                       //     index,
@@ -662,7 +649,7 @@ const ChartWidget = (props: any) => {
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                      selectData={["LAST"]}
                       onChange={handleDropdownChange}
                       index={index}
                       type="aggregation"

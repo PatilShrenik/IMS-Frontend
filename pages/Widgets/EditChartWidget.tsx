@@ -13,12 +13,16 @@ import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
 import "rsuite/dist/rsuite.min.css";
 import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import {
+  getIndicatorMapper,
+  getIndicatorMapperMetric,
+} from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget, updateWidget } from "../api/api/ReportsAPI";
 import { toast } from "react-toastify";
+import TimeRangePicker from "../Components/TimeRnangePicker";
 
 const EditChartWidget = (props: any) => {
   const { widgetData, handleAddDrawerClose } = props;
@@ -241,9 +245,9 @@ const EditChartWidget = (props: any) => {
   );
   useEffect(() => {
     const handleStorageChange = () => {
-      console.log("Storage change detected");
+      // console.log("Storage change detected");
       const newColorTheme = localStorage.getItem("color-theme");
-      console.log("New color theme:", newColorTheme);
+      // console.log("New color theme:", newColorTheme);
       setColorTheme(newColorTheme);
     };
     handleStorageChange();
@@ -448,16 +452,32 @@ const EditChartWidget = (props: any) => {
     // updatedDropdowns[index][field] = value;
     setDropdowns(updatedDropdowns);
   };
-  const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range:", value);
-    const start = value[0].getTime() / 1000;
-    const end = value[1].getTime() / 1000;
-    console.log(start, end);
-    setTimePeriod({
-      ...timePeriod,
-      start_timestamp: start,
-      end_timestamp: end,
-    });
+
+  const handleDate = (event: any) => {
+    // console.log("date event", event);
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
   };
 
   useEffect(() => {
@@ -538,30 +558,9 @@ const EditChartWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         />
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod && timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"

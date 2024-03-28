@@ -238,7 +238,7 @@ const CredentialProfileDrawer = (props: any) => {
 
   const handleSSHSave = () => {
     const modifiedData = replaceUnderscoresWithDots(sshObject);
-
+   // console.log("ssh object",modifiedData)
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
@@ -294,7 +294,7 @@ const CredentialProfileDrawer = (props: any) => {
   const handlesnmpSave = () => {
     // console.log("snmp object", snmpObject);
     const modifiedData = replaceUnderscoresWithDots(snmpObject);
-    // console.log("snmp object", modifiedData);
+   // console.log("snmp object", modifiedData);
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
@@ -347,7 +347,7 @@ const CredentialProfileDrawer = (props: any) => {
   const handleSNMPv3Save = () => {
     // console.log("snmp object", snmpObject);
     const modifiedData = replaceUnderscoresWithDots(snmpv3Object);
-  //  console.log("snmpv3 Object ", modifiedData);
+ // console.log("snmpv3 Object ", modifiedData);
     try {
       const createprofile = async () => {
         let response = await createCredsProfile(modifiedData);
@@ -399,7 +399,6 @@ const CredentialProfileDrawer = (props: any) => {
   };
   const handleSave = (event: any) => {
     event.preventDefault();
-
     // Choose the appropriate onSubmit method based on the protocol
     if (protocol == "SNMPV2C" || protocol == "SNMPV1") {
       handlesnmpSave();
@@ -409,6 +408,7 @@ const CredentialProfileDrawer = (props: any) => {
       handleSSHSave();
     }
   };
+  
   return (
     <Drawer
       // hideBackdrop = {false}temporary

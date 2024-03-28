@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": " next export",
     "start": "next start -p 5602",
     "start-dev": "next start -p 9210",
     "start-prod": "next start -p 5612",

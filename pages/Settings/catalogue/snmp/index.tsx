@@ -28,7 +28,7 @@ const SNMP = () => {
 
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
-          data.forEach(obj => {
+        data &&  data.forEach(obj => {
               Object.keys(obj).forEach(key => allKeys.add(key));
           });
           return Array.from(allKeys);
@@ -37,7 +37,7 @@ const SNMP = () => {
       const allKeys = extractAllKeys(modifiedData);
       
   
-      console.log("All keys from the API response:",allKeys);
+     // console.log("All keys from the API response:",allKeys);
      // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
       //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
