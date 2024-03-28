@@ -23,7 +23,7 @@ import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
 import TimeRangePicker from "../Components/TimeRnangePicker";
@@ -51,7 +51,7 @@ const GaugeWidget = (props: any) => {
     string | null
   >("device");
   const [groupByArray, setGroupByArray] = React.useState(
-    [] as { label: string; value: string }[]
+    [] as { name: string; id: string }[]
   );
   const [mapperdData, setMappersData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
@@ -106,91 +106,7 @@ const GaugeWidget = (props: any) => {
       .millisecond(0);
     financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
   }
-  const predefinedRanges: any = [
-    {
-      label: "Last day",
 
-      value: [
-        new Date(moment().subtract(1, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 7 days",
-
-      value: [
-        new Date(moment().subtract(7, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 15 days",
-
-      value: [
-        new Date(moment().subtract(15, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 30 days",
-
-      value: [
-        new Date(moment().subtract(30, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 90 days",
-
-      value: [
-        new Date(moment().subtract(90, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Last 120 days",
-
-      value: [
-        new Date(moment().subtract(120, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Last 180 days",
-
-      value: [
-        new Date(moment().subtract(180, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Current FY",
-      value: [
-        new Date(financialYearStart.format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(financialYearEnd.format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-      placement: "left",
-    },
-  ];
-  const { afterToday }: any = DateRangePicker;
 
   const isBrowser = typeof window !== "undefined";
 
@@ -317,15 +233,20 @@ const GaugeWidget = (props: any) => {
   React.useEffect(() => {
     setData({ ...data, indicators: dropdowns });
   }, [dropdowns]);
-
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log(index, field, value);
+    console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
     const matchingObject = mapperdData.find(
       (item: any) => item.indicator === value
     );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+
+      setIndicatorType(indicator_type);
+      updatedDropdowns[index]["indicator_type"] = indicator_type;
+    }
 
     if (field == "aggregation") {
       let tempindicator = dropdowns[index].indicator;
@@ -333,12 +254,6 @@ const GaugeWidget = (props: any) => {
       const matchingObject = mapperdData.find(
         (item: any) => item.indicator === tempindicator
       );
-      if (matchingObject) {
-        const { indicator_type } = matchingObject;
-
-        setIndicatorType(indicator_type);
-        updatedDropdowns[index]["indicator_type"] = indicator_type;
-      }
     }
     updatedDropdowns[index][field] = value;
     const indicatorValues = updatedDropdowns.map(
@@ -349,11 +264,11 @@ const GaugeWidget = (props: any) => {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-
-        if (!groupByArray.some((item) => item.value === object_type)) {
+        console.log("group array", groupByArray);
+        if (!groupByArray.some((item: any) => item.value === object_type)) {
           setGroupByArray((prevGroupByArray: any) => {
             const newArray = [...prevGroupByArray];
-            newArray[1] = { name: object_type, id: object_type };
+            newArray[0] = { name: object_type, id: object_type };
             return newArray;
           });
         }
@@ -376,13 +291,12 @@ const GaugeWidget = (props: any) => {
           (value: any) => !indicatorValues.includes(value)
         );
         console.log("matching indi", filteredArray);
-        setFilteredData(filteredArray);
+        setFilteredData(matchingIndicators);
       }
     }
     // updatedDropdowns[index][field] = value;
     setDropdowns(updatedDropdowns);
   };
-
   const handleDate = (event: any) => {
     // console.log("date event", event);
     let updatedPayload: any = { ...data };
@@ -469,13 +383,27 @@ const GaugeWidget = (props: any) => {
         if (response.status === "success") {
           toast.success(response.status, {
             position: "bottom-right",
-            autoClose: 1000,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
           handleAddDrawerClose();
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
         toggleWidgetApiState();
@@ -553,20 +481,13 @@ const GaugeWidget = (props: any) => {
                     index={index}
                     type="indicator"
                   />
-                  {indicatorType == "METRIC" ||
-                  indicatorType == "Metric" ||
-                  indicatorType == "metric" ? (
+                  {dropdown.indicator_type == "METRIC" ||
+                  dropdown.indicator_type == "Metric" ||
+                  dropdown.indicator_type == "metric" ? (
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
+                      selectData={["MIN", "MAX", "SUM", "AVG"]}
                       onChange={handleDropdownChange}
                       index={index}
                       type="aggregation"
@@ -575,17 +496,10 @@ const GaugeWidget = (props: any) => {
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                      selectData={["LAST"]}
                       onChange={handleDropdownChange}
                       index={index}
                       type="aggregation"
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
                     />
                   )}
                   <div

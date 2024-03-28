@@ -30,7 +30,7 @@ import {
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDiscoverySch } from "@/pages/api/api/DiscoveryScheduleAPI";
 import { getAllCredsProfile } from "@/pages/api/api/CredentialProfileAPI";
-import { convertEpochToDateMonthYear } from "@/functions/genericFunctions";
+import { convertEpochToDateMonthYear, convertEpochToDateMonthYearWithTime } from "@/functions/genericFunctions";
 import AddSingleDeviceDrawer from "../SideDrawers/AddDeviceDrawer";
 import { CustomeButtonGroupButton } from "../Buttons";
 import { StatusChips } from "../Chips";
@@ -418,7 +418,7 @@ const AllDeviceTabel = (props: any) => {
           row.availability_context["last_discovered_on"] ||
           row.availability_context["last_availability_checked_on"])
       ) {
-        const formattedDateMonthYear = convertEpochToDateMonthYear(timestamp);
+        const formattedDateMonthYear = convertEpochToDateMonthYearWithTime(timestamp);
         return formattedDateMonthYear ? formattedDateMonthYear : "-";
       }
     } else if (column.field == "device_status") {

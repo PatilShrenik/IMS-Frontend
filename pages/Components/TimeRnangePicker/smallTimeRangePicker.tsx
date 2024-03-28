@@ -118,6 +118,8 @@ const SmallTimeRangePicker = (props: any) => {
     >
       <DateRangePicker
         ranges={predefinedBottomRanges}
+        format="MM/dd/yyyy hh:mm aa"
+        showMeridian
         placeholder="TimeLine"
         style={{ width: 250 }}
         shouldDisableDate={afterToday()}

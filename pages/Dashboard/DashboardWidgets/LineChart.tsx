@@ -8,6 +8,7 @@ import moment from "moment";
 import { useWebSocketContext } from "@/pages/Components/WebSocketContext";
 import { GetWidgetsData } from "@/pages/api/api/DashboardWidgetsAPI";
 import { useAppContext } from "@/pages/Components/AppContext";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 const LineChartDashboardComponent = (props: any) => {
   useEffect(() => {
@@ -16,6 +17,7 @@ const LineChartDashboardComponent = (props: any) => {
     HighchartsAccessibility(Highcharts);
     NoDataToDisplay(Highcharts);
   }, []);
+  const [allDevices, setAllDevices] = React.useState([]);
   const eventType = "ws.visualization";
   const [data, setData] = useState<any>();
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
@@ -46,6 +48,14 @@ const LineChartDashboardComponent = (props: any) => {
     };
     handleStorageChange();
   }, [themeSwitch]);
+
+  React.useEffect(() => {
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
 
   useEffect(() => {
     // console.log(props.keys, eventType)
@@ -82,6 +92,15 @@ const LineChartDashboardComponent = (props: any) => {
     const devices = Array.from(
       new Set(initialData.map((item: any) => item?.event?.device))
     );
+    const devicesAsNumbers = devices.map((device) => Number(device));
+    // console.log("all devices", allDevices);
+    // console.log("devides ids", devicesAsNumbers);
+    const deviceValues: any[] =
+      allDevices &&
+      allDevices
+        .filter((item: any) => devicesAsNumbers.includes(item._id))
+        .map((item: any) => ({ id: item._id, hostname: item.hostname }));
+    // console.log("device values", deviceValues);
     const firstData = initialData[0]?.event || {};
     const allKeys = Object.keys(firstData);
     const indexes = Array.from(
@@ -95,6 +114,10 @@ const LineChartDashboardComponent = (props: any) => {
     );
     const lines: any[] = [];
     devices.forEach((device: any) => {
+      const deviceObject : any = deviceValues.find((item: any) => item.id === parseInt(device));
+      const hostname = deviceObject ? deviceObject.hostname : "";
+      console.log("---", deviceObject)
+      console.log("====", hostname)
       indexes.forEach((index: any, i: any) => {
         if (groupBy != "device") {
           Object.keys(totalGroupsKeys).forEach((key: any, i: any) => {
@@ -109,8 +132,8 @@ const LineChartDashboardComponent = (props: any) => {
               ]);
             const legendName =
               groupBy == "device"
-                ? device + "-" + index
-                : device +
+                ? hostname + "-" + index
+                : hostname +
                   "-" +
                   groupBy +
                   `(${initialData[i]?.event[groupBy]})` +
@@ -127,8 +150,8 @@ const LineChartDashboardComponent = (props: any) => {
             ]);
           const legendName =
             groupBy == "device"
-              ? device + "-" + index
-              : device +
+              ? hostname + "-" + index
+              : hostname +
                 "-" +
                 groupBy +
                 `(${initialData[i]?.event[groupBy]})` +
@@ -138,7 +161,7 @@ const LineChartDashboardComponent = (props: any) => {
         }
       });
     });
-    // console.log("lines", lines);
+    console.log("lines", lines);
     return lines;
   };
 
@@ -154,7 +177,7 @@ const LineChartDashboardComponent = (props: any) => {
           animation: false,
           // height: 200, // Adjust the height of the chart based on the reports prop
           zoomType: "x",
-          backgroundColor,
+          // backgroundColor,
         },
         title: {
           text: data.name || "",
@@ -162,7 +185,7 @@ const LineChartDashboardComponent = (props: any) => {
           style: {
             fontWeight: "bold",
             fontSize: "14px",
-            color: fontColor,
+            // color: fontColor,
           },
         },
         credits: {
@@ -178,9 +201,9 @@ const LineChartDashboardComponent = (props: any) => {
           title: {
             text: "",
           },
-          style: {
-            color: fontColor,
-          },
+          // style: {
+          //   color: fontColor,
+          // },
         },
 
         xAxis: {
@@ -188,9 +211,9 @@ const LineChartDashboardComponent = (props: any) => {
             text: "",
           },
           type: "category",
-          style: {
-            color: fontColor,
-          },
+          // style: {
+          //   color: fontColor,
+          // },
         },
         legend: {
           enabled: true,
@@ -200,7 +223,7 @@ const LineChartDashboardComponent = (props: any) => {
           itemStyle: {
             fontSize: "10px",
             // style: {
-            color: fontColor,
+            // color: fontColor,
             // }, // Adjust font size of legends
           },
           itemWidth: 150, // Set the width of each legend item
@@ -218,12 +241,12 @@ const LineChartDashboardComponent = (props: any) => {
           noData: "No Data to Display",
         },
         plotOptions: {
-          color: fontColor,
+          // color: fontColor,
           series: {
             label: {
               connectorAllowed: false,
             },
-            color: fontColor,
+            // color: fontColor,
           },
         },
 

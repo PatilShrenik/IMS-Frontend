@@ -55,18 +55,15 @@ const SNMPTemp = () => {
         }
         let filteredCols =
           col &&
-          col.filter((key: any) => key !== "scalar_oid" && key !== "objects");
+          col.filter(
+            (key: any) =>
+              key !== "scalar_oid" && key !== "objects" && key != "_id"
+          );
 
         console.log("filtered cols", filteredCols);
         filteredCols.filter((key: any) => {
           if (key) {
-            if (key == "_id") {
-              cols.push({
-                field: "_id",
-                headerName: "Id",
-                minWidth: 80,
-              });
-            } else if (key == "name") {
+            if (key == "name") {
               cols.push({
                 field: "name",
                 headerName: "Name",
@@ -92,6 +89,7 @@ const SNMPTemp = () => {
         setColumns(cols);
         console.log("rows", modifiedData);
         const hiddenColumnsValues = [
+          "id",
           "created_by",
           "created_on",
           "_type",

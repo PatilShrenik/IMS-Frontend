@@ -12,7 +12,8 @@ import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import AddWidgetDrawer from "../Components/SideDrawers/AddWidgetDrawer";
-
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import { useAppContext } from "../Components/AppContext";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import {
@@ -280,7 +281,7 @@ const index = () => {
                   className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
                   onClick={() => setEditable(!editable)}
                 >
-                  Unlock Dashboard
+                  <LockOpenOutlinedIcon />
                 </button>
               )}
               {editable && (
@@ -291,9 +292,10 @@ const index = () => {
                     setEditable(!editable);
                   }}
                 >
-                  Lock Dasboaard
+                  <LockOutlinedIcon />
                 </button>
               )}
+			  
             </div>
 
             {/* {editable && (

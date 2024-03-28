@@ -12,18 +12,24 @@ import SingleSelect from "../Components/Selects";
 import { getAllDevice } from "../api/api/DeviceManagementAPI";
 import { getAllGropus } from "../api/api/GroupsAPI";
 import "rsuite/dist/rsuite.min.css";
-import { CustomProvider, DateRangePicker, Tooltip } from "rsuite";
-import { getIndicatorMapper, getIndicatorMapperMetric } from "../api/api/MiscAPI";
+import { v4 as uuidv4 } from "uuid";
+import { getIndicatorMapperMetric } from "../api/api/MiscAPI";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
-import { addChartWidget } from "../api/api/ReportsAPI";
-import { toast } from "react-toastify";
+import { updateWidget } from "../api/api/ReportsAPI";
+import { Bounce, toast } from "react-toastify";
+import TimeRangePicker from "../Components/TimeRnangePicker";
+import { useWebSocketContext } from "../Components/WebSocketContext";
+import GaugeWidgetTabel from "../Components/Charts/GaugeWidgetTabel";
 
 const EditGaugeWidget = (props: any) => {
   const { widgetData, handleAddDrawerClose } = props;
   const { toggleWidgetApiState, themeSwitch } = useAppContext();
-
+  const pageID: any = Math.floor(Math.random() * 999999) + 1; // to give a random ID to each widget
+  const eventType = "ws.visualization";
+  const { Subscribe, emit, unsubscribe } = useWebSocketContext();
+  const [queryOutput, setQueryOutput] = useState<string>("");
   const options = ["Metric"];
 
   const [timePeriod, setTimePeriod] = useState({
@@ -38,18 +44,18 @@ const EditGaugeWidget = (props: any) => {
   const [selection, setSelection] = React.useState(
     widgetData &&
       widgetData.filters &&
-      widgetData.filters.device_filters &&
-      widgetData.filters.device_filters.entity_type
+      widgetData.filters.device_filter &&
+      widgetData.filters.device_filter.entity_type
   );
   const [activeButton, setActiveButton] = React.useState<string | null>(
     widgetData &&
       widgetData.filters &&
-      widgetData.filters.device_filters &&
-      widgetData.filters.device_filters.entity_type
+      widgetData.filters.device_filter &&
+      widgetData.filters.device_filter.entity_type
   );
-  const [groupByArray, setGroupByArray] = React.useState(
-    [] as { name: string; id: string }[]
-  );
+  const [groupByArray, setGroupByArray] = React.useState([
+    { name: "device", id: "device" },
+  ]);
   const [mapperdData, setMappersData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [indicatorType, setIndicatorType] = React.useState("");
@@ -82,91 +88,6 @@ const EditGaugeWidget = (props: any) => {
       .millisecond(0);
     financialYearEnd = today.hour(15).minute(30).second(0).millisecond(0);
   }
-  const predefinedRanges: any = [
-    {
-      label: "Last day",
-
-      value: [
-        new Date(moment().subtract(1, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 7 days",
-
-      value: [
-        new Date(moment().subtract(7, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 15 days",
-
-      value: [
-        new Date(moment().subtract(15, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 30 days",
-
-      value: [
-        new Date(moment().subtract(30, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-
-    {
-      label: "Last 90 days",
-
-      value: [
-        new Date(moment().subtract(90, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Last 120 days",
-
-      value: [
-        new Date(moment().subtract(120, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Last 180 days",
-
-      value: [
-        new Date(moment().subtract(180, "day").format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(moment().format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-
-      placement: "left",
-    },
-    {
-      label: "Current FY",
-      value: [
-        new Date(financialYearStart.format("YYYY-MM-DDTHH:mm:ss")),
-        new Date(financialYearEnd.format("YYYY-MM-DDTHH:mm:ss")),
-      ],
-      placement: "left",
-    },
-  ];
-  const { afterToday }: any = DateRangePicker;
 
   const isBrowser = typeof window !== "undefined";
 
@@ -210,14 +131,14 @@ const EditGaugeWidget = (props: any) => {
     setActiveButton(
       data &&
         data.filters &&
-        data.filters.device_filters &&
-        data.filters.device_filters.entity_type
+        data.filters.device_filter &&
+        data.filters.device_filter.entity_type
     );
     setSelection(
       data &&
         data.filters &&
-        data.filters.device_filters &&
-        data.filters.device_filters.entity_type
+        data.filters.device_filter &&
+        data.filters.device_filter.entity_type
     );
     setDropdowns(data && data.indicators);
     // setGroupByArray([{ name: data.group_by, id: data.group_by }]);
@@ -227,21 +148,21 @@ const EditGaugeWidget = (props: any) => {
     if (
       data &&
       data.filters &&
-      data.filters.device_filters &&
-      data.filters.device_filters.entity_type == "device"
+      data.filters.device_filter &&
+      data.filters.device_filter.entity_type == "device"
     ) {
       setSelectedDevices(
         data &&
           data.filters &&
-          data.filters.device_filters &&
-          data.filters.device_filters.entities
+          data.filters.device_filter &&
+          data.filters.device_filter.entities
       );
     } else {
       setSelectedGroups(
         data &&
           data.filters &&
-          data.filters.device_filters &&
-          data.filters.device_filters.entities
+          data.filters.device_filter &&
+          data.filters.device_filter.entities
       );
     }
   }, [data]);
@@ -257,18 +178,9 @@ const EditGaugeWidget = (props: any) => {
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
-    // if (name == "limit") {
-    //   let limit_value = Number(value);
-    //   setData({ ...data, [name]: limit_value });
-    // } else {
-    setData({ ...data, [name]: value });
-    // }
-  };
 
-  //   const handleGranTimeChange = (value: any) => {
-  //     // const { value } = event.target;
-  //     setData({ ...data, granularity: value });
-  //   };
+    setData({ ...data, [name]: value });
+  };
 
   const handleIndiGroupChange = (value: any) => {
     // const { value } = event.target;
@@ -282,8 +194,8 @@ const EditGaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entity_type: value,
         },
       },
@@ -309,8 +221,8 @@ const EditGaugeWidget = (props: any) => {
       ...data,
       filters: {
         ...data.filters,
-        device_filters: {
-          ...data.filters.device_filters,
+        device_filter: {
+          ...data.filters.device_filter,
           entities: values,
         },
       },
@@ -318,17 +230,47 @@ const EditGaugeWidget = (props: any) => {
   };
 
   React.useEffect(() => {
+    let filtered: any = [];
+    let matchingIndicators: any = [];
+    const updatedDropdowns: any = [...dropdowns];
+    const matchingObject = mapperdData.find(
+      (item: any) => item.indicator === updatedDropdowns[0].indicator
+    );
+    if (matchingObject) {
+      const { object_type, plugin_type, datasource } = matchingObject;
+      const indicatorValues = updatedDropdowns.map(
+        (dropdown: any) => dropdown.indicator
+      );
+      filtered = mapperdData.filter(
+        (item: any) =>
+          item.object_type === object_type && item.plugin_type === plugin_type
+      );
+
+      matchingIndicators = filtered.map((item: any) => item.indicator);
+
+      const filteredArray = matchingIndicators.filter(
+        (value: any) => !indicatorValues.includes(value)
+      );
+      console.log("matching indi", matchingIndicators);
+      setFilteredData(matchingIndicators);
+    }
     setData({ ...data, indicators: dropdowns });
-  }, [dropdowns]);
+  }, [mapperdData, dropdowns]);
 
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log(index, field, value);
+    console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
     const matchingObject = mapperdData.find(
       (item: any) => item.indicator === value
     );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+
+      setIndicatorType(indicator_type);
+      updatedDropdowns[index]["indicator_type"] = indicator_type;
+    }
 
     if (field == "aggregation") {
       let tempindicator = dropdowns[index].indicator;
@@ -336,12 +278,6 @@ const EditGaugeWidget = (props: any) => {
       const matchingObject = mapperdData.find(
         (item: any) => item.indicator === tempindicator
       );
-      if (matchingObject) {
-        const { indicator_type } = matchingObject;
-
-        setIndicatorType(indicator_type);
-        updatedDropdowns[index]["indicator_type"] = indicator_type;
-      }
     }
     updatedDropdowns[index][field] = value;
     const indicatorValues = updatedDropdowns.map(
@@ -352,11 +288,13 @@ const EditGaugeWidget = (props: any) => {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-
-        if (!groupByArray.some((item) => item.id === object_type)) {
-          console.log("inkjdhdsuihs", object_type);
-          //   setGroupByArray([{ name: object_type, id: object_type }]);
-          //   setData({ ...data, group_by: object_type });
+        console.log("group array", groupByArray);
+        if (!groupByArray.some((item: any) => item.value === object_type)) {
+          setGroupByArray((prevGroupByArray: any) => {
+            const newArray = [...prevGroupByArray];
+            newArray[1] = { name: object_type, id: object_type };
+            return newArray;
+          });
         }
 
         setData({
@@ -377,22 +315,37 @@ const EditGaugeWidget = (props: any) => {
           (value: any) => !indicatorValues.includes(value)
         );
         console.log("matching indi", filteredArray);
-        setFilteredData(filteredArray);
+        setFilteredData(matchingIndicators);
       }
     }
     // updatedDropdowns[index][field] = value;
     setDropdowns(updatedDropdowns);
   };
-  const handleDateRangeChange = (value: any) => {
-    console.log("Selected Date Range:", value);
-    const start = value[0].getTime() / 1000;
-    const end = value[1].getTime() / 1000;
-    console.log(start, end);
-    setTimePeriod({
-      ...timePeriod,
-      start_timestamp: start,
-      end_timestamp: end,
-    });
+
+  const handleDate = (event: any) => {
+    let updatedPayload: any = { ...data };
+
+    if (event.label !== "custom") {
+      delete updatedPayload.start_timestamp;
+      delete updatedPayload.end_timestamp;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+      };
+    } else {
+      const startdate = new Date(event.value[0]);
+      const startepochTime = startdate.getTime() / 1000;
+      const enddate = new Date(event.value[1]);
+      const endepochTime = enddate.getTime() / 1000;
+      updatedPayload = {
+        ...updatedPayload,
+        time_range: event.text,
+        start_timestamp: startepochTime,
+        end_timestamp: endepochTime,
+      };
+    }
+    // console.log("updated payload", updatedPayload);
+    setData(updatedPayload);
   };
 
   useEffect(() => {
@@ -404,48 +357,57 @@ const EditGaugeWidget = (props: any) => {
     });
   }, [timePeriod]);
 
-  //   const handleTypeChange = (value: any) => {
-  //     // const { value } = event.target;
-  //     console.log("------------", value);
-  //     console.log(value);
-  //     setData({ ...data, group_by: value });
-  //   };
+  const handleExecute = () => {
+    const randomId = uuidv4();
+    const modified = replaceUnderscoresWithDots(data);
+    modified["event.type"] = "ws.visualization";
+    modified["query.id"] = randomId;
+    modified.userName = "admin";
+    modified["pageID"] = pageID;
+    console.log("chart widget called");
+    emit(eventType, modified);
+  };
 
   const handleSave = () => {
-    // console.log("chart data", data);
     try {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
         console.log("chart widget data", modifiedData);
-        // const entities = Object.values(modifiedData.entities);
-        // modifiedData.entities = entities;
-
-        // const indicators = Object.values(modifiedData.indicators);
-        // modifiedData.indicators = indicators;
-        // modifiedData["query.id"] = 124453455;
-        // modifiedData.userName = "admin";
-
-        // console.log("chart data", modifiedData);
-        // let response = await addChartWidget(modifiedData);
-        // if (response.status === "success") {
-        //   toast.success(response.status, {
-        //     position: "bottom-right",
-        //     autoClose: 1000,
-        //   });
-        //   handleAddDrawerClose();
-        // } else {
-        //   toast.error(response.message, {
-        //     position: "bottom-right",
-        //     autoClose: 2000,
-        //   });
-        // }
-        // toggleWidgetApiState();
+        let response = await updateWidget(modifiedData, widgetData._id);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+          handleAddDrawerClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        }
+        toggleWidgetApiState();
       };
       addWidget();
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div className="h-full px-2 dark:bg-dark-menu-color">
       <div className="flex">
@@ -473,30 +435,9 @@ const EditGaugeWidget = (props: any) => {
           onChange={handleGranTimeChange}
           require={true}
         /> */}
-        <CustomProvider theme="dark">
-          <DateRangePicker
-            placement="bottomStart"
-            value={timePeriod}
-            onChange={handleDateRangeChange}
-            appearance="subtle"
-            ranges={predefinedRanges}
-            // showOneCalendar
-            style={{
-              margin: "1rem 1rem",
-              width: "18rem",
-              height: "max-content",
-              border:
-                colorTheme == "light"
-                  ? "1px solid #e5e7eb"
-                  : "1px solid #3C3C3C",
-              padding: ".4rem",
-            }}
-            // shouldDisableDate={afterToday()}
-            placeholder="Select Date Range"
-            format="yyyy-MM-dd"
-            className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
-          />
-        </CustomProvider>
+        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
+          <TimeRangePicker onTimeRangeChange={handleDate} />
+        </div>
         <div>
           <SecSingleSelect
             label="Indicator Group"
@@ -508,8 +449,16 @@ const EditGaugeWidget = (props: any) => {
         </div>
       </div>
       <div className="h-full flex justify-around">
-        <div className="w-[58%] flex justify-center items-center">
-          <p className="dark:text-textColor">Chart Will be Displayed here</p>
+        <div className="w-[58%] flex items-center">
+          {queryOutput ? (
+            <div className="w-full mt-12 p-8 dark:text-textColor">
+              <GaugeWidgetTabel data={queryOutput} />
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <p className="dark:text-textColor">Widget Preview</p>
+            </div>
+          )}
         </div>
         <div className="w-[42%] ml-3">
           <div>
@@ -528,20 +477,13 @@ const EditGaugeWidget = (props: any) => {
                       index={index}
                       type="indicator"
                     />
-                    {indicatorType == "METRIC" ||
-                    indicatorType == "Metric" ||
-                    indicatorType == "metric" ? (
+                    {dropdown.indicator_type == "METRIC" ||
+                    dropdown.indicator_type == "Metric" ||
+                    dropdown.indicator_type == "metric" ? (
                       <SecSingleSelect
                         label="Select Aggregation"
                         value={dropdown.aggregation}
-                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
-                        // onChange={(e: any) =>
-                        //   handleDropdownChange(
-                        //     index,
-                        //     "aggregation",
-                        //     e.target.value
-                        //   )
-                        // }
+                        selectData={["MIN", "MAX", "SUM", "AVG"]}
                         onChange={handleDropdownChange}
                         index={index}
                         type="aggregation"
@@ -550,17 +492,10 @@ const EditGaugeWidget = (props: any) => {
                       <SecSingleSelect
                         label="Select Aggregation"
                         value={dropdown.aggregation}
-                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                        selectData={["LAST"]}
                         onChange={handleDropdownChange}
                         index={index}
                         type="aggregation"
-                        // onChange={(e: any) =>
-                        //   handleDropdownChange(
-                        //     index,
-                        //     "aggregation",
-                        //     e.target.value
-                        //   )
-                        // }
                       />
                     )}
                     <div
@@ -641,9 +576,11 @@ const EditGaugeWidget = (props: any) => {
             />
           </div> */}
           <div className="w-[42%] flex justify-end absolute bottom-0 my-2 z-auto">
-            {/* <CustomeButton title="Create & Add" /> */}
+            <div onClick={handleExecute}>
+              <CustomeButton title="Execute" />
+            </div>
             <div onClick={handleSave}>
-              <CustomeButton title="Create" />
+              <CustomeButton title="Update" />
             </div>
             <div onClick={handleAddDrawerClose}>
               <CustomeCancelButton title="Cancel" />

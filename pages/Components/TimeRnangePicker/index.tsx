@@ -93,7 +93,7 @@ const predefinedBottomRanges: any = [
 
 const TimeRangePicker = (props: any) => {
   const { afterToday }: any = DateRangePicker;
-
+  console.log("timerange value", props.formatedTime && props.formatedTime);
   const handleShortcutClick = (shortcut: any, event: any) => {
     props.onTimeRangeChange(shortcut);
   };
@@ -108,6 +108,9 @@ const TimeRangePicker = (props: any) => {
       <DateRangePicker
         ranges={predefinedBottomRanges}
         placeholder="TimeLine"
+        format="MM/dd/yyyy hh:mm aa"
+        showMeridian
+        placement={props.placement == "leftStart" ? "leftStart" : "bottomStart"}
         style={{ width: 250 }}
         showOneCalendar={props.showOneCalendar ? true : false}
         shouldDisableDate={afterToday()}
@@ -118,19 +121,17 @@ const TimeRangePicker = (props: any) => {
             text: "custom",
             value: value,
           };
-          // console.log('format',format)
           props.onTimeRangeChange(dateRange);
         }}
-        // onShortcutClick={(shortcut: Range, event: any) => {
-        //   // console.log("time", event);
-        //   props.onTimeRangeChange(shortcut);
-        // }}
         onShortcutClick={handleShortcutClick}
         value={
-          Array.isArray(props.text)
-            ? props.text
-            : predefinedBottomRanges.find((val: any) => val.text === props.text)
-                ?.value
+          props.text != "custome"
+            ? Array.isArray(props.text)
+              ? props.text
+              : predefinedBottomRanges.find(
+                  (val: any) => val.text === props.text
+                )?.value
+            : props.formatedTime
         }
         className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
       />

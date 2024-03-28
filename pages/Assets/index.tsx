@@ -131,11 +131,6 @@ const Assets = () => {
             }
           });
         cols.push({
-          field: "last_availability_on",
-          headerName: "Last Available On",
-          minWidth: 220,
-        });
-        cols.push({
           field: "last_availability_checked_on",
           headerName: "Last Availability checked On",
           minWidth: 250,

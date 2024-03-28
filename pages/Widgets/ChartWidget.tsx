@@ -23,7 +23,7 @@ import SecSingleSelect from "../Components/Selects/secSelect";
 import { useAppContext } from "../Components/AppContext";
 import moment from "moment";
 import { addChartWidget } from "../api/api/ReportsAPI";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import LineChartComponent from "../Components/Charts/LineChart";
 import TimeRangePicker from "../Components/TimeRnangePicker";
@@ -115,9 +115,10 @@ const ChartWidget = (props: any) => {
   const [resultByactiveButton, setResultByActiveButton] = React.useState<
     string | null
   >("device");
-  const [groupByArray, setGroupByArray] = React.useState(
-    [] as { label: string; value: string }[]
-  );
+  const [groupByArray, setGroupByArray] = React.useState([
+    { name: "device", id: "device" },
+  ]);
+
   const [mapperdData, setMappersData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [indicatorType, setIndicatorType] = React.useState("");
@@ -306,13 +307,6 @@ const ChartWidget = (props: any) => {
     value: item._id,
   }));
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -342,11 +336,6 @@ const ChartWidget = (props: any) => {
         },
       },
     });
-  };
-  const handleresultByButtonClick = (value: any) => {
-    // setSelection(value);
-    setResultByActiveButton(value);
-    setData({ ...data, result_by: value });
   };
 
   const handleAddDropdown = () => {
@@ -388,6 +377,12 @@ const ChartWidget = (props: any) => {
     const matchingObject = mapperdData.find(
       (item: any) => item.indicator === value
     );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+
+      setIndicatorType(indicator_type);
+      updatedDropdowns[index]["indicator_type"] = indicator_type;
+    }
 
     if (field == "aggregation") {
       let tempindicator = dropdowns[index].indicator;
@@ -395,12 +390,6 @@ const ChartWidget = (props: any) => {
       const matchingObject = mapperdData.find(
         (item: any) => item.indicator === tempindicator
       );
-      if (matchingObject) {
-        const { indicator_type } = matchingObject;
-
-        setIndicatorType(indicator_type);
-        updatedDropdowns[index]["indicator_type"] = indicator_type;
-      }
     }
     updatedDropdowns[index][field] = value;
     const indicatorValues = updatedDropdowns.map(
@@ -411,7 +400,7 @@ const ChartWidget = (props: any) => {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-
+        console.log("group array", groupByArray);
         if (!groupByArray.some((item: any) => item.value === object_type)) {
           setGroupByArray((prevGroupByArray: any) => {
             const newArray = [...prevGroupByArray];
@@ -438,7 +427,7 @@ const ChartWidget = (props: any) => {
           (value: any) => !indicatorValues.includes(value)
         );
         console.log("matching indi", filteredArray);
-        setFilteredData(filteredArray);
+        setFilteredData(matchingIndicators);
       }
     }
     // updatedDropdowns[index][field] = value;
@@ -523,13 +512,27 @@ const ChartWidget = (props: any) => {
         if (response.status === "success") {
           toast.success(response.status, {
             position: "bottom-right",
-            autoClose: 1000,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
           handleAddDrawerClose();
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
         toggleWidgetApiState();
@@ -613,72 +616,61 @@ const ChartWidget = (props: any) => {
         </div>
         <div className="w-[42%] ml-3">
           <div>
-            {dropdowns.map((dropdown: any, index: any) => (
-              <div key={index}>
-                <div className="flex">
-                  <SecSingleSelect
-                    label="Select Indicator"
-                    value={dropdown.indicator}
-                    selectData={index == 0 ? indicatorsArray : filteredData}
-                    // onChange={(e: any) =>
-                    //   handleDropdownChange(index, "indicator", e.target.value)
-                    // }
-                    onChange={handleDropdownChange}
-                    index={index}
-                    type="indicator"
-                  />
-                  {indicatorType == "METRIC" ||
-                  indicatorType == "Metric" ||
-                  indicatorType == "metric" ? (
+            {dropdowns.map((dropdown: any, index: any) => {
+              console.log("indicator_type", dropdown.indicator_type);
+              return (
+                <div key={index}>
+                  <div className="flex">
                     <SecSingleSelect
-                      label="Select Aggregation"
-                      value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG"]}
+                      label="Select Indicator"
+                      value={dropdown.indicator}
+                      selectData={index == 0 ? indicatorsArray : filteredData}
                       // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
+                      //   handleDropdownChange(index, "indicator", e.target.value)
                       // }
                       onChange={handleDropdownChange}
                       index={index}
-                      type="aggregation"
+                      type="indicator"
                     />
-                  ) : (
-                    <SecSingleSelect
-                      label="Select Aggregation"
-                      value={dropdown.aggregation}
-                      selectData={["LAST"]}
-                      onChange={handleDropdownChange}
-                      index={index}
-                      type="aggregation"
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
-                    />
-                  )}
-                  <div
-                    className="text-primary2 flex items-center"
-                    onClick={handleAddDropdown}
-                  >
-                    <ControlPointIcon />
-                  </div>
-                  {dropdowns.length > 1 && (
+                    {dropdown.indicator_type == "METRIC" ||
+                    dropdown.indicator_type == "Metric" ||
+                    dropdown.indicator_type == "metric" ? (
+                      <SecSingleSelect
+                        label="Select Aggregation"
+                        value={dropdown.aggregation}
+                        selectData={["MIN", "MAX", "SUM", "AVG"]}
+                        onChange={handleDropdownChange}
+                        index={index}
+                        type="aggregation"
+                      />
+                    ) : (
+                      <SecSingleSelect
+                        label="Select Aggregation"
+                        value={dropdown.aggregation}
+                        selectData={["LAST"]}
+                        onChange={handleDropdownChange}
+                        index={index}
+                        type="aggregation"
+                      />
+                    )}
                     <div
-                      className="text-primary2 flex items-center ml-[3px]"
-                      onClick={() => handleRemoveDropdown(index)}
+                      className="text-primary2 flex items-center"
+                      onClick={handleAddDropdown}
                     >
-                      <RemoveCircleOutlineIcon />
+                      <ControlPointIcon />
                     </div>
-                  )}
+                    {dropdowns.length > 1 && (
+                      <div
+                        className="text-primary2 flex items-center ml-[3px]"
+                        onClick={() => handleRemoveDropdown(index)}
+                      >
+                        <RemoveCircleOutlineIcon />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="flex flex-col ml-4">
             {/* <InputLabel className="dark:text-textColor">Filters</InputLabel> */}

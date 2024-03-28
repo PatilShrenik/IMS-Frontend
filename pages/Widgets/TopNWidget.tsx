@@ -53,9 +53,10 @@ const TOPNWidget = (props: any) => {
   const [resultByactiveButton, setResultByActiveButton] = React.useState<
     string | null
   >("device");
-  const [groupByArray, setGroupByArray] = React.useState(
-    [] as { label: string; value: string }[]
-  );
+
+  const [groupByArray, setGroupByArray] = React.useState([
+    { name: "device", id: "device" },
+  ]);
   const [mapperdData, setMappersData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [indicatorType, setIndicatorType] = React.useState("");
@@ -366,13 +367,19 @@ const TOPNWidget = (props: any) => {
   }, [dropdowns]);
 
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log(index, field, value);
+    console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
     const matchingObject = mapperdData.find(
       (item: any) => item.indicator === value
     );
+    if (matchingObject) {
+      const { indicator_type } = matchingObject;
+
+      setIndicatorType(indicator_type);
+      updatedDropdowns[index]["indicator_type"] = indicator_type;
+    }
 
     if (field == "aggregation") {
       let tempindicator = dropdowns[index].indicator;
@@ -380,24 +387,18 @@ const TOPNWidget = (props: any) => {
       const matchingObject = mapperdData.find(
         (item: any) => item.indicator === tempindicator
       );
-      if (matchingObject) {
-        const { indicator_type } = matchingObject;
-
-        setIndicatorType(indicator_type);
-        updatedDropdowns[index]["indicator_type"] = indicator_type;
-      }
     }
     updatedDropdowns[index][field] = value;
-    const indicatorValue = updatedDropdowns.map(
+    const indicatorValues = updatedDropdowns.map(
       (dropdown: any) => dropdown.indicator
     );
-    setIndicatorValues(indicatorValue);
+    setIndicatorValues(indicatorValues);
     if (index == 0 && field == "indicator") {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-
-        if (!groupByArray.some((item) => item.value === object_type)) {
+        console.log("group array", groupByArray);
+        if (!groupByArray.some((item: any) => item.value === object_type)) {
           setGroupByArray((prevGroupByArray: any) => {
             const newArray = [...prevGroupByArray];
             newArray[1] = { name: object_type, id: object_type };
@@ -408,6 +409,8 @@ const TOPNWidget = (props: any) => {
         setData({
           ...data,
           datasource: datasource,
+          // plugin_type: plugin_type,
+          // object_type: object_type,
         });
 
         filtered = mapperdData.filter(
@@ -421,7 +424,7 @@ const TOPNWidget = (props: any) => {
           (value: any) => !indicatorValues.includes(value)
         );
         console.log("matching indi", filteredArray);
-        setFilteredData(filteredArray);
+        setFilteredData(matchingIndicators);
       }
     }
     // updatedDropdowns[index][field] = value;
@@ -520,20 +523,20 @@ const TOPNWidget = (props: any) => {
         // modifiedData.userName = "admin";
 
         // // console.log("chart data", modifiedData);
-        // let response = await addChartWidget(modifiedData);
-        // if (response.status === "success") {
-        //   toast.success(response.status, {
-        //     position: "bottom-right",
-        //     autoClose: 1000,
-        //   });
-        //   handleAddDrawerClose();
-        // } else {
-        //   toast.error(response.message, {
-        //     position: "bottom-right",
-        //     autoClose: 2000,
-        //   });
-        // }
-        // toggleWidgetApiState();
+        let response = await addChartWidget(modifiedData);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          handleAddDrawerClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        toggleWidgetApiState();
       };
       addWidget();
     } catch (error) {
@@ -615,20 +618,13 @@ const TOPNWidget = (props: any) => {
                     index={index}
                     type="indicator"
                   />
-                  {indicatorType == "METRIC" ||
-                  indicatorType == "Metric" ||
-                  indicatorType == "metric" ? (
+                  {dropdown.indicator_type == "METRIC" ||
+                  dropdown.indicator_type == "Metric" ||
+                  dropdown.indicator_type == "metric" ? (
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
                       selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
                       onChange={handleDropdownChange}
                       index={index}
                       type="aggregation"
@@ -637,17 +633,10 @@ const TOPNWidget = (props: any) => {
                     <SecSingleSelect
                       label="Select Aggregation"
                       value={dropdown.aggregation}
-                      selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
+                      selectData={["LAST"]}
                       onChange={handleDropdownChange}
                       index={index}
                       type="aggregation"
-                      // onChange={(e: any) =>
-                      //   handleDropdownChange(
-                      //     index,
-                      //     "aggregation",
-                      //     e.target.value
-                      //   )
-                      // }
                     />
                   )}
                   <div

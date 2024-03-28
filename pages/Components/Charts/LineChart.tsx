@@ -86,6 +86,7 @@ const LineChartComponent = (props: any) => {
                 `(${initialData[i]?.event[groupBy]})` +
                 "-" +
                 index;
+          console.log("legends in chart widget", legendName);
           lines.push({ name: legendName, data: data });
         }
       });
