@@ -26,7 +26,7 @@ const EditIPRange = (props: any) => {
   const initialState = {
     plugin_type: "SNMP",
     profile_type: "ip.range",
-    hostname: "",
+    profile_name: "",
     start_ip: null,
     end_ip: null,
     port: "161",
@@ -232,15 +232,15 @@ const EditIPRange = (props: any) => {
             <div className="flex flex-col">
               <CustomeInput
                 label="Host Name"
-                name="hostname"
-                value={data.hostname}
+                name="profile_name"
+                value={data.profile_name}
                 onChange={handleInputChange}
                 type="text"
                 require={true}
               />
-              {errorKeys && errorKeys.includes("hostname") && (
+              {errorKeys && errorKeys.includes("profile_name") && (
                 <p className="text-danger text-sm ml-2">
-                  HostName is {errors["hostname"]}*
+                  HostName is {errors["profile_name"]}*
                 </p>
               )}
             </div>

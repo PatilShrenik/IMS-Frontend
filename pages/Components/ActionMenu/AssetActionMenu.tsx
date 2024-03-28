@@ -234,12 +234,26 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     } catch (error) {
@@ -255,12 +269,26 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     } catch (error) {
@@ -277,12 +305,26 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     } catch (error) {
@@ -299,12 +341,26 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
           autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     } catch (error) {

@@ -8,6 +8,7 @@ import {
   TableSortLabel,
   Tooltip,
 } from "@mui/material";
+
 import Zoom from "@mui/material/Zoom";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -26,10 +27,11 @@ import {
   convertEpochToDateMonthYear,
   replacePeriodsWithUnderscores,
 } from "@/functions/genericFunctions";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useAppContext } from "../../../Components/AppContext";
 import Chips, { StatusChips } from "../../../Components/Chips";
 import DeviceProfileModal from "@/pages/Components/Modals/DeviceProfileModal";
+import ViewProfileDrawer from "@/pages/Components/SideDrawers/ViewProfileDrawer";
 
 const Profiling = () => {
   const [order, setOrder] = useState("asc");
@@ -47,14 +49,15 @@ const Profiling = () => {
   const [allDevices, setAllDevices] = React.useState([]);
   const [allGroups, setAllGroups] = React.useState([]);
   const [selected, setSelected] = useState(false);
-
+  const [viewedRowId, setViewedRowId] = useState(null);
   const [isModalopen, setIsModalOpen] = React.useState(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-
+    const open = Boolean(anchorEl);
+    const [isViewDrawerOpen, setIsViewDrawerOpen] = React.useState(false);
   const groupValues =
     allGroups &&
     allGroups.map((item: any) => ({
@@ -91,22 +94,37 @@ const Profiling = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllDeviceManager();
-    
+    console.log("res----",response.result);
         const modifiedData = replacePeriodsWithUnderscores(response.result);
         console.log("data from api",modifiedData);
        
         // const col = Object.keys(modifiedData[0]);
-        const indexOfObjectWithDeviceList =
-          modifiedData &&
-          modifiedData.findIndex((obj: any) => obj.device_list !== undefined);
-        let col = [] as any;
-        if (indexOfObjectWithDeviceList == -1 && modifiedData.length != 0) {
-          col = Object.keys(modifiedData[0]);
-        } else {
-          col =
-          modifiedData && modifiedData.length != 0 &&
-            Object.keys(modifiedData[indexOfObjectWithDeviceList]);
-        }
+        // const indexOfObjectWithDeviceList =
+        //   modifiedData &&
+        //   modifiedData.findIndex((obj: any) => obj.device_list !== undefined);
+        // let col = [] as any;
+        // if (indexOfObjectWithDeviceList == -1 && modifiedData.length != 0) {
+        //   col = Object.keys(modifiedData[0]);
+        // } else {
+        //   col =
+        //   modifiedData && modifiedData.length != 0 &&
+        //     Object.keys(modifiedData[indexOfObjectWithDeviceList]);
+        // }
+        
+        const extractAllKeys = (data: any[]) => {
+          const allKeys: Set<string> = new Set();
+        data &&  data.forEach(obj => {
+              Object.keys(obj).forEach(key => allKeys.add(key));
+          });
+          return Array.from(allKeys);
+      };
+      
+      const allKeys = extractAllKeys(modifiedData);
+      
+  
+     // console.log("All keys from the API response:",allKeys);
+     // allKeys.forEach(key => console.log(key));
+      const col = allKeys ;
         console.log("col",col);
         const filteredCols = col && col.filter((key: any) => !key.startsWith("_"));
         filteredCols &&  filteredCols.filter((key: any) => {
@@ -123,10 +141,11 @@ const Profiling = () => {
                 headerName: key.replace(/\./g, " "),
                 minWidth: 200,
               });
-            } else if (key == "hostname") {
-              cols.push({
+            } else if (key == "profile_name" ) {
+              cols.unshift({
+               
                 field: key.replace(/\./g, "_"),
-                headerName: "Profile Name",
+                headerName: "Host Name",
                 minWidth: 150,
               });
             } else if (key == "device_list") {
@@ -153,7 +172,7 @@ const Profiling = () => {
         setColumns(cols);
 
         const hiddenColumnsValues = [
-          //  "groups",
+             "hostname",
           "discovery_schedulers",
           "country",
            "site",
@@ -441,45 +460,19 @@ const Profiling = () => {
     // If no specific processing needed, return the original value
     return row[column.field];
   };
-  const deleteDevice = async () => {
-   // console.log("delete array", selectedRows);
-    try {
-      let response = await bulkActionDeviceDelete(selectedRows);
-
-      if (response.status == "success") {
-        handleModalClose();
-
-        toggleDeviceTableState();
-
-        toast.success(response.message, {
-          position: "bottom-right",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-      } else {
-        toast.error(response.message, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-      }
-      // setIsPopupOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleClose = () => {
+    setAnchorEl(null);
   };
+  const handleViewDrawerClose = () => {
+    setIsViewDrawerOpen(false);
+  //  setViewedRowId(null);
+  };
+const handleOpenProfile = (rowId: any) =>{
+  console.log("open",rowId)
+  setIsViewDrawerOpen(true);
+  setViewedRowId(rowId);
+  handleClose();
+}
 
   return (
     <>
@@ -681,14 +674,14 @@ const Profiling = () => {
                       );
                     })}
                   {/* <th
-                      className="bg-textColor text-tabel-header dark:text-textColor dark:bg-tabel-header "
+                      className="bg-textColor  text-tabel-header dark:text-textColor dark:bg-tabel-header"
                       style={{
                         padding: "0px 8px",
                         fontSize: "14px",
                         fontWeight: "600",
                         borderBottom: "0",
                         letterSpacing: ".7px",
-                        textAlign: "start",
+                        textAlign: "center",
                         fontStyle: "normal",
                         fontFamily: `"Poppins", sans-serif`,
                         // backgroundColor:"#D8D8D8"
@@ -780,26 +773,26 @@ const Profiling = () => {
                             // fontSize: "11px",
                             fontWeight: "normal",
                             padding: "0",
-                            textAlign: "start",
+                            textAlign: "center",
                             fontFamily: `"Poppins", sans-serif`,
                           }}
                         >
-                          {/* <div className="flex items-center">
-                              <Tooltip
-                                TransitionComponent={Zoom}
-                                title="Run Discovery Now"
-                                placement="top"
-                              >
-                                <SlowMotionVideoIcon />
-                               
-                              </Tooltip>
-                              <AssetsActionMenu rowData={row} />
-                            </div> */}
+                          {/* <VisibilityIcon
+                          className="text-[#0078d4]"
+                            onClick={() => handleOpenProfile(row._id)}
+                          /> */}
+                         
                         </td>
                       </tr>
                     );
                   })}
+                   {/* <ViewProfileDrawer
+                            id={viewedRowId}
+                            open={isViewDrawerOpen}
+                            handleDrawerClose={handleViewDrawerClose}
+                          /> */}
               </tbody>
+              
             </table>
           </div>
         </div>

@@ -291,7 +291,6 @@ const EditDiscoverySchDrawer = (props: any) => {
       },
     }));
   };
-  //console.log("df",data.scheduler_context.start_date);
   // const handleDate = (event: any) => {
   //   let updatedPayload: any = { ...data };
 
@@ -618,19 +617,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                 />
               ) : frequency == "WEEKLY" ? (
                 <>
-                  <SingleSelect
-                    label="Select Hours"
-                    isMulti={true}
-                    width={150}
-                    selectData={timeArray}
-                    value={timeArray.filter(
-                      (day: { value: any }) =>
-                        selectedTimeValue &&
-                        selectedTimeValue.includes(day.value)
-                    )}
-                    onChange={handleFrequency}
-                  />
-                  <SingleSelect
+                 <SingleSelect
                     label="Select Days"
                     isMulti={true}
                     width={150}
@@ -642,9 +629,6 @@ const EditDiscoverySchDrawer = (props: any) => {
                     selectData={daysOfWeek}
                     onChange={handleWeeklyFrequency}
                   />
-                </>
-              ) : frequency == "MONTHLY" ? (
-                <>
                   <SingleSelect
                     label="Select Hours"
                     isMulti={true}
@@ -657,7 +641,11 @@ const EditDiscoverySchDrawer = (props: any) => {
                     )}
                     onChange={handleFrequency}
                   />
-                  <SingleSelect
+                 
+                </>
+              ) : frequency == "MONTHLY" ? (
+                <>
+                 <SingleSelect
                     label="Select Dates"
                     isMulti={true}
                     width={150}
@@ -672,6 +660,19 @@ const EditDiscoverySchDrawer = (props: any) => {
                     // )}
                     onChange={handleMonthlyFrequency}
                   />
+                  <SingleSelect
+                    label="Select Hours"
+                    isMulti={true}
+                    width={150}
+                    selectData={timeArray}
+                    value={timeArray.filter(
+                      (day: { value: any }) =>
+                        selectedTimeValue &&
+                        selectedTimeValue.includes(day.value)
+                    )}
+                    onChange={handleFrequency}
+                  />
+                 
                 </>
               ) : (
                 ""
