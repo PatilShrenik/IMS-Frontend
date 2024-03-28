@@ -94,7 +94,7 @@ const PoliciesTable = (props: any) => {
       name: item.hostname,
       id: item._id,
     }));
-  console.log("------------data", data);
+  // console.log("------------data", data);
   //   useEffect(() => {
   //     try {
   //       const getData = async () => {
@@ -354,6 +354,7 @@ const PoliciesTable = (props: any) => {
   //   console.log("com", columns);
   const processColumnData = (column: any, row: any) => {
     // console.log("--row", row);
+    // console.log("column field",column)
     if (column.field === "entities") {
       const entity_type = row.entity_type;
       if (entity_type === "GROUP") {
@@ -445,7 +446,21 @@ const PoliciesTable = (props: any) => {
     } else if (column.field == "indicator") {
       return row.indicator;
     } else if (column.field == "tags") {
-      return row.tags ? <Chips value={row.tags.length} /> : "-";
+      const tagNames: any = row.tags && row.tags.map((item: any) => item);
+      // console.log("tags$$$$$$$", tagNames);
+      return row.tags ? (
+        <Tooltip
+          TransitionComponent={Zoom}
+          title={tagNames.join(", ")}
+          placement="top"
+        >
+          <div className="">
+            <Chips value={row.tags.length} />
+          </div>
+        </Tooltip>
+      ) : (
+        "-"
+      );
     } else if (column.field == "email.recipients") {
       const recipients =
         row.notification_context &&

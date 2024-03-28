@@ -18,9 +18,11 @@ import { useAppContext } from "../Components/AppContext";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import {
   CreateDashboard,
+  EditDashboard,
   GetAllDashboard,
   GetDashboardWidgetsData,
   UpdateWidgetsData,
+  deleteDashboard,
   getAllWidget,
 } from "../api/api/DashboardWidgetsAPI";
 import {
@@ -43,6 +45,8 @@ import SingleSelect from "../Components/Selects";
 import SecSingleSelect from "../Components/Selects/secSelect";
 import CustomeInput from "../Components/Inputs";
 import CustomeButton, { CustomeCancelButton } from "../Components/Buttons";
+import SecSingleSelectForDashboard from "../Components/Selects/secSelectForDashboard";
+import DeleteModal from "../Components/Modals/DeleteModal";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface Widget {
@@ -64,13 +68,24 @@ const index = () => {
   const [editable, setEditable] = useState(false);
   const [layouts, setLayouts] = useState<any>([]);
   const [isModalopen, setIsModalOpen] = React.useState(false);
+  const [isEditModalopen, setIsEditModalopen] = React.useState(false);
   const [layoutsCurrent, setLayoutsCurrent] = useState<any>([]);
   const [layoutsWholeData, setLayoutsWholeData] = useState<any>({});
   const [addToDashboard, setAddToDashboard] = useState<any>(0);
   const [dashboards, setDashboards] = useState<any>([]);
   const [dashboardId, setDashboardId] = useState<any>(1000000000001);
+  const [dashboardDeleteId, setDashboardDeleteId] = useState<any>();
   const [dashboardName, setDashBoardName] = useState("") as any;
-
+  const [editdashboardName, setEditDashBoardName] = useState("") as any;
+  const [editdashboardIID, setEditDashBoardID] = useState("") as any;
+  const [isDeleteModalopen, setIsDeleteModalOpen] = React.useState(false);
+  const [isContextModalopen, setIsContextModalOpen] = React.useState(false);
+  const handleDeleteModalOpen = (value: any) => {
+    setIsDeleteModalOpen(true);
+    setDashboardDeleteId(value);
+    // console.log("value$$$$$$$", value);
+  };
+  const handleDeleteModalClose = () => setIsDeleteModalOpen(false);
   useEffect(() => {
     try {
       const getData = async () => {
@@ -101,10 +116,18 @@ const index = () => {
     }
   }, []);
 
-  const dashboardValues = dashboards.map((item: any) => ({
-    name: item.name,
-    id: item._id,
-  }));
+  // const dashboardValues =
+  //   dashboards &&
+  //   dashboards.map((item: any) => ({
+  //     name: item.name,
+  //     id: item._id,
+  //   }));
+  const dashboardValues =
+    dashboards &&
+    dashboards.flatMap((item: any) => ({
+      name: item.name,
+      id: item._id,
+    }));
 
   useEffect(() => {
     async function getWidgetData() {
@@ -126,11 +149,24 @@ const index = () => {
   };
   const handleModalClose = () => setIsModalOpen(false);
 
+  const handleEditModalOpen = (id: any, name: any) => {
+    setIsEditModalopen(true);
+    // console.log("value&&&&&&&edit", id, name);
+    setEditDashBoardID(id);
+    setEditDashBoardName(name);
+  };
+
+  const handleEditModalClose = () => setIsEditModalopen(false);
+
   const handleInputChange = (event: any) => {
     const { value } = event.target;
     setDashBoardName(value);
   };
 
+  const handleEditInputChange = (event: any) => {
+    const { value } = event.target;
+    setEditDashBoardName(value);
+  };
   // console.log("layout dummy", layoutsDummy);
   const handleButtonClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -199,13 +235,44 @@ const index = () => {
     setLayouts(layoutsCurrent);
   }
 
-  const handleDashChange = (value: any) => {
-    if (value == "Add Dashboard") {
+  const handleDashChange = (event: any) => {
+    console.log("value######", event);
+    if (event.target.value == "Add Dashboard") {
       handleModalOpen();
     } else {
-      setDashboardId(value);
+      setDashboardId(event?.target.value);
     }
   };
+
+  const handleDelete = () => {
+    console.log("value in delete", dashboardDeleteId);
+    try {
+      const DeleteDashboard = async () => {
+        let response = await deleteDashboard(dashboardDeleteId);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          handleDeleteModalClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        // toggleWidgetApiState();
+      };
+      DeleteDashboard();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = (value: any) => {
+    console.log("value in Edit", value);
+  };
+
   const handleDate = (event: any) => {
     // console.log("date event", event);
     let updatedPayload: any = { ...data };
@@ -263,15 +330,54 @@ const index = () => {
       console.log(error);
     }
   };
+  const handleEditSave = () => {
+    const APIdata = {
+      name: editdashboardName,
+    };
+    try {
+      const editDashboard = async () => {
+        const modifiedData = replaceUnderscoresWithDots(APIdata);
+        console.log("Dashboard Data", modifiedData);
 
+        let response = await EditDashboard(modifiedData, editdashboardIID);
+        if (response.status === "success") {
+          toast.success(response.status, {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          handleEditModalClose();
+        } else {
+          toast.error(response.message, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+        }
+        // toggleWidgetApiState();
+      };
+      editDashboard();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <ToastContainer />
       <div>
-        <div className="text-xl border-b-2 border-slate-400 pb-2 px-4 mb-2 flex justify-between w-full items-end">
-          <div>Dashboards</div>
+        <div className="text-xl border-b-2 border-slate-400 pb-2 px-2 mb-2 flex justify-between w-full items-center">
+          <div className="-ml-2">
+            <SecSingleSelectForDashboard
+              label="Select Dashboard"
+              value={dashboardId}
+              selectData={dashboardValues}
+              onChange={handleDashChange}
+              require={true}
+              onDash={true}
+              handleEdit={handleEditModalOpen}
+              handleDelete={handleDeleteModalOpen}
+            />
+          </div>
           <div>
-            <div className="flex">
+            <div className="flex space-x-4">
               <div className="mx-8">
                 <TimeRangePicker onTimeRangeChange={handleDate} />
               </div>
@@ -297,7 +403,11 @@ const index = () => {
               )}
 			  
             </div>
-
+            <DeleteModal
+              open={isDeleteModalopen}
+              handleModalClose={handleDeleteModalClose}
+              deleteRow={handleDelete}
+            />
             {/* {editable && (
               <button
                 className="bg-red-500 rounded p-2 ml-2 text-sm text-white"
@@ -312,16 +422,6 @@ const index = () => {
           </div>
         </div>
         <div className="mt-[2rem]">
-          <div className="mt-4">
-            <SecSingleSelect
-              label="Select Dashboard"
-              value={dashboardId}
-              selectData={dashboardValues}
-              onChange={handleDashChange}
-              require={true}
-              onDash={true}
-            />
-          </div>
           <ResponsiveReactGridLayout
             className="layout"
             cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
@@ -557,6 +657,37 @@ const index = () => {
               <CustomeButton title="Create" />
             </div>
             <div onClick={handleModalClose}>
+              <CustomeCancelButton title="Cancel" />
+            </div>
+          </div>
+          {/* <button
+            onClick={handleModalClose}
+            className=" border border-light3 font-normal py-1 px-4 rounded mb-2  dark:text-textColor"
+          >
+            Cancel
+          </button> */}
+        </div>
+      </Modal>
+      <Modal open={isEditModalopen} onClose={handleEditModalClose}>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl p-4 max-w-md text-center rounded-md dark:bg-tabel-row">
+          <div className="flex w-full">
+            <p className="text-xl">Edit Dashboard</p>
+          </div>
+          <div>
+            <CustomeInput
+              label="Name"
+              name="name"
+              value={editdashboardName}
+              onChange={handleEditInputChange}
+              type="text"
+              require={true}
+            />
+          </div>
+          <div className="right-0 flex justify-end mt-6">
+            <div onClick={handleEditSave}>
+              <CustomeButton title="Update" />
+            </div>
+            <div onClick={handleEditModalClose}>
               <CustomeCancelButton title="Cancel" />
             </div>
           </div>

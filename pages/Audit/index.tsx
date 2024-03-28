@@ -14,11 +14,16 @@ import { useWebSocketContext } from "../Components/WebSocketContext";
 import AuditTable from "../Components/Tabels/AuditTable";
 
 const Audit = () => {
-  const { deviceTabelState, activeButton, toggleActiveButton } =
-    useAppContext();
+  const {
+    deviceTabelState,
+    activeButton,
+    toggleActiveButton,
+    auditSocketCalled,
+  } = useAppContext();
   const { Subscribe, emit, connection } = useWebSocketContext();
 
   const [data, setData] = useState<any>();
+  const [webSocketCalled, setWebSocketCalled] = useState<any>();
   const [columns, setColumns] = useState<any>();
   const [page, setPage] = React.useState(0);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);

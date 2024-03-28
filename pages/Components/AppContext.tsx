@@ -44,6 +44,8 @@ const AppContext = createContext<{
   toggleGetUserApiState: () => void;
   activeButton: any;
   toggleActiveButton: (alert: any) => void;
+  auditSocketCalled: any;
+  toggleauditSocketCalled: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -88,6 +90,8 @@ const AppContext = createContext<{
   toggleGetUserApiState: () => {},
   activeButton: "live",
   toggleActiveButton: (alert: any) => {},
+  auditSocketCalled: false,
+  toggleauditSocketCalled: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -110,9 +114,13 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getRoleApiState, setRoleApiState] = useState(false);
   const [getUserApiState, setUserApiState] = useState(false);
   const [activeButton, setActiveButton] = useState("live");
+  const [auditSocketCalled, setAuditSocketCalled] = useState(false);
 
   const togglegetTableApiState = () => {
     setGetTableApiState((prevState) => !prevState);
+  };
+  const toggleauditSocketCalled = () => {
+    setAuditSocketCalled((prevState) => !prevState);
   };
   const toggleGetRoleApiState = () => {
     setRoleApiState((prevState) => !prevState);
@@ -239,6 +247,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         toggleSideBarStateWithArgu,
         toggleActiveButton,
         activeButton,
+        auditSocketCalled,
+        toggleauditSocketCalled,
       }}
     >
       {children}

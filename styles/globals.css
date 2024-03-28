@@ -415,3 +415,68 @@ main::before {
 .css-1q2h7u5.Mui-disabled {
   @apply dark:text-textColor;
 }
+/* .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 12px 10px !important;
+} */
+
+/* css for legend in dropdown */
+.css-1ald77x {
+  color: #464646 !important;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+  color: #464646 !important;
+}
+
+/* css for selected */
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  @apply dark:text-textColor py-3 dark:border-dropdownBg;
+}
+
+.css-qiwgdb {
+  @apply dark:text-textColor !py-3 dark:border-dropdownBg;
+}
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  @apply rounded-md  dark:bg-dark-menu-color;
+}
+.css-qiwgdb.MuiSelect-select {
+  @apply rounded-md  dark:bg-dark-menu-color;
+}
+
+.css-igs3ac {
+  @apply rounded-md  dark:border-dropdownBg;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  @apply rounded-md  dark:border-dropdownBg;
+}
+
+/* css for dropdown arrow */
+.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon {
+  @apply dark:text-textColor;
+}
+.css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
+  @apply dark:text-textColor;
+}
+
+.css-1yhq19e {
+  @apply dark:text-textColor;
+}
+.css-1636szt {
+  @apply dark:text-textColor;
+}
+
+/* css for dropdown options */
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  @apply dark:bg-dark-menu-color dark:text-textColor;
+}
+.css-pwxzbm {
+  @apply dark:bg-dark-menu-color border dark:border-none dark:text-textColor;
+}
+.css-1km1ehz {
+  @apply dark:bg-dark-menu-color !bg-white dark:text-textColor;
+}
+.css-pwxzbm {
+  box-shadow: none !important;
+}

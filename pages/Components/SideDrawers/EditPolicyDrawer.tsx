@@ -41,24 +41,8 @@ const useStyles = makeStyles(() => ({
 }));
 const EditPolicyDrawer = (props: any) => {
   const classes = useStyles();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [tags, setTags] = useState("");
-  const [message, setMessage] = useState("");
-  const [description, setDescription] = useState("");
-  const [entityType, setEntityType] = useState("GROUP");
   const [selectedEntity, setSelectedEntity] = useState("");
-  const [indicators, setIndicators] = useState("");
-  const [indicatorsType, setIndicatorsType] = useState("");
-  const [operator, setOperator] = useState("");
-  const [warning, setWarning] = useState(0);
-  const [major, setMajor] = useState(0);
-  const [critical, setCritical] = useState(0);
-  const [occurrences, setOccurrences] = useState(0);
-  const [timeFrame, setTimeFrame] = useState(0);
-  const [timeFrameUnit, setTimeFrameUnit] = useState("sec");
-  const [autoClearUnit, setAutoClearUnit] = useState("sec");
-  const [autoClear, setAutoClear] = useState(0);
   const [indicatorsData, setIndicatorsData] = useState<any>();
   const [deviceData, setDeviceData] = useState<any>();
   const [selection, setSelection] = React.useState("DEVICE");
@@ -76,7 +60,10 @@ const EditPolicyDrawer = (props: any) => {
   );
   const [SelectedAlertFrameUnit, setSelectedAlertFrameUnit] =
     React.useState<any>([]);
-
+  const [covertedTimeFrame, setConvertedTimeFrame] = useState<any>();
+  const [covertedAutoClear, setConvertedAutoClear] = useState<any>();
+  const [covertedTimeFrameUnit, setConvertedTimeFrameUnit] = useState<any>();
+  const [covertedAutoClearUnit, setConvertedAutoClearUnit] = useState<any>();
   const [selectedDeviceValue, setSelectedDeviceValue] = React.useState<any>([]);
   const [data, setData] = useState<any>({});
   const [dataToModify, setDataToModify] = useState<any>({});
@@ -117,7 +104,7 @@ const EditPolicyDrawer = (props: any) => {
       setDataToModify(data);
     }
   }, [data]);
-
+  // console.log("converted timeframe", covertedTimeFrame);
   useEffect(() => {
     if (dataToModify) {
       dataToModify.entity_type && setActiveButton(dataToModify.entity_type);
@@ -128,6 +115,27 @@ const EditPolicyDrawer = (props: any) => {
       dataToModify &&
         dataToModify.time_frame_unit &&
         setSelectedTimeFrameUnit([dataToModify.time_frame_unit]);
+
+      dataToModify &&
+        dataToModify.time_frame_sec &&
+        dataToModify.time_frame_unit &&
+        setConvertedTimeFrame(
+          convertTimeFrameToOG(
+            dataToModify.time_frame_sec,
+            dataToModify.time_frame_unit
+          )
+        );
+
+      dataToModify &&
+        dataToModify.auto_clear_sec &&
+        dataToModify.auto_clear_unit &&
+        setConvertedAutoClear(
+          convertTimeFrameToOG(
+            dataToModify.auto_clear_sec,
+            dataToModify.auto_clear_unit
+          )
+        );
+
       dataToModify &&
         dataToModify.auto_clear_unit &&
         setSelectedAlertFrameUnit([dataToModify.auto_clear_unit]);
@@ -143,12 +151,6 @@ const EditPolicyDrawer = (props: any) => {
     }
   }, [dataToModify]);
 
-  //   console.log(
-  //     "dropdown items",
-  //     selectedDeviceValue,
-  //     selectedGroupValue,
-  //     selectedIndicator
-  //   );
   React.useEffect(() => {
     const getGroups = async () => {
       let response = await getAllGropus();
@@ -206,7 +208,7 @@ const EditPolicyDrawer = (props: any) => {
           label: item.name,
           value: item._id,
         }));
-      console.log("----", groupValues);
+      // console.log("----", groupValues);
     };
     getDevices();
   }, []);
@@ -223,7 +225,31 @@ const EditPolicyDrawer = (props: any) => {
         return null; // Handle invalid unit
     }
   };
-
+  const convertTimeFrameToOG = (value: any, unit: any) => {
+    console.log("time in connber", value, unit);
+    switch (unit) {
+      case "SEC":
+        return value;
+      case "MIN":
+        return value / 60;
+      case "HOUR":
+        return value / 3600;
+      default:
+        return null; // Handle invalid unit
+    }
+  };
+  // const convertAutoClearToOG = (value: any, unit: any) => {
+  //   switch (unit) {
+  //     case "SEC":
+  //       return value;
+  //     case "MIN":
+  //       return value / 60;
+  //     case "HOUR":
+  //       return value / 3600;
+  //     default:
+  //       return null; // Handle invalid unit
+  //   }
+  // };
   // Function to convert auto clear value to seconds
   const convertAutoClearToSeconds = (value: any, unit: any) => {
     switch (unit) {
@@ -257,15 +283,15 @@ const EditPolicyDrawer = (props: any) => {
       },
       occurrences: dataToModify.occurrences,
       time_frame_sec: convertTimeFrameToSeconds(
-        dataToModify.time_frame_sec,
-        dataToModify.time_frame_unit
+        covertedTimeFrame,
+        SelectedTimeFrameUnit
       ),
-      time_frame_unit: dataToModify.time_frame_unit,
+      time_frame_unit: SelectedTimeFrameUnit,
       auto_clear_sec: convertAutoClearToSeconds(
-        dataToModify.auto_clear_sec,
-        dataToModify.auto_clear_unit
+        covertedAutoClear,
+        SelectedAlertFrameUnit
       ),
-      auto_clear_unit: dataToModify.auto_clear_unit,
+      auto_clear_unit: SelectedAlertFrameUnit,
       notification_context: {
         email_recipients: [dataToModify.notification_context.email_recipients],
         message: dataToModify.notification_context.message,
@@ -274,7 +300,7 @@ const EditPolicyDrawer = (props: any) => {
     // console.log("payload------------", payload);
     const modifiedData = replaceUnderscoresWithDots(payload);
     // Handle saving logic
-    console.log("modifiifed payload", modifiedData);
+    // console.log("modifiifed payload", modifiedData);
     const editPolicy = async () => {
       let response = await updatePolicy(modifiedData, data._id);
       //   console.log(response);
@@ -388,19 +414,23 @@ const EditPolicyDrawer = (props: any) => {
   };
 
   const handleAlertContextTimeFrame = (value: any) => {
-    setDataToModify((prevData: any) => ({
-      ...prevData,
+    // setConvertedTimeFrameUnit(value);
+    setSelectedTimeFrameUnit(value);
+    // setDataToModify((prevData: any) => ({
+    //   ...prevData,
 
-      time_frame_unit: value,
-    }));
+    //   time_frame_unit: value,
+    // }));
   };
 
   const handleAlertContextAlertFrame = (value: any) => {
-    setDataToModify((prevData: any) => ({
-      ...prevData,
+    // setConvertedAutoClearUnit(value);
+    setSelectedAlertFrameUnit(value);
+    // setDataToModify((prevData: any) => ({
+    //   ...prevData,
 
-      auto_clear_unit: value,
-    }));
+    //   auto_clear_unit: value,
+    // }));
   };
   const handleThreshold = (event: any) => {
     // console.log("--------#########", values);
@@ -419,17 +449,26 @@ const EditPolicyDrawer = (props: any) => {
     // console.log("--------#########", values);
     const { name, value } = event.target;
     // console.log("values", name, value);
-    setDataToModify((prevData: any) => ({
-      ...prevData,
+    // setDataToModify((prevData: any) => ({
+    //   ...prevData,
 
-      [name]: value,
-    }));
+    //   [name]: value,
+    // }));
+    if (name == "time_frame_sec") {
+      setConvertedTimeFrame(value);
+    } else if (name == "auto_clear_sec") {
+      setConvertedAutoClear(value);
+    }
+    // setDataToModify((prevData: any) => ({
+    //   ...prevData,
+    //   [name]: value,
+    // }));
   };
 
   const handleNotificationEmail = (event: any) => {
     // console.log("--------#########", values);
     const { name, value } = event.target;
-    // console.log("values", name, value);
+    console.log("values", name, value);
     setDataToModify((prevData: any) => ({
       ...prevData,
       notification_context: {
@@ -437,6 +476,17 @@ const EditPolicyDrawer = (props: any) => {
         [name]: value,
       },
     }));
+    // value &&
+    //   Array.isArray(value) &&
+    //   value.map((d: any, i: any) => {
+    //     setDataToModify((prevData: any) => ({
+    //       ...prevData,
+    //       notification_context: {
+    //         ...prevData.notification_context,
+    //         [name]: d,
+    //       },
+    //     }));
+    //   });
   };
 
   const handleTags = (event: any) => {
@@ -469,7 +519,9 @@ const EditPolicyDrawer = (props: any) => {
           <p className="text-primary2 font-semibold">Edit Policy</p>
           <CloseSharpIcon
             className="cursor-pointer mr-3 dark:text-textColor"
-            onClick={props.handleDrawerClose}
+            onClick={() => {
+              props.handleDrawerClose();
+            }}
           />
         </div>
         <div className="px-2 dark:bg-dark-menu-color">
@@ -646,7 +698,20 @@ const EditPolicyDrawer = (props: any) => {
                   <CustomeInput
                     label="Time Frame"
                     name="time_frame_sec"
-                    value={dataToModify && dataToModify.time_frame_sec}
+                    // value={dataToModify && dataToModify.time_frame_sec}
+                    value={covertedTimeFrame}
+                    // value={
+                    //   dataToModify &&
+                    //   dataToModify.time_frame_sec &&
+                    //   SelectedTimeFrameUnit &&
+                    //   SelectedTimeFrameUnit[0]
+                    //     ? SelectedTimeFrameUnit[0] === "MIN"
+                    //       ? dataToModify.time_frame_sec / 60
+                    //       : SelectedTimeFrameUnit[0] === "HOUR"
+                    //       ? dataToModify.time_frame_sec / 3600
+                    //       : dataToModify.time_frame_sec
+                    //     : ""
+                    // }
                     onChange={(e: any) => handleAlertContext(e)}
                     type="number"
                     disable={false}
@@ -670,7 +735,8 @@ const EditPolicyDrawer = (props: any) => {
                   <CustomeInput
                     label="Auto Clear"
                     name="auto_clear_sec"
-                    value={dataToModify && dataToModify.auto_clear_sec}
+                    // value={dataToModify && dataToModify.auto_clear_sec}
+                    value={covertedAutoClear}
                     onChange={(e: any) => handleAlertContext(e)}
                     type="number"
                     disable={false}
@@ -735,7 +801,12 @@ const EditPolicyDrawer = (props: any) => {
                   Save
                 </button>
               </div>
-              <div onClick={props.handleDrawerClose}>
+
+              <div
+                onClick={() => {
+                  props.handleDrawerClose();
+                }}
+              >
                 <CustomeCancelButton title="Cancel" />
               </div>
             </div>

@@ -44,6 +44,28 @@ export const CreateDashboard = async (props: any) => {
   return res;
 };
 
+export const EditDashboard = async (body: any, id: any) => {
+  const token = localStorage.getItem("token");
+  let res: any;
+  try {
+    res = await fetch(baseURL + `/api/v1/visualization/dashboard/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    res = await res.json();
+  } catch (error) {
+    console.error("Error getting dashboard data", error);
+    res = {};
+  }
+  // const data = await res.json();
+  //   console.log("API data", data);
+  return res;
+};
+
 export const GetDashboardWidgetsData = async (id: any) => {
   const token = localStorage.getItem("token");
   console.log("dashboard id in api", id);
@@ -135,6 +157,28 @@ export const deleteWidgt = async (props: any) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    const data = await res.json();
+    //   console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteDashboard = async (props: any) => {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(
+      baseURL + `/api/v1/visualization/dashboard//${props}`,
+      {
+        method: "DELETE",
+        // body: JSON.stringify(props),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = await res.json();
     //   console.log("data", data);
     return data;

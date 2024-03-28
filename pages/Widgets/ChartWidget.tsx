@@ -542,6 +542,8 @@ const ChartWidget = (props: any) => {
       console.log(error);
     }
   };
+  console.log("indicatorsarray########", indicatorsArray);
+  console.log("filteredataarray########", filteredData);
   return (
     <div className="h-full px-2 dark:bg-dark-menu-color">
       <div className="flex">
