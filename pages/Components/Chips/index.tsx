@@ -1,8 +1,9 @@
 import React from "react";
 
 const Chips = (props: any) => {
+  
   const { value } = props;
-  // console.log("chip value", value);
+   console.log("chip value", value);
   return (
     <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2  rounded-full">
       <p className="mt-[2px] text-sm">{value}</p>
@@ -35,3 +36,15 @@ export const StatusChips = (props: any) => {
     </div>
   );
 };
+
+
+export const DeviceProfileChip = (props: any) => {
+  const { value } = props;
+  // console.log("chip value", value);
+  return (
+    <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2 mx-8 rounded-full">
+      <p className="mt-[2px] text-sm">{value}</p>
+    </div>
+  );
+};
+

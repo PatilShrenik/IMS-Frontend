@@ -29,7 +29,7 @@ import {
 } from "@/functions/genericFunctions";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useAppContext } from "../../../Components/AppContext";
-import Chips, { StatusChips } from "../../../Components/Chips";
+import Chips, { DeviceProfileChip, StatusChips } from "../../../Components/Chips";
 import DeviceProfileModal from "@/pages/Components/Modals/DeviceProfileModal";
 import ViewProfileDrawer from "@/pages/Components/SideDrawers/ViewProfileDrawer";
 
@@ -145,7 +145,7 @@ const Profiling = () => {
               cols.unshift({
                
                 field: key.replace(/\./g, "_"),
-                headerName: "Host Name",
+                headerName: "Profile Name",
                 minWidth: 150,
               });
             } else if (key == "device_list") {
@@ -172,7 +172,7 @@ const Profiling = () => {
         setColumns(cols);
 
         const hiddenColumnsValues = [
-             "hostname",
+          "hostname",
           "discovery_schedulers",
           "country",
            "site",
@@ -191,7 +191,8 @@ const Profiling = () => {
           "os_version",
           "vendor",
           "check_without_save",
-          // "device_list",
+          "latitide",
+          "timeZone",
           "site_code",
           "device_name",
           "service",
@@ -445,7 +446,7 @@ const Profiling = () => {
                 : undefined
             }
           >
-            <Chips value={keysArray.length} />
+            <DeviceProfileChip value={keysArray.length} />
           </div>
           <DeviceProfileModal
             open={dialogOpen && keysArray.length > 0}
@@ -673,22 +674,22 @@ const handleOpenProfile = (rowId: any) =>{
                         </th>
                       );
                     })}
-                  {/* <th
-                      className="bg-textColor  text-tabel-header dark:text-textColor dark:bg-tabel-header"
-                      style={{
-                        padding: "0px 8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        borderBottom: "0",
-                        letterSpacing: ".7px",
-                        textAlign: "center",
-                        fontStyle: "normal",
-                        fontFamily: `"Poppins", sans-serif`,
-                        // backgroundColor:"#D8D8D8"
-                      }}
-                    >
-                      Actions
-                    </th> */}
+                  <th
+                    className="bg-textColor  text-tabel-header dark:text-textColor dark:bg-tabel-header"
+                    style={{
+                      padding: "0px 8px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      borderBottom: "0",
+                      letterSpacing: ".7px",
+                      textAlign: "center",
+                      fontStyle: "normal",
+                      fontFamily: `"Poppins", sans-serif`,
+                      // backgroundColor:"#D8D8D8"
+                    }}
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -777,22 +778,20 @@ const handleOpenProfile = (rowId: any) =>{
                             fontFamily: `"Poppins", sans-serif`,
                           }}
                         >
-                          {/* <VisibilityIcon
-                          className="text-[#0078d4]"
+                          <VisibilityIcon
+                            className="text-[#0078d4]"
                             onClick={() => handleOpenProfile(row._id)}
-                          /> */}
-                         
+                          />
                         </td>
                       </tr>
                     );
                   })}
-                   {/* <ViewProfileDrawer
-                            id={viewedRowId}
-                            open={isViewDrawerOpen}
-                            handleDrawerClose={handleViewDrawerClose}
-                          /> */}
+                <ViewProfileDrawer
+                  id={viewedRowId}
+                  open={isViewDrawerOpen}
+                  handleDrawerClose={handleViewDrawerClose}
+                />
               </tbody>
-              
             </table>
           </div>
         </div>
