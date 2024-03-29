@@ -459,8 +459,8 @@ const EditGridWidget = (props: any) => {
           <TimeRangePicker
             onTimeRangeChange={handleDate}
             text={data && data.time_range}
-            startTime={data.start_timestamp}
-            endTime={data.end_timestamp}
+            startTime={data && data.start_timestamp}
+            endTime={data && data.end_timestamp}
           />
         </div>
         <div>
