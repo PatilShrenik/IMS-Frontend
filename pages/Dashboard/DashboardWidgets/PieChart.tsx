@@ -7,6 +7,7 @@ import HighchartsAccessibility from "highcharts/modules/accessibility";
 import moment from "moment";
 import { useWebSocketContext } from "@/pages/Components/WebSocketContext";
 import { GetWidgetsData } from "@/pages/api/api/DashboardWidgetsAPI";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 
 const PieChartDashboardComponent = (props: any) => {
@@ -20,6 +21,14 @@ const PieChartDashboardComponent = (props: any) => {
   const [data, setData] = useState<any>();
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
   // console.log("props.keys", props);
+  const [allDevices, setAllDevices] = React.useState([]);
+  React.useEffect(() => {
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
   function renderer(payload: any) {
     if (props.keys.endsWith(`${payload._id}`)){
       // console.log("payload - "+props.keys, payload);
@@ -65,6 +74,13 @@ const PieChartDashboardComponent = (props: any) => {
     const devices = Array.from(
       new Set(initialData.map((item: any) => item?.event?.device))
     );
+    const devicesAsNumbers = devices.map((device) => Number(device));
+
+    const deviceValues: any[] =
+      allDevices &&
+      allDevices
+        .filter((item: any) => devicesAsNumbers.includes(item._id))
+        .map((item: any) => ({ id: item._id, hostname: item.hostname }));
     const firstData = initialData[0]?.event || 0;
     const allKeys = Object.keys(firstData);
     const indexes = Array.from(
@@ -78,6 +94,10 @@ const PieChartDashboardComponent = (props: any) => {
     );
     const lines: any[] = [];
     devices.forEach((device: any) => {
+      const deviceObject: any = deviceValues.find(
+        (item: any) => item.id === parseInt(device)
+      );
+      const hostname = deviceObject ? deviceObject.hostname : "";
       indexes.forEach((index: any, i: any) => {
         if (groupBy != "device") {
           Object.keys(totalGroupsKeys).forEach((key: any, i: any) => {
@@ -89,8 +109,8 @@ const PieChartDashboardComponent = (props: any) => {
             );
             const legendName =
               groupBy == "device"
-                ? device + "-" + index
-                : device +
+                ? hostname + "-" + index
+                : hostname +
                   "-" +
                   groupBy +
                   `(${key})` +
@@ -106,8 +126,8 @@ const PieChartDashboardComponent = (props: any) => {
           );
           const legendName =
             groupBy == "device"
-              ? device + "-" + index
-              : device +
+              ? hostname + "-" + index
+              : hostname +
                 "-" +
                 groupBy +
                 `(${initialData[index]?.event[groupBy]})` +

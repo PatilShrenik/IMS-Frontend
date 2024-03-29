@@ -29,7 +29,7 @@ import {
   replacePeriodsWithUnderscores,
   replaceUnderscoresWithDots,
 } from "@/functions/genericFunctions";
-import { ToastContainer, toast } from "react-toastify";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import DashboardGaugeWidget from "./DashboardWidgets/GaugeWidget";
 import DashboardGridWidget from "./DashboardWidgets/GridWidget";
@@ -62,7 +62,8 @@ const index = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
   const [page, setPage] = React.useState(0);
   const { Subscribe, emit, unsubscribe, connection } = useWebSocketContext();
-  const { getWidgetApiState } = useAppContext();
+  const { getWidgetApiState, dashboardDropApi, toggleDashboardDropApiState } =
+    useAppContext();
   const [widgets, setWidgets] = useState<any>();
   const [data, setData] = useState({});
   const [editable, setEditable] = useState(false);
@@ -114,7 +115,7 @@ const index = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [dashboardDropApi]);
 
   // const dashboardValues =
   //   dashboards &&
@@ -252,16 +253,30 @@ const index = () => {
         if (response.status === "success") {
           toast.success(response.status, {
             position: "bottom-right",
-            autoClose: 1000,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
           handleDeleteModalClose();
         } else {
           toast.error(response.message, {
             position: "bottom-right",
-            autoClose: 2000,
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
           });
         }
-        // toggleWidgetApiState();
+        toggleDashboardDropApiState();
       };
       DeleteDashboard();
     } catch (error) {
@@ -314,16 +329,30 @@ const index = () => {
         if (response.status === "success") {
           toast.success(response.status, {
             position: "bottom-right",
-            autoClose: 1000,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
           handleModalClose();
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
-        // toggleWidgetApiState();
+        toggleDashboardDropApiState()
       };
       addDashboard();
     } catch (error) {
@@ -343,16 +372,30 @@ const index = () => {
         if (response.status === "success") {
           toast.success(response.status, {
             position: "bottom-right",
-            autoClose: 1000,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
           handleEditModalClose();
         } else {
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
-        // toggleWidgetApiState();
+        toggleDashboardDropApiState()
       };
       editDashboard();
     } catch (error) {
@@ -379,7 +422,7 @@ const index = () => {
           <div>
             <div className="flex space-x-4">
               <div className="mx-8">
-                <TimeRangePicker onTimeRangeChange={handleDate} />
+                <TimeRangePicker onTimeRangeChange={handleDate} placement="leftStart" />
               </div>
 
               {!editable && (
@@ -401,7 +444,6 @@ const index = () => {
                   <LockOutlinedIcon />
                 </button>
               )}
-			  
             </div>
             <DeleteModal
               open={isDeleteModalopen}

@@ -93,8 +93,7 @@ const LineChartDashboardComponent = (props: any) => {
       new Set(initialData.map((item: any) => item?.event?.device))
     );
     const devicesAsNumbers = devices.map((device) => Number(device));
-    // console.log("all devices", allDevices);
-    // console.log("devides ids", devicesAsNumbers);
+
     const deviceValues: any[] =
       allDevices &&
       allDevices

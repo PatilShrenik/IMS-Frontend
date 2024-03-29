@@ -78,7 +78,7 @@ const SecSingleSelectForDashboard = (props: any) => {
                     })
                     .join(", ");
                 }
-                const selectedItem = selectData.find(
+                const selectedItem = selectData && selectData.find(
                   (item: any) => item.id === selected
                 );
                 return selectedItem ? selectedItem.name : "";

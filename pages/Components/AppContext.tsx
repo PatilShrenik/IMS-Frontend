@@ -46,6 +46,8 @@ const AppContext = createContext<{
   toggleActiveButton: (alert: any) => void;
   auditSocketCalled: any;
   toggleauditSocketCalled: () => void;
+  dashboardDropApi: any;
+  toggleDashboardDropApiState: () => void;
 }>({
   sidebarOpen: false,
   toggleSideBarState: () => {},
@@ -92,6 +94,8 @@ const AppContext = createContext<{
   toggleActiveButton: (alert: any) => {},
   auditSocketCalled: false,
   toggleauditSocketCalled: () => {},
+  dashboardDropApi: false,
+  toggleDashboardDropApiState: () => {},
 });
 
 export const AppContextProvider: React.FC<any> = ({ children }: any) => {
@@ -115,8 +119,12 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
   const [getUserApiState, setUserApiState] = useState(false);
   const [activeButton, setActiveButton] = useState("live");
   const [auditSocketCalled, setAuditSocketCalled] = useState(false);
+  const [dashboardDropApi, setDashboardDropApi] = useState(false);
 
   const togglegetTableApiState = () => {
+    setDashboardDropApi((prevState) => !prevState);
+  };
+  const toggleDashboardDropApiState = () => {
     setGetTableApiState((prevState) => !prevState);
   };
   const toggleauditSocketCalled = () => {
@@ -249,6 +257,8 @@ export const AppContextProvider: React.FC<any> = ({ children }: any) => {
         activeButton,
         auditSocketCalled,
         toggleauditSocketCalled,
+        dashboardDropApi,
+        toggleDashboardDropApiState,
       }}
     >
       {children}

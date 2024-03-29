@@ -395,6 +395,11 @@ main::before {
   color: #575757;
   color: var(--rs-btn-subtle-hover-text);
 }
+
+.rs-picker-daterange-predefined {
+  overflow-y: scroll !important;
+}
+
 .css-1km1ehz {
   @apply !bg-textColor dark:!bg-tabel-header dark:!text-textColor hover:dark:!bg-tabel-header hover:!bg-textColor
   /* background-color: none !important; */;

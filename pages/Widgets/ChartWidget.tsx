@@ -640,7 +640,7 @@ const ChartWidget = (props: any) => {
                       <SecSingleSelect
                         label="Select Aggregation"
                         value={dropdown.aggregation}
-                        selectData={["MIN", "MAX", "SUM", "AVG"]}
+                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
                         onChange={handleDropdownChange}
                         index={index}
                         type="aggregation"

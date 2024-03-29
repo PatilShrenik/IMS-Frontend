@@ -20,7 +20,7 @@ const GridWidgetTabel = (props: any) => {
   function morphData(data: any) {
     const initialData = data?.result || [];
     if (initialData[0]) {
-      const groupBy = data["group.by"]
+      const groupBy = data["group.by"];
       const totalGroupsKeys: any = {};
       let cols: any = [];
       cols.push({
@@ -74,6 +74,18 @@ const GridWidgetTabel = (props: any) => {
     setData(response);
   }, [props.data]);
 
+  const processColumnData = (column: any, row: any) => {
+    if (column.field == "hostname") {
+      const value = row[column.field];
+      return (
+        <>
+          <p className="cursor-pointer text-primary2 text-[16px]">{value}</p>
+        </>
+      );
+    }
+    return row[column.field];
+  };
+
   return (
     <>
       {data &&
@@ -109,8 +121,9 @@ const GridWidgetTabel = (props: any) => {
                     className="bg-white dark:bg-dark-menu-color dark:text-textColor"
                     key={index}
                   >
-                    {columns.map((key: any) => {
+                    {columns.map((column: any, key: any) => {
                       console.log("-----------", data[key.field]);
+                      const processedValue = processColumnData(column, data);
                       return (
                         <td
                           style={{

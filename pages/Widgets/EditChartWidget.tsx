@@ -533,7 +533,12 @@ const EditChartWidget = (props: any) => {
           require={true}
         />
         <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
-          <TimeRangePicker onTimeRangeChange={handleDate} />
+          <TimeRangePicker
+            onTimeRangeChange={handleDate}
+            text={data && data.time_range}
+            startTime={data.start_timestamp}
+            endTime={data.end_timestamp}
+          />
         </div>
         <div>
           <SecSingleSelect
@@ -581,7 +586,7 @@ const EditChartWidget = (props: any) => {
                         <SecSingleSelect
                           label="Select Aggregation"
                           value={dropdown.aggregation}
-                          selectData={["MIN", "MAX", "SUM", "AVG"]}
+                          selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
                           onChange={handleDropdownChange}
                           index={index}
                           type="aggregation"

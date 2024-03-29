@@ -5,6 +5,7 @@ import NoDataToDisplay from "highcharts/modules/no-data-to-display";
 import HighchartsExporting from "highcharts/modules/exporting";
 import HighchartsExportData from "highcharts/modules/export-data";
 import HighchartsAccessibility from "highcharts/modules/accessibility";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 // Initialize Highcharts modules
 
@@ -16,6 +17,17 @@ const PieChartComponent = (props: any) => {
     HighchartsVariablePie(Highcharts);
     NoDataToDisplay(Highcharts);
   }, []);
+
+  const [allDevices, setAllDevices] = React.useState([]);
+  React.useEffect(() => {
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
+
+
   const morphData = (data: any) => {
     const initialData = data?.result || [];
     const groupBy = data["group.by"];
@@ -31,6 +43,13 @@ const PieChartComponent = (props: any) => {
     const devices = Array.from(
       new Set(initialData.map((item: any) => item?.event?.device))
     );
+    const devicesAsNumbers = devices.map((device) => Number(device));
+
+    const deviceValues: any[] =
+      allDevices &&
+      allDevices
+        .filter((item: any) => devicesAsNumbers.includes(item._id))
+        .map((item: any) => ({ id: item._id, hostname: item.hostname }));
     const firstData = initialData[0]?.event || 0;
     const allKeys = Object.keys(firstData);
     const indexes = Array.from(
@@ -44,6 +63,10 @@ const PieChartComponent = (props: any) => {
     );
     const lines: any[] = [];
     devices.forEach((device: any) => {
+      const deviceObject: any = deviceValues.find(
+        (item: any) => item.id === parseInt(device)
+      );
+      const hostname = deviceObject ? deviceObject.hostname : "";
       indexes.forEach((index: any, i: any) => {
         if (groupBy != "device") {
           Object.keys(totalGroupsKeys).forEach((key: any, i: any) => {
@@ -55,8 +78,8 @@ const PieChartComponent = (props: any) => {
             );
             const legendName =
               groupBy == "device"
-                ? device + "-" + index
-                : device + "-" + groupBy + `(${key})` + "-" + index;
+                ? hostname + "-" + index
+                : hostname + "-" + groupBy + `(${key})` + "-" + index;
             lines.push({ name: legendName, y: data });
           });
         } else {
@@ -66,8 +89,8 @@ const PieChartComponent = (props: any) => {
           );
           const legendName =
             groupBy == "device"
-              ? device + "-" + index
-              : device +
+              ? hostname + "-" + index
+              : hostname +
                 "-" +
                 groupBy +
                 `(${initialData[index]?.event[groupBy]})` +

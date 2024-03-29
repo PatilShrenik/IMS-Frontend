@@ -5,6 +5,7 @@ import HighchartsExporting from "highcharts/modules/exporting";
 import HighchartsExportData from "highcharts/modules/export-data";
 import HighchartsAccessibility from "highcharts/modules/accessibility";
 import moment from "moment";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 const LineChartComponent = (props: any) => {
   useEffect(() => {
@@ -14,6 +15,14 @@ const LineChartComponent = (props: any) => {
     NoDataToDisplay(Highcharts);
   }, []);
   const chartContainer = useRef(null);
+  const [allDevices, setAllDevices] = React.useState([]);
+  React.useEffect(() => {
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
 
   const morphData = (data: any) => {
     const initialData = data?.result || [];
@@ -30,7 +39,13 @@ const LineChartComponent = (props: any) => {
     const devices = Array.from(
       new Set(initialData.map((item: any) => item?.event?.device))
     );
-    console.log("devices", devices);
+    const devicesAsNumbers = devices.map((device) => Number(device));
+
+    const deviceValues: any[] =
+      allDevices &&
+      allDevices
+        .filter((item: any) => devicesAsNumbers.includes(item._id))
+        .map((item: any) => ({ id: item._id, hostname: item.hostname }));
     const firstData = initialData[0]?.event || {};
     const allKeys = Object.keys(firstData);
     const indexes = Array.from(
@@ -45,6 +60,10 @@ const LineChartComponent = (props: any) => {
     console.log("indexes", indexes);
     const lines: any[] = [];
     devices.forEach((device: any) => {
+      const deviceObject: any = deviceValues.find(
+        (item: any) => item.id === parseInt(device)
+      );
+      const hostname = deviceObject ? deviceObject.hostname : "";
       indexes.forEach((index: any, i: any) => {
         if (groupBy != "device") {
           console.log("if");
@@ -60,8 +79,8 @@ const LineChartComponent = (props: any) => {
               ]);
             const legendName =
               groupBy == "device"
-                ? device + "-" + index
-                : device +
+                ? hostname + "-" + index
+                : hostname +
                   "-" +
                   groupBy +
                   `(${initialData[i]?.event[groupBy]})` +
@@ -79,8 +98,8 @@ const LineChartComponent = (props: any) => {
             ]);
           const legendName =
             groupBy == "device"
-              ? device + "-" + index
-              : device +
+              ? hostname + "-" + index
+              : hostname +
                 "-" +
                 groupBy +
                 `(${initialData[i]?.event[groupBy]})` +

@@ -26,6 +26,7 @@ import { updateWidget } from "../api/api/ReportsAPI";
 import { Bounce, toast } from "react-toastify";
 import { useWebSocketContext } from "../Components/WebSocketContext";
 import PieChartComponent from "../Components/Charts/PieChart";
+import { parseISO, format } from 'date-fns';
 
 const EditTopnWidget = (props: any) => {
   const { widgetData, handleAddDrawerClose } = props;
@@ -132,13 +133,17 @@ const EditTopnWidget = (props: any) => {
   //   const formatTimestamp = (timestamp: any) => {
   //     const milliseconds = timestamp * 1000;
   //     const date = new Date(milliseconds);
-  //     return date.toString(); // Adjust the format as needed
+  //     // Parse the date in ISO format using parseISO
+  //     const parsedDate = parseISO(date.toString());
+
+  //     // Format the parsed date to "2023-01-01T00:00:00.000Z" format
+  //     const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  //     return parseISO(date.toString()); // Adjust the format as needed
   //   };
 
-  //   console.log("---", data.start_timestamp)
   //   const formattedStart: any = formatTimestamp(data.start_timestamp);
   //   const formattedEnd: any = formatTimestamp(data.end_timestamp);
-  //   console.log("---", formattedEnd, formattedStart)
+  //   console.log("---", formattedEnd, formattedStart);
   //   setFormattedData([formattedStart, formattedEnd]);
   // }, [data]);
 
@@ -503,8 +508,9 @@ const EditTopnWidget = (props: any) => {
         <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
           <TimeRangePicker
             onTimeRangeChange={handleDate}
-            // text={data.time_range}
-            // formatedTime = {formattedData}
+            text={data && data.time_range}
+            startTime={data.start_timestamp}
+            endTime={data.end_timestamp}
           />
         </div>
         <div>
@@ -552,7 +558,7 @@ const EditTopnWidget = (props: any) => {
                       <SecSingleSelect
                         label="Select Aggregation"
                         value={dropdown.aggregation}
-                        selectData={["MIN", "MAX", "SUM", "AVG"]}
+                        selectData={["MIN", "MAX", "SUM", "AVG", "LAST"]}
                         onChange={handleDropdownChange}
                         index={index}
                         type="aggregation"
