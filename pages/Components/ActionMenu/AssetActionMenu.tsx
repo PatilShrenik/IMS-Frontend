@@ -234,7 +234,7 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -246,7 +246,7 @@ const AssetsActionMenu = (props: any) => {
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -269,7 +269,7 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -281,7 +281,7 @@ const AssetsActionMenu = (props: any) => {
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -305,7 +305,7 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -317,7 +317,7 @@ const AssetsActionMenu = (props: any) => {
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -341,7 +341,7 @@ const AssetsActionMenu = (props: any) => {
         toggleDeviceTableState();
         toast.success(response.status, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
@@ -353,7 +353,7 @@ const AssetsActionMenu = (props: any) => {
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,

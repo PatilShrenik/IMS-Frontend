@@ -76,12 +76,12 @@ const Alerts = () => {
       // Store filtered payload in state
       setReceivedData(filteredPayload);
     } else if (activeButton == "live" && payload && payload.result) {
-      // setReceivedData(payload.result);
-      console.log("response from live alert", payload.result);
+      setReceivedData(payload);
+      // console.log("response from live alert", payload.result);
     }
   }
 
-  // console.log("recieved data state#########", receivedData);
+  console.log("recieved data state#########", receivedData);
 
   useEffect(() => {
     if (connection && activeButton == "historic") {
@@ -91,44 +91,52 @@ const Alerts = () => {
     }
   }, [connection, activeButton]);
 
+  function subscribeLiveData() {
+    setInterval(() => {
+      emit("ws.alert.live", paylodForLive);
+    }, 10000);
+  }
+
+  subscribeLiveData();
+
   useEffect(() => {
     if (activeButton == "live") {
       setData(null);
       setColumns(null);
       setVisibleColumns(null);
-      setReceivedData({
-        result: {
-          "P1225151828844040-D641660281176464-O21": {
-            _id: 1225151828844075,
-            severity: "critical",
-            policy: 1231575388837024,
-            device: 641660281176464,
-            object: "21",
-            indicator: "cpu.5sec.avg.percentage",
-            "triggered.value": 19,
-            status: "active",
-            message:
-              "critical! 641660281176464's 21 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
-            timestamp: 1710851085,
-            "previous.status": "warning",
-            "event.type": "notify.alert.state.change",
-          },
-          "P1225151828844040-D641660281176464-O22": {
-            _id: 1225151828844081,
-            severity: "critical",
-            policy: 1231575388837024,
-            device: 641660281176464,
-            object: "22",
-            indicator: "cpu.5sec.avg.percentage",
-            "triggered.value": 28,
-            status: "active",
-            message:
-              "critical! 641660281176464's 22 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
-            timestamp: 1710851175,
-          },
-        },
-        "event.type": "ws.alert.live",
-      });
+      // setReceivedData({
+      //   result: {
+      //     "P1225151828844040-D641660281176464-O21": {
+      //       _id: 1225151828844075,
+      //       severity: "critical",
+      //       policy: 1231575388837024,
+      //       device: 641660281176464,
+      //       object: "21",
+      //       indicator: "cpu.5sec.avg.percentage",
+      //       "triggered.value": 19,
+      //       status: "active",
+      //       message:
+      //         "critical! 641660281176464's 21 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+      //       timestamp: 1710851085,
+      //       "previous.status": "warning",
+      //       "event.type": "notify.alert.state.change",
+      //     },
+      //     "P1225151828844040-D641660281176464-O22": {
+      //       _id: 1225151828844081,
+      //       severity: "critical",
+      //       policy: 1231575388837024,
+      //       device: 641660281176464,
+      //       object: "22",
+      //       indicator: "cpu.5sec.avg.percentage",
+      //       "triggered.value": 28,
+      //       status: "active",
+      //       message:
+      //         "critical! 641660281176464's 22 [cpu.5sec.avg.percentage] has 2 occurrences in 300 seconds",
+      //       timestamp: 1710851175,
+      //     },
+      //   },
+      //   "event.type": "ws.alert.live",
+      // });
     } else if (activeButton == "historic") {
       setData(null);
       setColumns(null);
