@@ -302,13 +302,13 @@ const EditUserDrawer = (props: any) => {
                         pointerEvents: "auto",
                       }}
                     >
-                      <span>No</span>
+                      <span>Inactive</span>
                       <Android12Switch
                         checked={isAuthEnabled}
                         onChange={handleEnable}
                         value={data.enable}
                       />
-                      <span>Yes</span>
+                      <span>Active</span>
                     </div>
                   }
                   control={<div />}

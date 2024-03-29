@@ -60,7 +60,7 @@ const CredntialProfileTable = (props: any) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
   const [search, setSearch] = useState("");
-  //   const [visibleColumns, setVisibleColumns] = useState<any>([]);
+  const [viewedRowId, setViewedRowId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -294,11 +294,13 @@ const CredntialProfileTable = (props: any) => {
   };
 
   const handleClickOpen = (deviceIds: any) => {
+    setViewedRowId(deviceIds);
     setDialogOpen(deviceIds);
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+      //  setViewedRowId(null);
   };
 
   const isMenuOpen = Boolean(anchorEl);
@@ -316,6 +318,7 @@ const CredntialProfileTable = (props: any) => {
       return matchingGroup ? matchingGroup.name : row[column.field];
     } else if (column.field === "device_ids") {
       const deviceIds = row[column.field];
+//      console.log("ids",deviceIds);
       return (
         <>
           <div

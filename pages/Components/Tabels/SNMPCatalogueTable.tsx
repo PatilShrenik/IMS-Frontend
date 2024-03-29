@@ -48,7 +48,7 @@ const SNMPCatalogueTable = (props: any) => {
     const handleModalOpen = () => setIsModalOpen(true);
     const handleModalClose = () => setIsModalOpen(false);
     const [allTemplates, setAllTemplates] = React.useState([]);
-    console.log("data-----", data);
+    
     const templatesValues =
     allTemplates &&
     allTemplates.map((item: any) => ({

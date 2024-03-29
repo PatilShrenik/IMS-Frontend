@@ -1,7 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { replaceDotsWithUnderscores, replaceUnderscoresWithDots } from '@/functions/genericFunctions';
-import CustomeInput from '@/pages/Components/Inputs';
-import { getSMTPServer, updateSMTPServer } from '@/pages/api/api/SMTPServerAPI';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  replaceDotsWithUnderscores,
+  replaceUnderscoresWithDots,
+} from "@/functions/genericFunctions";
+import CustomeInput from "@/pages/Components/Inputs";
+import { getSMTPServer, updateSMTPServer } from "@/pages/api/api/SMTPServerAPI";
 
 import { Bounce, toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
@@ -9,22 +12,21 @@ import { Button, ButtonGroup, InputLabel, Paper, styled } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch, { SwitchProps } from "@mui/material/Switch";
-import { CustomeCancelButton } from '@/pages/Components/Buttons';
+import { CustomeCancelButton } from "@/pages/Components/Buttons";
 import "react-toastify/dist/ReactToastify.css";
 
+// const initialState = {
+//   smtp_enabled: "no",
+//   smtp_hostname: "",
+//   smtp_port: 0,
+//   sender_email: "",
+//   smtp_security: "NONE",
+//   smtp_authentication: "no",
+//   smtp_username: "",
+//   smtp_password: "",
+// };
 
-const initialState = {
-  smtp_enabled: "no",
-  smtp_hostname: "",
-  smtp_port: "",
-  sender_email: "",
-  smtp_security: "NONE",
-  smtp_authentication: "no",
-  smtp_username: "",
-  smtp_password: "",
-};
-
-const MailServer= () => {
+const MailServer = () => {
   const Android12Switch = styled(Switch)(({ theme }) => ({
     padding: 8,
     "& .MuiSwitch-track": {
@@ -60,20 +62,18 @@ const MailServer= () => {
   const [isEmailEnabled, setIsEmailEnabled] = useState(false);
   const [isAuthEnabled, setIsAuthEnabled] = useState(false);
   const [selectedSecurity, setSelectedSecurity] = useState("NONE");
-  const [data, setData] = React.useState<any>(initialState);
+  const [data, setData] = React.useState<any>({});
   const [originalData, setOriginalData] = useState([]);
-  const lastSavedData = useRef<any>(initialState);
+  const lastSavedData = useRef<any>({});
   useEffect(() => {
     try {
       const getData = async () => {
         let response = await getSMTPServer();
-        const modifiedData = replaceDotsWithUnderscores(
-          response.result
-        );
-       //  console.log("get data", modifiedData);
+        const modifiedData = replaceDotsWithUnderscores(response.result);
+        //  console.log("get data", modifiedData);
         setData(modifiedData);
-       //  setOriginalData(modifiedData);
-       lastSavedData.current = { ...modifiedData };
+        //  setOriginalData(modifiedData);
+        lastSavedData.current = { ...modifiedData };
         modifiedData.smtp_enabled == "yes"
           ? setIsEmailEnabled(true)
           : setIsEmailEnabled(false);
@@ -95,12 +95,12 @@ const MailServer= () => {
   //       ...data,
   //       smtp_enabled: isEmailEnabled ? "yes" : "no",
   //     });
-        
+
   //   } else {
   //     setData({
   //       smtp_enabled: "no",
   //       smtp_hostname: "",
-  //       smtp_port: "",
+  //       smtp_port: 0,
   //       sender_email: "",
   //       smtp_security: "NONE",
   //       smtp_authentication: "no",
@@ -125,7 +125,7 @@ const MailServer= () => {
   //         smtp_authentication: "yes",
   //       };
   //     } else {
-       
+
   //       return {
   //         ...prevData,
   //         smtp_username: "",
@@ -135,7 +135,7 @@ const MailServer= () => {
   //   });
   // }, [isAuthEnabled]);
 
-   useEffect(() => {
+  useEffect(() => {
     setData({
       ...data,
       smtp_enabled: isEmailEnabled ? "yes" : "no",
@@ -149,7 +149,6 @@ const MailServer= () => {
       ...data,
       smtp_enabled: isEmailEnabled ? "yes" : "no",
     });
-
   };
   //console.log("sntp enable",data)
   const handleAuthChange = () => {
@@ -160,17 +159,17 @@ const MailServer= () => {
       // smtp_username: "",
       //   smtp_password: "",
     });
-    
   };
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
+    let updatedValue = value;
     if (name == "smtp_port") {
-      Number(value);
+      updatedValue = parseInt(value);
     }
     setData({
       ...data,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 
@@ -182,33 +181,83 @@ const MailServer= () => {
     setSelectedSecurity(securityType);
   };
 
-
   const handleSave = (event: any) => {
     event.preventDefault();
-  
-   // console.log("handle save data",data);
-   
+
+    // console.log("handle save data",data);
+    // try {
+    //   const updateMailServer = async () => {
+    //     if(data.smtp_authentication == "no"){
+    //       data.smtp_username = "";
+    //       data.smtp_password = "";
+    //     } 
+        
+    //     if(data.smtp_enabled == "no"){
+    //       data.smtp_hostname = "",
+    //       data.smtp_port = "",
+    //       data.sender_email = "",
+    //       data.smtp_security = "NONE",
+    //       data.smtp_authentication = "no",
+    //       data.smtp_username = "",
+    //       data.smtp_password = "";
+    //     }
+    //     const modifiedData = replaceUnderscoresWithDots(data);
+    //   // console.log("smtp server data", modifiedData);
+    //     let response = await updateSMTPServer(modifiedData);
+    //     if (response.status == "success") {
+          
+    //       toast.success(response.status, {
+    //         position: "bottom-right",
+    //         autoClose: 1000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //         theme: "colored",
+    //         transition: Bounce,
+    //       });
+    //       lastSavedData.current = { ...data };
+    //     } else {
+    //       toast.error(response.message, {
+    //         position: "bottom-right",
+    //         autoClose: 2000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //         theme: "colored",
+    //         transition: Bounce,
+    //       });
+    //     }
+    //   };
+    //   updateMailServer();
+     
+    // } catch (error) {
+    //   console.log(error);
+    // }
     try {
       const updateMailServer = async () => {
-        if(data.smtp_authentication == "no"){
-          data.smtp_username = "";
-          data.smtp_password = "";
-        } 
-        
-        if(data.smtp_enabled == "no"){
-          data.smtp_hostname = "",
-          data.smtp_port = "",
-          data.sender_email = "",
-          data.smtp_security = "NONE",
-          data.smtp_authentication = "no",
-          data.smtp_username = "",
-          data.smtp_password = "";
+        if (data.smtp_authentication == "no") {
+          delete data.smtp_username;
+          delete data.smtp_password;
+        }
+
+        if (data.smtp_enabled == "no") {
+          delete data.smtp_hostname;
+          delete data.smtp_port;
+          delete data.sender_email;
+          delete data.smtp_security;
+          delete data.smtp_authentication;
+          delete data.smtp_username;
+          delete data.smtp_password;
+
         }
         const modifiedData = replaceUnderscoresWithDots(data);
-      // console.log("smtp server data", modifiedData);
+        console.log("smtp server data", modifiedData);
         let response = await updateSMTPServer(modifiedData);
         if (response.status == "success") {
-          
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
@@ -235,15 +284,13 @@ const MailServer= () => {
           });
         }
       };
+
       updateMailServer();
-     
     } catch (error) {
       console.log(error);
     }
-  
   };
   const handleCancel = () => {
-
     setData({ ...lastSavedData.current });
     setIsEmailEnabled(lastSavedData.current.smtp_enabled === "yes");
     setIsAuthEnabled(lastSavedData.current.smtp_authentication === "yes");
@@ -251,144 +298,149 @@ const MailServer= () => {
   };
   return (
     <>
-     <ToastContainer />
-    <form onSubmit={handleSave} method="POST">
-    <div className="flex justify-start px-4 pt-4">
-        <FormGroup>
-          <FormControlLabel className='dark:text-textColor'
-            labelPlacement="start"
-            control={
-              <Android12Switch
-                checked={isEmailEnabled}
-                onChange={handleSwitchChange}
-              />
-            }
-             label="Enable Email"
-          />
-        </FormGroup>
-      </div>
-      {isEmailEnabled && (
-        <div className="px-4">
-          <div className="flex ">
-            <CustomeInput
-              type="text"
-              label="SMTP Hostname"
-              name="smtp_hostname"
-              value={data.smtp_hostname}
-              onChange={handleChange}
-              require={true}
+      <ToastContainer />
+      <form onSubmit={handleSave} method="POST">
+        <div className="flex justify-start px-4 pt-4">
+          <FormGroup>
+            <FormControlLabel
+              className="dark:text-textColor"
+              labelPlacement="start"
+              control={
+                <Android12Switch
+                  checked={isEmailEnabled}
+                  onChange={handleSwitchChange}
+                />
+              }
+              label="Enable Email"
             />
-            <CustomeInput
-              type="number"
-              label="SMTP Port"
-              name="smtp_port"
-              value={data.smtp_port}
-              onChange={handleChange}
-            
-             require={true}
-            />
-            <CustomeInput
-              type="email"
-              label="Sender Email"
-              name="sender_email"
-              value={data.sender_email}
-              onChange={handleChange}
-            
-             require={true}
-            />
-            <div className="mx-6">
-            <label className="block text-md font-medium text-gray-700 dark:text-textColor">Security</label>
-              <ButtonGroup
-                className="py-1"
-                variant="outlined"
-                aria-label="Basic button group"
-              >
-                <Button
-                  onClick={() => handleSecurityButtonClick("NONE")}
-                  style={{
-                    backgroundColor: selectedSecurity == "NONE" ? "#0078d4" : "",
-                    color: selectedSecurity == "NONE" ? "white" : "",
-                  }}
-                  // style={{
-                  //   backgroundColor:
-                  //     selectedSecurity === "NONE" ? "blue" : "inherit",
-                  //   color: selectedSecurity === "NONE" ? "white" : "inherit",
-                  // }}
-                >
-                  NONE
-                </Button>
-                <Button
-                  onClick={() => handleSecurityButtonClick("SSL")}
-                  style={{
-                    backgroundColor: selectedSecurity == "SSL" ? "#0078d4" : "",
-                    color: selectedSecurity == "SSL" ? "white" : "",
-                  }}
-                >
-                  SSL
-                </Button>
-                <Button
-                  onClick={() => handleSecurityButtonClick("TSL")}
-                  style={{
-                    backgroundColor: selectedSecurity == "TSL" ? "#0078d4" : "",
-                    color: selectedSecurity == "TSL" ? "white" : "",
-                  }}
-                >
-                  TSL
-                </Button>
-              </ButtonGroup>
-            </div>
-          </div>
-          <div className="flex justify-start pt-4">
-            <FormGroup>
-              <FormControlLabel className='dark:text-textColor'
-                labelPlacement="start"
-                control={
-                  <Android12Switch
-                    checked={isAuthEnabled}
-                    onChange={handleAuthChange}
-                  />
-                }
-                label="Authentication"
-              />
-            </FormGroup>
-          </div>
-          {isAuthEnabled && (
-            <div className="flex">
+          </FormGroup>
+        </div>
+        {isEmailEnabled && (
+          <div className="px-4">
+            <div className="flex ">
               <CustomeInput
                 type="text"
-                label="UserName"
-                name="smtp_username"
-                value={data.smtp_username}
-                onChange={handleChange}          
+                label="SMTP Hostname"
+                name="smtp_hostname"
+                value={data.smtp_hostname}
+                onChange={handleChange}
+                require={true}
               />
               <CustomeInput
-                type="password"
-                label="Password"
-                name="smtp_password"
-                value={data.smtp_password}
-                onChange={handleChange}            
+                type="number"
+                label="SMTP Port"
+                name="smtp_port"
+                value={data.smtp_port}
+                onChange={handleChange}
+                require={true}
               />
+              <CustomeInput
+                type="email"
+                label="Sender Email"
+                name="sender_email"
+                value={data.sender_email}
+                onChange={handleChange}
+                require={true}
+              />
+              <div className="mx-6">
+                <label className="block text-md font-medium text-gray-700 dark:text-textColor">
+                  Security
+                </label>
+                <ButtonGroup
+                  className="py-1"
+                  variant="outlined"
+                  aria-label="Basic button group"
+                >
+                  <Button
+                    onClick={() => handleSecurityButtonClick("NONE")}
+                    style={{
+                      backgroundColor:
+                        selectedSecurity == "NONE" ? "#0078d4" : "",
+                      color: selectedSecurity == "NONE" ? "white" : "",
+                    }}
+                    // style={{
+                    //   backgroundColor:
+                    //     selectedSecurity === "NONE" ? "blue" : "inherit",
+                    //   color: selectedSecurity === "NONE" ? "white" : "inherit",
+                    // }}
+                  >
+                    NONE
+                  </Button>
+                  <Button
+                    onClick={() => handleSecurityButtonClick("SSL")}
+                    style={{
+                      backgroundColor:
+                        selectedSecurity == "SSL" ? "#0078d4" : "",
+                      color: selectedSecurity == "SSL" ? "white" : "",
+                    }}
+                  >
+                    SSL
+                  </Button>
+                  <Button
+                    onClick={() => handleSecurityButtonClick("TSL")}
+                    style={{
+                      backgroundColor:
+                        selectedSecurity == "TSL" ? "#0078d4" : "",
+                      color: selectedSecurity == "TSL" ? "white" : "",
+                    }}
+                  >
+                    TSL
+                  </Button>
+                </ButtonGroup>
+              </div>
             </div>
-          )}
+            <div className="flex justify-start pt-4">
+              <FormGroup>
+                <FormControlLabel
+                  className="dark:text-textColor"
+                  labelPlacement="start"
+                  control={
+                    <Android12Switch
+                      checked={isAuthEnabled}
+                      onChange={handleAuthChange}
+                    />
+                  }
+                  label="Authentication"
+                />
+              </FormGroup>
+            </div>
+            {isAuthEnabled && (
+              <div className="flex">
+                <CustomeInput
+                  type="text"
+                  label="Username"
+                  name="smtp_username"
+                  value={data.smtp_username}
+                  onChange={handleChange}
+                />
+                <CustomeInput
+                  type="password"
+                  label="Password"
+                  name="smtp_password"
+                  value={data.smtp_password}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
+          <div>
+            {/* <SubmitButton title="Save" /> */}
+            <button
+              className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
+              type="submit"
+            >
+              Save
+            </button>
+          </div>
+          <div onClick={handleCancel}>
+            <CustomeCancelButton title="Cancel" />
+          </div>
         </div>
-      )}
-      <div className="fixed bottom-0 right-0 p-2 flex justify-end mt-6">
-        <div >
-          {/* <SubmitButton title="Save" /> */}
-          <button
-            className=" mx-2 inline-flex items-center justify-center rounded-md py-1 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
-            type="submit"
-          >
-            Save
-          </button>
-        </div>
-        <div onClick={handleCancel}>
-          <CustomeCancelButton title="Cancel"/>
-        </div>
-      </div>
       </form>
     </>
   );
-}
+};
 
-export default MailServer
+export default MailServer;
