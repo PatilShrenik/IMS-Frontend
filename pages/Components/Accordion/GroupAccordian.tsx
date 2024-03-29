@@ -21,7 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { getAllGropus, updateGroup, addGroup } from "@/pages/api/api/GroupsAPI";
 import PageHeading from "@/pages/Components/PageHeading";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { replacePeriodsWithUnderscores } from "@/functions/genericFunctions";
 import Chips from "../Chips";
 import CustomeInput from "../Inputs";
@@ -69,11 +69,25 @@ const NestedAccordion = ({ data, onAdd, onEdit }: any) => {
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         } else {
           toast.error(response.message, {
             position: "bottom-right",
-            autoClose: 2000,
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
       };
@@ -144,13 +158,27 @@ const NestedAccordion = ({ data, onAdd, onEdit }: any) => {
           if (response.status === "success") {
             toast.success(response.status, {
               position: "bottom-right",
-              autoClose: 1000,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
             });
             toggleGroupState();
           } else {
             toast.error(response.message, {
               position: "bottom-right",
-              autoClose: 2000,
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce,
             });
           }
         };

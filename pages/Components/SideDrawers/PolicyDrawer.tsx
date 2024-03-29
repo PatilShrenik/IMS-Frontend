@@ -29,7 +29,7 @@ const PolicyDrawer = (props: any) => {
   const [message, setMessage] = useState("");
   const [description, setDescription] = useState("");
   const [entityType, setEntityType] = useState("DEVICE");
-  const [selectedEntity, setSelectedEntity] = useState("");
+  const [selectedEntity, setSelectedEntity] = useState<any>([]);
   const [indicators, setIndicators] = useState("");
   const [indicatorsType, setIndicatorsType] = useState("");
   const [operator, setOperator] = useState("");
@@ -205,11 +205,25 @@ const PolicyDrawer = (props: any) => {
         toast.success(response.status, {
           position: "bottom-right",
           autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       } else {
         toast.error(response.message, {
           position: "bottom-right",
-          autoClose: 2000,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
         });
       }
     };
