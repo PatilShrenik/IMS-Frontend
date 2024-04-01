@@ -30,7 +30,7 @@ const LiveAlert = () => {
   }, [connection]);
 
   function render(payload: any) {
-    console.log("live alert p", payload);
+    // console.log("live alert p", payload);
     const newData = payload;
     const filteredKeys = Object.keys(newData).filter(
       (key) => key !== "event.type"

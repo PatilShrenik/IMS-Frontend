@@ -68,7 +68,7 @@ export const EditDashboard = async (body: any, id: any) => {
 
 export const GetDashboardWidgetsData = async (id: any) => {
   const token = localStorage.getItem("token");
-  console.log("dashboard id in api", id);
+  // console.log("dashboard id in api", id);
   let res: any;
   try {
     res = await fetch(baseURL + `/api/v1/visualization/dashboard/${id}`, {

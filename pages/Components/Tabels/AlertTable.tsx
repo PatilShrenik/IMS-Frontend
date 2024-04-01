@@ -68,7 +68,7 @@ const AlertTable = (props: any) => {
     page,
     rowsPerPage,
   } = props;
-  console.log("-----data-------", data);
+  // console.log("-----data-------", data);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("hostname");
   const [search, setSearch] = useState("");

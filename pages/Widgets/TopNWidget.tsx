@@ -211,9 +211,9 @@ const TOPNWidget = (props: any) => {
   );
   useEffect(() => {
     const handleStorageChange = () => {
-      console.log("Storage change detected");
+      // console.log("Storage change detected");
       const newColorTheme = localStorage.getItem("color-theme");
-      console.log("New color theme:", newColorTheme);
+      // console.log("New color theme:", newColorTheme);
       setColorTheme(newColorTheme);
     };
     handleStorageChange();
@@ -317,7 +317,7 @@ const TOPNWidget = (props: any) => {
     );
     if (matchingObject) {
       const { indicator_type } = matchingObject;
-      console.log("indicator type in order bgy", indicator_type);
+      // console.log("indicator type in order bgy", indicator_type);
       setData({
         ...data,
         order_by: {
@@ -329,7 +329,7 @@ const TOPNWidget = (props: any) => {
   };
 
   const handleOrderByChange = (value: any) => {
-    console.log("orderby value", value);
+    // console.log("orderby value", value);
     let tempindicator = value;
     const matchingObject = mapperdData.find(
       (item: any) => item.indicator === value
@@ -349,7 +349,7 @@ const TOPNWidget = (props: any) => {
     // IndicatorType(value);
   };
   const handleEntities = (values: any) => {
-    console.log("entities", values);
+    // console.log("entities", values);
     setData({
       ...data,
       filters: {
@@ -367,7 +367,7 @@ const TOPNWidget = (props: any) => {
   }, [dropdowns]);
 
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log("in function", index, field, value);
+    // console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
@@ -397,7 +397,7 @@ const TOPNWidget = (props: any) => {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-        console.log("group array", groupByArray);
+        // console.log("group array", groupByArray);
         if (!groupByArray.some((item: any) => item.value === object_type)) {
           setGroupByArray((prevGroupByArray: any) => {
             const newArray = [...prevGroupByArray];
@@ -423,7 +423,7 @@ const TOPNWidget = (props: any) => {
         const filteredArray = matchingIndicators.filter(
           (value: any) => !indicatorValues.includes(value)
         );
-        console.log("matching indi", filteredArray);
+        // console.log("matching indi", filteredArray);
         setFilteredData(matchingIndicators);
       }
     }
@@ -459,7 +459,7 @@ const TOPNWidget = (props: any) => {
   };
 
   useEffect(() => {
-    console.log("time", timePeriod);
+    // console.log("time", timePeriod);
     setData({
       ...data,
       start_timestamp: timePeriod.start_timestamp,
@@ -484,7 +484,7 @@ const TOPNWidget = (props: any) => {
 
   function getWidgetData(data: any) {
     // if (pageID == data.pageID) {
-    console.log("widget data", data, pageID);
+    // console.log("widget data", data, pageID);
     setQueryOutput(data);
     // }
   }
@@ -513,7 +513,7 @@ const TOPNWidget = (props: any) => {
       const addWidget = async () => {
         data.limit = parseInt(data.limit);
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("topn widget data", modifiedData);
+        // console.log("topn widget data", modifiedData);
         // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 

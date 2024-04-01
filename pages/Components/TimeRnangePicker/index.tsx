@@ -226,7 +226,7 @@ const TimeRangePicker = (props: any) => {
         format="MM/dd/yyyy hh:mm aa"
         showMeridian
         placement={props.placement == "leftStart" ? "leftStart" : "bottomStart"}
-        style={{ width: 550 }}
+        // style={{ width: 550 }}
         showOneCalendar={props.showOneCalendar ? true : false}
         // shouldDisableDate={afterToday()}
         onChange={(value: any, format: any) => {

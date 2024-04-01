@@ -266,14 +266,14 @@ const index = () => {
         } else {
           toast.error(response.message, {
             position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
           });
         }
         toggleDashboardDropApiState();
@@ -352,7 +352,7 @@ const index = () => {
             transition: Bounce,
           });
         }
-        toggleDashboardDropApiState()
+        toggleDashboardDropApiState();
       };
       addDashboard();
     } catch (error) {
@@ -395,7 +395,7 @@ const index = () => {
             transition: Bounce,
           });
         }
-        toggleDashboardDropApiState()
+        toggleDashboardDropApiState();
       };
       editDashboard();
     } catch (error) {
@@ -420,14 +420,17 @@ const index = () => {
             />
           </div>
           <div>
-            <div className="flex space-x-4">
-              <div className="mx-8">
-                <TimeRangePicker onTimeRangeChange={handleDate} placement="leftStart" />
+            <div className="flex">
+              <div className="mx-4">
+                <TimeRangePicker
+                  onTimeRangeChange={handleDate}
+                  placement="leftStart"
+                />
               </div>
 
               {!editable && (
                 <button
-                  className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
+                  className="bg-blue-500 rounded py-2 px-3 text-sm text-white"
                   onClick={() => setEditable(!editable)}
                 >
                   <LockOpenOutlinedIcon />
@@ -435,7 +438,7 @@ const index = () => {
               )}
               {editable && (
                 <button
-                  className="bg-blue-500 rounded p-2 ml-2 text-sm text-white"
+                  className="bg-blue-500 rounded py-2 px-3 text-sm text-white"
                   onClick={() => {
                     saveLayout();
                     setEditable(!editable);
@@ -463,7 +466,7 @@ const index = () => {
             )} */}
           </div>
         </div>
-        <div className="mt-[2rem]">
+        <div className="mt-[1rem]">
           <ResponsiveReactGridLayout
             className="layout"
             cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}

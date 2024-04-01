@@ -24,6 +24,7 @@ const Alerts = () => {
   const [collectedKeys, setCollectedKeys] = useState<any>([]);
   // const [receivedDataLive, setReceivedDataLive] = React.useState<any>();
   const [receivedData, setReceivedData] = React.useState<any>();
+  const [receivedDataLive, setReceivedDataLive] = React.useState<any>();
 
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
@@ -76,12 +77,12 @@ const Alerts = () => {
       // Store filtered payload in state
       setReceivedData(filteredPayload);
     } else if (activeButton == "live" && payload && payload.result) {
-      setReceivedData(payload);
+      setReceivedDataLive(payload);
       // console.log("response from live alert", payload.result);
     }
   }
 
-  console.log("recieved data state#########", receivedData);
+  // console.log("recieved data state#########", receivedData);
 
   useEffect(() => {
     if (connection && activeButton == "historic") {
@@ -397,7 +398,7 @@ const Alerts = () => {
     if (activeButton == "live") {
       let cols: any = [];
 
-      const modifiedData = convertKeys(receivedData);
+      const modifiedData = convertKeys(receivedDataLive);
       let collectedKeys = collectUniqueKeys(modifiedData);
       const resultArray = [];
       for (const key in modifiedData.result) {
@@ -516,7 +517,7 @@ const Alerts = () => {
     // console.log("-----------data#########", data);
 
     // setColumns(cols);
-  }, [activeButton, receivedData]);
+  }, [activeButton, receivedData, receivedDataLive]);
 
   const totalCount = data && data.length;
   const handleChangePage = (

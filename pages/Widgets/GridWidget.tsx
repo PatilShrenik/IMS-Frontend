@@ -115,9 +115,9 @@ const GridWidget = (props: any) => {
   );
   useEffect(() => {
     const handleStorageChange = () => {
-      console.log("Storage change detected");
+      // console.log("Storage change detected");
       const newColorTheme = localStorage.getItem("color-theme");
-      console.log("New color theme:", newColorTheme);
+      // console.log("New color theme:", newColorTheme);
       setColorTheme(newColorTheme);
     };
     handleStorageChange();
@@ -211,7 +211,7 @@ const GridWidget = (props: any) => {
   };
 
   const handleEntities = (values: any) => {
-    console.log("entities", values);
+    // console.log("entities", values);
     setData({
       ...data,
       filters: {
@@ -229,7 +229,7 @@ const GridWidget = (props: any) => {
   }, [dropdowns]);
 
   const handleDropdownChange = (index: any, field: any, value: any) => {
-    console.log("in function", index, field, value);
+    // console.log("in function", index, field, value);
     const updatedDropdowns: any = [...dropdowns];
     let filtered: any = [];
     let matchingIndicators: any = [];
@@ -259,7 +259,7 @@ const GridWidget = (props: any) => {
       // Check if a matching object is found
       if (matchingObject) {
         const { object_type, plugin_type, datasource } = matchingObject;
-        console.log("group array", groupByArray);
+        // console.log("group array", groupByArray);
         if (!groupByArray.some((item: any) => item.value === object_type)) {
           setGroupByArray((prevGroupByArray: any) => {
             const newArray = [...prevGroupByArray];
@@ -285,7 +285,7 @@ const GridWidget = (props: any) => {
         const filteredArray = matchingIndicators.filter(
           (value: any) => !indicatorValues.includes(value)
         );
-        console.log("matching indi", filteredArray);
+        // console.log("matching indi", filteredArray);
         setFilteredData(matchingIndicators);
       }
     }
@@ -319,7 +319,7 @@ const GridWidget = (props: any) => {
   };
 
   useEffect(() => {
-    console.log("time", timePeriod);
+    // console.log("time", timePeriod);
     setData({
       ...data,
       start_timestamp: timePeriod.start_timestamp,
@@ -328,13 +328,13 @@ const GridWidget = (props: any) => {
   }, [timePeriod]);
   const handleTypeChange = (value: any) => {
     // const { value } = event.target;
-    console.log(value);
+    // console.log(value);
     setData({ ...data, group_by: value });
   };
 
   function getWidgetData(data: any) {
     // if (pageID == data.pageID) {
-    console.log("widget data", data, pageID);
+    // console.log("widget data", data, pageID);
     setQueryOutput(data);
     // }
   }
@@ -362,7 +362,7 @@ const GridWidget = (props: any) => {
     try {
       const addWidget = async () => {
         const modifiedData = replaceUnderscoresWithDots(data);
-        console.log("chart widget data", modifiedData);
+        // console.log("chart widget data", modifiedData);
         // const ent  ities = Object.values(modifiedData.entities);
         // modifiedData.entities = entities;
 
