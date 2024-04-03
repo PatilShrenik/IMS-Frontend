@@ -14,7 +14,7 @@ import { useWebSocketContext } from "../Components/WebSocketContext";
 const Alerts = () => {
   const { deviceTabelState, activeButton, toggleActiveButton } =
     useAppContext();
-  const { Subscribe, emit, connection } = useWebSocketContext();
+  const { Subscribe, emit, connection, unsubscribe } = useWebSocketContext();
 
   const [data, setData] = useState<any>();
   const [columns, setColumns] = useState<any>();
@@ -87,18 +87,20 @@ const Alerts = () => {
   useEffect(() => {
     if (connection && activeButton == "historic") {
       Subscribe("history1", "ws.alert.historical", render);
+      unsubscribe("liveData1", "ws.alert.live");
     } else if (connection && activeButton == "live") {
       Subscribe("liveData1", "ws.alert.live", render);
+      unsubscribe("history1", "ws.alert.historical");
     }
   }, [connection, activeButton]);
 
-  function subscribeLiveData() {
-    setInterval(() => {
-      emit("ws.alert.live", paylodForLive);
-    }, 10000);
-  }
+  // function subscribeLiveData() {
+  //   setInterval(() => {
+  //     emit("ws.alert.live", paylodForLive);
+  //   }, 10000);
+  // }
 
-  subscribeLiveData();
+  // subscribeLiveData();
 
   useEffect(() => {
     if (activeButton == "live") {
