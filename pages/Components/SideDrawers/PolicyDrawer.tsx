@@ -374,6 +374,7 @@ const PolicyDrawer = (props: any) => {
                   <div className="">
                     {selection == "DEVICE" ? (
                       <SingleSelect
+                      key="device-select"
                         label="Select Devices"
                         isMulti={true}
                         change={change}
@@ -383,6 +384,7 @@ const PolicyDrawer = (props: any) => {
                       />
                     ) : (
                       <SingleSelect
+                      key="group-select"
                         label="Select Groups"
                         isMulti={true}
                         change={change}

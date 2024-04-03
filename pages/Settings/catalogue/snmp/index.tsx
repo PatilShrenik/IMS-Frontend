@@ -25,7 +25,7 @@ const SNMP = () => {
         let response = await getSNMPCatalog();
      
         const modifiedData = replaceDotsWithUnderscores(response && response.result);
-
+        console.log("data",modifiedData);
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
         data &&  data.forEach(obj => {

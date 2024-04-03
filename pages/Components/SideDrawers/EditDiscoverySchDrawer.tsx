@@ -24,7 +24,8 @@ import {
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import SingleSelect from "../Selects";
-import TimeRangePicker from "../TimeRnangePicker";
+import { Chip, TextField } from "@material-ui/core";
+import { CustomChip } from "../Chips";
 const useStyles = makeStyles(() => ({
   drawer: {
     width: "60%",
@@ -37,13 +38,13 @@ const EditDiscoverySchDrawer = (props: any) => {
   const [frequency, setFrequency] = React.useState("");
   const [timeArray, setTimeArray] = React.useState<any>([]);
   const [selectedGroupValue, setSelectedGroupValue] = React.useState<any>([]);
-  const [date, setDate] = React.useState<any>([]);
   const [selectedDeviceValue, setSelectedDeviceValue] = React.useState<any>([]);
   const [selectedTimeValue, setSelectedTimeValue] = React.useState<any>([]);
   const [schedulerContext, setSchedulerContext] = useState({}) as any;
   const [selectedDaysValue, setSelectedDaysValue] = React.useState<any>([]);
   const [selectedDatesValue, setSelectedDatesValue] = React.useState<any>([]);
   const { themeSwitch, togglegetDisSchedApiState } = useAppContext();
+  
   const [data, setData] = React.useState<any>({
     entities: [""],
     entity_type: "",
@@ -93,13 +94,43 @@ const EditDiscoverySchDrawer = (props: any) => {
     label: index + 1,
     value: (index + 1).toString(),
   }));
+  
+    
+  const [newEmail, setNewEmail] = useState("");
+  const [emails, setEmails] = useState<any[]>( data && data.email && data.email.filter((email: string) => email !== "")); 
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEmail(event.target.value);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === " ") {
+      addEmail();
+    }
+  };
+
+  const addEmail = () => {
+    if (newEmail.trim() !== "" && newEmail.includes("@")) {
+      const updatedEmails = [...emails, newEmail.trim()];
+      setData({ ...data, email: updatedEmails });
+      setEmails(updatedEmails);
+      setNewEmail("");
+    }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedEmails = emails.filter((_, i) => i !== index);
+    setData({ ...data, email: updatedEmails });
+    setEmails(updatedEmails);
+  };
+
+
   React.useEffect(() => {
     if (open) {
       try {
         const getDiscoveryShById = async () => {
           let response = await getDiscoverySchById(id);
           //   console.log("Get by Id ---result", response.result);
-          const modifiedData = replaceDotWithUnderscore2(response.result);
+          const modifiedData = replaceDotWithUnderscore2(response && response.result);
           //  console.log("mod data getById----", modifiedData);
 
           setData(modifiedData);
@@ -108,6 +139,10 @@ const EditDiscoverySchDrawer = (props: any) => {
           setSelection(modifiedData.entity_type);
           setFrequencyButton(modifiedData.scheduler_context?.frequency);
           setFrequency(modifiedData.scheduler_context?.frequency);
+          // setNewEmail(modifiedData.email)
+          setNewEmail("");
+          setEmails(modifiedData.email)
+
         };
         getDiscoveryShById();
       } catch (error) {
@@ -184,15 +219,15 @@ const EditDiscoverySchDrawer = (props: any) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
   };
-  const handleEmailChange = (event: any) => {
-    const newEmailValue = event.target.value;
-    const emailArray = newEmailValue.split(",");
+  // const handleEmailChange = (event: any) => {
+  //   const newEmailValue = event.target.value;
+  //   const emailArray = newEmailValue.split(",");
 
-    setData((prevData: any) => ({
-      ...prevData,
-      email: emailArray,
-    }));
-  };
+  //   setData((prevData: any) => ({
+  //     ...prevData,
+  //     email: emailArray,
+  //   }));
+  // };
   const handleButtonClick = (value: any) => {
     setSelection(value);
     setActiveButton(value);
@@ -484,7 +519,7 @@ const EditDiscoverySchDrawer = (props: any) => {
               <h5 className="mx-4 mt-2 font-normal dark:text-textColor">
                 Notify To
               </h5>
-              <CustomeInput
+              {/* <CustomeInput
                 style={{ marginTop: "10px" }}
                 label="Email"
                 name="email"
@@ -492,11 +527,63 @@ const EditDiscoverySchDrawer = (props: any) => {
                 onChange={handleEmailChange}
                 type="email"
                 disable={false}
-              />
+              /> */}
+                 {/* <div>
+                <div style={{ marginTop: "3px" }}>
+                  {emails.map((email, index) => (
+                    <Chip
+                      key={index}
+                      label={email}
+                      onDelete={() => handleDelete(index)}
+                      style={{ margin: "5px" }}
+                    />
+                  ))}
+                </div>
+                <input
+                  className="w-[18rem] mx-4  text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent py-[0.9rem] px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
+                  // className="border border-gray-300 rounded-lg px-4 py-2 w-72 outline-none focus:border-blue-500"
+                  type="text"
+                  placeholder="Emails"
+                  value={newEmail}
+                  onChange={handleEmailChange}
+                  onKeyPress={handleKeyPress}
+                />
+              </div> */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <div
+                  className={`relative flex flex-wrap items-center mx-4 text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent  px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+                  emails && emails.length > 0 ? "w-full" : "w-[18rem]"
+                  }`}
+                  style={{ minHeight: "52px" }} // Adjust the height to match the input field
+                >
+                  {emails && emails.map((email, index) => (
+                    <CustomChip
+                      key={index}
+                      label={email}
+                      onDelete={() => handleDelete(index)}
+                      style={{marginRight:"6px"}}
+                    />
+                  ))}
+                  <input
+                    className="flex-grow bg-transparent outline-none px-2"
+                    type="text"
+                    placeholder="Emails"
+                    value={newEmail}
+                    onChange={handleEmailChange}
+                    onKeyPress={handleKeyPress}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mx-4 my-2 w-[18rem] dark:text-textColor">
+              <i>
+                Note: - Press{" "}
+                <strong>space</strong> to add emails
+              </i>
             </div>
 
             <div className="mx-3 py-2">
-              <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
+              <h5 className="my-4 font-normal dark:text-textColor">Schedule</h5>
               {/* <TimeRangePicker
                 showOneCalendar={true}
                 onTimeRangeChange={handleDate}

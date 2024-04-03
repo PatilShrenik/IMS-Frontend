@@ -682,6 +682,7 @@ const TOPNWidget = (props: any) => {
               </ButtonGroup>
               {selection == "device" ? (
                 <SingleSelect
+                key="device-select"
                   label="Select Devices"
                   // value={data.entities}
                   selectData={deviceValues}
@@ -691,6 +692,7 @@ const TOPNWidget = (props: any) => {
                 />
               ) : (
                 <SingleSelect
+                key="group-select"
                   label="Select Groups"
                   selectData={groupValues}
                   apiData={[""]}

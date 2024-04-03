@@ -483,7 +483,7 @@ const AlertTable = (props: any) => {
         : matchesSearch;
     });
 
-  // console.log("selectedbuttons", selectedButtons);
+  console.log("selectedbuttons", selectedButtons);
   const handleButtonClick = (title: any) => {
     setSelectedButtons((prevSelectedButtons: any) => {
       if (prevSelectedButtons.includes(title)) {
@@ -668,9 +668,7 @@ const AlertTable = (props: any) => {
   const isMenuOpen = Boolean(anchorEl);
 
   const processColumnData = (column: any, row: any) => {
-    // Perform operations based on the column and row data
-    // console.log("-------column", column);
-    // console.log("-------row", row);
+
     if (column.field === "policy") {
       const policyName: any =
         allPolicies &&
@@ -705,11 +703,82 @@ const AlertTable = (props: any) => {
           "-"
         );
       }
-    }
+    } else if (column.field === "created_on") {
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
 
+      return dateObject.toLocaleString();
+    } else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
+    }
     // If no specific processing needed, return the original value
     return <div className="px-2">{row[column.field]}</div>;
   };
+  // const filteredData =
+  // data &&
+  // data.filter((row: any) => {
+  //   const matchesSearch = visibleColumns.some((columnField: any) => {
+  //     const processedValue = processColumnData({ field: columnField }, row); // Process the column data
+
+  //     if (processedValue !== null && processedValue !== undefined) {
+  //       if (typeof processedValue === "string") {
+  //         return processedValue.toLowerCase().includes(search.toLowerCase());
+  //       }
+
+  //        else if (processedValue instanceof Date) {
+  //         return processedValue.toLocaleString().toLowerCase().includes(search.toLowerCase());
+  //       } else {
+  //         // Handle other types if needed
+  //         console.warn("Unhandled type:", typeof processedValue, processedValue);
+  //         return false;
+  //       }
+  //     }
+  //     return false;
+  //   });
+
+  //   const matchesButtons =
+  //     (selectedDevice.length !== 0 ||
+  //       selectedPolicy.length !== 0 ||
+  //       selectedSeverity.length !== 0 ||
+  //       selectedStatus.length !== 0) &&
+  //     selectedButtons.some((button: any) => {
+  //       for (const columnField of visibleColumns) {
+  //         let buttonMatched = false;
+  //         const processedValue = processColumnData({ field: columnField }, row); // Process the column data
+  //         for (const key of button) {
+  //           if (processedValue !== null && processedValue !== undefined) {
+  //             if (
+  //               (typeof processedValue === "string" && typeof key === "string" &&
+  //                 processedValue.toLowerCase() === key.toLowerCase()) ||
+  //               (typeof processedValue === "number" && typeof key === "number" &&
+  //                 processedValue === key)
+  //             ) {
+  //               buttonMatched = true;
+  //               break;
+  //             }
+  //           }
+  //         }
+  //         if (buttonMatched) {
+  //           return true;
+  //         }
+  //       }
+  //       return false;
+  //     });
+
+  //   return (selectedDevice.length !== 0 ||
+  //     selectedPolicy.length !== 0 ||
+  //     selectedSeverity.length !== 0 ||
+  //     selectedStatus.length !== 0) ?
+  //     (matchesSearch && matchesButtons) :
+  //     matchesSearch;
+  // });
+
   const deleteDevice = async () => {
     // console.log("delete array", selectedRows);
     try {

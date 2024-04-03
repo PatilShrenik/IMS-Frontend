@@ -26,7 +26,7 @@ const CredentialProfile = () => {
         let cols: any = [];
         let response = await getAllCredsProfile();
     
-        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        const modifiedData = replacePeriodsWithUnderscores(response && response.result);
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
          data && data.forEach(obj => {
@@ -42,7 +42,7 @@ const CredentialProfile = () => {
      // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
       //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_"));
+        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "credential_context");
  
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {

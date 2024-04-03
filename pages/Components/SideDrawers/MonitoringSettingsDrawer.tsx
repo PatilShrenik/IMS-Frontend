@@ -154,13 +154,13 @@ const handleInputChange = (id: number, field: string, value: any) => {
                     Object Type
                   </th>
                   <th className="bg-textColor dark:bg-tabel-header dark:text-textColor py-2">
-                    Polling Interval
+                    Polling Interval(sec)
                   </th>
                   <th className="bg-textColor dark:bg-tabel-header dark:text-textColor py-2">
                     Object Enabled
                   </th>
-                  <th className="bg-textColor dark:bg-tabel-header dark:text-textColor py-2">
-                    Update
+                  <th className="bg-textColor w-[10em] dark:bg-tabel-header dark:text-textColor py-2">
+                    
                   </th>
                 </tr>
               </thead>

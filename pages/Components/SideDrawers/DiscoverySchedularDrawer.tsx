@@ -18,7 +18,8 @@ import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import SingleSelect from "../Selects";
 import "rsuite/dist/rsuite.min.css";
 import { useAppContext } from "../AppContext";
-import TimeRangePicker from "../TimeRnangePicker";
+import { Chip, TextField } from "@material-ui/core";
+import { CustomChip } from "../Chips";
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: "60%",
@@ -117,6 +118,8 @@ const DiscoverySchedularDrawer = (props: any) => {
           frequency: "CUSTOME",
         },
       });
+      setEmails([]);
+      setNewEmail("");
       setActiveButton("DEVICE");
       setSelection("DEVICE");
       setFrequencyButton("CUSTOME");
@@ -124,6 +127,35 @@ const DiscoverySchedularDrawer = (props: any) => {
       setErrorKeys([]);
     }
   }, [open]);
+
+  const [newEmail, setNewEmail] = useState("");
+  const [emails, setEmails] = useState<any[]>(
+    data.email.filter((email: string) => email !== "")
+  );
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEmail(event.target.value);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === " ") {
+      addEmail();
+    }
+  };
+
+  const addEmail = () => {
+    if (newEmail.trim() !== "" && newEmail.includes("@")) {
+      const updatedEmails = [...emails, newEmail.trim()];
+      setData({ ...data, email: updatedEmails });
+      setEmails(updatedEmails);
+      setNewEmail("");
+    }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedEmails = emails.filter((_, i) => i !== index);
+    setData({ ...data, email: updatedEmails });
+    setEmails(updatedEmails);
+  };
 
   const groupValues =
     allGroups &&
@@ -157,7 +189,7 @@ const DiscoverySchedularDrawer = (props: any) => {
       setAllDevices(response.result);
     };
     getDevices();
-  }, [open]);
+  }, []);
 
   // console.log("group", groupValues);
 
@@ -166,22 +198,28 @@ const DiscoverySchedularDrawer = (props: any) => {
     setData({ ...data, [name]: value });
     // console.log("first",data);
   };
-  const handleEmailChange = (event: any) => {
-    const newEmailValue = event.target.value;
-    const emailArray = newEmailValue.split(",");
-   // const emailArray = newEmailValue.split(",").map(email => email.trim());
+  // const handleEmailChange = (event: any) => {
+  //   const newEmailValue = event.target.value;
+  //   const emailArray = newEmailValue.split(",");
+  //  // const emailArray = newEmailValue.split(",").map(email => email.trim());
+  //   setData((prevData: any) => ({
+  //     ...prevData,
+  //     email: emailArray,
+  //   }));
+  // };
+
+  const handleButtonClick = (value: any) => {
+    console.log("but click", value);
+    setSelection(value);
+    setActiveButton(value);
     setData((prevData: any) => ({
       ...prevData,
-      email: emailArray,
+      entity_type: value,
+      entities: [], // Ensure entities are being set to an empty array
     }));
   };
 
-  const handleButtonClick = (value: any) => {
-    setSelection(value);
-    setActiveButton(value);
-    setData({ ...data, entity_type: value, entities: [] });
-  };
-
+  // console.log("data-----",data)
   const handleFrequencyClick = (value: any) => {
     setFrequency(value);
     // if (value === "WEEKLY") {
@@ -222,7 +260,10 @@ const DiscoverySchedularDrawer = (props: any) => {
       scheduler_context: {
         ...prevSnmpObject.scheduler_context,
         frequency: value,
-        //cron:""
+        scheduled_times: [], // Reset selected times
+        days_of_week: [], // Reset selected days of week
+        days_of_month: [], // Reset selected days of month
+        cron: "", // Reset cron value
       },
     }));
   };
@@ -309,14 +350,17 @@ const DiscoverySchedularDrawer = (props: any) => {
   };
 
   const handleDeviceEntities = (values: any) => {
-    //setChange(!change);
+    console.log("dev", values);
+
     setData({
       ...data,
       entities: values,
     });
   };
+
   const handleGroupEntities = (values: any) => {
-    // setChange(!change);
+    console.log("grp", values);
+
     setData({
       ...data,
       entities: values,
@@ -354,7 +398,6 @@ const DiscoverySchedularDrawer = (props: any) => {
           handleDrawerClose();
         } else {
           setErrors(response.errors);
-
           toast.error(response.message, {
             position: "bottom-right",
             autoClose: 2000,
@@ -450,6 +493,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               <div className="px-4">
                 {selection == "DEVICE" ? (
                   <SingleSelect
+                    key="device-select"
                     label="Select Devices"
                     isMulti={true}
                     title="Select Devices"
@@ -459,6 +503,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   />
                 ) : (
                   <SingleSelect
+                    key="group-select"
                     label="Select Groups"
                     isMulti={true}
                     title="Select Groups"
@@ -474,7 +519,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               <h5 className="mx-4 font-normal dark:text-textColor">
                 Notify To
               </h5>
-              <CustomeInput
+              {/* <CustomeInput
                 label="Email"
                 name="email"
                 value={data && data.email.join(",")}
@@ -482,11 +527,61 @@ const DiscoverySchedularDrawer = (props: any) => {
                 onChange={handleEmailChange}
                 type="email"
                 disable={false}
-              />
+              /> */}
+              {/* <div>
+                <div style={{ marginTop: "3px" }}>
+                  {emails.map((email, index) => (
+                    <Chip
+                      key={index}
+                      label={email}
+                      onDelete={() => handleDelete(index)}
+                      style={{ margin: "5px" }}
+                    />
+                  ))}
+                </div>
+                <input
+                  className="w-[18rem] mx-4  text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent py-[0.9rem] px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
+                  // className="border border-gray-300 rounded-lg px-4 py-2 w-72 outline-none focus:border-blue-500"
+                  type="text"
+                  placeholder="Emails"
+                  value={newEmail}
+                  onChange={handleEmailChange}
+                  onKeyPress={handleKeyPress}
+                />
+              </div> */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <div
+                  className={`relative flex flex-wrap items-center mx-4 text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent  px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+                    emails.length > 0 ? "w-full" : "w-[18rem]"
+                  }`}
+                  style={{ minHeight: "52px" }} // Adjust the height to match the input field
+                >
+                  {emails.map((email, index) => (
+                    <CustomChip
+                      key={index}
+                      label={email}
+                      onDelete={() => handleDelete(index)} 
+                      style={{marginRight:"6px"}}
+                    />
+                  ))}
+                  <input
+                    className="flex-grow bg-transparent outline-none px-2"
+                    type="text"
+                    placeholder="Emails"
+                    value={newEmail}
+                    onChange={handleEmailChange}
+                    onKeyPress={handleKeyPress}
+                  />
+                </div>
+              </div>
             </div>
-            {/* <div>
-              <i>{`Note :- Enter email's in comma(,) seperated  formate.`}</i>
-            </div> */}
+            <div className="mx-4 my-2 w-[18rem] dark:text-textColor">
+              <i>
+                Note: - Press{" "}
+                <strong>space</strong> to add emails
+              </i>
+            </div>
+
             {/* </div> */}
             {/* <CustomeInput
                 label="Send Message to"
@@ -498,7 +593,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               /> */}
             {/* </div> */}
             <div className="mx-4 py-2">
-              <h5 className="mb-4 font-normal dark:text-textColor">Schedule</h5>
+              <h5 className="my-4 font-normal dark:text-textColor">Schedule</h5>
               {/* <TimeRangePicker
                 showOneCalendar={true}
                 onTimeRangeChange={handleDate}
@@ -611,6 +706,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               ) : frequency == "WEEKLY" ? (
                 <>
                   <SingleSelect
+                    key="weekly-select"
                     label="Select Days"
                     isMulti={true}
                     width={150}
@@ -628,6 +724,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               ) : frequency == "MONTHLY" ? (
                 <>
                   <SingleSelect
+                    key="monthly-select"
                     label="Select Dates"
                     isMulti={true}
                     width={150}

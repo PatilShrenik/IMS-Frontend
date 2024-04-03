@@ -545,9 +545,10 @@ const ChartWidget = (props: any) => {
   console.log("indicatorsarray########", indicatorsArray);
   console.log("filteredataarray########", filteredData);
   return (
-    <div className="h-full px-2 dark:bg-dark-menu-color">
+    <div className="h-full  dark:bg-dark-menu-color">
       <div className="flex">
         <CustomeInput
+        style={{width:"4rem", }}
           label="Name"
           name="name"
           value={data.name}
@@ -699,6 +700,7 @@ const ChartWidget = (props: any) => {
               </ButtonGroup>
               {selection == "device" ? (
                 <SingleSelect
+                key="device-select"
                   label="Select Devices"
                   // value={data.entities}
                   selectData={deviceValues}
@@ -708,6 +710,7 @@ const ChartWidget = (props: any) => {
                 />
               ) : (
                 <SingleSelect
+                key="group-select"
                   label="Select Groups"
                   selectData={groupValues}
                   apiData={[""]}

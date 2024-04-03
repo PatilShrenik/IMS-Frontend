@@ -18,6 +18,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { Bounce, toast } from "react-toastify";
 import {
   bulkActionDeviceDelete,
+  getAllDevice,
   getAllDeviceManager,
 } from "@/pages/api/api/DeviceManagementAPI";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
@@ -83,11 +84,11 @@ const Profiling = () => {
       setAllGroups(response.result);
     };
     getGroups();
-    const getDiscoveryScheduler = async () => {
-      let response = await getAllDiscoverySch();
-      // setAllDiscoverySch(response.result);
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
     };
-    getDiscoveryScheduler();
+    getDevices();
   }, []);
   useEffect(() => {
     try {
@@ -453,9 +454,26 @@ const Profiling = () => {
             DeviceList={DeviceList}
             handleDialogClose={handleDialogClose}
             keysArray={keysArray}
+            deviceValues1={deviceValues}
           />
         </>
       );
+    }
+    else  if (column.field === "created_on") {
+  
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
+   
+      return dateObject.toLocaleString();
+    }
+    else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
     }
 
     // If no specific processing needed, return the original value
@@ -677,7 +695,7 @@ const handleOpenProfile = (rowId: any) =>{
                   <th
                     className="bg-textColor  text-tabel-header dark:text-textColor dark:bg-tabel-header"
                     style={{
-                      padding: "0px 8px",
+                      padding: "0px 18px",
                       fontSize: "14px",
                       fontWeight: "600",
                       borderBottom: "0",

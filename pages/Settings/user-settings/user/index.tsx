@@ -27,9 +27,10 @@ const User = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllUser();
-    
+    console.log("user data from API",response.result);
         const modifiedData = replaceDotsWithUnderscores( response && response.result);
-     
+        console.log("user data from API",modifiedData);
+
           
 
         const extractAllKeys = (data: any[]) => {

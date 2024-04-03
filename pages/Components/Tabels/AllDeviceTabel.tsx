@@ -40,6 +40,7 @@ import AllDeviceMenu from "../ActionMenu/AllDeviceMenu";
 import UploadCSVDrawer from "../SideDrawers/UploadCSV";
 import Link from "next/link";
 import DiscoveryContext from "../Modals/DiscoveryContextModal";
+import * as XLSX from 'xlsx';
 
 const AllDeviceTabel = (props: any) => {
   const {
@@ -122,6 +123,7 @@ const AllDeviceTabel = (props: any) => {
 
   const handleSearchChange = (event: any) => {
     setSearch(event.target.value);
+    
   };
 
   const handleColumnToggle = (columnField: any) => {
@@ -165,49 +167,83 @@ const AllDeviceTabel = (props: any) => {
     }
   }, [selectedRows]);
 
-  const downloadCSV = () => {
+  // const downloadCSV = () => {
+  //   const selectedRowsData = data.filter((row: any) =>
+  //     selectedRows.includes(row._id)
+  //   );
+
+  //   const csvData = [Object.keys(selectedRowsData[0])]; // Header
+
+  //   selectedRowsData.forEach((row: any) => {
+  //     const rowData: any = Object.values(row);
+  //     csvData.push(rowData);
+  //   });
+
+  //   const csvContent = csvData.map((row) => row.join(",")).join("\n");
+
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", "data.csv");
+  //     link.style.visibility = "hidden";
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   }
+  // };
+
+  // const filteredData =
+  //   data &&
+  //   data.filter((row: any) => {
+  //     const matchesSearch = visibleColumns.some(
+  //       (columnField: any) =>
+  //         typeof row[columnField] === "string" &&
+  //         row[columnField].toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     const matchesButtons =
+  //     selectedButtons.length === 0 ||
+  //     selectedButtons.some((button: any) => row["plugin_type"] === button);
+  //     // console.log("matched button", row["plugin_type"]);
+  //     return matchesSearch && matchesButtons;
+  //   });
+  const downloadExcel = () => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
     );
-
-    const csvData = [Object.keys(selectedRowsData[0])]; // Header
-
-    selectedRowsData.forEach((row: any) => {
-      const rowData: any = Object.values(row);
-      csvData.push(rowData);
+  
+    // Function to convert timestamp to human-readable date and time
+    const formatTimestamp = (timestamp: any) => {
+      if (timestamp === undefined) {
+        return ""; // Return empty string if timestamp is undefined
+      }
+      const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+      return date.toLocaleDateString() + ', ' + date.toLocaleTimeString(); // Format date and time according to user's locale
+    };
+  
+  
+    selectedRowsData.forEach( (row: any) => {
+      row.created_on = formatTimestamp(row.created_on);
+      row.updated_on = formatTimestamp(row.updated_on);
     });
-
-    const csvContent = csvData.map((row) => row.join(",")).join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "data.csv");
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    console.log("excel row data",selectedRowsData);
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+  
+    // Convert data to worksheet
+    const ws = XLSX.utils.json_to_sheet(selectedRowsData);
+  
+    // Set column widths
+    const columnWidths = [{wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20},  {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}];
+    ws['!cols'] = columnWidths;
+  
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    // Generate Excel file
+    XLSX.writeFile(wb, 'data.xlsx');
   };
-
-  const filteredData =
-    data &&
-    data.filter((row: any) => {
-      const matchesSearch = visibleColumns.some(
-        (columnField: any) =>
-          typeof row[columnField] === "string" &&
-          row[columnField].toLowerCase().includes(search.toLowerCase())
-      );
-
-      const matchesButtons =
-        selectedButtons.length === 0 ||
-        selectedButtons.some((button: any) => row["plugin_type"] === button);
-      // console.log("matched button", row["plugin_type"]);
-      return matchesSearch && matchesButtons;
-    });
-
   const handleButtonClick = (title: any) => {
     setSelectedButtons((prevSelectedButtons: any) => {
       if (prevSelectedButtons.includes(title)) {
@@ -425,10 +461,49 @@ const AllDeviceTabel = (props: any) => {
       const device_status = row[column.field] && row[column.field];
       return <StatusChips value={device_status} />;
     }
+    else  if (column.field === "created_on") {
+      //convert to userfriendly values
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
+      // Format the date as desired, e.g., "Jan 1, 2024 12:00 PM"
+      return dateObject.toLocaleString();
+    }
+    else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
+    }
 
     // If no specific processing needed, return the original value
     return row[column.field];
   };
+
+  const filteredData =
+  data &&
+  data.filter((row: any) => {
+    const matchesSearch = visibleColumns.some((columnField: any) => {
+      const processedValue = processColumnData({ field: columnField }, row); // Process the column data
+
+      if (typeof processedValue === "string" || typeof processedValue === "number" || processedValue instanceof Date) {
+        // Check if the processed value is a string, number, or date
+        if (typeof processedValue === "string") {
+          return processedValue.toLowerCase().includes(search.toLowerCase());
+        } else if (typeof processedValue === "number") {
+          return processedValue.toString().toLowerCase().includes(search.toLowerCase());
+        } else if (processedValue instanceof Date) {
+          return processedValue.toLocaleString().toLowerCase().includes(search.toLowerCase());
+        }
+      }
+      return false;
+    });
+
+    return matchesSearch;
+  });
+
   const deleteDevice = async () => {
     console.log("delete array", selectedRows);
     try {
@@ -616,7 +691,8 @@ const AllDeviceTabel = (props: any) => {
                     placement="top"
                   >
                     <FileDownloadIcon
-                      onClick={downloadCSV}
+                      //onClick={downloadCSV}
+                      onClick={downloadExcel}
                       className="cursor-pointer dark:text-textColor"
                       style={{
                         margin: "0 5px",

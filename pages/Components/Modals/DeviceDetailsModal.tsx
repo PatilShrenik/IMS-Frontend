@@ -6,29 +6,29 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 
 const DeviceDetailsModal = (props: any) => {
   //   const classes = useStyles();
-  const { open, handleDialogClose, device_ids } = props;
+  const { open, handleDialogClose, device_ids ,deviceValues } = props;
   const [allDevices, setAllDevices] = React.useState([]);
+//  console.log("dev id",device_ids)
+  // React.useEffect(() => {
+  //   const getDevices = async () => {
+  //     let response = await getAllDevice();
+  //     setAllDevices(response.result);
+  //   };
+  //   getDevices();
+  // }, []);
 
-  React.useEffect(() => {
-    const getDevices = async () => {
-      let response = await getAllDevice();
-      setAllDevices(response.result);
-    };
-    getDevices();
-  }, []);
-
-  const deviceValues: any[] =
-    allDevices &&
-    allDevices
-      .filter((item: any) => device_ids.includes(item._id))
-      .map((filteredDevice: any) => ({
-        hostName: filteredDevice.hostname,
-        alias: filteredDevice.alias,
-        status: filteredDevice.status,
-        plugin_type: filteredDevice["plugin.type"],
-        name: filteredDevice.hostname,
-        ip_address: filteredDevice["ip.address"],
-      }));
+  // const deviceValues: any[] =
+  //   allDevices &&
+  //   allDevices
+  //     .filter((item: any) => device_ids.includes(item._id))
+  //     .map((filteredDevice: any) => ({
+  //       hostName: filteredDevice.hostname,
+  //       alias: filteredDevice.alias,
+  //       status: filteredDevice.status,
+  //       plugin_type: filteredDevice["plugin.type"],
+  //       name: filteredDevice.hostname,
+  //       ip_address: filteredDevice["ip.address"],
+  //     }));
  // console.log("devdejasds", deviceValues);
   return (
     <Drawer
@@ -84,7 +84,6 @@ const DeviceDetailsModal = (props: any) => {
               {deviceValues &&
                 deviceValues.map((data: any, index: any) => {
                   const isLastRow = index === data.length - 1;
-                  console.log(data.name);
                   return (
                     <tr
                       className="bg-white dark:bg-dark-container dark:text-textColor"

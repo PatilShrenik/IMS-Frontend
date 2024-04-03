@@ -35,6 +35,7 @@ import PolicyActionMenu from "../ActionMenu/PolicyActionMenu";
 import { deleteBulkPolicy } from "@/pages/api/api/PolicyApi";
 import { getAllGropus } from "@/pages/api/api/GroupsAPI";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
+import * as XLSX from 'xlsx';
 
 const PoliciesTable = (props: any) => {
   const {
@@ -276,6 +277,42 @@ const PoliciesTable = (props: any) => {
       document.body.removeChild(link);
     }
   };
+  const downloadExcel = () => {
+    const selectedRowsData = data.filter((row: any) =>
+      selectedRows.includes(row._id)
+    );
+  
+    // Function to convert timestamp to human-readable date and time
+    const formatTimestamp = (timestamp: any) => {
+      if (timestamp === undefined) {
+        return ""; // Return empty string if timestamp is undefined
+      }
+      const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+      return date.toLocaleDateString() + ', ' + date.toLocaleTimeString(); // Format date and time according to user's locale
+    };
+  
+  
+    selectedRowsData.forEach( (row: any) => {
+      row.created_on = formatTimestamp(row.created_on);
+      row.updated_on = formatTimestamp(row.updated_on);
+    });
+    console.log("excel row data",selectedRowsData);
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+  
+    // Convert data to worksheet
+    const ws = XLSX.utils.json_to_sheet(selectedRowsData);
+  
+    // Set column widths
+    const columnWidths = [{wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20},  {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}];
+    ws['!cols'] = columnWidths;
+  
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    // Generate Excel file
+    XLSX.writeFile(wb, 'data.xlsx');
+  };
 
   const filteredData =
     data &&
@@ -474,8 +511,23 @@ const PoliciesTable = (props: any) => {
       //   })
       // );
       return recipients && recipients[0] && recipients[0];
+    }    
+     else  if (column.field === "created_on") {
+  
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
+   
+      return dateObject.toLocaleString();
     }
-
+    else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
+    }
     // If no specific processing needed, return the original value
     return row[column.field] == "" ? "-" : row[column.field];
   };
@@ -575,7 +627,8 @@ const PoliciesTable = (props: any) => {
                       placement="top"
                     >
                       <FileDownloadIcon
-                        onClick={downloadCSV}
+                        //onClick={downloadCSV}
+                        onClick={downloadExcel}
                         className="cursor-pointer"
                         style={{
                           margin: "0 5px",

@@ -538,6 +538,7 @@ const GridWidget = (props: any) => {
               </ButtonGroup>
               {selection == "device" ? (
                 <SingleSelect
+                key="device-select"
                   label="Select Devices"
                   // value={data.entities}
                   selectData={deviceValues}
@@ -547,6 +548,7 @@ const GridWidget = (props: any) => {
                 />
               ) : (
                 <SingleSelect
+                key="group-select"
                   label="Select Groups"
                   selectData={groupValues}
                   apiData={[""]}

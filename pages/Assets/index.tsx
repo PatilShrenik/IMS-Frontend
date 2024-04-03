@@ -91,19 +91,30 @@ const Assets = () => {
                   headerName: "HostName",
                   minWidth: 150,
                 });
-              } else if (key == "device_status") {
-                cols.unshift({
-                  field: key.replace(/\./g, "_"),
-                  headerName: "Status",
-                  minWidth: 150,
-                });
-              } else if (key == "ip_address") {
+              }
+              
+              else if (key == "ip_address") {
                 cols.push({
                   field: key.replace(/\./g, "_"),
                   headerName: "IP Address",
                   minWidth: 150,
                 });
-              } else if (key == "alias") {
+              }
+              else if (key == "plugin_type") {
+                cols.unshift({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "plugin type",
+                  minWidth: 150,
+                });
+              }
+              
+              else if (key == "device_status") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "Status",
+                  minWidth: 150,
+                });
+              }  else if (key == "alias") {
                 cols.push({
                   field: key.replace(/\./g, "_"),
                   headerName: "Alias",
@@ -132,7 +143,12 @@ const Assets = () => {
           });
         cols.push({
           field: "last_availability_checked_on",
-          headerName: "Last Availability checked On",
+          headerName: "Last Availability",
+          minWidth: 250,
+        });
+        cols.push({
+          field: "last_discovered_on",
+          headerName: "Last Discovered On",
           minWidth: 250,
         });
         // const x = filteredCols && filteredCols.includes("availabilty_context");
@@ -158,16 +174,16 @@ const Assets = () => {
         setColumns(cols);
         console.log("rows", modifiedData);
         const hiddenColumnsValues = [
-          // "alias",
+           "alias",
           "discovery_schedulers",
           "country",
-          // "groups",
+           "groups",
           "profile_type",
           "port",
           "credential_profiles",
           // "hostname",
           "availability_interval",
-          // "flow_enabled",
+           "device_type",
           "auto_provision",
           "location",
           "site",
@@ -189,7 +205,7 @@ const Assets = () => {
           "timestamp",
           "timezone",
           "valid_credential_profile",
-          "last_discovered_on",
+          // "last_discovered_on",
         ];
 
         setVisibleColumns(

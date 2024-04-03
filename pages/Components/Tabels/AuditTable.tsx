@@ -98,7 +98,7 @@ const AuditTable = (props: any) => {
   const [payloadForAlert, setpayloadForAlert] = React.useState({
     time_range: "",
     filters: {
-      device_filter: {
+      // device_filter: {
         pre_filters: [
           {
             filter_type: "equals",
@@ -121,8 +121,8 @@ const AuditTable = (props: any) => {
             values: [],
           },
         ],
-        post_filters: [],
-      },
+      //   post_filters: [],
+      // },
     },
   });
 
@@ -481,7 +481,7 @@ const AuditTable = (props: any) => {
       setpayloadForAlert({
         time_range: "",
         filters: {
-          device_filter: {
+          // device_filter: {
             pre_filters: [
               {
                 filter_type: "equals",
@@ -504,8 +504,8 @@ const AuditTable = (props: any) => {
                 values: [],
               },
             ],
-            post_filters: [],
-          },
+          //   post_filters: [],
+          // },
         },
       });
     }
@@ -520,15 +520,13 @@ const AuditTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        device_filter: {
-          ...prevData.filters.device_filter,
-          pre_filters: prevData.filters.device_filter.pre_filters.map(
+          pre_filters: prevData.filters.pre_filters.map(
             (filter: any) =>
               filter.indicator === "collection"
                 ? { ...filter, values: value }
                 : filter
           ),
-        },
+        
       },
     }));
   };
@@ -538,15 +536,14 @@ const AuditTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        device_filter: {
-          ...prevData.filters.device_filter,
-          pre_filters: prevData.filters.device_filter.pre_filters.map(
+ 
+          pre_filters: prevData.filters.pre_filters.map(
             (filter: any) =>
               filter.indicator === "username"
                 ? { ...filter, values: value }
                 : filter
           ),
-        },
+        
       },
     }));
   };
@@ -556,15 +553,14 @@ const AuditTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        device_filter: {
-          ...prevData.filters.device_filter,
-          pre_filters: prevData.filters.device_filter.pre_filters.map(
+     
+          pre_filters: prevData.filters.pre_filters.map(
             (filter: any) =>
               filter.indicator === "status"
                 ? { ...filter, values: value }
                 : filter
           ),
-        },
+      
       },
     }));
   };
@@ -574,15 +570,14 @@ const AuditTable = (props: any) => {
       ...prevData,
       filters: {
         ...prevData.filters,
-        device_filter: {
-          ...prevData.filters.device_filter,
-          pre_filters: prevData.filters.device_filter.pre_filters.map(
+     
+          pre_filters: prevData.filters.pre_filters.map(
             (filter: any) =>
               filter.indicator === "request"
                 ? { ...filter, values: value }
                 : filter
           ),
-        },
+        
       },
     }));
   };
@@ -685,7 +680,22 @@ const AuditTable = (props: any) => {
         );
       }
     }
-
+    else  if (column.field === "created_on") {
+  
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
+   
+      return dateObject.toLocaleString();
+    }
+    else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
+    }
     // If no specific processing needed, return the original value
     return <div className="px-2">{row[column.field]}</div>;
   };

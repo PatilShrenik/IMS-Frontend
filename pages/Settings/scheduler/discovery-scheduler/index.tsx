@@ -32,7 +32,6 @@ const DiscoverySchedular = () => {
         let response = await getAllDiscoverySch();
         const modifiedData = replaceDotsWithUnderscores( response && response.result);
         
-
         //const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
         const indexOfObjectWithEmail =
         modifiedData &&
@@ -56,7 +55,15 @@ const DiscoverySchedular = () => {
                 headerName: "Entity type",
                 minWidth: 150,
               });
-            } else if (key == "name") {
+            }
+            else if (key == "email") {
+              cols.push({
+                field: "email",
+                headerName: "Emails",
+                minWidth: 150,
+              });
+            }
+            else if (key == "name") {
               cols.unshift({
                 field: "name",
                 headerName: "Name",

@@ -15,6 +15,8 @@ import {
   Backdrop,
   Fade,
 } from "@mui/material";
+import * as XLSX from 'xlsx';
+
 import Zoom from "@mui/material/Zoom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -89,16 +91,21 @@ const CredntialProfileTable = (props: any) => {
   const deviceValues =
     allDevices &&
     allDevices.map((item: any) => ({
-      name: item.hostname,
+       hostName: item.hostname,
+        alias: item.alias,
+        status: item.status,
+        plugin_type: item["plugin.type"],
+        name: item.hostname,
+        ip_address: item["ip.address"],
       id: item._id,
     }));
 
   React.useEffect(() => {
-    const getCredsProfile = async () => {
+    const getDevices = async () => {
       let response = await getAllDevice();
       setAllDevices(response.result);
     };
-    getCredsProfile();
+    getDevices();
     const getGroups = async () => {
       let response = await getAllGropus();
       setAllGroups(response.result);
@@ -201,33 +208,69 @@ const CredntialProfileTable = (props: any) => {
     }
   };
 
-  const downloadCSV = () => {
+  // const downloadCSV = () => {
+  //   const selectedRowsData = data.filter((row: any) =>
+  //     selectedRows.includes(row._id)
+  //   );
+
+  //   const csvData = [Object.keys(selectedRowsData[0])]; // Header
+
+  //   selectedRowsData.forEach((row: any) => {
+  //     const rowData: any = Object.values(row);
+  //     csvData.push(rowData);
+  //   });
+
+  //   const csvContent = csvData.map((row) => row.join(",")).join("\n");
+
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", "data.csv");
+  //     link.style.visibility = "hidden";
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   }
+  // };
+
+  const downloadExcel = () => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
     );
-
-    const csvData = [Object.keys(selectedRowsData[0])]; // Header
-
-    selectedRowsData.forEach((row: any) => {
-      const rowData: any = Object.values(row);
-      csvData.push(rowData);
+  
+    // Function to convert timestamp to human-readable date and time
+    const formatTimestamp = (timestamp: any) => {
+      if (timestamp === undefined) {
+        return ""; // Return empty string if timestamp is undefined
+      }
+      const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+      return date.toLocaleDateString() + ', ' + date.toLocaleTimeString(); // Format date and time according to user's locale
+    };
+  
+  
+    selectedRowsData.forEach( (row: any) => {
+      row.created_on = formatTimestamp(row.created_on);
+      row.updated_on = formatTimestamp(row.updated_on);
     });
-
-    const csvContent = csvData.map((row) => row.join(",")).join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "data.csv");
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    console.log("excel row data",selectedRowsData);
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+  
+    // Convert data to worksheet
+    const ws = XLSX.utils.json_to_sheet(selectedRowsData);
+  
+    // Set column widths
+    const columnWidths = [{wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20},  {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}];
+    ws['!cols'] = columnWidths;
+  
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    // Generate Excel file
+    XLSX.writeFile(wb, 'data.xlsx');
   };
-
   const filteredData =
     data &&
     data.filter((row: any) => {
@@ -294,6 +337,7 @@ const CredntialProfileTable = (props: any) => {
   };
 
   const handleClickOpen = (deviceIds: any) => {
+    console.log("dve id",deviceIds);
     setViewedRowId(deviceIds);
     setDialogOpen(deviceIds);
   };
@@ -318,7 +362,6 @@ const CredntialProfileTable = (props: any) => {
       return matchingGroup ? matchingGroup.name : row[column.field];
     } else if (column.field === "device_ids") {
       const deviceIds = row[column.field];
-//      console.log("ids",deviceIds);
       return (
         <>
           <div
@@ -335,6 +378,7 @@ const CredntialProfileTable = (props: any) => {
             open={dialogOpen === deviceIds}
             handleDialogClose={handleDialogClose}
             device_ids={deviceIds}
+            deviceValues={deviceValues}
           />
         </>
       );
@@ -358,6 +402,22 @@ const CredntialProfileTable = (props: any) => {
       return row.credential_context["snmp.version"] == ""
         ? "-"
         : row.credential_context["snmp.version"];
+    }
+    else  if (column.field === "created_on") {
+  
+      const timestamp = row[column.field];
+      const dateObject = new Date(timestamp * 1000);
+   
+      return dateObject.toLocaleString();
+    }
+    else if (column.field === "updated_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Upadated";
+      }
     }
 
     // If no specific processing needed, return the original value
@@ -461,7 +521,8 @@ const CredntialProfileTable = (props: any) => {
                       placement="top"
                     >
                       <FileDownloadIcon
-                        onClick={downloadCSV}
+                        //onClick={downloadCSV}
+                        onClick={downloadExcel}
                         className="cursor-pointer  dark:text-textColor"
                         style={{
                           margin: "0 5px",

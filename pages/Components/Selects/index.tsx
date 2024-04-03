@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 const SingleSelect = (props: any) => {
-  const { label, selectData, onChange, require, value, isMulti } = props;
+  const { label, selectData, onChange, require, value, isMulti , key  } = props;
   const [selectFocused, setSelectFocused] = useState(false);
 
   const handleSelectChange = (data: any) => {

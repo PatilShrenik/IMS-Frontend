@@ -3,7 +3,7 @@ import React from "react";
 const Chips = (props: any) => {
   
   const { value } = props;
-   console.log("chip value", value);
+//console.log("chip value", value);
   return (
     <div className=" items-center h-[22px] w-[30px] border border-primary2 dark:text-primary2  rounded-full">
       <p className="mt-[2px] text-sm">{value}</p>
@@ -48,3 +48,16 @@ export const DeviceProfileChip = (props: any) => {
   );
 };
 
+export const CustomChip = (props: any) => {
+  const { label, onDelete } = props ;
+  return (
+    <div
+      className="inline-flex items-center dark:bg-[#4B5563] dark:text-textColor   bg-gray-200 text-gray-700 mr-2 rounded-md"
+      style={{ cursor: "pointer" }}
+      onClick={onDelete}
+    >
+      <span className="px-2 ">{label}</span>
+      <span className="bg-[#4B5563] text-textColor px-1.5 py-1 text-xs font-bold hover:bg-red-500   ">&#x2715;</span> {/* Close icon */}
+    </div>
+  );
+};

@@ -5,27 +5,31 @@ import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 
 const DeviceProfileModal = (props: any) => {
-  const { open, handleDialogClose, keysArray, DeviceList } = props;
-  // console.log("open", open);
+  const { open, handleDialogClose, keysArray, DeviceList , deviceValues1} = props;
+  
   const [allDevices, setAllDevices] = React.useState([]);
   // const classes = useStyles();
 
   React.useEffect(() => {
-    const getDevices = async () => {
-      let response = await getAllDevice();
-      setAllDevices(response.result);
-    };
-    getDevices();
+    // const getDevices = async () => {
+    //   let response = await getAllDevice();
+    //   setAllDevices(response.result);
+    // };
+    // getDevices();
+    setAllDevices(deviceValues1);
   }, []);
+
   const deviceIds = DeviceList && Object.values(DeviceList);
+ // console.log("all",allDevices);
   const deviceValues: any[] =
-    allDevices &&
-    allDevices
-      .filter((item: any) => deviceIds && deviceIds.includes(item._id))
+  allDevices &&
+  allDevices
+      .filter((item: any) => deviceIds && deviceIds.includes(item.id))
       .map((filteredDevice: any) => ({
-        hostname: filteredDevice.hostname,
+        hostname: filteredDevice.name,
       }));
-    //  console.log("first",deviceValues);
+     
+
   return (
     <Drawer
       anchor="right"

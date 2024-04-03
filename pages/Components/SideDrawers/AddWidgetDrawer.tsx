@@ -34,7 +34,7 @@ const AddWidgetDrawer = (props: any) => {
       open={open}
       variant="temporary"
       classes={{ paper: classes.drawer }}
-      className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:bg-dark-menu-color"
+       className="shadow-sm shadow-dark-container w-full overflow-y-auto dark:bg-dark-menu-color"
     >
       <div className="h-full w-full dark:bg-dark-menu-color bg-white ">
         <Box sx={{ width: "100%", typography: "body1" }}>
@@ -122,16 +122,16 @@ const AddWidgetDrawer = (props: any) => {
                   />
                 </TabList> */}
               </Box>
-              <TabPanel style={{ padding: "0", height: "100%" }} value="chart">
+              <TabPanel style={{ padding: "0", height: "100%", width:"95%" }} value="chart">
                 <ChartWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" }} value="grid">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"95%" }} value="grid">
                 <GridWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" }} value="topn">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"95%"}} value="topn">
                 <TOPNWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" }} value="gauge">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"95%" }} value="gauge">
                 <GaugeWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
               <TabPanel value="sankey">Sankey</TabPanel>
