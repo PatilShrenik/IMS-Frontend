@@ -483,7 +483,7 @@ const AlertTable = (props: any) => {
         : matchesSearch;
     });
 
-  console.log("selectedbuttons", selectedButtons);
+ // console.log("selectedbuttons", selectedButtons);
   const handleButtonClick = (title: any) => {
     setSelectedButtons((prevSelectedButtons: any) => {
       if (prevSelectedButtons.includes(title)) {

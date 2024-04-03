@@ -51,13 +51,17 @@ export const DeviceProfileChip = (props: any) => {
 export const CustomChip = (props: any) => {
   const { label, onDelete } = props ;
   return (
-    <div
-      className="inline-flex items-center dark:bg-[#4B5563] dark:text-textColor   bg-gray-200 text-gray-700 mr-2 rounded-md"
-      style={{ cursor: "pointer" }}
-      onClick={onDelete}
-    >
-      <span className="px-2 ">{label}</span>
-      <span className="bg-[#4B5563] text-textColor px-1.5 py-1 text-xs font-bold hover:bg-red-500   ">&#x2715;</span> {/* Close icon */}
-    </div>
+    // <div
+    //   className="inline-flex items-center dark:bg-[#4B5563] dark:text-textColor   bg-gray-200 text-gray-700 mr-2 rounded-md"
+    //   style={{ cursor: "pointer" }}
+    //   onClick={onDelete}
+    // >
+    //   <span className="px-2 ">{label}</span>
+    //   <span className="bg-[#4B5563] text-textColor px-1.5 py-1 text-xs font-bold  hover:bg-red-400  ">&#x2715;</span> {/* Close icon */}
+    // </div>
+    <div className="inline-flex items-center dark:bg-[#4B5563] dark:text-textColor bg-gray-200 text-gray-700 mr-2 rounded-md" style={{ cursor: "pointer" }}>
+    <span className="px-2">{label}</span>
+    <span className="bg-[#4B5563] text-textColor px-1.5 py-1 text-xs font-bold  hover:bg-red-400" onClick={onDelete}>&#x2715;</span> {/* Close icon */}
+  </div>
   );
 };

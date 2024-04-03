@@ -38,14 +38,14 @@ const initialState = {
     days_of_month: [""],
     cron: "",
     start_date: 0,
-    frequency: "CUSTOME",
+    frequency: "DAILY",
   },
 };
 const DiscoverySchedularDrawer = (props: any) => {
   const { open, handleDrawerClose } = props;
   const classes = useStyles();
   const [selection, setSelection] = React.useState("DEVICE");
-  const [frequency, setFrequency] = React.useState("CUSTOME");
+  const [frequency, setFrequency] = React.useState("DAILY");
   const [timeArray, setTimeArray] = React.useState<any>([]);
   const [change, setChange] = React.useState(true);
   const { themeSwitch, togglegetDisSchedApiState } = useAppContext();
@@ -54,7 +54,7 @@ const DiscoverySchedularDrawer = (props: any) => {
     "DEVICE"
   );
   const [frequencyButton, setFrequencyButton] = React.useState<string | null>(
-    "CUSTOME"
+    "DAILY"
   );
 
   const isBrowser = typeof window !== "undefined";
@@ -115,15 +115,15 @@ const DiscoverySchedularDrawer = (props: any) => {
           days_of_month: [""],
           cron: "",
           start_date: 0,
-          frequency: "CUSTOME",
+          frequency: "DAILY",
         },
       });
       setEmails([]);
       setNewEmail("");
       setActiveButton("DEVICE");
       setSelection("DEVICE");
-      setFrequencyButton("CUSTOME");
-      setFrequency("CUSTOME");
+      setFrequencyButton("DAILY");
+      setFrequency("DAILY");
       setErrorKeys([]);
     }
   }, [open]);
@@ -551,7 +551,7 @@ const DiscoverySchedularDrawer = (props: any) => {
               </div> */}
               <div style={{ position: "relative", display: "inline-block" }}>
                 <div
-                  className={`relative flex flex-wrap items-center mx-4 text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent  px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
+                  className={`relative flex flex-wrap items-center mx-4 text-gray-400 border-[1px] rounded-lg dark:border-dark-border bg-transparent  px-2 font-medium outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
                     emails.length > 0 ? "w-full" : "w-[18rem]"
                   }`}
                   style={{ minHeight: "52px" }} // Adjust the height to match the input field
@@ -577,7 +577,7 @@ const DiscoverySchedularDrawer = (props: any) => {
             </div>
             <div className="mx-4 my-2 w-[18rem] dark:text-textColor">
               <i>
-                Note: - Press{" "}
+                Note: - press{" "}
                 <strong>space</strong> to add emails
               </i>
             </div>
@@ -624,7 +624,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   aria-label="Basic button group"
                   className="my-5 ml-4 mr-7"
                 >
-                  <Button
+                  {/* <Button
                     // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
                     //   frequencyButton == "CUSTOME" &&
                     //   "bg-primary2 hover:bg-primary2 text-white"
@@ -638,14 +638,15 @@ const DiscoverySchedularDrawer = (props: any) => {
                     }}
                   >
                     Custom
-                  </Button>
+                  </Button> */}
                   <Button
                     // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
                     //   frequencyButton == "DAILY" &&
                     //   "bg-primary2 hover:bg-primary2 text-white"
                     // }`}
                     style={{
-                      width: "65px",
+                     // width: "65px",
+                      width: "100px",
                       backgroundColor:
                         frequencyButton === "DAILY" ? "#0078d4" : "",
                       color: frequencyButton === "DAILY" ? "white" : "",
@@ -660,7 +661,8 @@ const DiscoverySchedularDrawer = (props: any) => {
                     //   "bg-primary2 hover:bg-primary2 text-white"
                     // }`}
                     style={{
-                      width: "75px",
+                      //width: "75px",
+                      width: "105px",
                       backgroundColor:
                         frequencyButton === "WEEKLY" ? "#0078d4" : "",
                       color: frequencyButton === "WEEKLY" ? "white" : "",
@@ -671,8 +673,9 @@ const DiscoverySchedularDrawer = (props: any) => {
                   </Button>
                   <Button
                     style={{
-                      width: "85px",
-                      backgroundColor:
+                     // width: "85px",
+                     width: "105px",
+                       backgroundColor:
                         frequencyButton === "MONTHLY" ? "#0078d4" : "",
                       color: frequencyButton === "MONTHLY" ? "white" : "",
                     }}
@@ -686,7 +689,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              {frequency == "CUSTOME" ? (
+              {/* {frequency == "CUSTOME" ? (
                 <CustomeInput
                   label="Cron Value"
                   name="cron"
@@ -695,13 +698,15 @@ const DiscoverySchedularDrawer = (props: any) => {
                   type="text"
                   disable={false}
                 />
-              ) : frequency == "DAILY" ? (
+              ) : */}
+              { frequency == "DAILY" ? (
                 <SingleSelect
                   label="Select Hours"
                   isMulti={true}
                   width={150}
                   selectData={timeArray}
                   onChange={handleFrequency}
+                  require={true}
                 />
               ) : frequency == "WEEKLY" ? (
                 <>
@@ -719,6 +724,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                     width={150}
                     selectData={timeArray}
                     onChange={handleFrequency}
+                    require={true}
                   />
                 </>
               ) : frequency == "MONTHLY" ? (
@@ -730,6 +736,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                     width={150}
                     selectData={datesOfMonth}
                     onChange={handleMonthlyFrequency}
+                    
                   />
                   <SingleSelect
                     label="Select Hours"
@@ -737,6 +744,7 @@ const DiscoverySchedularDrawer = (props: any) => {
                     width={150}
                     selectData={timeArray}
                     onChange={handleFrequency}
+                    require={true}
                   />
                 </>
               ) : (

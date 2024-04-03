@@ -25,7 +25,7 @@ const Alerts = () => {
   // const [receivedDataLive, setReceivedDataLive] = React.useState<any>();
   const [receivedData, setReceivedData] = React.useState<any>();
   const [receivedDataLive, setReceivedDataLive] = React.useState<any>();
-
+  const [initialStateSet, setInitialStateSet] = useState(false);
   const [currentPage, setCurrentPage] = useState(1) as any;
   const [rowsPerPage, setRowsPerPage] = useState(10) as any;
 
@@ -49,51 +49,89 @@ const Alerts = () => {
     }
   }, [activeButton]);
 
-  // console.log("activbutton", activeButton);
+   //console.log("activbutton", activeButton);
 
-  function render(payload: any) {
-    // Check if payload contains 'result' array
+  // function render(payload: any) {
+  //   // Check if payload contains 'result' array
 
-    if (
-      activeButton == "historic" &&
-      payload &&
-      payload.result &&
-      Array.isArray(payload.result)
-    ) {
-      // Iterate over each result object
-      const filteredResult = payload.result.map((result: any) => {
-        // Create a copy of the result object
-        const resultCopy = { ...result };
-        // Check if the result object has 'rowSignature' key and remove it
-        if (resultCopy.rowSignature) {
-          delete resultCopy.rowSignature;
-        }
-        return resultCopy;
-      });
+  //   if (
+  //     activeButton == "historic" &&
+  //     payload &&
+  //     payload.result &&
+  //     Array.isArray(payload.result)
+  //   ) {
+  //     // Iterate over each result object
+  //     const filteredResult = payload.result.map((result: any) => {
+  //       // Create a copy of the result object
+  //       const resultCopy = { ...result };
+  //       // Check if the result object has 'rowSignature' key and remove it
+  //       if (resultCopy.rowSignature) {
+  //         delete resultCopy.rowSignature;
+  //       }
+  //       return resultCopy;
+  //     });
 
-      // Create a new object with filtered result and other properties from payload
-      const filteredPayload = { ...payload, result: filteredResult };
+  //     // Create a new object with filtered result and other properties from payload
+  //     const filteredPayload = { ...payload, result: filteredResult };
 
-      // Store filtered payload in state
-      setReceivedData(filteredPayload);
-    } else if (activeButton == "live" && payload && payload.result) {
-      setReceivedDataLive(payload);
-      // console.log("response from live alert", payload.result);
-    }
-  }
+  //     // Store filtered payload in state
+  //     setReceivedData(filteredPayload);
+  //   } else if (activeButton == "live" && payload && payload.result) {
+  //     setReceivedDataLive(payload);
+  //      console.log("response from live alert", payload.result);
+  //   }
+  // }
 
-  // console.log("recieved data state#########", receivedData);
+  //  console.log("recieved data state#########", receivedData);
 
+  // useEffect(() => {
+  //   if (connection && activeButton == "historic") {
+  //     Subscribe("history1", "ws.alert.historical", render);
+  //     unsubscribe("liveData1", "ws.alert.live");
+  //   } else if (connection && activeButton == "live") {
+  //     Subscribe("liveData1", "ws.alert.live", render);
+  //     unsubscribe("history1", "ws.alert.historical");
+  //   }
+  // }, [connection, activeButton]);
   useEffect(() => {
-    if (connection && activeButton == "historic") {
-      Subscribe("history1", "ws.alert.historical", render);
-      unsubscribe("liveData1", "ws.alert.live");
-    } else if (connection && activeButton == "live") {
-      Subscribe("liveData1", "ws.alert.live", render);
-      unsubscribe("history1", "ws.alert.historical");
+    if (!initialStateSet) {
+      toggleActiveButton("live");
+      setInitialStateSet(true); 
     }
-  }, [connection, activeButton]);
+    const render = (payload: any) => {
+      if (activeButton === "historic" && payload && payload.result && Array.isArray(payload.result)) {
+        const filteredResult = payload.result.map((result: any) => {
+          const resultCopy = { ...result };
+          if (resultCopy.rowSignature) {
+            delete resultCopy.rowSignature;
+          }
+          return resultCopy;
+        });
+        const filteredPayload = { ...payload, result: filteredResult };
+        setReceivedData(filteredPayload);
+      } else if (activeButton === "live" && payload && payload.result) {
+        setReceivedDataLive(payload);
+        console.log("response from live alert", payload.result);
+      }
+    };
+    console.log("recieved data state#########", receivedData);
+    if (connection) {
+      if (activeButton === "historic") {
+        Subscribe("history1", "ws.alert.historical", render);
+        unsubscribe("liveData1", "ws.alert.live");
+      }
+       else if (activeButton === "live") {
+        Subscribe("liveData1", "ws.alert.live", render);
+        unsubscribe("history1", "ws.alert.historical");
+      }
+    }
 
+    return () => {
+      // Clean up subscription when component unmounts
+      unsubscribe("history1", "ws.alert.historical");
+      unsubscribe("liveData1", "ws.alert.live");
+    };
+  }, [connection, activeButton]);
   // function subscribeLiveData() {
   //   setInterval(() => {
   //     emit("ws.alert.live", paylodForLive);
@@ -465,7 +503,7 @@ const Alerts = () => {
         receivedData.result[0] &&
         receivedData.result[0].columns;
       const convertedData = convertAlertData(receivedData);
-      // console.log("-----------columns#########", collectedKeys);
+//       console.log("-----------columns#########", collectedKeys);
       setData(convertedData);
       collectedKeys &&
         collectedKeys.filter((key: any) => {
@@ -516,7 +554,7 @@ const Alerts = () => {
             .filter((field: any) => !hiddenColumnsValues.includes(field))
         );
     }
-    // console.log("-----------data#########", data);
+     console.log("-----------data#########", data);
 
     // setColumns(cols);
   }, [activeButton, receivedData, receivedDataLive]);

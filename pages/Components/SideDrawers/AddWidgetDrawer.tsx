@@ -122,16 +122,16 @@ const AddWidgetDrawer = (props: any) => {
                   />
                 </TabList> */}
               </Box>
-              <TabPanel style={{ padding: "0", height: "100%", width:"95%" }} value="chart">
+              <TabPanel style={{ padding: "0", height: "100%", width:"93%" }} value="chart">
                 <ChartWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" , width:"95%" }} value="grid">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"93%" }} value="grid">
                 <GridWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" , width:"95%"}} value="topn">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"93%"}} value="topn">
                 <TOPNWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
-              <TabPanel style={{ padding: "0", height: "100%" , width:"95%" }} value="gauge">
+              <TabPanel style={{ padding: "0", height: "100%" , width:"93%" }} value="gauge">
                 <GaugeWidget handleAddDrawerClose={handleAddDrawerClose} />
               </TabPanel>
               <TabPanel value="sankey">Sankey</TabPanel>

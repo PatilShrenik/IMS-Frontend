@@ -544,9 +544,11 @@ const TOPNWidget = (props: any) => {
     }
   };
   return (
-    <div className="h-full px-2 dark:bg-dark-menu-color">
+    <div className="h-full  dark:bg-dark-menu-color">
       <div className="flex">
+      <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
+         style={{width:"17rem"}}
           label="Name"
           name="name"
           value={data.name}
@@ -554,7 +556,10 @@ const TOPNWidget = (props: any) => {
           type="text"
           require={true}
         />
+         </div>
+         <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
+         style={{width:"17rem"}}
           label="Description"
           name="description"
           value={data.description}
@@ -562,7 +567,9 @@ const TOPNWidget = (props: any) => {
           type="text"
           require={true}
         />
+         </div>
         <CustomeInput
+         style={{width:"17rem"}}
           label="Limit"
           name="limit"
           value={data.limit}
@@ -582,6 +589,7 @@ const TOPNWidget = (props: any) => {
         </div>
         <div>
           <SecSingleSelect
+           style={{width:"17rem" , marginTop:"3px"}}
             label="Indicator Group"
             value={data.indicator_group}
             selectData={options}

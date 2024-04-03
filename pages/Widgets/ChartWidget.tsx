@@ -546,9 +546,10 @@ const ChartWidget = (props: any) => {
   console.log("filteredataarray########", filteredData);
   return (
     <div className="h-full  dark:bg-dark-menu-color">
-      <div className="flex">
+      <div className="flex ">
+      <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
-        style={{width:"4rem", }}
+         style={{width:"17rem"}}
           label="Name"
           name="name"
           value={data.name}
@@ -556,7 +557,10 @@ const ChartWidget = (props: any) => {
           type="text"
           require={true}
         />
+        </div>
+        <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
+          style={{width:"17rem"}}
           label="Description"
           name="description"
           value={data.description}
@@ -565,7 +569,9 @@ const ChartWidget = (props: any) => {
           require={true}
           // rows={1}
         />
+          </div>
         <SecSingleSelect
+         style={{width:"17rem" , marginTop:"3px"}}
           label="Granuality"
           value={data.granularity}
           selectData={granuality_time}
@@ -592,11 +598,12 @@ const ChartWidget = (props: any) => {
           format="yyyy-MM-dd"
           className="rounded-lg border-dark-border dark:hover:bg-transparent dark:text-textColor dark:bg-dark-menu-color z-50"
         /> */}
-        <div className="h-max mt-[1.20rem] w-[18rem] mx-3">
+        <div className="h-max mt-[1.2rem] w-[18rem] mx-2.5">
           <TimeRangePicker onTimeRangeChange={handleDate} />
         </div>
-        <div>
+        <div >
           <SecSingleSelect
+           style={{width:"17rem"}}
             label="Indicator Group"
             value={data.indicator_group}
             selectData={options}

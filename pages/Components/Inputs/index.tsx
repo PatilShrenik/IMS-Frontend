@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const CustomeInput = (props: any) => {
-  const { type, require, disable, name, onChange, onBlur, color } = props;
+  const { type, require, disable, name, onChange, onBlur, color , style  } = props;
   // console.log("value.length", value && value.length);
   const [inputFocused, setInputFocused] = useState(false);
   // console.log("color", color);
@@ -24,6 +24,7 @@ const CustomeInput = (props: any) => {
           } border-[1px] rounded-lg dark:border-dark-border bg-transparent py-[0.9rem] px-2 font-medium outline-none transition focus:border-primary2 active:border-primary2 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input ${
             inputFocused ? "input-focused" : ""
           }`}
+          style={style}
           type={type ? type : "text"}
           placeholder={
             !inputFocused ? `${props.label}${require ? " *" : ""}` : ""

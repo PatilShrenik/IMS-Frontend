@@ -88,7 +88,7 @@ const Assets = () => {
               } else if (key == "hostname") {
                 cols.unshift({
                   field: key.replace(/\./g, "_"),
-                  headerName: "HostName",
+                  headerName: "Hostname",
                   minWidth: 150,
                 });
               }
@@ -101,7 +101,7 @@ const Assets = () => {
                 });
               }
               else if (key == "plugin_type") {
-                cols.unshift({
+                cols.push({
                   field: key.replace(/\./g, "_"),
                   headerName: "plugin type",
                   minWidth: 150,
@@ -141,6 +141,7 @@ const Assets = () => {
               }
             }
           });
+          
         cols.push({
           field: "last_availability_checked_on",
           headerName: "Last Availability",

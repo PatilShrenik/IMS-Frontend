@@ -54,7 +54,9 @@ const EditDiscoverySchDrawer = (props: any) => {
     scheduler_context_updated: "no",
     scheduler_context: {
       scheduled_times: [""],
-      cron: "0 */2 * ? * *",
+      days_of_week: [""],
+      days_of_month: [""],
+     // cron: "0 */2 * ? * *",
       start_date: 0,
       frequency: "",
     },
@@ -63,7 +65,7 @@ const EditDiscoverySchDrawer = (props: any) => {
     "DEVICE"
   );
   const [frequencyButton, setFrequencyButton] = React.useState<string | null>(
-    "CUSTOME"
+    "DAILY"
   );
   const isBrowser = typeof window !== "undefined";
   const [colorTheme, setColorTheme] = useState<any>(
@@ -577,7 +579,7 @@ const EditDiscoverySchDrawer = (props: any) => {
             </div>
             <div className="mx-4 my-2 w-[18rem] dark:text-textColor">
               <i>
-                Note: - Press{" "}
+                Note: - press{" "}
                 <strong>space</strong> to add emails
               </i>
             </div>
@@ -619,7 +621,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   aria-label="Basic button group"
                   className="my-5 mx-4 mr-7"
                 >
-                  <Button
+                  {/* <Button
                     // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
                     //   frequencyButton == "CUSTOME" &&
                     //   "bg-primary2 hover:bg-primary2 text-white"
@@ -633,7 +635,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                     }}
                   >
                     Custom
-                  </Button>
+                  </Button> */}
                   <Button
                     // className={`dark:text-textColor border-primary2 px-[5px] py-2.5 rounded-lg ${
                     //   frequencyButton == "DAILY" &&
@@ -681,7 +683,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   </Button>
                 </ButtonGroup>
               </Box>
-              {frequency == "CUSTOME" ? (
+              {/* {frequency == "CUSTOME" ? (
                 <CustomeInput
                   label="Cron Value"
                   name="cron"
@@ -690,7 +692,9 @@ const EditDiscoverySchDrawer = (props: any) => {
                   type="text"
                   disable={false}
                 />
-              ) : frequency == "DAILY" ? (
+              ) : */}
+              
+              { frequency == "DAILY" ? (
                 <SingleSelect
                   label="Select Hours"
                   isMulti={true}
@@ -701,6 +705,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                   )}
                   selectData={timeArray}
                   onChange={handleFrequency}
+                  require={true}
                 />
               ) : frequency == "WEEKLY" ? (
                 <>
@@ -727,6 +732,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                         selectedTimeValue.includes(day.value)
                     )}
                     onChange={handleFrequency}
+                    require={true}
                   />
                  
                 </>
@@ -758,6 +764,7 @@ const EditDiscoverySchDrawer = (props: any) => {
                         selectedTimeValue.includes(day.value)
                     )}
                     onChange={handleFrequency}
+                    require={true}
                   />
                  
                 </>

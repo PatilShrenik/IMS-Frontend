@@ -416,7 +416,9 @@ const GaugeWidget = (props: any) => {
   return (
     <div className="h-full px-2 dark:bg-dark-menu-color">
       <div className="flex">
+      <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
+         style={{width:"17rem"}}
           label="Name"
           name="name"
           value={data.name}
@@ -424,7 +426,10 @@ const GaugeWidget = (props: any) => {
           type="text"
           require={true}
         />
+         </div>
+        <div style={{ margin: "0 -0.5rem -0.5rem 0" }}>
         <CustomeInput
+         style={{width:"17rem"}}
           label="Description"
           name="description"
           value={data.description}
@@ -433,6 +438,7 @@ const GaugeWidget = (props: any) => {
           require={true}
           // rows={1}
         />
+        </div>
         {/* <SecSingleSelect
           label="Granuality"
           value={data.granularity}
@@ -445,6 +451,7 @@ const GaugeWidget = (props: any) => {
         </div>
         <div>
           <SecSingleSelect
+          style={{width:"17rem" , marginTop:"3px"}}
             label="Indicator Group"
             value={data.indicator_group}
             selectData={options}

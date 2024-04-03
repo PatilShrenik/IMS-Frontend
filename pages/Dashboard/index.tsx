@@ -433,7 +433,7 @@ const index = () => {
                   className="bg-blue-500 rounded py-2 px-3 text-sm text-white"
                   onClick={() => setEditable(!editable)}
                 >
-                  <LockOpenOutlinedIcon />
+                  <LockOutlinedIcon />
                 </button>
               )}
               {editable && (
@@ -444,7 +444,8 @@ const index = () => {
                     setEditable(!editable);
                   }}
                 >
-                  <LockOutlinedIcon />
+                
+                  <LockOpenOutlinedIcon />
                 </button>
               )}
             </div>

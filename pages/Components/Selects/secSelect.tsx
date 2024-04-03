@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const SecSingleSelect = (props: any) => {
-  const { label, selectData, onChange, require, value, index, type, onDash } =
-    props;
+  const { label, selectData, onChange, require, value, index, type, onDash ,style } =
+    props; 
 
   // console.log(index, type);
   const [selectFocused, setSelectFocused] = useState(false);
@@ -28,6 +28,7 @@ const SecSingleSelect = (props: any) => {
           className={`relative w-[18rem] text-gray-400  border-[1px] rounded-lg dark:border-dark-border py-3.5 pr-12 pl-1 outline-none transition focus:border-primary2 active:border-primary2 dark:bg-dark-menu-color  ${
             value ? "" : ""
           }`}
+          style={style}
           // placeholder={label}
           onChange={handleSelectChange}
           value={value ? value : label}
