@@ -53,7 +53,7 @@ import SingleSelect from "../Selects";
 import SmallSingleSelect from "../Selects/smallSingleSelect";
 import { CustomProvider, DatePicker, DateRangePicker } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-
+import RefreshIcon from "@mui/icons-material/Refresh";
 import moment from "moment";
 import { getAllPolicy } from "@/pages/api/api/PolicyApi";
 import { useWebSocketContext } from "../WebSocketContext";
@@ -607,6 +607,11 @@ const AlertTable = (props: any) => {
     emit("ws.alert.historical", modifiedData);
   };
 
+  const handleLiveSearch = () => {
+    const paylodForLive = {};
+    emit("ws.alert.live", paylodForLive);
+  };
+  
   const stableSort = (array: any, comparator: any) => {
     const stabilizedThis =
       array && array.map((el: any, index: any) => [el, index]);
@@ -1259,6 +1264,14 @@ const AlertTable = (props: any) => {
                     className="cursor-pointer mx-2"
                   />
                 </Tooltip> */}
+              <div className="">
+                <div
+                  className="mx-2 inline-flex items-center justify-center py-2 rounded-lg text-center font-medium text-white bg-primary2 hover:bg-opacity-90 px-2 cursor-pointer"
+                  onClick={handleLiveSearch}
+                >
+                  <RefreshIcon />
+                </div>
+              </div>
             </div>
           )}
         </div>
