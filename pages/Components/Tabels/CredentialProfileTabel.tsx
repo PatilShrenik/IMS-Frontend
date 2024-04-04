@@ -378,7 +378,7 @@ const CredntialProfileTable = (props: any) => {
             open={dialogOpen === deviceIds}
             handleDialogClose={handleDialogClose}
             device_ids={deviceIds}
-            deviceValues={deviceValues}
+            // deviceValues={deviceValues}
           />
         </>
       );

@@ -6,30 +6,34 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 
 const DeviceDetailsModal = (props: any) => {
   //   const classes = useStyles();
-  const { open, handleDialogClose, device_ids ,deviceValues } = props;
+  const { open, handleDialogClose, device_ids } = props;
   const [allDevices, setAllDevices] = React.useState([]);
-//  console.log("dev id",device_ids)
-  // React.useEffect(() => {
-  //   const getDevices = async () => {
-  //     let response = await getAllDevice();
-  //     setAllDevices(response.result);
-  //   };
-  //   getDevices();
-  // }, []);
 
-  // const deviceValues: any[] =
-  //   allDevices &&
-  //   allDevices
-  //     .filter((item: any) => device_ids.includes(item._id))
-  //     .map((filteredDevice: any) => ({
-  //       hostName: filteredDevice.hostname,
-  //       alias: filteredDevice.alias,
-  //       status: filteredDevice.status,
-  //       plugin_type: filteredDevice["plugin.type"],
-  //       name: filteredDevice.hostname,
-  //       ip_address: filteredDevice["ip.address"],
-  //     }));
- // console.log("devdejasds", deviceValues);
+  React.useEffect(() => {
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
+
+  const deviceValues: any[] =
+    allDevices &&
+    allDevices
+      .filter((item: any) => device_ids.includes(item._id))
+      .map((filteredDevice: any) => ({
+        hostName: filteredDevice.hostname,
+        alias: filteredDevice.alias,
+        status: filteredDevice.status,
+        plugin_type: filteredDevice["plugin.type"],
+        name: filteredDevice.hostname,
+        ip_address: filteredDevice["ip.address"],
+      }));
+  // const alldevices: any[]= deviceValues && 
+  //   deviceValues.filter((item: any) => device_ids.includes(item._id));
+  // console.log("d id",device_ids)
+  //   console.log("devdejasds", alldevices);
+
   return (
     <Drawer
       anchor="right"
@@ -59,30 +63,30 @@ const DeviceDetailsModal = (props: any) => {
 
                 return ( */}
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
-                  Device Name
+                  Hostname
                 </th>
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Device IP
                 </th>
-                <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
+                {/* <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Hostname
-                </th>
+                </th> */}
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Status
                 </th>
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Plugin Type
                 </th>
-                <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
+                {/* <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Alias
-                </th>
+                </th> */}
                 {/* );
               })} */}
               </tr>
             </thead>
             <tbody>
-              {deviceValues &&
-                deviceValues.map((data: any, index: any) => {
+            {deviceValues &&
+                deviceValues.map((data: any, index: any)  => {
                   const isLastRow = index === data.length - 1;
                   return (
                     <tr
@@ -97,7 +101,7 @@ const DeviceDetailsModal = (props: any) => {
                           isLastRow ? "border-b" : "border-b"
                         }`}
                       >
-                        {data.name}
+                             {data.hostName}
                       </td>
                       <td
                         style={{
@@ -117,7 +121,8 @@ const DeviceDetailsModal = (props: any) => {
                           isLastRow ? "border-b" : "border-b"
                         }`}
                       >
-                        {data.hostname}
+                  
+                  {data.status}
                       </td>
                       <td
                         style={{
@@ -127,9 +132,9 @@ const DeviceDetailsModal = (props: any) => {
                           isLastRow ? "border-b" : "border-b"
                         }`}
                       >
-                        {data.status}
+                           {data.plugin_type}
                       </td>
-                      <td
+                      {/* <td
                         style={{
                           textAlign: "left",
                         }}
@@ -138,8 +143,8 @@ const DeviceDetailsModal = (props: any) => {
                         }`}
                       >
                         {data.plugin_type}
-                      </td>
-                      <td
+                      </td> */}
+                      {/* <td
                         style={{
                           textAlign: "left",
                         }}
@@ -148,7 +153,7 @@ const DeviceDetailsModal = (props: any) => {
                         }`}
                       >
                         {data.alias}
-                      </td>
+                      </td> */}
                     </tr>
                   );
                 })}

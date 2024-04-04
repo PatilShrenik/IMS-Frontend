@@ -206,6 +206,7 @@ const RoleTable = (props: any) => {
     }
     return row[column.field] == "" ? "-" : row[column.field];
   };
+  
   const handleSearchChange = (event: any) => {
     setSearch(event.target.value);
   };

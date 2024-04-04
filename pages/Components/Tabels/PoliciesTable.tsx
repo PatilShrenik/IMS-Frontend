@@ -89,12 +89,18 @@ const PoliciesTable = (props: any) => {
       name: item.name,
       id: item._id,
     }));
-  const deviceValues =
+    const deviceValues =
     allDevices &&
     allDevices.map((item: any) => ({
-      name: item.hostname,
+       hostName: item.hostname,
+        alias: item.alias,
+        status: item.status,
+        plugin_type: item["plugin.type"],
+        name: item.hostname,
+        ip_address: item["ip.address"],
       id: item._id,
     }));
+
   // console.log("------------data", data);
   //   useEffect(() => {
   //     try {
@@ -431,6 +437,7 @@ const PoliciesTable = (props: any) => {
               open={dialogOpen === deviceIds}
               handleDialogClose={handleDialogClose}
               device_ids={deviceIds}
+              // deviceValues={deviceValues}
             />
           </>
         );

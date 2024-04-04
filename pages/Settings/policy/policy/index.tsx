@@ -49,7 +49,7 @@ const Policy = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllPolicy();
-        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        const modifiedData = replacePeriodsWithUnderscores( response && response.result);
         // console.log("modifidData", modifiedData);
         const col =
           modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);

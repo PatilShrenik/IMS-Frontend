@@ -23,6 +23,7 @@ import {
 import CustomeInput from "../Inputs";
 import { Modal } from "@mui/material";
 import DeviceDetailsModal from "../Modals/DeviceDetailsModal";
+import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 
 const renderTree = (
   nodes: any,
@@ -158,7 +159,27 @@ const TreeViewGroup = ({ data }: any) => {
   const [chipDialogId, setChipDialogId] = React.useState<string>("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [isChipdialogOpen, setIsChipdialogOpen] = React.useState(false);
+  const [allDevices, setAllDevices] = React.useState([]);
+  React.useEffect(() => {
 
+    const getDevices = async () => {
+      let response = await getAllDevice();
+      setAllDevices(response.result);
+    };
+    getDevices();
+  }, []);
+
+  const deviceValues =
+    allDevices &&
+    allDevices.map((item: any) => ({
+       hostName: item.hostname,
+        alias: item.alias,
+        status: item.status,
+        plugin_type: item["plugin.type"],
+        name: item.hostname,
+        ip_address: item["ip.address"],
+      id: item._id,
+    }));
   React.useEffect(() => {
     if (data && data[0] && data[0]._id) {
       setParentId(data[0]._id);
@@ -455,6 +476,7 @@ const TreeViewGroup = ({ data }: any) => {
         open={isChipdialogOpen}
         handleDialogClose={handleChipDialogClose}
         device_ids={chipDialogId}
+        deviceValues={deviceValues}
       />
     </div>
   );
