@@ -65,7 +65,7 @@ const DeviceDetailsModal = (props: any) => {
                   Device IP
                 </th>
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
-                  Host Name
+                  Hostname
                 </th>
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Status
