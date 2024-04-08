@@ -46,7 +46,7 @@ const EditIPAddress = (props: any) => {
     latitude: 0,
     longitude: 0,
     timezone: "",
-    flow_enabled: false,
+   // flow_enabled: false,
     device_status: "new",
     // availability_interval: 60,
     auto_provision: "discovery",
@@ -164,9 +164,9 @@ const EditIPAddress = (props: any) => {
     });
   };
 
-  const handleCheckboxChange = (event: any) => {
-    setData({ ...data, flow_enabled: event.target.checked });
-  };
+  // const handleCheckboxChange = (event: any) => {
+  //   setData({ ...data, flow_enabled: event.target.checked });
+  // };
 
   const handleDeviceType = (selectedOption: any) => {
     setData({
@@ -491,7 +491,7 @@ const EditIPAddress = (props: any) => {
             />
           </div>
           <div className="flex items-center">
-            <FormControlLabel
+            {/* <FormControlLabel
               className="mx-4 dark:text-gray-400 text-sm"
               control={
                 <Checkbox
@@ -501,7 +501,7 @@ const EditIPAddress = (props: any) => {
                 />
               }
               label="Flow Enabled"
-            />
+            /> */}
             <div
               style={{
                 margin: ".5rem 1rem",

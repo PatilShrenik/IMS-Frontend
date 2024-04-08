@@ -588,6 +588,7 @@ const AuditTable = (props: any) => {
     console.log("modified payload for audit", modifiedData);
     emit("ws.audit", modifiedData);
     toggleauditSocketCalled();
+    
   };
 
   const stableSort = (array: any, comparator: any) => {
@@ -783,6 +784,20 @@ const AuditTable = (props: any) => {
     { label: "Device Manager", value: "device-manager" },
     { label: "Device Object", value: "object" },
     { label: "Widget", value: "widget" },
+    { label: "Discovery Scheduler", value: "discovery-scheduler" },
+    { label: "Discovery Context", value: "discovery-context" },
+    { label: "Druid", value: "druid-supervisor-specs" },
+    { label: "Group", value: "group" },
+    { label: "Policy", value: "policy" },
+    { label: "Role", value: "role" },    
+    { label: "Mail Server", value: "smtp-server" },
+    { label: "Snmp Catalogue", value: "smtp-catalog" },
+    { label: "Snmp Template", value: "smtp-template" },
+    { label: "System", value: "system" },
+    { label: "Scheduler", value: "scheduler" },
+    { label: "User", value: "user" },
+    { label: "Version", value: "version" },
+    
   ];
   const StatusValues = [
     { label: "SUCCESS", value: "success" },
@@ -844,7 +859,7 @@ const AuditTable = (props: any) => {
   const handleSelectedStatus = (value: any) => {
     setSelectedStatus(value);
   };
-
+console.log("payload for alert",payloadForAlert);
   // console.log("------------selected Severity", selectedSeverity);
   // console.log("------------selected device", selectedDevice);
   // console.log("------------selected policy", selectedPolicy);
@@ -895,6 +910,7 @@ const AuditTable = (props: any) => {
                 isMulti={true}
                 selectData={CollectionValues}
                 onChange={handleCollection}
+                // require={true}
               />
             </div>
             <div>
@@ -928,11 +944,31 @@ const AuditTable = (props: any) => {
               <div
                 className="mx-2 inline-flex items-center justify-center rounded-md py-2 px-6 text-center font-medium text-white bg-primary2 hover:bg-opacity-90 lg:px-6 xl:px-6 cursor-pointer"
                 onClick={handleSearch}
+                // style={{
+                //   cursor: payloadForAlert.time_range 
+                //     ? "pointer"
+                //     : "not-allowed",
+                //   backgroundColor: payloadForAlert.time_range ? "" : "gray",
+                // }}
+                // style={{
+                //   cursor: ( payloadForAlert && payloadForAlert.time_range &&  payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection').values.length > 0) ? "pointer" : "not-allowed",
+                //   backgroundColor: (payloadForAlert && payloadForAlert.time_range && payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection').values.length > 0) ? "" : "gray",
+                // }}
                 style={{
-                  cursor: payloadForAlert.time_range
-                    ? "pointer"
-                    : "not-allowed",
-                  backgroundColor: payloadForAlert.time_range ? "" : "gray",
+                  cursor: (
+                    payloadForAlert && 
+                    payloadForAlert.time_range && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection') !== undefined && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection')!.values !== undefined && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection')!.values!.length > 0
+                  ) ? "pointer" : "not-allowed",
+                  backgroundColor: (
+                    payloadForAlert && 
+                    payloadForAlert.time_range && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection') !== undefined && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection')!.values !== undefined && 
+                    payloadForAlert.filters.pre_filters.find(filter => filter.indicator === 'collection')!.values!.length > 0
+                  ) ? "" : "gray",
                 }}
               >
                 Search

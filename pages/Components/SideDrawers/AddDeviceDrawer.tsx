@@ -273,7 +273,7 @@ const IPAddress = (props: any) => {
     latitude: "",
     longitude: "",
     timezone: "",
-    flow_enabled: false,
+   // flow_enabled: false,
     device_status: "new",
     // availability_interval: 60,
     auto_provision: "discovery",
@@ -390,9 +390,9 @@ const IPAddress = (props: any) => {
     });
   };
 
-  const handleCheckboxChange = (event: any) => {
-    setData({ ...data, flow_enabled: event.target.checked });
-  };
+  // const handleCheckboxChange = (event: any) => {
+  //   setData({ ...data, flow_enabled: event.target.checked });
+  // };
 
   const handleDeviceType = (value: any) => {
     setData({
@@ -678,7 +678,7 @@ const IPAddress = (props: any) => {
             />
           </div>
           <div className="flex items-center">
-            <FormControlLabel
+            {/* <FormControlLabel
               className="mx-4 dark:text-gray-400 text-sm"
               control={
                 <Checkbox
@@ -688,7 +688,7 @@ const IPAddress = (props: any) => {
                 />
               }
               label="Flow Enabled"
-            />
+            /> */}
             <div
               style={{
                 margin: ".5rem 1rem",
@@ -872,9 +872,9 @@ const IPRange = (props: any) => {
     });
   };
 
-  const handleCheckboxChange = (event: any) => {
-    setData({ ...data, flow_enabled: event.target.checked });
-  };
+  // const handleCheckboxChange = (event: any) => {
+  //   setData({ ...data, flow_enabled: event.target.checked });
+  // };
 
   const handleCredProfile = (values: any) => {
     setData({
@@ -1156,7 +1156,7 @@ const IPRange = (props: any) => {
             />
           </div>
           <div className="flex items-center">
-            <FormControlLabel
+            {/* <FormControlLabel
               className="mx-4 dark:text-gray-400 text-sm"
               control={
                 <Checkbox
@@ -1166,7 +1166,7 @@ const IPRange = (props: any) => {
                 />
               }
               label="Flow Enabled"
-            />
+            /> */}
             <div
               style={{
                 margin: ".5rem 1rem",
@@ -1314,9 +1314,9 @@ const CIDR = (props: any) => {
     });
   };
 
-  const handleCheckboxChange = (event: any) => {
-    setData({ ...data, flow_enabled: event.target.checked });
-  };
+  // const handleCheckboxChange = (event: any) => {
+  //   setData({ ...data, flow_enabled: event.target.checked });
+  // };
 
   const handleDeviceType = (value: any) => {
     setData({
@@ -1608,7 +1608,7 @@ const CIDR = (props: any) => {
             />
           </div>
           <div className="flex items-center">
-            <FormControlLabel
+            {/* <FormControlLabel
               className="mx-4 dark:text-gray-400 text-sm"
               control={
                 <Checkbox
@@ -1618,7 +1618,7 @@ const CIDR = (props: any) => {
                 />
               }
               label="Flow Enabled"
-            />
+            /> */}
             <div
               style={{
                 margin: ".5rem 1rem",

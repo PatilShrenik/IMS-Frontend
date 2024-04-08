@@ -209,6 +209,8 @@ const AllDeviceTabel = (props: any) => {
   //     return matchesSearch && matchesButtons;
   //   });
   const downloadExcel = () => {
+    
+    
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
     );
@@ -221,13 +223,23 @@ const AllDeviceTabel = (props: any) => {
       const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
       return date.toLocaleDateString() + ', ' + date.toLocaleTimeString(); // Format date and time according to user's locale
     };
-  
+    
+    console.log("excel row data",selectedRowsData);
   
     selectedRowsData.forEach( (row: any) => {
+      const credentialContext = row.availability_context;
+      for (const key in credentialContext) {
+        if (credentialContext.hasOwnProperty(key)) {
+          row[key] = credentialContext[key];
+        }
+      }
+      delete row.flow_enabled;
+      delete row.availability_context;
       row.created_on = formatTimestamp(row.created_on);
       row.updated_on = formatTimestamp(row.updated_on);
+      row.last_discovered_on = formatTimestamp(row.last_discovered_on);
+       row.timestamp = formatTimestamp(row.timestamp);
     });
-    console.log("excel row data",selectedRowsData);
     // Create a new workbook
     const wb = XLSX.utils.book_new();
   
@@ -437,32 +449,35 @@ const AllDeviceTabel = (props: any) => {
           />
         </>
       );
-    } else if (
-      column.field === "timestamp" ||
-      column.field == "last_discovered_on" ||
-      column.field == "last_availability_checked_on"
-    ) {
-      const timestamp =
-        row.availability_context &&
-        (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"] ||
-          row.availability_context["last_availability_checked_on"]);
-
-      if (
-        row.availability_context &&
-        (row.availability_context["timestamp"] ||
-          row.availability_context["last_discovered_on"] ||
-          row.availability_context["last_availability_checked_on"])
-      ) {
-        const formattedDateMonthYear = convertEpochToDateMonthYearWithTime(timestamp);
-        return formattedDateMonthYear ? formattedDateMonthYear : "-";
-      }
-    } else if (column.field == "device_status") {
+    }
+     else if (column.field == "device_status") {
       const device_status = row[column.field] && row[column.field];
       return <StatusChips value={device_status} />;
     }
+    else  if (column.field === "last_discovered_on") {
+      const timestamp = row[column.field];
+      if (timestamp !== undefined) {
+        const dateObject = new Date(timestamp * 1000);
+        return dateObject.toLocaleString();
+      } else {
+        return "Not Available";
+      }
+    }
+    else  if (column.field === "timestamp") {
+      if (row.availability_context && row.availability_context["timestamp"]){
+        const timestamp = row.availability_context && row.availability_context["timestamp"];
+        if (timestamp !== undefined) {
+          const dateObject = new Date(timestamp * 1000);
+          return dateObject.toLocaleString();
+        } else {
+          return "Not Available";
+        }
+      }
+      
+    
+    
+    }
     else  if (column.field === "created_on") {
-      //convert to userfriendly values
       const timestamp = row[column.field];
       const dateObject = new Date(timestamp * 1000);
       // Format the date as desired, e.g., "Jan 1, 2024 12:00 PM"

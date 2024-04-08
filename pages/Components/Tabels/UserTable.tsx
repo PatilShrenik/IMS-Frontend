@@ -203,7 +203,6 @@ const UserTable = (props: any) => {
     const selectedRowsData = data.filter((row: any) =>
       selectedRows.includes(row._id)
     );
-  
     // Function to convert timestamp to human-readable date and time
     const formatTimestamp = (timestamp: any) => {
       if (timestamp === undefined) {
@@ -215,6 +214,8 @@ const UserTable = (props: any) => {
   
   
     selectedRowsData.forEach( (row: any) => {
+      delete row.password;
+     delete row.user_preferences;
       row.created_on = formatTimestamp(row.created_on);
       row.updated_on = formatTimestamp(row.updated_on);
     });

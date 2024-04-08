@@ -349,12 +349,12 @@ const ViewProfileDrawer = (props: any) => {
               type="text"
               require={false}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               className="mx-4 dark:text-textColor"
               //  control={<Checkbox defaultChecked />}
              control={<Checkbox disabled />}
               label="Flow Enabled"
-            />
+            /> */}
           </div>
           <div
             style={{

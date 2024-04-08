@@ -3,6 +3,7 @@ import { Drawer, Modal, makeStyles } from "@mui/material";
 import CustomeButton, { CustomeCancelButton } from "../Buttons";
 import { getAllDevice } from "@/pages/api/api/DeviceManagementAPI";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { StatusChips } from "../Chips";
 
 const DeviceDetailsModal = (props: any) => {
   //   const classes = useStyles();
@@ -24,15 +25,14 @@ const DeviceDetailsModal = (props: any) => {
       .map((filteredDevice: any) => ({
         hostName: filteredDevice.hostname,
         alias: filteredDevice.alias,
-        status: filteredDevice.status,
+        status: filteredDevice["device.status"],
         plugin_type: filteredDevice["plugin.type"],
         name: filteredDevice.hostname,
         ip_address: filteredDevice["ip.address"],
       }));
   // const alldevices: any[]= deviceValues && 
   //   deviceValues.filter((item: any) => device_ids.includes(item._id));
-  // console.log("d id",device_ids)
-  //   console.log("devdejasds", alldevices);
+
 
   return (
     <Drawer
@@ -71,7 +71,7 @@ const DeviceDetailsModal = (props: any) => {
                 {/* <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Hostname
                 </th> */}
-                <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
+                <th className="bg-textColor  dark:bg-tabel-header dark:text-textColor px-4 py-2">
                   Status
                 </th>
                 <th className="bg-textColor dark:bg-tabel-header dark:text-textColor px-4 py-2">
@@ -114,15 +114,15 @@ const DeviceDetailsModal = (props: any) => {
                         {data.ip_address}
                       </td>
                       <td
-                        style={{
-                          textAlign: "left",
-                        }}
-                        className={`bg-white dark:bg-dark-container dark:text-textColor dark:border-dark-border py-3 px-4 ${
+                      style={{
+                        textAlign: "center",
+                      }}
+                        className={`bg-white dark:bg-dark-container  dark:text-textColor dark:border-dark-border py-3 px-8 ${
                           isLastRow ? "border-b" : "border-b"
                         }`}
                       >
+                <StatusChips value={data.status}/>
                   
-                  {data.status}
                       </td>
                       <td
                         style={{

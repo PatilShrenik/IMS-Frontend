@@ -39,31 +39,44 @@ const Assets = () => {
         let response = await getAllDevice();
         const modifiedData = replacePeriodsWithUnderscores(response.result);
         console.log("modified 1", modifiedData);
-        const indexOfObjectWithAvailabilityContext =
-          modifiedData &&
-          modifiedData.findIndex(
-            (obj: any) => obj.availability_context !== undefined
-          );
-        let col = [] as any;
-        // console.log("index value", indexOfObjectWithAvailabilityContext);
-        if (
-          indexOfObjectWithAvailabilityContext == -1 &&
-          modifiedData.length != 0
-        ) {
-          // console.log("modified 2", modifiedData);
-          col = Object.keys(modifiedData[0]);
-        } else {
-          col =
-            modifiedData.length != 0 &&
-            Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
-        }
+        // const indexOfObjectWithAvailabilityContext =
+        //   modifiedData &&
+        //   modifiedData.findIndex(
+        //     (obj: any) => obj.availability_context !== undefined
+        //   );
+        // let col = [] as any;
+        // // console.log("index value", indexOfObjectWithAvailabilityContext);
+        // if (
+        //   indexOfObjectWithAvailabilityContext == -1 &&
+        //   modifiedData.length != 0
+        // ) {
+        //   // console.log("modified 2", modifiedData);
+        //   col = Object.keys(modifiedData[0]);
+        // } else {
+        //   col =
+        //     modifiedData.length != 0 &&
+        //     Object.keys(modifiedData[indexOfObjectWithAvailabilityContext]);
+        // }
+        const extractAllKeys = (data: any[]) => {
+          const allKeys: Set<string> = new Set();
+         data && data.forEach(obj => {
+              Object.keys(obj).forEach(key => allKeys.add(key));
+          });
+          return Array.from(allKeys);
+      };
+      
+      const allKeys = extractAllKeys(modifiedData);
+      
+  
+      console.log("All keys from the API response:",allKeys);
+      const col = allKeys ;
         let filteredCols =
           col && col.filter((key: any) => !key.startsWith("_"));
         filteredCols =
           col &&
           col.filter(
-            (key: any) => key !== "flow_enabled" && key != "last_discovered_on"
-          );
+            (key: any) => key !== "flow_enabled" && key != "last_discovered_on" && key != "latitude" && key != "timezone"
+         );
 
         // console.log(filteredCols);
         filteredCols &&
@@ -132,7 +145,17 @@ const Assets = () => {
                   headerName: key.replace(/\./g, " "),
                   minWidth: 200,
                 });
-              } else {
+                
+              } 
+              else if (key == "latitide") {
+                cols.push({
+                  field: key.replace(/\./g, "_"),
+                  headerName: "latitude",
+                  minWidth: 150,
+                });
+              }
+              
+              else {
                 cols.push({
                   field: key.replace(/\./g, "_"),
                   headerName: key.replace(/\./g, " "),
@@ -142,15 +165,15 @@ const Assets = () => {
             }
           });
           
-        cols.push({
-          field: "last_availability_checked_on",
-          headerName: "Last Availability",
-          minWidth: 250,
-        });
+          cols.push({
+            field: "timestamp",
+            headerName: "Last Availability",
+            minWidth: 200,
+          }); 
         cols.push({
           field: "last_discovered_on",
           headerName: "Last Discovered On",
-          minWidth: 250,
+          minWidth: 200,
         });
         // const x = filteredCols && filteredCols.includes("availabilty_context");
         // if (x) {
@@ -164,11 +187,7 @@ const Assets = () => {
           headerName: "icmp_Avl.",
           minWidth: 120,
         });
-        cols.push({
-          field: "timestamp",
-          headerName: "timestamp",
-          minWidth: 120,
-        });
+       
         // }
 
         console.log("cols", cols);
@@ -192,6 +211,7 @@ const Assets = () => {
           "device_name",
           "service",
           "latitude",
+          "latitide",
           "oem",
           "os",
           "os_version",
@@ -203,7 +223,7 @@ const Assets = () => {
           "created_on",
           "updated_by",
           "updated_on",
-          "timestamp",
+           "timeZone",
           "timezone",
           "valid_credential_profile",
           // "last_discovered_on",
@@ -234,6 +254,7 @@ const Assets = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  
 
   return (
     <>

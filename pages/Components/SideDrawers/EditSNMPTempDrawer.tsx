@@ -369,7 +369,7 @@ const EditSNMPTempDrawer = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className="w-full absolute bottom-0 left-0 flex justify-end">
+            <div className="w-full Fixed bottom-0 left-0 flex justify-end">
               <div className=" flex m-3">
                 {/* <div onClick={handleUpdate}> */}
                 <SubmitButton title="Update" />

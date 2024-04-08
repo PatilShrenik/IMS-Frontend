@@ -25,8 +25,8 @@ const CredentialProfile = () => {
       const getData = async () => {
         let cols: any = [];
         let response = await getAllCredsProfile();
-    
-        const modifiedData = replacePeriodsWithUnderscores(response && response.result);
+        const modifiedData = replacePeriodsWithUnderscores(response.result);
+        console.log("cred data........",modifiedData)
         const extractAllKeys = (data: any[]) => {
           const allKeys: Set<string> = new Set();
          data && data.forEach(obj => {
@@ -39,11 +39,29 @@ const CredentialProfile = () => {
       
   
       console.log("All keys from the API response:",allKeys);
-     // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
-      //  const col = modifiedData && modifiedData[0] && Object.keys(modifiedData[0]);
-        const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "credential_context");
- 
+
+         //  const filteredCols = col.filter((key: any) => !key.startsWith("_") && key !== "credential_context");
+      //    const indexOfObjectWithCredentialContext =
+      //    modifiedData &&
+      //    modifiedData.findIndex(
+      //      (obj: any) => obj.credential_context
+      //      !== undefined
+      //    );
+      //  let col = [] as any;
+      //  // console.log("index value", indexOfObjectWithAvailabilityContext);
+      //  if (
+      //    indexOfObjectWithCredentialContext == -1 &&
+      //    modifiedData.length != 0
+      //  ) {
+      //    // console.log("modified 2", modifiedData);
+      //    col = Object.keys(modifiedData[1]);
+      //  } else {
+      //    col =
+      //      modifiedData.length != 0 &&
+      //      Object.keys(modifiedData[indexOfObjectWithCredentialContext]);
+      //  }
+         const filteredCols = col.filter((key: any) => !key.startsWith("_") );
         filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
              if (key == "name") {
@@ -88,8 +106,22 @@ const CredentialProfile = () => {
             }
           }
         });
-
-      
+        cols.push({
+          field: "username",
+          headerName: "username",
+          minWidth: 120,
+        });
+        cols.push({
+          field: "authentication_protocol",
+          headerName: "authentication_protocol",
+          minWidth: 120,
+        });
+        cols.push({
+          field: "privacy_protocol",
+          headerName: "privacy_protocol",
+          minWidth: 120,
+        });
+      console.log("col",cols)
         setColumns(cols);
        
         const hiddenColumnsValues = [
@@ -102,7 +134,10 @@ const CredentialProfile = () => {
           "updated_on",
           "snmp_security",
           "public_key",
-          "paraphase"   
+          "paraphase" ,
+          "username",  
+          "privacy_protocol",
+          "authentication_protocol"
         ];
 
         setVisibleColumns(

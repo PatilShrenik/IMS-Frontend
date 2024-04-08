@@ -230,7 +230,7 @@ const AddSNMPTempDrawer = (props: any) => {
                       <div className="flex">
                         <div onClick={() => handleAddFields()}>
                           <ControlPointIcon className="dark:text-textColor" />
-                        </div>
+                        </div>  
                         {formData && formData.length > 1 && (
                           <div
                             onClick={() => handleRemoveFields(index)}
@@ -317,7 +317,7 @@ const AddSNMPTempDrawer = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className="w-full absolute bottom-0 left-0 flex justify-end">
+            <div className="w-full Fixed bottom-0 right-0 flex justify-end">
               <div className=" flex m-3">
                 <div onClick={handleSave}>
                   <SubmitButton title="Save" />

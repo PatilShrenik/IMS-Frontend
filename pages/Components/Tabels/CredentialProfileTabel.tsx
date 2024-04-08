@@ -249,8 +249,21 @@ const CredntialProfileTable = (props: any) => {
       return date.toLocaleDateString() + ', ' + date.toLocaleTimeString(); // Format date and time according to user's locale
     };
   
-  
-    selectedRowsData.forEach( (row: any) => {
+    selectedRowsData.forEach((row: any) => {
+      const credentialContext = row.credential_context;
+      for (const key in credentialContext) {
+        if (credentialContext.hasOwnProperty(key)) {
+          row[key] = credentialContext[key];
+        }
+      }
+      delete row.credential_context;
+      delete row.privacy_passward;
+      delete row.authentication_password;
+      delete row.snmp_community;
+      delete row.snmp_security;
+      delete row.snmp_msg_flag
+
+
       row.created_on = formatTimestamp(row.created_on);
       row.updated_on = formatTimestamp(row.updated_on);
     });
@@ -262,7 +275,7 @@ const CredntialProfileTable = (props: any) => {
     const ws = XLSX.utils.json_to_sheet(selectedRowsData);
   
     // Set column widths
-    const columnWidths = [{wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20},  {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}];
+    const columnWidths = [{wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 30}, {wch:25},  {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, ];
     ws['!cols'] = columnWidths;
   
     // Add worksheet to workbook
@@ -394,15 +407,30 @@ const CredntialProfileTable = (props: any) => {
       //   const namesInCommaSeparatedFormat = matchingDevices.join(", ");
 
       //   return namesInCommaSeparatedFormat ? namesInCommaSeparatedFormat : "-";
-    } else if (column.field === "snmp_community") {
-      return row.credential_context["snmp.community"] == ""
-        ? "-"
-        : row.credential_context["snmp.community"];
-    } else if (column.field === "snmp_version") {
-      return row.credential_context["snmp.version"] == ""
-        ? "-"
-        : row.credential_context["snmp.version"];
     }
+    
+    else if (column.field === "username") {
+
+     if(row.credential_context && row.credential_context["username"]){
+      return row.credential_context["username"] == ""
+        ? "-"
+        : row.credential_context["username"];
+     }
+    }
+    else if (column.field === "privacy_protocol") {
+      if(row.credential_context["privacy.protocol"]){
+       return row.credential_context["privacy.protocol"] == ""
+         ? "-"
+         : row.credential_context["privacy.protocol"];
+      }
+     }
+     else if (column.field === "authentication_protocol") {
+      if(row.credential_context["authentication.protocol"]){
+       return row.credential_context["authentication.protocol"] == ""
+         ? "-"
+         : row.credential_context["authentication.protocol"];
+      }
+     }
     else  if (column.field === "created_on") {
   
       const timestamp = row[column.field];

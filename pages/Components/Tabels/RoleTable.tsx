@@ -252,6 +252,7 @@ const RoleTable = (props: any) => {
   
   
     selectedRowsData.forEach( (row: any) => {
+      delete row.rbac_context
       row.created_on = formatTimestamp(row.created_on);
       row.updated_on = formatTimestamp(row.updated_on);
     });

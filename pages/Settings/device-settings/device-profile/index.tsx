@@ -127,7 +127,7 @@ const Profiling = () => {
      // allKeys.forEach(key => console.log(key));
       const col = allKeys ;
         console.log("col",col);
-        const filteredCols = col && col.filter((key: any) => !key.startsWith("_"));
+        const filteredCols = col && col.filter((key: any) => !key.startsWith("_") && key !== "timezone" && key !== "latitude" && key !== "flow_enabled"  && key !== "hostname");
         filteredCols &&  filteredCols.filter((key: any) => {
           if (!key.startsWith("_")) {
             if (key == "profile_type") {
@@ -179,6 +179,7 @@ const Profiling = () => {
            "site",
            "plugin_type",
           "port",
+          "cidr",
           "credential_profiles",
           "availability_interval",
            "flow_enabled",

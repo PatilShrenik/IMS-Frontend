@@ -81,6 +81,7 @@ const index = () => {
   const [editdashboardIID, setEditDashBoardID] = useState("") as any;
   const [isDeleteModalopen, setIsDeleteModalOpen] = React.useState(false);
   const [isContextModalopen, setIsContextModalOpen] = React.useState(false);
+  const [initialized, setInitialized] = useState(false); // New state variable
   const handleDeleteModalOpen = (value: any) => {
     setIsDeleteModalOpen(true);
     setDashboardDeleteId(value);
@@ -110,6 +111,7 @@ const index = () => {
           response &&
           replacePeriodsWithUnderscores(response && response.result);
         setDashboards(modifiedData);
+
       };
       getDashboards();
     } catch (error) {
@@ -142,7 +144,7 @@ const index = () => {
       );
       setLayoutsWholeData(res.result);
     });
-  }, [addToDashboard, dashboardId]);
+  }, [addToDashboard, dashboardId,getWidgetApiState]);
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -235,6 +237,19 @@ const index = () => {
   function discardLayout() {
     setLayouts(layoutsCurrent);
   }
+  // useEffect(() => {
+  //   // Update dashboardValues only if it hasn't been initialized yet
+  //   if (!initialized && dashboards && dashboards.length > 0) {
+  //     const newDashboardValues = dashboards.map((item: any) => ({
+  //       name: item.name,
+  //       id: item._id,
+  //     }));
+  //     setDashboards(newDashboardValues);
+  //     setInitialized(true); // Set initialized to true to prevent further updates
+  //   }
+  // }, [dashboards, initialized]);
+
+  
 
   const handleDashChange = (event: any) => {
     console.log("value######", event);
@@ -251,6 +266,8 @@ const index = () => {
       const DeleteDashboard = async () => {
         let response = await deleteDashboard(dashboardDeleteId);
         if (response.status === "success") {
+          // const updatedDashboardValues = dashboardValues.filter((item: any) => item.id !== dashboardDeleteId);
+          // setDashboards(updatedDashboardValues);
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 2000,
@@ -323,11 +340,11 @@ const index = () => {
     try {
       const addDashboard = async () => {
         const modifiedData = replaceUnderscoresWithDots(APIdata);
-        console.log("Dashboard Data", modifiedData);
-
+        
         let response = await CreateDashboard(modifiedData);
         if (response.status === "success") {
           toast.success(response.status, {
+            
             position: "bottom-right",
             autoClose: 2000,
             hideProgressBar: true,
@@ -338,6 +355,14 @@ const index = () => {
             theme: "colored",
             transition: Bounce,
           });
+          // const updatedDashboardsResponse = await GetAllDashboard();
+          // const updatedDashboards = updatedDashboardsResponse.result;
+          // const updatedDashboardValues = updatedDashboards.map((item: any) => ({
+          //   name: item.name,
+          //   id: item._id
+          // }));
+          // setDashboards(updatedDashboardValues);
+
           handleModalClose();
         } else {
           toast.error(response.message, {

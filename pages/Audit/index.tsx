@@ -20,7 +20,7 @@ const Audit = () => {
     toggleActiveButton,
     auditSocketCalled,
   } = useAppContext();
-  const { Subscribe, emit, connection } = useWebSocketContext();
+  const { Subscribe, emit, connection ,unsubscribe } = useWebSocketContext();
 
   const [data, setData] = useState<any>();
   const [webSocketCalled, setWebSocketCalled] = useState<any>();
@@ -51,39 +51,51 @@ const Audit = () => {
   const paylodForLive = {};
 
   // console.log("activbutton", activeButton);
-
-  function render(payload: any) {
-    // Check if payload contains 'result' array
-    console.log("response for audit", payload.result);
-    if (payload && payload.result && Array.isArray(payload.result)) {
-      // Iterate over each result object
-      const filteredResult = payload.result.map((result: any) => {
-        // Create a copy of the result object
-        const resultCopy = { ...result };
-        // Check if the result object has 'rowSignature' key and remove it
-        if (resultCopy.rowSignature) {
-          delete resultCopy.rowSignature;
-        }
-        return resultCopy;
-      });
-
-      // Create a new object with filtered result and other properties from payload
-      const filteredPayload = { ...payload, result: filteredResult };
-      console.log("filterdata state#########", filteredPayload);
-
-      // Store filtered payload in state
-      setReceivedData(filteredPayload);
-    }
-  }
-
-  console.log("recieved data state#########", receivedData);
-
+  
   useEffect(() => {
-    if (connection) {
+    function render(payload: any) {
+      // Check if payload contains 'result' array
+      console.log("response for audit", payload);
+      if (payload && payload.result && Array.isArray(payload.result)) {
+        // Iterate over each result object
+        const filteredResult = payload.result.map((result: any) => {
+          // Create a copy of the result object
+          const resultCopy = { ...result };
+          // Check if the result object has 'rowSignature' key and remove it
+          if (resultCopy.rowSignature) {
+            delete resultCopy.rowSignature;
+          }
+          return resultCopy;
+        });
+  
+        // Create a new object with filtered result and other properties from payload
+        const filteredPayload = { ...payload, result: filteredResult };
+        console.log("filterdata state#########", filteredPayload);
+  
+        // Store filtered payload in state
+        setReceivedData(filteredPayload);
+      }
+    }
+    if (connection && auditSocketCalled) {
       Subscribe("audit1", "ws.audit", render);
     }
-  }, [connection]);
+    // return () => {
+    //   // Clean up subscription when component unmounts
+    //   unsubscribe("audit1", "ws.audit");
+    
+    // };
+  }, [connection , auditSocketCalled ]);
 
+
+  useEffect(()=>{
+   
+    return () => {
+      // Clean up subscription when component unmounts
+      unsubscribe("audit1", "ws.audit");
+    
+    };
+  },[connection])
+  console.log("recieved data", receivedData);
   //   useEffect(() => {
   //  if (activeButton == "historic") {
   //       setData(null);
@@ -349,8 +361,9 @@ const Audit = () => {
       receivedData.result &&
       receivedData.result[0] &&
       receivedData.result[0].columns;
+    
     const convertedData = convertAlertData(receivedData);
-    // console.log("-----------columns#########", collectedKeys);
+     console.log("-----------converted data", convertedData);
     setData(convertedData);
     collectedKeys &&
       collectedKeys.filter((key: any) => {
@@ -409,7 +422,7 @@ const Audit = () => {
     // console.log("-----------data#########", data);
 
     // setColumns(cols);
-  }, [activeButton, receivedData]);
+  }, [receivedData , auditSocketCalled]);
 
   const totalCount = data && data.length;
   const handleChangePage = (
