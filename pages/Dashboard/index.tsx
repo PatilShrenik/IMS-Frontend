@@ -111,7 +111,6 @@ const index = () => {
           response &&
           replacePeriodsWithUnderscores(response && response.result);
         setDashboards(modifiedData);
-
       };
       getDashboards();
     } catch (error) {
@@ -144,11 +143,12 @@ const index = () => {
       );
       setLayoutsWholeData(res.result);
     });
-  }, [addToDashboard, dashboardId,getWidgetApiState]);
+  }, [addToDashboard, dashboardId]);
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
     // handleClose();
+    setDashBoardName("");
   };
   const handleModalClose = () => setIsModalOpen(false);
 
@@ -249,8 +249,6 @@ const index = () => {
   //   }
   // }, [dashboards, initialized]);
 
-  
-
   const handleDashChange = (event: any) => {
     console.log("value######", event);
     if (event.target.value == "Add Dashboard") {
@@ -266,8 +264,8 @@ const index = () => {
       const DeleteDashboard = async () => {
         let response = await deleteDashboard(dashboardDeleteId);
         if (response.status === "success") {
-          // const updatedDashboardValues = dashboardValues.filter((item: any) => item.id !== dashboardDeleteId);
-          // setDashboards(updatedDashboardValues);
+          //  const updatedDashboardValues = dashboardValues.filter((item: any) => item.id !== dashboardDeleteId);
+          //  setDashboards(updatedDashboardValues);
           toast.success(response.status, {
             position: "bottom-right",
             autoClose: 2000,
@@ -279,6 +277,10 @@ const index = () => {
             theme: "colored",
             transition: Bounce,
           });
+          const updatedDashboardsResponse = await GetAllDashboard();
+          const updatedDashboards = updatedDashboardsResponse.result;
+          setDashboards(updatedDashboards);
+
           handleDeleteModalClose();
         } else {
           toast.error(response.message, {
@@ -340,11 +342,16 @@ const index = () => {
     try {
       const addDashboard = async () => {
         const modifiedData = replaceUnderscoresWithDots(APIdata);
-        
+
         let response = await CreateDashboard(modifiedData);
+
         if (response.status === "success") {
+          // const newDashboard = {
+          //   name: modifiedData.name,
+          // //  id: response.result._id, // Assuming _id is the ID of the newly created dashboard
+          // };
+          // setDashboards((prevDashboards: any) => [...prevDashboards, newDashboard]);
           toast.success(response.status, {
-            
             position: "bottom-right",
             autoClose: 2000,
             hideProgressBar: true,
@@ -355,13 +362,18 @@ const index = () => {
             theme: "colored",
             transition: Bounce,
           });
-          // const updatedDashboardsResponse = await GetAllDashboard();
-          // const updatedDashboards = updatedDashboardsResponse.result;
-          // const updatedDashboardValues = updatedDashboards.map((item: any) => ({
-          //   name: item.name,
-          //   id: item._id
-          // }));
-          // setDashboards(updatedDashboardValues);
+          const updatedDashboardsResponse = await GetAllDashboard();
+          const updatedDashboards = updatedDashboardsResponse.result;
+          const newDashboard = updatedDashboards.find(
+            (dashboard: any) => dashboard.name === modifiedData.name
+          );
+          console.log("nn", newDashboard);
+          if (newDashboard) {
+            // If the new dashboard is found, extract its ID and add it to the state
+            const newDashboardId = newDashboard._id;
+            setDashboardId(newDashboardId);
+            setDashboards((prevDashboards: any) => [...updatedDashboards]);
+          }
 
           handleModalClose();
         } else {
@@ -469,7 +481,6 @@ const index = () => {
                     setEditable(!editable);
                   }}
                 >
-                
                   <LockOpenOutlinedIcon />
                 </button>
               )}
